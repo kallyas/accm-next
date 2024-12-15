@@ -1,0 +1,212 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String           @id @default(cuid())
+  firstName      String
+  lastName       String
+  email          String           @unique
+  phone          String?
+  service        String?
+  gender         Gender?
+  country        String?
+  educationLevel String?
+  password       String
+  role           Role             @default(USER)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  profile        UserProfile?
+  subscriptions  Subscription[]
+  feedbacks      Feedback[]
+  notifications  Notification[]
+  trackProgress  TrackProgress[]
+  paymentProofs  PaymentProof[]
+}
+
+model UserProfile {
+  id          String   @id @default(cuid())
+  bio         String?
+  avatar      String?
+  phoneNumber String?
+  address     String?
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String   @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Plan {
+  id            String         @id @default(cuid())
+  name          String
+  description   String
+  price         Float
+  duration      Int
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  subscriptions Subscription[]
+  services      Service[]
+}
+
+model Subscription {
+  id            String         @id @default(cuid())
+  startDate     DateTime
+  endDate       DateTime
+  status        SubscriptionStatus
+  user          User           @relation(fields: [userId], references: [id])
+  userId        String
+  plan          Plan           @relation(fields: [planId], references: [id])
+  planId        String
+  paymentProofs PaymentProof[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model PaymentProof {
+  id             String       @id @default(cuid())
+  imageUrl       String
+  status         PaymentStatus
+  user           User         @relation(fields: [userId], references: [id])
+  userId         String
+  subscription   Subscription @relation(fields: [subscriptionId], references: [id])
+  subscriptionId String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+model Feedback {
+  id        String   @id @default(cuid())
+  content   String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  read      Boolean  @default(false)
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model TrackProgress {
+  id        String   @id @default(cuid())
+  title     String
+  progress  Int
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Service {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  plan        Plan     @relation(fields: [planId], references: [id])
+  planId      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Publication {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  author    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model BlogPost {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  author    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Testimonial {
+  id        String   @id @default(cuid())
+  content   String
+  author    String
+  role      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Mentor {
+  id          String   @id @default(cuid())
+  name        String
+  bio         String
+  expertise   String[]
+  avatar      String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model TeamMember {
+  id        String   @id @default(cuid())
+  name      String
+  role      String
+  bio       String
+  avatar    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Contact {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  message   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model DownloadableResource {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  fileUrl     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  EXPIRED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
