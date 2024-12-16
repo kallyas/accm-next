@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -68,7 +67,7 @@ export default function CreateBlogPage() {
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to create blog post. Please try again.",
+        description: "Failed to create blog post. Please try again." + error,
         variant: "destructive",
       });
     }
@@ -114,7 +113,7 @@ export default function CreateBlogPage() {
           <FormField
             control={form.control}
             name="content"
-            render={({ field }) => (
+            render={({  }) => (
               <FormItem>
                 <FormLabel>Content</FormLabel>
                 <FormControl>
