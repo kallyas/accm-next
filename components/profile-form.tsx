@@ -17,39 +17,63 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { toast } from "@/hooks/use-toast";
+import { User, UserProfile } from "@prisma/client";
 
 const profileFormSchema = z.object({
-  name: z.string().min(2, {
-    message: "Name must be at least 2 characters.",
+  firstName: z.string().min(2, {
+    message: "First name must be at least 2 characters.",
   }),
-  bio: z.string().max(160, {
-    message: "Bio must not be longer than 160 characters.",
+  lastName: z.string().min(2, {
+    message: "Last name must be at least 2 characters.",
   }),
-  url: z
+  email: z.string().email({
+    message: "Please enter a valid email address.",
+  }),
+  bio: z
     .string()
-    .url({ message: "Please enter a valid URL." })
-    .optional()
-    .or(z.literal("")),
+    .max(500, {
+      message: "Bio must not be longer than 500 characters.",
+    })
+    .optional(),
+  phoneNumber: z
+    .string()
+    .regex(/^\+?[1-9]\d{1,14}$/, {
+      message: "Please enter a valid phone number.",
+    })
+    .optional(),
+  address: z
+    .string()
+    .max(200, {
+      message: "Address must not be longer than 200 characters.",
+    })
+    .optional(),
 });
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
-export function ProfileForm({ user }: { user: any }) {
+interface ProfileFormProps {
+  user: User & { profile: UserProfile | null };
+}
+
+export function ProfileForm({ user }: ProfileFormProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
-      name: user?.name || "",
-      bio: user?.bio || "",
-      url: user?.url || "",
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      bio: user.profile?.bio || "",
+      phoneNumber: user.profile?.phoneNumber || "",
+      address: user.profile?.address || "",
     },
   });
 
   async function onSubmit(data: ProfileFormValues) {
     setIsLoading(true);
 
-    const response = await fetch("/api/user", {
+    const response = await fetch("/api/user/profile", {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -77,17 +101,39 @@ export function ProfileForm({ user }: { user: any }) {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
-          name="name"
+          name="firstName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
+              <FormLabel>First Name</FormLabel>
               <FormControl>
-                <Input placeholder="Your name" {...field} />
+                <Input {...field} />
               </FormControl>
-              <FormDescription>
-                This is the name that will be displayed on your profile and in
-                emails.
-              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="lastName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Last Name</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
@@ -100,14 +146,13 @@ export function ProfileForm({ user }: { user: any }) {
               <FormLabel>Bio</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Tell us a little bit about yourself"
+                  placeholder="Tell us about yourself"
                   className="resize-none"
                   {...field}
                 />
               </FormControl>
               <FormDescription>
-                You can <span>@mention</span> other users and organizations to
-                link to them.
+                You can <span>@mention</span> other users and organizations.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -115,16 +160,26 @@ export function ProfileForm({ user }: { user: any }) {
         />
         <FormField
           control={form.control}
-          name="url"
+          name="phoneNumber"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>URL</FormLabel>
+              <FormLabel>Phone Number</FormLabel>
               <FormControl>
-                <Input placeholder="https://example.com" {...field} />
+                <Input {...field} />
               </FormControl>
-              <FormDescription>
-                This is the URL that will be displayed on your profile.
-              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="address"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Address</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
