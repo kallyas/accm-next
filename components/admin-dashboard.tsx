@@ -1,3 +1,5 @@
+"use client";
+
 import { DashboardHeader } from "@/components/dashboard/header";
 import { DashboardShell } from "@/components/dashboard/shell";
 import { Button } from "@/components/ui/button";
@@ -8,15 +10,18 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useState } from "react";
+import { AddAdminModal } from "./admin/add-admin-modal";
 
 export function AdminDashboard() {
+  const [isOpened, setIsOpened] = useState(false);
   return (
     <DashboardShell>
       <DashboardHeader
         heading="Admin Dashboard"
         text="Manage users, content, and platform settings."
       >
-        <Button>Add New User</Button>
+        <Button onClick={() => setIsOpened(true)}>Add New User</Button>
       </DashboardHeader>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
@@ -56,7 +61,7 @@ export function AdminDashboard() {
           </CardContent>
         </Card>
       </div>
-      {/* Add more admin-specific components here */}
+      <AddAdminModal isOpen={isOpened} onClose={() => setIsOpened(false)} />
     </DashboardShell>
   );
 }
