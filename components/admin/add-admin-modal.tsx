@@ -62,7 +62,7 @@ export function AddAdminModal({ isOpen, onClose }: AddAdminModalProps) {
         description: "The new admin user has been successfully created.",
       });
       onClose();
-    } catch (error) {
+    } catch (_) {
       toast({
         title: "Error",
         description: "Failed to create admin user. Please try again.",
