@@ -13,6 +13,7 @@ import {
   Download,
   UsersIcon,
   MessageSquare,
+  CalendarCheckIcon,
 } from "lucide-react";
 
 export default async function AdminLayout({
@@ -40,6 +41,11 @@ export default async function AdminLayout({
       href: "/admin/events",
       label: "Events",
       icon: <Calendar className="h-4 w-4" />,
+    },
+    {
+      href: "/admin/user-events",
+      label: "User Events",
+      icon: <CalendarCheckIcon className="h-4 w-4" />,
     },
     {
       href: "/admin/plans",
