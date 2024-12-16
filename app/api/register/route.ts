@@ -1,39 +1,145 @@
-import { db } from "@/lib/db"
-import { NextResponse } from "next/server"
-import bcrypt from "bcryptjs"
+import { db } from "@/lib/db";
+import { NextResponse } from "next/server";
+import bcrypt from "bcryptjs";
+import { z } from "zod";
+
+// Comprehensive validation schema
+const UserRegistrationSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  firstName: z
+    .string()
+    .trim()
+    .min(2, "First name must be at least 2 characters"),
+  lastName: z.string().trim().min(2, "Last name must be at least 2 characters"),
+  phone: z
+    .string()
+    .trim()
+    .regex(/^\+?[1-9]\d{1,14}$/, "Invalid phone number"),
+  service: z.string().trim().min(1, "Service is required"),
+  gender: z.enum(["MALE", "FEMALE", "OTHER"], {
+    errorMap: () => ({ message: "Invalid gender selection" }),
+  }),
+  country: z.string().trim().min(2, "Country is required"),
+  educationLevel: z.enum(
+    ["HIGH_SCHOOL", "BACHELOR", "MASTER", "DOCTORATE", "OTHER"],
+    {
+      errorMap: () => ({ message: "Invalid education level" }),
+    }
+  ),
+  password: z
+    .string()
+    .min(8, "Password must be at least 8 characters")
+    .regex(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+      "Password must include uppercase, lowercase, number, and special character"
+    ),
+});
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json()
-    const { email, name, password } = body
+    // Parse request body
+    const body = await req.json();
 
-    if (!email || !name || !password) {
-      return new NextResponse("Missing required fields", { status: 400 })
+    // Validate input
+    const validationResult = UserRegistrationSchema.safeParse({
+      ...body,
+      educationLevel: body.educationLevel.toUpperCase(),
+    });
+
+    // Check validation results
+    if (!validationResult.success) {
+      return NextResponse.json(
+        {
+          error: "Validation failed",
+          details: validationResult.error.errors,
+        },
+        { status: 400 }
+      );
     }
 
+    const {
+      email,
+      password,
+      firstName,
+      lastName,
+      phone,
+      service,
+      gender,
+      country,
+      educationLevel,
+    } = validationResult.data;
+
+    // Check for existing user
     const existingUser = await db.user.findUnique({
-      where: {
-        email,
-      },
-    })
+      where: { email },
+      select: { id: true },
+    });
 
     if (existingUser) {
-      return new NextResponse("Email already exists", { status: 400 })
+      return NextResponse.json(
+        { error: "A user with this email already exists" },
+        { status: 409 } // Conflict status code
+      );
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10)
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 12);
 
+    // Create user
     const user = await db.user.create({
       data: {
         email,
-        name,
         password: hashedPassword,
+        phone,
+        service,
+        gender,
+        country,
+        educationLevel,
+        firstName,
+        lastName,
       },
-    })
+      // Explicitly select fields to return
+      select: {
+        id: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+        createdAt: true,
+      },
+    });
 
-    return NextResponse.json(user)
+    // Log registration (replace with your logging mechanism)
+    console.log(`User registered: ${user.email}`);
+
+    return NextResponse.json(
+      {
+        message: "User registered successfully",
+        user,
+      },
+      { status: 201 } // Created status code
+    );
   } catch (error) {
-    return new NextResponse("Internal Error", { status: 500 })
+    // Log the full error (replace with proper logging)
+    console.error("Registration error:", error);
+
+    // Differentiate between different types of errors
+    if (error instanceof Error) {
+      return NextResponse.json(
+        {
+          error: "Registration failed",
+          message: error.message,
+        },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json(
+      { error: "Unexpected error during registration" },
+      { status: 500 }
+    );
   }
 }
 
+// Prevent caching of this dynamic route
+export const dynamic = "force-dynamic";
+  
