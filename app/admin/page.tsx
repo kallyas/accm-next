@@ -22,6 +22,8 @@ export default function AdminDashboardPage() {
     return <SkeletonLoader />;
   }
 
+  console.log(data);
+
   return (
     <div className="space-y-10">
       <DashboardStats />
