@@ -89,7 +89,7 @@ export default function UserEventsPage() {
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to send reminders. Please try again.",
+        description: "Failed to send reminders. Please try again." + error,
         variant: "destructive",
       });
     }
