@@ -77,7 +77,7 @@ const events = [
   },
 ];
 
-export function EventList() {
+function EventList() {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
 
   const handleRegister = (event: Event) => {
