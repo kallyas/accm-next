@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { DataTable } from "@/components/admin/data-table";
 import { Button } from "@/components/ui/button";
 import { ColumnDef } from "@tanstack/react-table";
