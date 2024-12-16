@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,7 +25,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Blog, useEditBlog } from "@/hooks/use-blogs";
 import { toast } from "@/hooks/use-toast";
-import ReactQuill from "react-quill";
+import dynamic from "next/dynamic";
+
+
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 const formSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -68,7 +73,7 @@ export function EditBlogModal({ blog, onClose }: EditBlogModalProps) {
         description: "The blog post has been successfully updated.",
       });
       onClose();
-    } catch (error) {
+    } catch (_) {
       toast({
         title: "Error",
         description: "Failed to update the blog post. Please try again.",
