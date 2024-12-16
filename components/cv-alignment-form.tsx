@@ -15,7 +15,7 @@ const formSchema = z.object({
     .refine((file) => ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'].includes(file.type), "Only .pdf, .doc and .docx formats are supported.")
 })
 
-export function CVAlignmentForm() {
+export function CVAlignmentForm({ onUpload }: { onUpload: (file: File) => void }) {
   const [isLoading, setIsLoading] = useState(false)
   const [feedback, setFeedback] = useState<string | null>(null)
   const [isAligned, setIsAligned] = useState(false)
@@ -28,6 +28,7 @@ export function CVAlignmentForm() {
     setIsLoading(true)
     setFeedback(null)
     setIsAligned(false)
+    onUpload(values.cv)
 
     // Simulating API call for CV comparison
     await new Promise(resolve => setTimeout(resolve, 2000))
