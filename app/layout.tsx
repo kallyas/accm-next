@@ -7,6 +7,7 @@ import { Footer } from "@/components/footer";
 import { Providers } from "./providers";
 import "./globals.css";
 import { getSession } from "@/lib/auth";
+import QueryProvider from "@/components/query-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -31,20 +32,22 @@ export default async function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <div className="relative flex min-h-svh flex-col bg-background px-4">
-              <Header />
-              {session ? (
-                <main className="flex-1 max-w-screen-xl mx-auto w-full">
-                  {children}
-                </main>
-              ) : (
-                <main className="flex-1 px-4 md:px-8 lg:px-16 xl:px-32 max-w-screen-xl mx-auto w-full">
-                  {children}
-                </main>
-              )}
-              <Footer />
-            </div>
-            <Toaster />
+            <QueryProvider>
+              <div className="relative flex min-h-svh flex-col bg-background px-4">
+                <Header />
+                {session ? (
+                  <main className="flex-1 max-w-screen-xl mx-auto w-full">
+                    {children}
+                  </main>
+                ) : (
+                  <main className="flex-1 px-4 md:px-8 lg:px-16 xl:px-32 max-w-screen-xl mx-auto w-full">
+                    {children}
+                  </main>
+                )}
+                <Footer />
+              </div>
+              <Toaster />
+            </QueryProvider>
           </ThemeProvider>
         </Providers>
       </body>
