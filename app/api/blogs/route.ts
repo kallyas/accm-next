@@ -1,3 +1,4 @@
+//@typescript-eslint/no-unused-vars
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
@@ -37,9 +38,9 @@ export async function GET(req: Request) {
         total,
       },
     });
-  } catch (error) {
+  } catch (_) {
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      { error: "Internal Server Error"},
       { status: 500 }
     );
   }
