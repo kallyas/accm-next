@@ -27,7 +27,7 @@ export default function AboutPage() {
           </p>
           <p className="text-lg">
             Through our unique 4WFramework and personalized mentorship approach,
-            we've helped thousands of individuals unlock their potential and
+            we&apos;ve helped thousands of individuals unlock their potential and
             achieve their career goals.
           </p>
         </div>
