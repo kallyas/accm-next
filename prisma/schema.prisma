@@ -11,25 +11,26 @@ datasource db {
 }
 
 model User {
-  id             String           @id @default(cuid())
+  id             String          @id @default(cuid())
   firstName      String
   lastName       String
-  email          String           @unique
+  email          String          @unique
   phone          String?
   service        String?
   gender         Gender?
   country        String?
   educationLevel String?
   password       String
-  role           Role             @default(USER)
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
+  role           Role            @default(USER)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
   profile        UserProfile?
   subscriptions  Subscription[]
   feedbacks      Feedback[]
   notifications  Notification[]
   trackProgress  TrackProgress[]
   paymentProofs  PaymentProof[]
+  events         UserEvent[]
 }
 
 model UserProfile {
@@ -57,29 +58,29 @@ model Plan {
 }
 
 model Subscription {
-  id            String         @id @default(cuid())
+  id            String             @id @default(cuid())
   startDate     DateTime
   endDate       DateTime
   status        SubscriptionStatus
-  user          User           @relation(fields: [userId], references: [id])
+  user          User               @relation(fields: [userId], references: [id])
   userId        String
-  plan          Plan           @relation(fields: [planId], references: [id])
+  plan          Plan               @relation(fields: [planId], references: [id])
   planId        String
   paymentProofs PaymentProof[]
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
 }
 
 model PaymentProof {
-  id             String       @id @default(cuid())
+  id             String        @id @default(cuid())
   imageUrl       String
   status         PaymentStatus
-  user           User         @relation(fields: [userId], references: [id])
+  user           User          @relation(fields: [userId], references: [id])
   userId         String
-  subscription   Subscription @relation(fields: [subscriptionId], references: [id])
+  subscription   Subscription  @relation(fields: [subscriptionId], references: [id])
   subscriptionId String
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
 }
 
 model Feedback {
@@ -134,8 +135,10 @@ model Publication {
 model BlogPost {
   id        String   @id @default(cuid())
   title     String
+  excerpt   String  @default("")
   content   String
   author    String
+  tags      String[] @default([])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -150,13 +153,13 @@ model Testimonial {
 }
 
 model Mentor {
-  id          String   @id @default(cuid())
-  name        String
-  bio         String
-  expertise   String[]
-  avatar      String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(cuid())
+  name      String
+  bio       String
+  expertise String[]
+  avatar    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model TeamMember {
@@ -187,6 +190,30 @@ model DownloadableResource {
   updatedAt   DateTime @updatedAt
 }
 
+model Event {
+  id          String      @id @default(cuid())
+  title       String
+  description String
+  startDate   DateTime
+  endDate     DateTime
+  location    String
+  bannerUrl   String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  users       UserEvent[]
+}
+
+model UserEvent {
+  userId    String
+  eventId   String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([userId, eventId])
+}
+
 enum Role {
   USER
   ADMIN
@@ -209,4 +236,3 @@ enum Gender {
   FEMALE
   OTHER
 }
-
