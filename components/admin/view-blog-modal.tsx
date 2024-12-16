@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Dialog,
   DialogContent,
@@ -21,7 +23,7 @@ export function ViewBlogModal({ blog, onClose }: ViewBlogModalProps) {
           <DialogTitle>{blog.title}</DialogTitle>
           <DialogDescription>
             By {blog.author} | Created on{" "}
-            {new Date(blog.createdAt).toLocaleDateString()}
+            {new Date(blog.createdAt!).toLocaleDateString()}
           </DialogDescription>
         </DialogHeader>
         <ScrollArea className="mt-4 h-[350px] w-full rounded-md border p-4">
