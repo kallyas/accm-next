@@ -20,6 +20,7 @@ import {
   CheckCircle,
 } from "lucide-react";
 import Link from "next/link";
+import { SubscribePlan } from "@/components/user/subscribe-plan";
 
 export default async function ServicesPage() {
   const session = await getServerSession(authOptions);
@@ -134,8 +135,10 @@ export default async function ServicesPage() {
       </div>
 
       <div className="mt-8">
-        <h2 className="text-2xl font-bold mb-4">Subscribe to Our Services</h2>
-        <ServiceList userEmail={session?.user?.email} />
+        {!session && (
+          <h2 className="text-2xl font-bold mb-4">Subscribe to Our Services</h2>
+        )}
+        <SubscribePlan />
         {!session && (
           <div className="mt-8">
             <Link href="/login">
