@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Link from "next/link";
 import { useSession } from "next-auth/react";
@@ -6,6 +6,7 @@ import { UserNav } from "@/components/user-nav";
 import { MainNav } from "@/components/main-nav";
 import { MobileNav } from "@/components/mobile-nav";
 import { Button } from "@/components/ui/button";
+import { ModeSwitcher } from "@/components/mode-switcher";
 
 export function Header() {
   const { data: session } = useSession();
@@ -29,6 +30,7 @@ export function Header() {
                 </Link>
               </div>
             )}
+            <ModeSwitcher />
           </nav>
         </div>
       </div>
