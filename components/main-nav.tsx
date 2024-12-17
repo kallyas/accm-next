@@ -30,6 +30,13 @@ export function MainNav({
               </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
+          <NavigationMenuItem>
+            <Link href="/courses" legacyBehavior passHref>
+              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                Courses
+              </NavigationMenuLink>
+            </Link>
+          </NavigationMenuItem>
 
           <NavigationMenuItem>
             <NavigationMenuTrigger>Services</NavigationMenuTrigger>
