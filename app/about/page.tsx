@@ -32,7 +32,7 @@ export default function AboutPage() {
           </p>
         </div>
         <Image
-          src="https://via.placeholder.com/600x400"
+          src="/accm/IMG_4727.JPG"
           alt="Team at Pearl Mentor Hub"
           width={600}
           height={400}
