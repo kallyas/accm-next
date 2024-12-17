@@ -14,6 +14,7 @@ import {
   UsersIcon,
   MessageSquare,
   CalendarCheckIcon,
+  Library,
 } from "lucide-react";
 
 export default async function AdminLayout({
@@ -56,6 +57,11 @@ export default async function AdminLayout({
       href: "/admin/publications",
       label: "Publications",
       icon: <BookOpen className="h-4 w-4" />,
+    },
+    {
+      href: "/admin/courses",
+      label: "Courses",
+      icon: <Library className="h-4 w-4" />,
     },
     {
       href: "/admin/users",
