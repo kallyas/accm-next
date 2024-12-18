@@ -9,6 +9,7 @@ import {
   BookOpen,
   Star,
   MessageSquare,
+  File,
 } from "lucide-react";
 
 export default async function UserDashboardLayout({
@@ -37,6 +38,11 @@ export default async function UserDashboardLayout({
       href: "/dashboard/events",
       label: "My Events",
       icon: <Calendar className="h-4 w-4" />,
+    },
+    {
+      href: "/dashboard/cvs",
+      label: "My CVs",
+      icon: <File className="h-4 w-4" />,
     },
     {
       href: "/dashboard/progress",
