@@ -3,8 +3,14 @@
 import { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, Lock, PlayCircle } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 type Lesson = {
   id: string;
@@ -59,29 +65,44 @@ export function LessonList({ lessons, courseId, enrollment }: LessonListProps) {
   };
 
   return (
-    <div className="space-y-4">
-      {lessons.map((lesson) => (
-        <Card key={lesson.id}>
-          <CardHeader>
-            <CardTitle className="flex items-center justify-between">
-              <span>
-                Lesson {lesson.order}: {lesson.title}
-              </span>
-              {completedLessons.has(lesson.id) && (
-                <CheckCircle className="text-green-500" />
-              )}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="mb-4">{lesson.content.substring(0, 100)}...</p>
-            {enrollment && !completedLessons.has(lesson.id) && (
-              <Button onClick={() => handleComplete(lesson.id)}>
-                Mark as Complete
-              </Button>
-            )}
-          </CardContent>
-        </Card>
+    <Accordion type="single" collapsible className="w-full">
+      {lessons.map((lesson, index) => (
+        <AccordionItem value={`lesson-${lesson.id}`} key={lesson.id}>
+          <AccordionTrigger className="hover:no-underline">
+            <div className="flex items-center justify-between w-full">
+              <div className="flex items-center">
+                {completedLessons.has(lesson.id) ? (
+                  <CheckCircle className="mr-2 h-5 w-5 text-green-500" />
+                ) : enrollment ? (
+                  <PlayCircle className="mr-2 h-5 w-5 text-blue-500" />
+                ) : (
+                  <Lock className="mr-2 h-5 w-5 text-gray-500" />
+                )}
+                <span className="font-medium">
+                  Lesson {index + 1}: {lesson.title}
+                </span>
+              </div>
+            </div>
+          </AccordionTrigger>
+          <AccordionContent>
+            <Card>
+              <CardContent className="pt-4">
+                <p className="mb-4">{lesson.content.substring(0, 150)}...</p>
+                {enrollment && !completedLessons.has(lesson.id) && (
+                  <Button onClick={() => handleComplete(lesson.id)}>
+                    Mark as Complete
+                  </Button>
+                )}
+                {!enrollment && (
+                  <p className="text-sm text-muted-foreground">
+                    Enroll in the course to access this lesson
+                  </p>
+                )}
+              </CardContent>
+            </Card>
+          </AccordionContent>
+        </AccordionItem>
       ))}
-    </div>
+    </Accordion>
   );
 }
