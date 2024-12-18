@@ -21,7 +21,7 @@ const UserRegistrationSchema = z.object({
   }),
   country: z.string().trim().min(2, "Country is required"),
   educationLevel: z.enum(
-    ["HIGH_SCHOOL", "BACHELOR", "MASTER", "DOCTORATE", "OTHER"],
+    ["HIGH_SCHOOL", "BACHELORS", "MASTERS", "DOCTORATE", "OTHER", "PHD"],
     {
       errorMap: () => ({ message: "Invalid education level" }),
     }
