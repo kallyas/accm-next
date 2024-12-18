@@ -60,7 +60,7 @@ export default function LoginPage() {
         variant: "destructive",
       });
     } else {
-      const callBackUrl = params.get("callbackUrl");
+      const callBackUrl = decodeURIComponent(params.get("callbackUrl") || "");
       router.push(callBackUrl || "/dashboard");
     }
   }
