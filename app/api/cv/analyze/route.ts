@@ -77,6 +77,14 @@ export async function POST(req: Request) {
       },
     });
 
+    await db.notification.create({
+      data: {
+        content: `Your CV ${cvRecord.fileName} has been analyzed`,
+        title: `CV Analysis Complete for ${cvRecord.fileName}`,
+        user: { connect: { id: session!.user!.id } },
+      },
+    });
+
     return NextResponse.json(updatedCV);
   } catch (error) {
     // Handle validation errors from Zod
@@ -86,7 +94,7 @@ export async function POST(req: Request) {
 
     // Handle other errors
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      { error: "Internal Server Error" + error.message },
       { status: 500 }
     );
   }
