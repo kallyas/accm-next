@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { CVAlignmentForm } from "@/components/cv-alignment-form";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Card,
   CardContent,
@@ -10,149 +11,169 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { toast } from "@/hooks/use-toast";
+import { FileCheck2, Loader2 } from "lucide-react";
+
+// Type definitions
+interface CVUploadResponse {
+  id: string;
+  fileName: string;
+}
+
+// Constants
+const ALLOWED_FILE_TYPES = [".pdf", ".doc", ".docx"];
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
 export default function CVAlignmentPage() {
-  const [userCV, setUserCV] = useState<File | null>(null);
-  const [systemCV, setSystemCV] = useState<string | null>(null);
-  const [comparisonResult, setComparisonResult] = useState<string | null>(null);
+  // State management with more descriptive states
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [uploadStatus, setUploadStatus] = useState<
+    "idle" | "uploading" | "analyzing" | "completed"
+  >("idle");
 
-  const handleUserCVUpload = (file: File) => {
-    setUserCV(file);
+  const router = useRouter();
+
+  // File validation function
+  const validateFile = (file: File): boolean => {
+    const fileExtension = "." + file.name.split(".").pop()?.toLowerCase();
+    const isValidType = ALLOWED_FILE_TYPES.includes(fileExtension);
+    const isValidSize = file.size <= MAX_FILE_SIZE;
+
+    if (!isValidType) {
+      toast({
+        title: "Invalid File Type",
+        description: `Please upload a file with extension: ${ALLOWED_FILE_TYPES.join(
+          ", "
+        )}`,
+        variant: "destructive",
+      });
+      return false;
+    }
+
+    if (!isValidSize) {
+      toast({
+        title: "File Too Large",
+        description: `File must be less than ${MAX_FILE_SIZE / 1024 / 1024}MB`,
+        variant: "destructive",
+      });
+      return false;
+    }
+
+    return true;
   };
 
-  const handleSystemCVFetch = async () => {
-    // In a real application, this would fetch the system CV from your backend
-    const response = await fetch("/api/system-cv");
-    const data = await response.json();
-    setSystemCV(data.cvContent);
+  // File change handler with validation
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && validateFile(file)) {
+      setSelectedFile(file);
+    }
   };
 
-  const handleCompare = async () => {
-    if (!userCV || !systemCV) return;
+  // Combined upload and analyze flow
+  const handleUploadAndAnalyze = async () => {
+    if (!selectedFile) return;
 
-    // In a real application, you would send both CVs to your backend for comparison
-    const formData = new FormData();
-    formData.append("userCV", userCV);
-    formData.append("systemCV", systemCV);
+    try {
+      setUploadStatus("uploading");
+      const formData = new FormData();
+      formData.append("file", selectedFile);
 
-    const response = await fetch("/api/compare-cv", {
-      method: "POST",
-      body: formData,
-    });
+      // Upload CV
+      const uploadResponse = await fetch("/api/cv/upload", {
+        method: "POST",
+        body: formData,
+      });
 
-    const result = await response.json();
-    setComparisonResult(result.comparison);
+      if (!uploadResponse.ok) {
+        throw new Error("CV Upload Failed");
+      }
+
+      const uploadData: CVUploadResponse = await uploadResponse.json();
+
+      // Analyze CV
+      setUploadStatus("analyzing");
+      const analyzeResponse = await fetch("/api/cv/analyze", {
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cvId: uploadData.id }),
+      });
+
+      if (!analyzeResponse.ok) {
+        throw new Error("CV Analysis Failed");
+      }
+
+      // Success handling
+      setUploadStatus("completed");
+      toast({
+        title: "CV Processing Complete",
+        description: `${selectedFile.name} has been uploaded and analyzed.`,
+      });
+
+      // Redirect to CV dashboard
+      router.push("/dashboard/cvs");
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "Processing Error",
+        description: "Failed to upload or analyze CV. Please try again.",
+        variant: "destructive",
+      });
+      setUploadStatus("idle");
+    }
+  };
+
+  // Render loading states
+  const getButtonContent = () => {
+    switch (uploadStatus) {
+      case "uploading":
+        return (
+          <>
+            <Loader2 className="mr-2 animate-spin" /> Uploading
+          </>
+        );
+      case "analyzing":
+        return (
+          <>
+            <FileCheck2 className="mr-2 animate-pulse" /> Analyzing
+          </>
+        );
+      case "completed":
+        return (
+          <>
+            <FileCheck2 className="mr-2" /> Completed
+          </>
+        );
+      default:
+        return "Upload and Analyze CV";
+    }
   };
 
   return (
-    <div className="container py-10">
-      <h1 className="text-4xl font-bold mb-6">CV Alignment Service</h1>
-      <p className="text-xl text-muted-foreground mb-8">
-        Upload your CV to compare it against our system-provided template and
-        receive personalized feedback.
-      </p>
-      <Tabs defaultValue="upload">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="upload">Upload CV</TabsTrigger>
-          <TabsTrigger value="result">Comparison Result</TabsTrigger>
-        </TabsList>
-        <TabsContent value="upload">
-          <div className="grid gap-6 md:grid-cols-2">
-            <Card>
-              <CardHeader>
-                <CardTitle>Your CV</CardTitle>
-                <CardDescription>Upload your CV for comparison</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <CVAlignmentForm onUpload={handleUserCVUpload} />
-                {userCV && (
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <Button className="mt-4">Preview Your CV</Button>
-                    </DialogTrigger>
-                    <DialogContent className="max-w-4xl">
-                      <DialogHeader>
-                        <DialogTitle>Your CV Preview</DialogTitle>
-                        <DialogDescription>
-                          This is a preview of your uploaded CV
-                        </DialogDescription>
-                      </DialogHeader>
-                      <iframe
-                        src={URL.createObjectURL(userCV)}
-                        className="w-full h-[600px]"
-                      />
-                    </DialogContent>
-                  </Dialog>
-                )}
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>System CV Template</CardTitle>
-                <CardDescription>Our recommended CV format</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Button onClick={handleSystemCVFetch}>Load System CV</Button>
-                {systemCV && (
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <Button className="mt-4 ml-4">Preview System CV</Button>
-                    </DialogTrigger>
-                    <DialogContent className="max-w-4xl">
-                      <DialogHeader>
-                        <DialogTitle>System CV Preview</DialogTitle>
-                        <DialogDescription>
-                          This is our recommended CV format
-                        </DialogDescription>
-                      </DialogHeader>
-                      <iframe srcDoc={systemCV} className="w-full h-[600px]" />
-                    </DialogContent>
-                  </Dialog>
-                )}
-              </CardContent>
-            </Card>
-          </div>
+    <div className="container max-w-xl mx-auto py-10">
+      <Card>
+        <CardHeader>
+          <CardTitle>CV Alignment</CardTitle>
+          <CardDescription>
+            Upload your CV for comprehensive analysis and improvement insights.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <Input
+            type="file"
+            onChange={handleFileChange}
+            accept={ALLOWED_FILE_TYPES.join(",")}
+            className="cursor-pointer"
+          />
           <Button
-            className="mt-8"
-            onClick={handleCompare}
-            disabled={!userCV || !systemCV}
+            onClick={handleUploadAndAnalyze}
+            disabled={!selectedFile || uploadStatus !== "idle"}
+            className="w-full"
           >
-            Compare CVs
+            {getButtonContent()}
           </Button>
-        </TabsContent>
-        <TabsContent value="result">
-          <Card>
-            <CardHeader>
-              <CardTitle>Comparison Result</CardTitle>
-              <CardDescription>
-                Here's how your CV compares to our system template
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {comparisonResult ? (
-                <div
-                  className="prose max-w-none"
-                  dangerouslySetInnerHTML={{ __html: comparisonResult }}
-                />
-              ) : (
-                <p>
-                  No comparison result yet. Please upload your CV and run the
-                  comparison first.
-                </p>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+        </CardContent>
+      </Card>
     </div>
   );
 }
