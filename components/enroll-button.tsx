@@ -37,7 +37,8 @@ export function EnrollButton({ courseId }: { courseId: string }) {
 
       toast({
         title: "Enrolled Successfully",
-        description: "You have been enrolled in the course.",
+        description:
+          "You have been enrolled in the course. Start learning now!",
       });
       router.refresh();
     } catch (error) {
@@ -54,20 +55,20 @@ export function EnrollButton({ courseId }: { courseId: string }) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button className="w-full">Enroll in Course</Button>
+        <Button className="w-full text-lg py-6">Enroll in Course</Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you sure you want to enroll?</AlertDialogTitle>
+          <AlertDialogTitle>Are you ready to start learning?</AlertDialogTitle>
           <AlertDialogDescription>
             By enrolling, you'll gain access to all course materials and can
-            track your progress.
+            track your progress. Let's begin your learning journey!
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction onClick={handleEnroll} disabled={isEnrolling}>
-            {isEnrolling ? "Enrolling..." : "Enroll"}
+            {isEnrolling ? "Enrolling..." : "Enroll Now"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
