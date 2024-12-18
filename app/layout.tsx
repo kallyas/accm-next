@@ -11,6 +11,11 @@ import QueryProvider from "@/components/query-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
+export const metadata = {
+  title: "Mentorship Platform",
+  description: "A platform to connect mentors and mentees",
+};
+
 export default async function RootLayout({
   children,
 }: {
