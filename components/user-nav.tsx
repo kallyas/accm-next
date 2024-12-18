@@ -12,9 +12,45 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useQuery } from "@tanstack/react-query";
 import { BellIcon } from "lucide-react";
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
+
+type Notification = {
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  read: boolean;
+};
+
+type NotificationsResponse = {
+  notifications: Notification[];
+  total: number;
+  page: number;
+  pageSize: number;
+};
+
+const fetchNotifications = async ({
+  userId,
+  page = 1,
+  pageSize = 10,
+}: {
+  userId: string;
+  page?: number;
+  pageSize?: number;
+}): Promise<NotificationsResponse> => {
+  const response = await fetch(
+    `/api/notifications?userId=${userId}&page=${page}&pageSize=${pageSize}`
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch notifications");
+  }
+
+  return response.json();
+};
 
 export function UserNav() {
   const { data: session } = useSession();
@@ -23,13 +59,24 @@ export function UserNav() {
     return null;
   }
 
+  const { data, isLoading, isError, error } = useQuery<
+    NotificationsResponse,
+    Error
+  >({
+    queryKey: ["notifications", session!.user!.id, 1],
+    queryFn: () => fetchNotifications({ userId: session!.user!.id }),
+    staleTime: 5000, // 5 seconds
+  });
+
   return (
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-8 w-8 rounded-full">
             <BellIcon className="h-5 w-5" />
-            <span className="absolute top-0 right-0 inline-block h-2 w-2 rounded-full bg-red-500" />
+            {data?.notifications.some((notification) => !notification.read) && (
+              <span className="absolute top-0 right-0 inline-block h-2 w-2 rounded-full bg-red-500" />
+            )}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-64" align="end" forceMount>
@@ -43,20 +90,17 @@ export function UserNav() {
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem>
-              <div className="flex items-center justify-between gap-2">
-                <p className="text-sm leading-none">New user registered</p>
-                <span className="text-xs text-muted-foreground">1h</span>
-              </div>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <div className="flex items-center justify-between gap-2">
-                <p className="text-sm leading-none">
-                  New feature: Notifications
-                </p>
-                <span className="text-xs text-muted-foreground">2d</span>
-              </div>
-            </DropdownMenuItem>
+            {isLoading && <DropdownMenuItem>Loading...</DropdownMenuItem>}
+            {data?.notifications.map((notification) => (
+              <DropdownMenuItem key={notification.id}>
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-sm leading-none">{notification.title}</p>
+                  <span className="text-xs text-muted-foreground">
+                    {notification.date}
+                  </span>
+                </div>
+              </DropdownMenuItem>
+            ))}
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <Link href="/dashboard/notifications">
