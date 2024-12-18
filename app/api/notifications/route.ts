@@ -1,4 +1,6 @@
+import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { getServerSession } from "next-auth";
 import { type NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { z } from "zod";
@@ -10,9 +12,10 @@ const NotificationQuerySchema = z.object({
 
 export async function GET(req: NextRequest) {
   try {
+    const session = await getServerSession(authOptions);
     // Parse and validate query parameters
     const searchParams = req.nextUrl.searchParams;
-    const userId = searchParams.get("userId");
+    const userId = session?.user?.id;
     const page = parseInt(searchParams.get("page") || "1");
     const pageSize = parseInt(searchParams.get("pageSize") || "10");
 
