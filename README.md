@@ -51,7 +51,10 @@ Create a `.env` file in the project root and add the following:
 ```env
 DATABASE_URL="postgresql://username:password@localhost:5432/accmdb"
 NEXTAUTH_SECRET="your-nextauth-secret"
-# Add other necessary environment variables
+NEXT_AUTH_URL="http://localhost:3000"
+R2_ACCESS_KEY_ID="your-r2-access-key-id"
+R2_SECRET_ACCESS_KEY="your-r2-secret-access-key"
+R2_ENDPOINT="your-r2-endpoint"
 ```
 
 ### 4. Set Up Database
