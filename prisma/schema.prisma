@@ -33,6 +33,7 @@ model User {
   paymentProofs  PaymentProof[]
   events         UserEvent[]
   enrollments    Enrollment[]
+  cvs            CV[]
 }
 
 model UserProfile {
@@ -263,6 +264,17 @@ model LessonCompletion {
 
   @@unique([enrollmentId, lessonId])
 }
+
+model CV {
+  id            String   @id @default(cuid())
+  userId        String
+  fileName      String
+  fileUrl       String
+  uploadedAt    DateTime @default(now())
+  analysisResult String?
+  user          User     @relation(fields: [userId], references: [id])
+}
+
 
 
 enum Role {
