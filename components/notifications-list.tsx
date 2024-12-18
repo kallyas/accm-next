@@ -10,13 +10,22 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Pagination, PaginationContent } from "@/components/ui/pagination";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import { Bell, Check, Dot, Loader2 } from "lucide-react";
+import { formatDistanceToNow } from "date-fns";
+import { cn } from "@/lib/utils";
 
 type Notification = {
   id: string;
   title: string;
   description: string;
-  date: string;
+  createdAt: string;
   read: boolean;
 };
 
@@ -121,44 +130,125 @@ export function NotificationsList({ userId }: { userId: string }) {
   });
 
   // Loading and error states
-  if (isLoading) return <p>Loading notifications...</p>;
-  if (isError) return <p>Error: {error.message}</p>;
-
-  // No notifications
-  if (!data?.notifications.length) {
-    return <p>No notifications</p>;
-  }
+  if (isLoading)
+    return (
+      <div className="space-y-4">
+        <Card className="p-8 text-center">
+          <div className="flex flex-col items-center gap-4">
+            <Bell className="h-12 w-12 text-muted-foreground/50" />
+            <div className="space-y-2">
+              <h3 className="text-lg font-semibold">Loading notifications</h3>
+              <p className="text-sm text-muted-foreground">
+                Please wait while we fetch your notifications
+              </p>
+            </div>
+          </div>
+        </Card>
+      </div>
+    );
+  if (isError)
+    return (
+      <Card className="p-8 text-center">
+        <div className="flex flex-col items-center gap-4">
+          <Bell className="h-12 w-12 text-muted-foreground/50" />
+          <div className="space-y-2">
+            <h3 className="text-lg font-semibold">
+              Failed to load notifications
+            </h3>
+            <p className="text-sm text-muted-foreground">{error.message}</p>
+          </div>
+        </div>
+      </Card>
+    );
 
   return (
-    <div className="space-y-4">
-      {data.notifications.map((notification) => (
-        <Card
-          key={notification.id}
-          className={notification.read ? "bg-muted" : ""}
-        >
-          <CardHeader>
-            <CardTitle>{notification.title}</CardTitle>
-            <CardDescription>{notification.date}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p>{notification.description}</p>
-            {!notification.read && (
-              <Button
-                className="mt-2"
-                variant="outline"
-                onClick={() => markAsReadMutation.mutate(notification.id)}
-                disabled={markAsReadMutation.isPending}
-              >
-                {markAsReadMutation.isPending ? "Marking..." : "Mark as read"}
-              </Button>
-            )}
-          </CardContent>
+    <div className="space-y-6">
+      {data?.notifications.length === 0 ? (
+        <Card className="p-8 text-center">
+          <div className="flex flex-col items-center gap-4">
+            <Bell className="h-12 w-12 text-muted-foreground/50" />
+            <div className="space-y-2">
+              <h3 className="text-lg font-semibold">No notifications yet</h3>
+              <p className="text-sm text-muted-foreground">
+                When you receive notifications, they will appear here
+              </p>
+            </div>
+          </div>
         </Card>
-      ))}
+      ) : (
+        <div className="space-y-4">
+          {data?.notifications.map((notification) => (
+            <Card
+              key={notification.id}
+              className={cn(
+                "transition-colors duration-200",
+                !notification.read && "border-primary/20 bg-primary/5"
+              )}
+            >
+              <CardHeader className="flex flex-row items-start gap-4 space-y-0 pb-2">
+                <div className="flex-1">
+                  <div className="flex items-center gap-2">
+                    <CardTitle className="text-base">
+                      {notification.title}
+                    </CardTitle>
+                    {!notification.read && (
+                      <Dot className="h-6 w-6 fill-primary text-primary animate-pulse" />
+                    )}
+                  </div>
+                  <CardDescription className="mt-1">
+                    {formatDistanceToNow(new Date(notification.createdAt), {
+                      addSuffix: true,
+                    })}
+                  </CardDescription>
+                </div>
+                {!notification.read && (
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="h-8 hover:bg-primary/10"
+                    onClick={() => markAsReadMutation.mutate(notification.id)}
+                    disabled={markAsReadMutation.isPending}
+                  >
+                    {markAsReadMutation.isPending ? (
+                      <span className="flex items-center gap-2">
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        Marking
+                      </span>
+                    ) : (
+                      <span className="flex items-center gap-2">
+                        <Check className="h-4 w-4" />
+                        Mark as read
+                      </span>
+                    )}
+                  </Button>
+                )}
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {notification.description} 
+                </p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
 
-      {data.total > pageSize && (
-        <Pagination>
-          <PaginationContent></PaginationContent>
+      {data?.total! > pageSize && (
+        <Pagination className="mt-8">
+          <PaginationContent>
+            <PaginationItem>
+              {page > 1 && <PaginationPrevious href="#" />}
+            </PaginationItem>
+            {/* Add page numbers based on your total pages */}
+            <PaginationItem>
+              <span>{page}</span>
+            </PaginationItem>
+            <PaginationItem>
+              {page < Math.ceil(data!.total / pageSize) && (
+                <PaginationNext href="#" />
+              )}
+            </PaginationItem>
+          </PaginationContent>
         </Pagination>
       )}
     </div>
