@@ -18,8 +18,16 @@ type EnrolledCourse = {
 
 export function EnrolledCourses({ courses }: { courses: EnrolledCourse[] }) {
   return (
-    <div>
+    <div className="border-t border-b border-divider p-6">
       <h2 className="text-2xl font-bold mb-4">My Courses</h2>
+      {courses.length === 0 && (
+        <div className="flex flex-col items-center gap-4 p-6">
+          <p className="text-muted-foreground">No courses enrolled</p>
+          <Button asChild>
+            <Link href="/courses">Browse Courses</Link>
+          </Button>
+        </div>
+      )}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {courses.map((course) => (
           <Card key={course.id}>
