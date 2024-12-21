@@ -15,26 +15,26 @@ const testimonials = [
   {
     id: 1,
     name: "Sarah M.",
-    role: "Software Developer",
+    role: "Client",
     content:
-      "The mentorship I received through Pearl Mentor Hub was instrumental in landing my dream job. The guidance and support were invaluable.",
-    avatar: "/avatars/sarah-m.jpg",
+      "l had previously struggled with finding a good fit for a job when l realized my CV might be the problem. ACCM CV alignment service reshaped my presentation of who l am and what impact l have created and it taught me to apply this to other aspects of my career and not only my CV.",
+    avatar: "/mentors/thumb.png",
   },
   {
     id: 2,
     name: "John D.",
     role: "Marketing Manager",
     content:
-      "The workshops and resources provided by Pearl Mentor Hub have been invaluable. It's made a significant impact on my professional development.",
-    avatar: "/avatars/john-d.jpg",
+      "African Center for Career Mentorship has truly been a game changer when it comes to my personal and professional development. l had previously struggled with finding a good fit for a job when l realized my CV might be the problem. ACCM's CV alignment service reshaped my presentation of who I am and what impact l have created and it taught me to apply this to other aspects of my career and not only my CV.",
+    avatar: "/mentors/thumb.png",
   },
   {
     id: 3,
     name: "Emily K.",
-    role: "Entrepreneur",
+    role: "Student at Makerere University",
     content:
-      "The network I built through Pearl Mentor Hub's community has been a game-changer for my startup. The connections and advice are priceless.",
-    avatar: "/avatars/emily-k.jpg",
+      "Thank you to the team for always being responsive and available at a moment's notice to answer questions and inquiries. it was worth it! l encourage everyone to check out their catalog because there is a service for everyone from students to career professionals.",
+    avatar: "/mentors/thumb.png",
   },
 ];
 
@@ -48,15 +48,13 @@ export function TestimonialSlider() {
       className="w-full max-w-xl mx-auto"
     >
       <CarouselContent>
-        {testimonials.map((testimonial, index) => (
+        {testimonials.map((testimonial) => (
           <CarouselItem key={testimonial.id}>
             <Card>
               <CardContent className="flex flex-col items-center text-center p-6">
                 <Avatar className="w-20 h-20 mb-4">
                   <AvatarImage
-                    src={`https://randomuser.me/api/portraits/${
-                      index % 2 === 0 ? "men" : "women"
-                    }/${index}.jpg`}
+                    src={testimonial.avatar}
                     alt={testimonial.name}
                   />
                   <AvatarFallback>

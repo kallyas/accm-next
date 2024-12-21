@@ -1,10 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const stats = [
-  { title: "Active Mentors", value: "100+" },
-  { title: "Mentees Supported", value: "5,000+" },
-  { title: "Successful Career Transitions", value: "1,000+" },
-  { title: "Workshops Conducted", value: "500+" },
+  { title: "Masters Scholarships Won", value: "14+" },
+  { title: "PhD Scholarships won", value: " 7+" },
+  { title: "Weekly Webinars attendance", value: "712+" },
+  { title: "Bachelors Degrees Won ", value: "5+" },
 ];
 
 export function StatisticsSection() {

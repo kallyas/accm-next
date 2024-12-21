@@ -1,5 +1,5 @@
 export const siteConfig = {
-    name: "Pearl Mentor Hub",
+    name: "African Centre For Career Mentorship",
     description: "A Sustainable Centre of Excellence for Career Mentorship",
     mainNav: [
       {
@@ -28,7 +28,7 @@ export const siteConfig = {
       },
     ],
     links: {
-      twitter: "https://twitter.com/pearlmentorhub",
+      twitter: "https://x.com/i/flow/login?redirect_after_login=%2Fmentorglobally",
       github: "https://github.com/pearlmentorhub",
     },
   }

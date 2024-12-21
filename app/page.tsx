@@ -145,7 +145,7 @@ export default function Home() {
               Ready to Take the Next Step?
             </h2>
             <p className="text-xl mb-8">
-              Start your journey towards career success with Pearl Mentor Hub
+              Start your journey towards career success with African Centre For Career Mentorship
               today.
             </p>
             <div className="space-x-4">

@@ -5,34 +5,32 @@ const mentors = [
   {
     name: "Dr. Abel Wilson Walekhwa",
     role: "Founder & Lead Mentor",
-    image: "/placeholder.svg?height=100&width=100",
+    image: "/mentors/banner-image.jpeg",
     expertise: "Career Development, Leadership",
   },
   {
-    name: "Sarah Mutesi",
-    role: "Technology Mentor",
-    image: "/placeholder.svg?height=100&width=100",
-    expertise: "Software Development, AI/ML",
+    name: "Birungi Evelyne",
+    role: "Learning and Development Specialist",
+    image: "/mentors/picture2.png",
+    expertise: "financial literacy, Trainer of trainees.",
   },
   {
-    name: "Oluwaseun Adebayo",
-    role: "Business Strategy Mentor",
-    image: "/placeholder.svg?height=100&width=100",
-    expertise: "Entrepreneurship, Marketing",
+    name: "Harriet Ocitti",
+    role: "A proficient and passionate communication coach",
+    image: "/mentors/harriet.jpg",
+    expertise: "public speaking, leadership skills",
   },
 ];
 
 export function FeaturedMentors() {
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {mentors.map((mentor, index) => (
+      {mentors.map((mentor) => (
         <Card key={mentor.name}>
           <CardHeader>
             <div className="flex items-center space-x-4">
               <Image
-                src={`https://randomuser.me/api/portraits/${
-                  index % 2 === 0 ? "women" : "men"
-                }/${index}.jpg`}
+                src={mentor.image}
                 alt={mentor.name}
                 width={50}
                 height={50}

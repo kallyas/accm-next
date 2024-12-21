@@ -7,26 +7,34 @@ const mentors = [
     id: 1,
     name: "Dr. Abel Wilson Walekhwa",
     title: "Founder & Lead Mentor",
-    image: "https://randomuser.me/api/portraits/men/4.jpg",
+    image: "/mentors/banner-image.jpeg",
     expertise: ["Career Development", "4WFramework", "Leadership"],
     bio: "Dr. Walekhwa is the founder of African Centre for Career Mentorship and developer of the 4WFramework. With over 15 years of experience in career counseling, he has helped thousands of professionals across Africa realize their potential."
   },
   {
     id: 2,
-    name: "Sarah Mutesi",
-    title: "Technology Mentor",
-    image: "https://randomuser.me/api/portraits/women/1.jpg",
-    expertise: ["Software Development", "AI/ML", "Tech Entrepreneurship"],
-    bio: "Sarah is a tech industry veteran with experience at top Silicon Valley companies. She specializes in guiding aspiring tech professionals and entrepreneurs in navigating the rapidly evolving tech landscape."
+    name: "Birungi Evelyne",
+    title: "Learning & Development Specialist",
+    image: "/mentors/picture2.png",
+    expertise: ["financial literacy", "Trainer of trainees" ,"HR-Learning and Development"],
+    bio: "Evelyne is a Learning and Development specialist currently serving as lead HR-Learning and Development at Wagagai Limited, one of the largest Horticulture farms in Uganda.She has a passion for financial literacy and has trained over 5000 employees in the last 10 years."
   },
   {
     id: 3,
-    name: "Oluwaseun Adebayo",
-    title: "Business Strategy Mentor",
-    image: "https://randomuser.me/api/portraits/men/1.jpg",
-    expertise: ["Business Development", "Marketing", "Entrepreneurship"],
-    bio: "Oluwaseun brings 20 years of experience in business strategy and entrepreneurship. He has successfully launched and scaled multiple businesses across West Africa and is passionate about nurturing the next generation of African entrepreneurs."
-  }
+    name: "Harriet Ocitti",
+    title: "A proficient communication coach",
+    image: "/mentors/harriet.jpg",
+    expertise: ["public speaking", "leadership skills", "communication coaching"],
+    bio: "Harriet Ocitti serves as the Executive Director at the Institute for National Transformation (INT), whose mission is to develop no-excuse leaders who will transform their spheres of influence to greater levels of performance and excellence.she brings a wealth of experience in communication and leadership coaching."
+  },
+  {
+    id: 4,
+    name: "Bainomugisha Bernnet",
+    title: "Communication Officer",
+    image: "/mentors/Baino.jpeg",
+    expertise: ["Communication", "Publicity", "Public Speaking"],
+    bio: "I have witnessed firsthand the transformative power of career guidance and how it  can redirect someone's life. That's why I am so passionate about my work with the African Centre for Career Mentorship (ACCM). As a Communication Officer, I am driven by a sense of purpose to help others find their way, to empower them with the knowledge and confidence to pursue their dreams. Every message I craft, every word I write, is a chance to make a real difference. I believe that everyone deserves to find fulfillment and purpose in their career, and I am honored to be a part of that journey."
+  },
 ]
 
 export function MentorList() {
