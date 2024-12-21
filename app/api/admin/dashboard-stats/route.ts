@@ -3,18 +3,16 @@ import { db } from "@/lib/db";
 
 export async function GET() {
   try {
-    const [totalUsers, activeMentorships, totalBlogPosts, upcomingEvents] =
+    const [totalUsers, activeMentorships, upcomingEvents] =
       await Promise.all([
         db.user.count(),
         db.mentor.count(),
-        db.blogPost.count(),
         db.event.count({ where: { createdAt: { gte: new Date() } } }),
       ]);
 
     return NextResponse.json({
       totalUsers,
       activeMentorships,
-      totalBlogPosts,
       upcomingEvents,
     });
   } catch (error) {
