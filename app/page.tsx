@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -19,18 +21,10 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import {
-  Award,
-  BookOpen,
-  CheckCircle2,
-  Clock,
-  Globe,
-  Rocket,
-  Target,
-  TargetIcon,
-  Users,
-  Zap,
-} from "lucide-react";
+import { BookOpen, Rocket, Users } from "lucide-react";
+import useEmblaCarousel from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
+import { useEffect } from "react";
 
 const carouselSlides = [
   {
@@ -57,10 +51,31 @@ const carouselSlides = [
 ];
 
 export default function Home() {
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Autoplay()]);
+  useEffect(() => {
+    if (emblaApi) {
+      emblaApi.on("select", () => {
+        // Optional: Update some state or perform actions on slide change
+      });
+    }
+  }, [emblaApi]);
+
   return (
     <div className="flex flex-col min-h-screen">
       <main className="flex-grow">
-        <Carousel className="w-full rounded-lg mt-8">
+        <Carousel
+          ref={emblaRef}
+          opts={{
+            align: "start",
+            loop: true,
+          }}
+          plugins={[
+            Autoplay({
+              delay: 5000,
+            }),
+          ]}
+          className="w-full rounded-lg mt-8"
+        >
           <CarouselContent>
             {carouselSlides.map((slide, index) => (
               <CarouselItem key={index}>
@@ -145,8 +160,8 @@ export default function Home() {
               Ready to Take the Next Step?
             </h2>
             <p className="text-xl mb-8">
-              Start your journey towards career success with African Centre For Career Mentorship
-              today.
+              Start your journey towards career success with African Centre For
+              Career Mentorship today.
             </p>
             <div className="space-x-4">
               <Link href="/register">
