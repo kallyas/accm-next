@@ -18,7 +18,7 @@ export function MainNav({
     <div className="hidden md:flex items-center">
       <Link href="/" className="mr-6 flex items-center space-x-2">
         <span className="hidden font-bold sm:inline-block">
-          Pearl Mentor Hub
+         African Centre For Career Mentorship
         </span>
       </Link>
       <NavigationMenu>
@@ -133,13 +133,13 @@ export function MainNav({
               </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
-          <NavigationMenuItem>
+          {/* <NavigationMenuItem>
             <Link href="/blogs" legacyBehavior passHref>
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                 Blog
               </NavigationMenuLink>
             </Link>
-          </NavigationMenuItem>
+          </NavigationMenuItem> */}
           <NavigationMenuItem>
             <Link href="/contact" legacyBehavior passHref>
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>

@@ -11,11 +11,11 @@ import { CheckCircle } from "lucide-react";
 export default function AboutPage() {
   return (
     <div className="container mx-auto py-10">
-      <h1 className="text-4xl font-bold mb-6">About Pearl Mentor Hub</h1>
+      <h1 className="text-4xl font-bold mb-6">About African Centre For Career Mentorship</h1>
       <div className="grid gap-6 md:grid-cols-2">
         <div>
           <p className="text-lg mb-4">
-            Pearl Mentor Hub is a sustainable center of excellence for career
+            African Centre For Career Mentorship is a sustainable center of excellence for career
             mentorship, dedicated to empowering professionals across Africa
             through expert guidance and innovative career development programs.
           </p>
@@ -33,7 +33,7 @@ export default function AboutPage() {
         </div>
         <Image
           src="/accm/IMG_4727.JPG"
-          alt="Team at Pearl Mentor Hub"
+          alt="Team at African Centre For Career Mentorship"
           width={600}
           height={400}
           className="rounded-lg"

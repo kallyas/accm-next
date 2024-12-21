@@ -11,7 +11,7 @@ export function Footer() {
           <div>
             <h2 className="text-lg font-semibold text-primary">About Us</h2>
             <p className="mt-4 text-sm text-muted-foreground">
-              Pearl Mentor Hub is a sustainable centre of excellence for Career Mentorship and Human Capital Development in Africa.
+              African Centre For Career Mentorship is a sustainable centre of excellence for Career Mentorship and Human Capital Development in Africa.
             </p>
           </div>
           <div>
@@ -42,9 +42,9 @@ export function Footer() {
           <div>
             <h2 className="text-lg font-semibold text-primary">Contact Us</h2>
             <ul className="mt-4 space-y-2">
-              <li className="text-sm text-muted-foreground">123 Mentor Street, Kampala, Uganda</li>
-              <li className="text-sm text-muted-foreground">Phone: +256 123 456 789</li>
-              <li className="text-sm text-muted-foreground">Email: info@pearlmentorhub.com</li>
+              <li className="text-sm text-muted-foreground"> Ministers Village, Kiwatule Road, Kampala, Uganda</li>
+              <li className="text-sm text-muted-foreground">Phone: +(477)-570-224-173(whatsapp)</li>
+              <li className="text-sm text-muted-foreground">Email: admin@africanccm.com</li>
             </ul>
           </div>
           <div>
@@ -62,14 +62,14 @@ export function Footer() {
         <div className="mt-8 border-t border-gray-300 pt-8">
           <div className="flex flex-col items-center justify-between sm:flex-row">
             <p className="text-sm text-muted-foreground">
-              © {new Date().getFullYear()} Pearl Mentor Hub. All rights reserved.
+              © {new Date().getFullYear()} African Centre For Career Mentorship. All rights reserved.
             </p>
             <div className="mt-4 flex space-x-6 sm:mt-0">
-              <Link href="#" className="text-muted-foreground hover:text-primary">
+              <Link href="https://www.facebook.com/people/African-Centre-For-Career-Mentorship/61551044302562/?paipv=0&eav=AfbUD8Zh-9wRjw4tFs0kgv6fQfZ26xXoHwGhpM9WXMs1esn-eK9Fd1MYefU0wm9hsNg&_rdr" className="text-muted-foreground hover:text-primary">
                 <span className="sr-only">Facebook</span>
                 <Facebook className="h-6 w-6" />
               </Link>
-              <Link href="#" className="text-muted-foreground hover:text-primary">
+              <Link href="https://x.com/i/flow/login?redirect_after_login=%2Fmentorglobally" className="text-muted-foreground hover:text-primary">
                 <span className="sr-only">Twitter</span>
                 <Twitter className="h-6 w-6" />
               </Link>
@@ -77,7 +77,7 @@ export function Footer() {
                 <span className="sr-only">Instagram</span>
                 <Instagram className="h-6 w-6" />
               </Link>
-              <Link href="#" className="text-muted-foreground hover:text-primary">
+              <Link href="https://www.linkedin.com/in/african-centre-for-career-mentorship-8a476228b/?originalSubdomain=ug" className="text-muted-foreground hover:text-primary">
                 <span className="sr-only">LinkedIn</span>
                 <Linkedin className="h-6 w-6" />
               </Link>
