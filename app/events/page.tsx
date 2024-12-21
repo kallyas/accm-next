@@ -38,42 +38,42 @@ const events = [
     title: "Career Development Workshop",
     date: new Date("2023-08-15"),
     location: "Virtual",
-    bannerImage: "/placeholder.svg?height=200&width=400",
+    bannerImage: "https://via.placeholder.com/400x200",
   },
   {
     id: "2",
     title: "Networking Mixer",
     date: new Date("2023-09-01"),
     location: "Nairobi, Kenya",
-    bannerImage: "/placeholder.svg?height=200&width=400",
+    bannerImage: "https://via.placeholder.com/400x200",
   },
   {
     id: "3",
     title: "Leadership Seminar",
     date: new Date("2023-09-20"),
     location: "Virtual",
-    bannerImage: "/placeholder.svg?height=200&width=400",
+    bannerImage: "https://via.placeholder.com/400x200",
   },
   {
     id: "4",
     title: "Tech Talk",
     date: new Date("2023-10-05"),
     location: "Virtual",
-    bannerImage: "/placeholder.svg?height=200&width=400",
+    bannerImage: "https://via.placeholder.com/400x200",
   },
   {
     id: "5",
     title: "Startup Pitch Competition",
     date: new Date("2023-10-20"),
     location: "Virtual",
-    bannerImage: "/placeholder.svg?height=200&width",
+    bannerImage: "https://via.placeholder.com/400x200",
   },
   {
     id: "6",
     title: "Web Development Bootcamp",
     date: new Date("2023-11-10"),
     location: "Virtual",
-    bannerImage: "/placeholder.svg?height=200&width=400",
+    bannerImage: "https://via.placeholder.com/400x200",
   },
 ];
 
@@ -128,7 +128,7 @@ function EventList() {
                 <div className="space-y-4">
                   <div className="relative w-full h-64">
                     <Image
-                      src={selectedEvent?.bannerImage || ""}
+                      src={selectedEvent?.bannerImage || "https://via.placeholder.com/400x200"}
                       alt={selectedEvent?.title || ""}
                       layout="fill"
                       objectFit="cover"
