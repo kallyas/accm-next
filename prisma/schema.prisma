@@ -135,16 +135,6 @@ model Publication {
   updatedAt DateTime @updatedAt
 }
 
-model BlogPost {
-  id        String   @id @default(cuid())
-  title     String
-  excerpt   String  @default("")
-  content   String
-  author    String
-  tags      String[] @default([])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
 
 model Testimonial {
   id        String   @id @default(cuid())
