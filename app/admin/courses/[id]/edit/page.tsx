@@ -24,15 +24,36 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
-import { Trash2, Plus, GripVertical } from "lucide-react";
+import { Trash2, Plus, GripVertical, Loader2 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { useUpdateCourseMutation } from "@/hooks/use-courses";
+import {
+  closestCenter,
+  DndContext,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { SortableLesson } from "@/components/sortable-lesson";
+import { useCategoriesQuery } from "@/hooks/use-categories";
 
 const lessonSchema = z.object({
-  id: z.string().optional(),
   title: z.string().min(1, "Lesson title is required"),
   content: z.string().min(1, "Lesson content is required"),
   order: z.number().min(1),
@@ -43,11 +64,12 @@ const courseFormSchema = z.object({
   title: z.string().min(1, "Title is required"),
   subtitle: z.string().min(1, "Subtitle is required"),
   description: z.string().min(1, "Description is required"),
+  content: z.string().min(50, "Content must be at least 50 characters"),
   learningObjectives: z
     .array(z.string())
     .min(1, "At least one learning objective is required"),
   level: z.enum(["Beginner", "Intermediate", "Advanced"]),
-  category: z.string().min(1, "Category is required"),
+  categoryId: z.string().min(1, "Category is required"),
   duration: z.number().min(1, "Duration must be at least 1 minute"),
   isFeatured: z.boolean(),
   previewVideoUrl: z.string().url().optional(),
@@ -58,7 +80,16 @@ type CourseFormValues = z.infer<typeof courseFormSchema>;
 
 export default function EditCoursePage({ params }: { params: { id: string } }) {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  const updateCourseMutation = useUpdateCourseMutation();
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const { data: categories, isLoading, error } = useCategoriesQuery();
 
   const form = useForm<CourseFormValues>({
     resolver: zodResolver(courseFormSchema),
@@ -66,13 +97,14 @@ export default function EditCoursePage({ params }: { params: { id: string } }) {
       title: "",
       subtitle: "",
       description: "",
+      content: "",
       learningObjectives: [""],
       level: "Beginner",
-      category: "",
+      categoryId: "",
       duration: 0,
       isFeatured: false,
       previewVideoUrl: "",
-      lessons: [],
+      lessons: [{ title: "", content: "", order: 1, duration: 5 }],
     },
   });
 
@@ -95,6 +127,16 @@ export default function EditCoursePage({ params }: { params: { id: string } }) {
     control: form.control,
   });
 
+  function handleDragEnd(event) {
+    const { active, over } = event;
+
+    if (active.id !== over.id) {
+      const oldIndex = lessonFields.findIndex((item) => item.id === active.id);
+      const newIndex = lessonFields.findIndex((item) => item.id === over.id);
+      moveLesson(oldIndex, newIndex);
+    }
+  }
+
   useEffect(() => {
     async function fetchCourse() {
       const response = await fetch(`/api/admin/courses/${params.id}`);
@@ -114,21 +156,11 @@ export default function EditCoursePage({ params }: { params: { id: string } }) {
   }, [params.id, form]);
 
   async function onSubmit(values: CourseFormValues) {
-    setIsLoading(true);
-
     try {
-      const response = await fetch(`/api/admin/courses/${params.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
+      await updateCourseMutation.mutateAsync({
+        ...values,
+        id: params.id,
       });
-
-      if (!response.ok) {
-        throw new Error("Failed to update course");
-      }
-
       toast({
         title: "Success",
         description: "Course updated successfully",
@@ -140,30 +172,21 @@ export default function EditCoursePage({ params }: { params: { id: string } }) {
         description: "Failed to update course",
         variant: "destructive",
       });
-    } finally {
-      setIsLoading(false);
     }
   }
 
-  const onDragEnd = (result: any) => {
-    if (!result.destination) {
-      return;
-    }
-
-    moveLesson(result.source.index, result.destination.index);
-  };
-
   return (
-    <div className="container py-10">
-      <h1 className="text-3xl font-bold mb-6">Edit Course</h1>
+    <div className="container max-w-4xl py-10">
+      <h1 className="text-4xl font-bold mb-8">Create New Course</h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <Tabs defaultValue="basic">
-            <TabsList>
+          <Tabs defaultValue="basic" className="w-full">
+            <TabsList className="w-full justify-start">
               <TabsTrigger value="basic">Basic Information</TabsTrigger>
               <TabsTrigger value="details">Course Details</TabsTrigger>
               <TabsTrigger value="lessons">Lessons</TabsTrigger>
             </TabsList>
+
             <TabsContent value="basic">
               <Card>
                 <CardHeader>
@@ -211,6 +234,19 @@ export default function EditCoursePage({ params }: { params: { id: string } }) {
                   />
                   <FormField
                     control={form.control}
+                    name="content"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Course Content</FormLabel>
+                        <FormControl>
+                          <Textarea {...field} rows={10} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
                     name="level"
                     render={({ field }) => (
                       <FormItem>
@@ -238,13 +274,27 @@ export default function EditCoursePage({ params }: { params: { id: string } }) {
                   />
                   <FormField
                     control={form.control}
-                    name="category"
+                    name="categoryId"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Course Category</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
+                        <FormLabel>Category</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select a category" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {categories?.map((category) => (
+                              <SelectItem key={category.id} value={category.id}>
+                                {category.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -304,148 +354,128 @@ export default function EditCoursePage({ params }: { params: { id: string } }) {
                     name="previewVideoUrl"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Course Preview Video URL</FormLabel>
+                        <FormLabel>Preview Video URL</FormLabel>
                         <FormControl>
-                          <Input type="url" {...field} />
+                          <Input {...field} />
                         </FormControl>
+                        <FormDescription>
+                          Provide a URL for the course preview video (optional)
+                        </FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
+                  <div>
+                    <FormLabel>Learning Objectives</FormLabel>
+                    {objectiveFields.map((field, index) => (
+                      <FormField
+                        key={field.id}
+                        control={form.control}
+                        name={`learningObjectives.${index}`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <div className="flex items-center mt-2">
+                              <FormControl>
+                                <Input {...field} />
+                              </FormControl>
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => removeObjective(index)}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </FormItem>
+                        )}
+                      />
+                    ))}
+                    <div className="flex items-center">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className="mt-2"
+                        onClick={() => appendObjective("")}
+                      >
+                        <Plus className="mr-2 h-4 w-4" />
+                        Add Learning Objective
+                      </Button>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
             </TabsContent>
+
             <TabsContent value="lessons">
               <Card>
                 <CardHeader>
-                  <CardTitle>Lessons</CardTitle>
+                  <CardTitle>Course Lessons</CardTitle>
+                  <CardDescription>
+                    Drag and drop to reorder lessons. Add new lessons using the
+                    button below.
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <DragDropContext onDragEnd={onDragEnd}>
-                    <Droppable droppableId="lessons">
-                      {(provided) => (
-                        <div
-                          {...provided.droppableProps}
-                          ref={provided.innerRef}
-                        >
-                          {lessonFields.map((field, index) => (
-                            <Draggable
-                              key={field.id}
-                              draggableId={field.id}
-                              index={index}
-                            >
-                              {(provided) => (
-                                <div
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  className="mb-4 p-4 border rounded-lg"
-                                >
-                                  <div className="flex items-center justify-between mb-2">
-                                    <h4 className="text-lg font-semibold">
-                                      Lesson {index + 1}
-                                    </h4>
-                                    <div className="flex items-center">
-                                      <Button
-                                        type="button"
-                                        variant="ghost"
-                                        size="sm"
-                                        onClick={() => removeLesson(index)}
-                                      >
-                                        <Trash2 className="h-4 w-4" />
-                                      </Button>
-                                      <div {...provided.dragHandleProps}>
-                                        <GripVertical className="h-5 w-5 text-gray-500" />
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <FormField
-                                    control={form.control}
-                                    name={`lessons.${index}.title`}
-                                    render={({ field }) => (
-                                      <FormItem>
-                                        <FormLabel>Lesson Title</FormLabel>
-                                        <FormControl>
-                                          <Input {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                      </FormItem>
-                                    )}
-                                  />
-                                  <FormField
-                                    control={form.control}
-                                    name={`lessons.${index}.content`}
-                                    render={({ field }) => (
-                                      <FormItem>
-                                        <FormLabel>Lesson Content</FormLabel>
-                                        <FormControl>
-                                          <Textarea {...field} rows={5} />
-                                        </FormControl>
-                                        <FormMessage />
-                                      </FormItem>
-                                    )}
-                                  />
-                                  <FormField
-                                    control={form.control}
-                                    name={`lessons.${index}.duration`}
-                                    render={({ field }) => (
-                                      <FormItem>
-                                        <FormLabel>
-                                          Lesson Duration (minutes)
-                                        </FormLabel>
-                                        <FormControl>
-                                          <Input
-                                            type="number"
-                                            {...field}
-                                            onChange={(e) =>
-                                              field.onChange(
-                                                parseInt(e.target.value, 10)
-                                              )
-                                            }
-                                          />
-                                        </FormControl>
-                                        <FormMessage />
-                                      </FormItem>
-                                    )}
-                                  />
-                                  <input
-                                    type="hidden"
-                                    {...form.register(`lessons.${index}.order`)}
-                                    value={index + 1}
-                                  />
-                                </div>
-                              )}
-                            </Draggable>
-                          ))}
-                          {provided.placeholder}
-                        </div>
-                      )}
-                    </Droppable>
-                  </DragDropContext>
+                  <DndContext
+                    sensors={sensors}
+                    collisionDetection={closestCenter}
+                    onDragEnd={handleDragEnd}
+                  >
+                    <SortableContext
+                      items={lessonFields.map((field) => field.id)}
+                      strategy={verticalListSortingStrategy}
+                    >
+                      {lessonFields.map((field, index) => (
+                        <SortableLesson
+                          key={field.id}
+                          lesson={field}
+                          index={index}
+                          removeLesson={removeLesson}
+                          form={form}
+                        />
+                      ))}
+                    </SortableContext>
+                  </DndContext>
+
                   <Button
                     type="button"
                     variant="outline"
-                    size="sm"
                     onClick={() =>
                       appendLesson({
                         title: "",
                         content: "",
-                        order: lessonFields.length + 1,
                         duration: 5,
+                        order: lessonFields.length + 1,
                       })
                     }
-                    className="mt-4"
+                    className="mt-6 w-full"
                   >
                     <Plus className="mr-2 h-4 w-4" />
-                    Add Lesson
+                    Add New Lesson
                   </Button>
                 </CardContent>
               </Card>
             </TabsContent>
           </Tabs>
 
-          <Button type="submit" disabled={isLoading}>
-            {isLoading ? "Saving..." : "Save Course"}
-          </Button>
+          <div className="flex justify-end">
+            <Button
+              type="submit"
+              disabled={updateCourseMutation.isPending}
+              size="lg"
+            >
+              {updateCourseMutation.isPending ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Updating Course...
+                </>
+              ) : (
+                "Update Course"
+              )}
+            </Button>
+          </div>
         </form>
       </Form>
     </div>
