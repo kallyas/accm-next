@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -8,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -25,6 +23,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
+import { useContact } from "@/hooks/use-contact";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -42,7 +41,7 @@ const formSchema = z.object({
 });
 
 export default function ContactPage() {
-  const [isLoading, setIsLoading] = useState(false);
+  const contactMutation = useContact();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -55,15 +54,20 @@ export default function ContactPage() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true);
-    // In a real application, you would send this data to your API here.
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setIsLoading(false);
-    toast({
-      title: "Message sent",
-      description: "We'll get back to you as soon as possible.",
-    });
-    form.reset();
+    try {
+      await contactMutation.mutateAsync(values);
+      toast({
+        title: "Message sent",
+        description: "We'll get back to you as soon as possible.",
+      });
+      form.reset();
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again.",
+        variant: "destructive",
+      });
+    }
   }
 
   return (
@@ -141,8 +145,8 @@ export default function ContactPage() {
                       </FormItem>
                     )}
                   />
-                  <Button type="submit" disabled={isLoading}>
-                    {isLoading ? "Sending..." : "Send Message"}
+                  <Button type="submit" disabled={contactMutation.isPending}>
+                    {contactMutation.isPending ? "Sending..." : "Send Message"}
                   </Button>
                 </form>
               </Form>
@@ -178,7 +182,7 @@ export default function ContactPage() {
               <CardTitle>Our Location</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="aspect-video">
+              <div className="aspect-video rounded-lg overflow-hidden">
                 <iframe
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d255281.19036281522!2d32.5722063!3d0.3475964!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x177dbc0f8c4d0775%3A0x2f9b5a15e8c77748!2sKampala%2C%20Uganda!5e0!3m2!1sen!2sus!4v1655825826786!5m2!1sen!2sus"
                   width="100%"
@@ -187,7 +191,6 @@ export default function ContactPage() {
                   allowFullScreen
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  className="rounded-lg"
                 ></iframe>
               </div>
             </CardContent>
