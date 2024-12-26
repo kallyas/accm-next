@@ -135,8 +135,10 @@ CREATE TABLE "Service" (
 CREATE TABLE "Publication" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
-    "content" TEXT NOT NULL,
-    "author" TEXT NOT NULL,
+    "authors" TEXT NOT NULL,
+    "abstract" TEXT NOT NULL,
+    "externalUrl" TEXT NOT NULL,
+    "publishedDate" TIMESTAMP(3) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -186,6 +188,7 @@ CREATE TABLE "Contact" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
+    "subject" TEXT NOT NULL,
     "message" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,

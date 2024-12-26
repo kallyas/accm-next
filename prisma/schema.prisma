@@ -129,8 +129,10 @@ model Service {
 model Publication {
   id        String   @id @default(cuid())
   title     String
-  content   String
-  author    String
+  authors   String
+  abstract  String
+  externalUrl String
+  publishedDate DateTime
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -168,6 +170,7 @@ model Contact {
   id        String   @id @default(cuid())
   name      String
   email     String
+  subject   String
   message   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
