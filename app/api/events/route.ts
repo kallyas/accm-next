@@ -1,77 +1,57 @@
 import { NextResponse } from "next/server";
-import { z } from "zod";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { getPagination } from "@/lib/utils";
+import { z } from "zod";
 
-const querySchema = z.object({
-  page: z.string().optional(),
-  pageSize: z.string().optional(),
-});
-
-export async function GET(req: Request) {
-  try {
-    const url = new URL(req.url);
-    const { page, pageSize } = querySchema.parse({
-      page: url.searchParams.get("page"),
-      pageSize: url.searchParams.get("pageSize"),
-    });
-
-    const { from, to } = getPagination(
-      Number(page) || 0,
-      Number(pageSize) || 10
-    );
-
-    const events = await db.event.findMany({
-      skip: from,
-      take: to - from + 1,
-      orderBy: { createdAt: "asc" },
-    });
-
-    const total = await db.event.count();
-
-    return NextResponse.json({
-      events,
-      pageInfo: {
-        page: Number(page) || 0,
-        pageSize: to - from + 1,
-        total,
-      },
-    });
-  } catch (_) {
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
-    );
-  }
-}
-
-const createEventSchema = z.object({
-  title: z.string().min(5),
-  description: z.string().min(20),
-  startDate: z.string().date(),
-  endDate: z.string().date(),
-  location: z.string().min(2),
+const eventSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  description: z.string().min(1, "Description is required"),
+  startDate: z.string().refine((date) => !isNaN(Date.parse(date)), {
+    message: "Invalid start date",
+  }),
+  endDate: z.string().refine((date) => !isNaN(Date.parse(date)), {
+    message: "Invalid end date",
+  }),
+  location: z.string().min(1, "Location is required"),
   bannerUrl: z.string().url().optional(),
 });
 
+export async function GET() {
+  const events = await db.event.findMany({
+    orderBy: { startDate: "asc" },
+    include: { users: { select: { userId: true } } },
+  });
+
+  const formattedEvents = events.map((event) => ({
+    ...event,
+    registeredCount: event.users.length,
+    users: undefined,
+  }));
+
+  return NextResponse.json(formattedEvents);
+}
+
 export async function POST(req: Request) {
+  const session = await getServerSession(authOptions);
+
+  if (!session || session.user!.role !== "USER") {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
-    const body = await req.json();
-    const { title, description, startDate, endDate, location, bannerUrl } =
-      createEventSchema.parse(body);
+    const json = await req.json();
+    const body = eventSchema.parse(json);
 
     const event = await db.event.create({
       data: {
-        title,
-        description,
-        startDate,
-        endDate,
-        bannerUrl,
-        location,
+        ...body,
+        startDate: new Date(body.startDate),
+        endDate: new Date(body.endDate),
       },
     });
 
-    return NextResponse.json({ event });
+    return NextResponse.json(event);
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: error.errors }, { status: 400 });
