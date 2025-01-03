@@ -12,7 +12,7 @@ type EmailParams = {
 export async function sendEmail({ to, subject, text, html }: EmailParams) {
   try {
     const data = await resend.emails.send({
-      from: 'Pearl Mentor Hub <noreply@pearlmentorhub.com>',
+      from: 'Pearl Mentor Hub <noreply@africanccm.com>',
       to,
       subject,
       text,
