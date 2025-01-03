@@ -33,7 +33,7 @@ export async function POST(req: Request) {
       },
     })
 
-    const resetUrl = `${process.env.NEXT_PUBLIC_APP_URL}/reset-password?token=${token}`
+    const resetUrl = `${process.env.NEXT_AUTH_URL}/reset-password?token=${token}`
 
     await sendEmail({
       to: user.email,
