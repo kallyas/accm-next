@@ -34,7 +34,7 @@ export async function POST(
   req: Request,
   { params }: { params: { id: string } }
 ): Promise<NextResponse<ApiSuccess | ApiError>> {
-  console.log("unregistering for event", params.id);
+  
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
