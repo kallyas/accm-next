@@ -20,7 +20,7 @@ export async function POST(req: Request) {
 
     // Here you would typically send an email notification
     // For now, we'll just log the submission
-    console.log("New contact form submission:", submission);
+    
 
     return NextResponse.json({ message: "Form submitted successfully" });
   } catch (error) {
