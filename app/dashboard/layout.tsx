@@ -10,6 +10,7 @@ import {
   Star,
   MessageSquare,
   File,
+  CreditCard,
 } from "lucide-react";
 
 export default async function UserDashboardLayout({
@@ -63,7 +64,12 @@ export default async function UserDashboardLayout({
       href: "/dashboard/testimonials",
       label: "Testimonials",
       icon: <Star className="h-4 w-4" />,
-    }
+    },
+    {
+      href: "/dashboard/billing",
+      label: "Billing",
+      icon: <CreditCard className="h-4 w-4" />,
+    },
   ];
 
   return (
