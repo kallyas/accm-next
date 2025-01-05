@@ -10,9 +10,5 @@ export default async function BookSessionLayout({
 }) {
   const session = await getServerSession(authOptions);
 
-  if (!session) {
-    redirect(`/login?callbackUrl=${encodeURIComponent("/book-session")}`);
-  }
-
   return children;
 }
