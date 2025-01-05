@@ -2,6 +2,8 @@ import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
+import { sendEmail } from "@/lib/email";
+import { getAccountCreationEmailTemplate } from "@/lib/email-templates/account-creation";
 
 // Comprehensive validation schema
 const UserRegistrationSchema = z.object({
@@ -26,9 +28,7 @@ const UserRegistrationSchema = z.object({
       errorMap: () => ({ message: "Invalid education level" }),
     }
   ),
-  password: z
-    .string()
-    .min(8, "Password must be at least 8 characters")
+  password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
 export async function POST(req: Request) {
@@ -104,8 +104,15 @@ export async function POST(req: Request) {
       },
     });
 
-    // Log registration (replace with your logging mechanism)
-    console.log(`User registered: ${user.email}`);
+    await sendEmail({
+      to: email,
+      subject: "Your account has been created",
+      text: `Welcome to our platform, ${firstName}!`,
+      html: getAccountCreationEmailTemplate({
+        userName: `${firstName} ${lastName}`,
+        loginUrl: `${process.env.VERCEL_URL}/login`,
+      }),
+    });
 
     return NextResponse.json(
       {
@@ -138,4 +145,3 @@ export async function POST(req: Request) {
 
 // Prevent caching of this dynamic route
 export const dynamic = "force-dynamic";
-  
