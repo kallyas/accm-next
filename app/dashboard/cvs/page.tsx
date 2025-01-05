@@ -8,10 +8,6 @@ import { getR2Url } from "@/lib/cloudflare-r2";
 export default async function UserCVsPage() {
   const session = await getServerSession(authOptions);
 
-  if (!session) {
-    redirect("/login");
-  }
-
   const cvs = await Promise.all(
     (
       await db.cV.findMany({
