@@ -10,10 +10,6 @@ import { EnrolledCourses } from "@/components/enrolled-courses";
 export default async function UserDashboardPage() {
   const session = await getServerSession(authOptions);
 
-  if (!session) {
-    redirect("/login");
-  }
-
   const enrolledCourses = await db.enrollment.findMany({
     where: { userId: session!.user!.id },
     include: {
