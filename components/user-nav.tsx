@@ -55,10 +55,6 @@ const fetchNotifications = async ({
 export function UserNav() {
   const { data: session } = useSession();
 
-  if (!session) {
-    return null;
-  }
-
   const { data, isLoading, isError, error } = useQuery<
     NotificationsResponse,
     Error
