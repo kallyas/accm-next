@@ -21,12 +21,6 @@ export default async function EventDetailsPage({
 }) {
   const session = await getServerSession(authOptions);
 
-  if (!session) {
-    redirect(
-      `/login?callbackUrl=${encodeURIComponent(`/events/${params.id}`)}`
-    );
-  }
-
   const event = await db.event.findUnique({
     where: { id: params.id },
     include: {
