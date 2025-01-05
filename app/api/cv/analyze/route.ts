@@ -5,7 +5,7 @@ import { getR2Url } from "@/lib/cloudflare-r2";
 import { analyzeCVContent } from "@/lib/utils";
 import { db } from "@/lib/db";
 import { z } from "zod";
-import pdf from "pdf-parse";
+import pdf from "@bingsjs/pdf-parse";
 import mammoth from "mammoth";
 import fs from "fs";
 
@@ -50,18 +50,6 @@ export async function POST(req: Request) {
     // Handle case where CV is not found
     if (!cvRecord) {
       return NextResponse.json({ error: "CV not found" }, { status: 404 });
-    }
-
-    // check if we have "./test/data/05-versions-space.pdf" file from root directory
-    const temp = await fs.promises.readFile(
-      "./test/data/05-versions-space.pdf"
-    );
-    if (!temp) {
-      // create the file
-      await fs.promises.writeFile(
-        "./test/data/05-versions-space.pdf",
-        "This is a test file"
-      );
     }
 
     const cvUrl = await getR2Url(cvRecord.fileUrl);
