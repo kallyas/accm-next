@@ -161,15 +161,15 @@ export default function ContactPage() {
             <CardContent className="space-y-4">
               <div className="flex items-center space-x-2">
                 <MapPin className="h-5 w-5 text-muted-foreground" />
-                <p>123 Mentor Street, Kampala, Uganda</p>
+                <p>Plot 153, Kira Road, Kampala, Uganda</p>
               </div>
               <div className="flex items-center space-x-2">
                 <Phone className="h-5 w-5 text-muted-foreground" />
-                <p>+256 123 456 789</p>
+                <p>+447 570 224 173</p>
               </div>
               <div className="flex items-center space-x-2">
                 <Mail className="h-5 w-5 text-muted-foreground" />
-                <p>info@pearlmentorhub.com</p>
+                <p>admin@africanccm.com</p>
               </div>
               <div className="flex items-center space-x-2">
                 <Clock className="h-5 w-5 text-muted-foreground" />
@@ -184,7 +184,7 @@ export default function ContactPage() {
             <CardContent>
               <div className="aspect-video rounded-lg overflow-hidden">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d255281.19036281522!2d32.5722063!3d0.3475964!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x177dbc0f8c4d0775%3A0x2f9b5a15e8c77748!2sKampala%2C%20Uganda!5e0!3m2!1sen!2sus!4v1655825826786!5m2!1sen!2sus"
+                  src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3989.7468313008358!2d32.59352!3d0.34298999999999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMMKwMjAnMzQuOCJOIDMywrAzNSczNi43IkU!5e0!3m2!1sen!2sug!4v1736110635232!5m2!1sen!2sug"
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
