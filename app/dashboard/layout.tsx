@@ -11,6 +11,7 @@ import {
   MessageSquare,
   File,
   CreditCard,
+  User,
 } from "lucide-react";
 
 export default async function UserDashboardLayout({
@@ -20,9 +21,6 @@ export default async function UserDashboardLayout({
 }) {
   const session = await getServerSession(authOptions);
 
-  if (!session) {
-    redirect("/login");
-  }
 
   const sidebarLinks = [
     {
@@ -44,6 +42,11 @@ export default async function UserDashboardLayout({
       href: "/dashboard/cvs",
       label: "My CVs",
       icon: <File className="h-4 w-4" />,
+    },
+    {
+      href: "/dashboard/personal-discovery",
+      label: "Personal Discovery",
+      icon: <User className="h-4 w-4" />,
     },
     {
       href: "/dashboard/progress",
