@@ -74,7 +74,7 @@ export function Footer() {
             <ul className="mt-4 space-y-2">
               <li className="text-sm text-muted-foreground">
                 {" "}
-                Ministers Village, Kiwatule Road, Kampala, Uganda
+                Plot 153, Kira Road, Kampala, Uganda
               </li>
               <li className="text-sm text-muted-foreground">
                 Phone: +(477)-570-224-173(whatsapp)
