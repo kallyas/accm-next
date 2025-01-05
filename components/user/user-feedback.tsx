@@ -10,7 +10,7 @@ export function UserFeedback() {
 
   const handleSubmitFeedback = () => {
     // In a real application, you would send this feedback to your backend
-    console.log("Submitting feedback:", feedback);
+    
     toast({
       title: "Feedback Submitted",
       description: "Thank you for your feedback!",
