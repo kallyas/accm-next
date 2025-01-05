@@ -6,14 +6,10 @@ import { SettingsForm } from "@/components/settings-form"
 export default async function SettingsPage() {
   const session = await getServerSession(authOptions)
 
-  if (!session) {
-    redirect("/login")
-  }
-
   return (
     <div className="container py-10">
       <h1 className="text-3xl font-bold mb-6">Settings</h1>
-      <SettingsForm user={session.user} />
+      <SettingsForm user={session!.user} />
     </div>
   )
 }
