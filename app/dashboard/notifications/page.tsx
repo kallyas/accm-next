@@ -6,9 +6,6 @@ import { NotificationsList } from "@/components/notifications-list";
 export default async function NotificationsPage() {
   const session = await getServerSession(authOptions);
 
-  if (!session) {
-    redirect("/login");
-  }
 
   return (
     <div className="container py-10">
