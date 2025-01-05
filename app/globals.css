@@ -40,6 +40,9 @@ body {
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+    --brand-blue: 221 83% 53%;
+    --brand-teal: 199 89% 48%;
+    --brand-gradient: linear-gradient(to right, hsl(var(--brand-blue)), hsl(var(--brand-teal)));
   }
 
   .dark {
@@ -150,4 +153,39 @@ iframe {
   code {
     @apply bg-secondary text-secondary-foreground p-1 rounded;
   }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Glass morphism effects */
+.glass-card {
+  @apply bg-white/10 backdrop-blur-lg border border-white/20;
+}
+
+.glass-card-dark {
+  @apply bg-black/10 backdrop-blur-lg border border-white/10;
+}
+
+/* Gradient text */
+.gradient-text {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-teal-500;
+}
+
+/* Custom utilities */
+.text-balance {
+  text-wrap: balance;
 }

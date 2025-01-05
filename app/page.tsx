@@ -21,10 +21,19 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { BookOpen, Rocket, Users } from "lucide-react";
+import {
+  Award,
+  BookOpen,
+  GraduationCap,
+  Rocket,
+  Target,
+  Users,
+} from "lucide-react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { useEffect } from "react";
+import { motion } from "framer-motion";
+import { useInView } from "react-intersection-observer";
 
 const carouselSlides = [
   {
@@ -50,8 +59,55 @@ const carouselSlides = [
   },
 ];
 
+const features = [
+  {
+    icon: <GraduationCap className="h-10 w-10" />,
+    title: "Expert Mentorship",
+    description: "Learn from industry professionals with years of experience",
+  },
+  {
+    icon: <Users className="h-10 w-10" />,
+    title: "Community Support",
+    description: "Join a thriving community of like-minded professionals",
+  },
+  {
+    icon: <Target className="h-10 w-10" />,
+    title: "Career Growth",
+    description: "Achieve your career goals with personalized guidance",
+  },
+  {
+    icon: <Award className="h-10 w-10" />,
+    title: "Skill Development",
+    description: "Enhance your skills through workshops and resources",
+  },
+];
+
 export default function Home() {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Autoplay()]);
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  });
+
+  const containerVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        staggerChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+    },
+  };
   useEffect(() => {
     if (emblaApi) {
       emblaApi.on("select", () => {
@@ -76,10 +132,10 @@ export default function Home() {
           ]}
           className="w-full rounded-lg mt-8"
         >
-          <CarouselContent>
+          <CarouselContent className="rounded-lg">
             {carouselSlides.map((slide, index) => (
               <CarouselItem key={index}>
-                <div className="relative h-[60vh] w-full">
+                <div className="relative h-[60vh] w-full rounded-lg">
                   <Image
                     src={slide.image}
                     alt={slide.title}
@@ -102,6 +158,37 @@ export default function Home() {
           <CarouselPrevious />
           <CarouselNext />
         </Carousel>
+        <motion.section
+          ref={ref}
+          variants={containerVariants}
+          initial="hidden"
+          animate={inView ? "visible" : "hidden"}
+          className="py-20"
+        >
+          <div className="container mx-auto px-4">
+            <motion.h2
+              variants={itemVariants}
+              className="text-4xl font-bold text-center mb-12"
+            >
+              Why Choose Pearl Mentor Hub?
+            </motion.h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {features.map((feature, index) => (
+                <motion.div
+                  key={index}
+                  variants={itemVariants}
+                  className="flex flex-col items-center text-center p-6 rounded-xl backdrop-blur-sm border border-border/50 hover:shadow-lg transition-all duration-300"
+                >
+                  <div className="mb-4 text-primary">{feature.icon}</div>
+                  <h3 className="text-xl font-semibold mb-2">
+                    {feature.title}
+                  </h3>
+                  <p className="text-muted-foreground">{feature.description}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </motion.section>
 
         <ServicesSection />
 
@@ -314,9 +401,7 @@ const ServicesSection = () => {
   return (
     <section className="py-20 bg-background">
       <div className="container mx-auto">
-        <h2 className="text-3xl font-bold text-center mb-12">
-          Our Professional Development Services
-        </h2>
+        <h2 className="text-3xl font-bold text-center mb-12">Our Services</h2>
         <Tabs defaultValue="personalized-development" className="w-full">
           <TabsList className="grid w-full grid-cols-3">
             {services.map((service) => (
