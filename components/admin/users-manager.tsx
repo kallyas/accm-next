@@ -141,7 +141,7 @@ export function UsersManager() {
 
   const handleEditUser = (user: User) => {
     // Implement edit user functionality
-    console.log("Edit user:", user);
+    
     toast({
       title: "Edit User",
       description: `Editing user ${user.firstName} ${user.lastName}`,
