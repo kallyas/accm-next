@@ -7,10 +7,6 @@ import { db } from "@/lib/db"
 export default async function ProfilePage() {
   const session = await getServerSession(authOptions)
 
-  if (!session) {
-    redirect(`/login?callbackUrl=${encodeURIComponent("/dashboard/profile")}`)
-  }
-
   const user = await db.user.findUnique({
     where: { id: session?.user?.id },
     include: { profile: true },
