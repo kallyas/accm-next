@@ -658,6 +658,14 @@
   dependencies:
     regenerator-runtime "^0.14.0"
 
+"@bingsjs/pdf-parse@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@bingsjs/pdf-parse/-/pdf-parse-1.1.1.tgz#3b487362a9d5cff44eac6932bb745c8dc0f13ad4"
+  integrity sha512-BzZJ5ffTvqaN5zuufNTd9EUj+yWw9dLOvutjBkfQymorGM248YGupw5Fb17EICTpX09w8ro5ed9QNJD6urX7Ww==
+  dependencies:
+    debug "^3.1.0"
+    node-ensure "^0.0.0"
+
 "@dnd-kit/accessibility@^3.1.1":
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/@dnd-kit/accessibility/-/accessibility-3.1.1.tgz#3b4202bd6bb370a0730f6734867785919beac6af"
