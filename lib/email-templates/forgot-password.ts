@@ -21,7 +21,7 @@ export function getForgotPasswordEmailTemplate({
                   <!-- Header with Logo -->
                   <tr>
                     <td style="padding: 40px 40px 20px 40px; background: linear-gradient(to right, #3b82f6, #06b6d4);">
-                      <h1 style="margin: 0; font-size: 24px; color: #ffffff; text-align: center;">Pearl Mentor Hub</h1>
+                      <h1 style="margin: 0; font-size: 24px; color: #ffffff; text-align: center;">African Centre For Career Mentorship</h1>
                     </td>
                   </tr>
                   
@@ -33,7 +33,7 @@ export function getForgotPasswordEmailTemplate({
                         Hello${userName ? ` ${userName}` : ''},
                       </p>
                       <p style="margin: 0 0 24px 0; font-size: 16px; line-height: 24px; color: #4b5563;">
-                        We received a request to reset your password for your Pearl Mentor Hub account. If you didn't make this request, you can safely ignore this email.
+                        We received a request to reset your password for your African Centre For Career Mentorship account. If you didn't make this request, you can safely ignore this email.
                       </p>
                       <p style="margin: 0 0 32px 0; font-size: 16px; line-height: 24px; color: #4b5563;">
                         To reset your password, click the button below:
@@ -58,7 +58,7 @@ export function getForgotPasswordEmailTemplate({
                               For security reasons, this password reset link will expire in 1 hour.
                             </p>
                             <p style="margin: 0; font-size: 14px; line-height: 22px; color: #6b7280;">
-                              If you need any assistance, please contact our support team at support@pearlmentorhub.com
+                              If you need any assistance, please contact our support team at admin@africanccm.com
                             </p>
                           </td>
                         </tr>
@@ -70,7 +70,7 @@ export function getForgotPasswordEmailTemplate({
                   <tr>
                     <td style="padding: 24px 40px; background-color: #f8fafc; text-align: center;">
                       <p style="margin: 0; font-size: 14px; line-height: 22px; color: #6b7280;">
-                        © ${new Date().getFullYear()} Pearl Mentor Hub. All rights reserved.
+                        © ${new Date().getFullYear()} African Centre For Career Mentorship. All rights reserved.
                       </p>
                       <p style="margin: 8px 0 0 0; font-size: 14px; line-height: 22px; color: #6b7280;">
                         This email was sent to you because a password reset was requested for your account.
