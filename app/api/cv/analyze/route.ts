@@ -33,7 +33,7 @@ export async function extractDocxContent(url: string): Promise<string> {
 
 // Main POST handler function
 export async function POST(req: Request) {
-  console.log(req.method);
+  
   const session = await getServerSession(authOptions);
 
   // Unauthorized if no session
@@ -52,6 +52,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "CV not found" }, { status: 404 });
     }
 
+ 
     const cvUrl = await getR2Url(cvRecord.fileUrl);
     let cvContent: string;
 
@@ -95,7 +96,7 @@ export async function POST(req: Request) {
 
     // Handle other errors
     return NextResponse.json(
-      { error: "Internal Server Error" + error.message },
+      { error: "Internal Server Error" + (error as Error).message },
       { status: 500 }
     );
   }
