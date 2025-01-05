@@ -3,6 +3,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { db } from "@/lib/db";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
+import { revalidatePath } from "next/cache";
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db),
@@ -43,6 +44,7 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
+        revalidatePath("/dashboard");
         return {
           id: user.id,
           email: user.email,
