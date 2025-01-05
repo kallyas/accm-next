@@ -170,7 +170,7 @@ export default function Home() {
               variants={itemVariants}
               className="text-4xl font-bold text-center mb-12"
             >
-              Why Choose Pearl Mentor Hub?
+              Why Choose African Centre For Career Mentorship?
             </motion.h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {features.map((feature, index) => (

@@ -12,15 +12,15 @@ export default function PrivacyPolicyPage() {
       <h1 className="text-4xl font-bold mb-6">Privacy Policy</h1>
       <Card>
         <CardHeader>
-          <CardTitle>Privacy Policy for Pearl Mentor Hub</CardTitle>
+          <CardTitle>Privacy Policy for African Centre For Career Mentorship</CardTitle>
           <CardDescription>Last updated: June 1, 2023</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <p>
-            At Pearl Mentor Hub, accessible from www.pearlmentorhub.com, one of
+            At African Centre For Career Mentorship, accessible from www.pearlmentorhub.com, one of
             our main priorities is the privacy of our visitors. This Privacy
             Policy document contains types of information that is collected and
-            recorded by Pearl Mentor Hub and how we use it.
+            recorded by African Centre For Career Mentorship and how we use it.
           </p>
           <p>
             If you have additional questions or require more information about
@@ -76,7 +76,7 @@ export default function PrivacyPolicyPage() {
 
           <h2 className="text-2xl font-semibold mt-6">Log Files</h2>
           <p>
-            Pearl Mentor Hub follows a standard procedure of using log files.
+            African Centre For Career Mentorship follows a standard procedure of using log files.
             These files log visitors when they visit websites. All hosting
             companies do this and a part of hosting services' analytics. The
             information collected by log files include internet protocol (IP)
@@ -92,7 +92,7 @@ export default function PrivacyPolicyPage() {
             Cookies and Web Beacons
           </h2>
           <p>
-            Like any other website, Pearl Mentor Hub uses 'cookies'. These
+            Like any other website, African Centre For Career Mentorship uses 'cookies'. These
             cookies are used to store information including visitors'
             preferences, and the pages on the website that the visitor accessed
             or visited. The information is used to optimize the users'

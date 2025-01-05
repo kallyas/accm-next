@@ -104,7 +104,7 @@ const data: Testimonial[] = [
     id: "2",
     author: "Michael L.",
     content:
-      "The resources and guidance provided by Pearl Mentor Hub have been invaluable. It's made a significant impact on my professional development.",
+      "The resources and guidance provided by African Centre For Career Mentorship have been invaluable. It's made a significant impact on my professional development.",
     rating: 4,
     date: "2023-06-02",
   },

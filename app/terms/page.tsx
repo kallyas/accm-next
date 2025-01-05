@@ -12,7 +12,7 @@ export default function TermsPage() {
       <h1 className="text-4xl font-bold mb-6">Terms and Conditions</h1>
       <Card>
         <CardHeader>
-          <CardTitle>Welcome to Pearl Mentor Hub</CardTitle>
+          <CardTitle>Welcome to African Centre For Career Mentorship</CardTitle>
           <CardDescription>Last updated: June 1, 2023</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -44,7 +44,7 @@ export default function TermsPage() {
             </li>
             <li>
               <strong>Company</strong> (referred to as either "the Company",
-              "We", "Us" or "Our" in this Agreement) refers to Pearl Mentor Hub.
+              "We", "Us" or "Our" in this Agreement) refers to African Centre For Career Mentorship.
             </li>
             <li>
               <strong>Country</strong> refers to: Uganda
@@ -68,7 +68,7 @@ export default function TermsPage() {
               included or made available by the Service.
             </li>
             <li>
-              <strong>Website</strong> refers to Pearl Mentor Hub, accessible
+              <strong>Website</strong> refers to African Centre For Career Mentorship, accessible
               from www.pearlmentorhub.com
             </li>
             <li>
