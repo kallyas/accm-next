@@ -33,7 +33,7 @@ export default function PaymentInstructionsPage() {
             <p className="mb-4">Please use the following bank details for transfer:</p>
             <ul className="space-y-2">
               <li><strong>Bank Name:</strong> Example Bank</li>
-              <li><strong>Account Name:</strong> Pearl Mentor Hub Ltd</li>
+              <li><strong>Account Name:</strong> African Centre For Career Mentorship</li>
               <li><strong>Account Number:</strong> 1234567890</li>
               <li><strong>Sort Code:</strong> 12-34-56</li>
               <li><strong>Reference:</strong> Your full name</li>
