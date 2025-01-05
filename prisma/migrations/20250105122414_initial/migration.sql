@@ -30,6 +30,30 @@ CREATE TABLE "User" (
 );
 
 -- CreateTable
+CREATE TABLE "PersonalDiscovery" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "strengths" TEXT[],
+    "weaknesses" TEXT[],
+    "opportunities" TEXT[],
+    "achievements" TEXT[],
+    "threats" TEXT[],
+    "familyAspirations" TEXT[],
+    "careerAspirations" TEXT[],
+    "financialBusinessAspirations" TEXT[],
+    "socialAspirations" TEXT[],
+    "desiredPosition" TEXT[],
+    "requiredSkills" TEXT[],
+    "coursesAndTrainings" TEXT[],
+    "strategies" TEXT[],
+    "shortTermGoals" TEXT[],
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "PersonalDiscovery_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "UserProfile" (
     "id" TEXT NOT NULL,
     "bio" TEXT,
@@ -333,6 +357,9 @@ CREATE TABLE "PasswordResetToken" (
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "PersonalDiscovery_userId_key" ON "PersonalDiscovery"("userId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "UserProfile_userId_key" ON "UserProfile"("userId");
 
 -- CreateIndex
@@ -346,6 +373,9 @@ CREATE UNIQUE INDEX "Category_name_key" ON "Category"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "PasswordResetToken_token_key" ON "PasswordResetToken"("token");
+
+-- AddForeignKey
+ALTER TABLE "PersonalDiscovery" ADD CONSTRAINT "PersonalDiscovery_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "UserProfile" ADD CONSTRAINT "UserProfile_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

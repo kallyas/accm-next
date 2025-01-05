@@ -34,6 +34,29 @@ model User {
   events         UserEvent[]
   enrollments    Enrollment[]
   cvs            CV[]
+  personalDiscovery PersonalDiscovery?
+}
+
+model PersonalDiscovery {
+  id                           String   @id @default(cuid())
+  userId                       String   @unique
+  user                         User     @relation(fields: [userId], references: [id])
+  strengths                    String[]
+  weaknesses                   String[]
+  opportunities                String[]
+  achievements                 String[]
+  threats                      String[]
+  familyAspirations            String[]
+  careerAspirations            String[]
+  financialBusinessAspirations String[]
+  socialAspirations            String[]
+  desiredPosition              String[]
+  requiredSkills               String[]
+  coursesAndTrainings          String[]
+  strategies                   String[]
+  shortTermGoals               String[]
+  createdAt                    DateTime @default(now())
+  updatedAt                    DateTime @updatedAt
 }
 
 model UserProfile {
