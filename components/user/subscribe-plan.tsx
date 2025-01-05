@@ -105,8 +105,8 @@ export function SubscribePlan() {
     }
 
     // Here you would typically send the subscription request and payment proof to your backend
-    console.log("Subscribing to plan:", selectedPlan);
-    console.log("Payment proof:", paymentProof);
+    
+    
 
     toast({
       title: "Subscription Submitted",
