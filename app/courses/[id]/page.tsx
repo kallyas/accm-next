@@ -26,9 +26,6 @@ export default async function CourseDetailsPage({
 }) {
   const session = await getServerSession(authOptions);
 
-  if (!session) {
-    redirect("/login");
-  }
 
   const course = await db.course.findUnique({
     where: { id: params.id },
