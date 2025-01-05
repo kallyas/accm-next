@@ -3,6 +3,7 @@ import { db } from "@/lib/db"
 import { z } from "zod"
 import crypto from "crypto"
 import { sendEmail } from "@/lib/email"
+import { getForgotPasswordEmailTemplate } from "@/lib/email-templates/forgot-password"
 
 const forgotPasswordSchema = z.object({
   email: z.string().email(),
@@ -34,19 +35,17 @@ export async function POST(req: Request) {
     })
 
     const resetUrl = `${process.env.VERCEL_URL}/reset-password?token=${token}`
+    const userName = user.firstName ? `${user.firstName} ${user.lastName}` : undefined
 
     await sendEmail({
       to: user.email,
-      subject: "Reset your password",
-      text: `Click the following link to reset your password: ${resetUrl}`,
-      html: `
-        <h1>Reset Your Password</h1>
-        <p>Click the following link to reset your password:</p>
-        <a href="${resetUrl}">${resetUrl}</a>
-        <p>If you didn't request this, please ignore this email.</p>
-      `,
+      subject: "Reset Your Pearl Mentor Hub Password",
+      text: `Click the following link to reset your password: https://${resetUrl}`,
+      html: getForgotPasswordEmailTemplate({
+        resetUrl,
+        userName,
+      }),
     })
-
     return NextResponse.json({ message: "If a user with that email exists, a password reset link has been sent." })
   } catch (error) {
     if (error instanceof z.ZodError) {
