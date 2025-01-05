@@ -14,9 +14,5 @@ interface LayoutProps {
 export default async function Layout({ children }: LayoutProps) {
   const session = await getServerSession();
 
-  if (!session) {
-    redirect(`/login?callbackUrl=${encodeURIComponent("/cv-alignment")}`);
-  }
-
   return children;
 }
