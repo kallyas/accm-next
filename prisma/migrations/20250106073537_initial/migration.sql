@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "Role" AS ENUM ('USER', 'ADMIN');
+CREATE TYPE "Role" AS ENUM ('USER', 'ADMIN', 'MENTOR', 'TEAM_MEMBER');
 
 -- CreateEnum
 CREATE TYPE "SubscriptionStatus" AS ENUM ('ACTIVE', 'EXPIRED', 'CANCELLED');
@@ -51,6 +51,27 @@ CREATE TABLE "PersonalDiscovery" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "PersonalDiscovery_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "ScholarshipAssessment" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "reasonForDegree" TEXT NOT NULL,
+    "whyNow" TEXT NOT NULL,
+    "undergraduateCGPA" DOUBLE PRECISION NOT NULL,
+    "undergraduateCourse" TEXT NOT NULL,
+    "workExperienceYears" INTEGER NOT NULL,
+    "leadershipExperience" BOOLEAN NOT NULL,
+    "leadershipDetails" TEXT,
+    "communityService" BOOLEAN NOT NULL,
+    "awardsAndHonors" BOOLEAN NOT NULL,
+    "publications" BOOLEAN NOT NULL,
+    "hasLinkedIn" BOOLEAN NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "ScholarshipAssessment_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -360,6 +381,9 @@ CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 CREATE UNIQUE INDEX "PersonalDiscovery_userId_key" ON "PersonalDiscovery"("userId");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "ScholarshipAssessment_userId_key" ON "ScholarshipAssessment"("userId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "UserProfile_userId_key" ON "UserProfile"("userId");
 
 -- CreateIndex
@@ -376,6 +400,9 @@ CREATE UNIQUE INDEX "PasswordResetToken_token_key" ON "PasswordResetToken"("toke
 
 -- AddForeignKey
 ALTER TABLE "PersonalDiscovery" ADD CONSTRAINT "PersonalDiscovery_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ScholarshipAssessment" ADD CONSTRAINT "ScholarshipAssessment_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "UserProfile" ADD CONSTRAINT "UserProfile_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
