@@ -94,7 +94,7 @@ export function Footer() {
                 placeholder="Enter your email"
                 className="mr-2 mb-2 sm:mb-0"
               />
-              <Button type="submit">Subscribe</Button>
+              <Button type="submit" className="bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600">Subscribe</Button>
             </form>
           </div>
         </div>
