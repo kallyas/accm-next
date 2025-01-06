@@ -118,7 +118,7 @@ export default function TermsPage() {
             contact us:
           </p>
           <ul className="list-disc list-inside">
-            <li>By email: info@pearlmentorhub.com</li>
+            <li>By email: admin@africanccm.com</li>
             <li>
               By visiting this page on our website:
               www.pearlmentorhub.com/contact

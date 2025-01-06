@@ -55,7 +55,7 @@ export function getAccountCreationEmailTemplate({
                         <li>Connect with mentors in your field</li>
                       </ul>
                       <p style="margin: 0 0 24px 0; font-size: 16px; line-height: 24px; color: #4b5563;">
-                        If you have any questions or need assistance, don't hesitate to reach out to our support team at support@pearlmentorhub.com.
+                        If you have any questions or need assistance, don't hesitate to reach out to our support team at admin@africanccm.com.
                       </p>
                       <p style="margin: 0; font-size: 16px; line-height: 24px; color: #4b5563;">
                         We're excited to be part of your career journey!

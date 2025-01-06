@@ -38,7 +38,7 @@ export default function PaymentInstructionsPage() {
               <li><strong>Sort Code:</strong> 12-34-56</li>
               <li><strong>Reference:</strong> Your full name</li>
             </ul>
-            <p className="mt-4">After making the transfer, please email a copy of the transaction to payments@pearlmentorhub.com</p>
+            <p className="mt-4">After making the transfer, please email a copy of the transaction to admin@africanccm.com</p>
           </CardContent>
         </Card>
       </div>
