@@ -20,6 +20,7 @@ export const config = {
     '/admin/:path*',
     '/cv-alignment',
     '/book-session',
+    '/scholarship-quest',
   ],
 }
 
