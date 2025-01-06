@@ -25,6 +25,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import Link from "next/link";
+import { getNames } from "country-list";
 
 const formSchema = z.object({
   firstName: z.string().min(2, {
@@ -282,9 +283,11 @@ export default function RegisterPage() {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="kenya">Kenya</SelectItem>
-                          <SelectItem value="uganda">Uganda</SelectItem>
-                          <SelectItem value="tanzania">Tanzania</SelectItem>
+                          {getNames().map((country) => (
+                            <SelectItem key={country} value={country}>
+                              {country}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                       <FormMessage />
