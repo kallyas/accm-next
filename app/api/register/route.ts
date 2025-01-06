@@ -110,7 +110,7 @@ export async function POST(req: Request) {
       text: `Welcome to our platform, ${firstName}!`,
       html: getAccountCreationEmailTemplate({
         userName: `${firstName} ${lastName}`,
-        loginUrl: `${process.env.VERCEL_URL}/login`,
+        loginUrl: `${process.env.VERCEL_PROJECT_PRODUCTION_URL}/login`,
       }),
     });
 

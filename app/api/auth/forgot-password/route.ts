@@ -34,7 +34,7 @@ export async function POST(req: Request) {
       },
     })
 
-    const resetUrl = `${process.env.VERCEL_URL}/reset-password?token=${token}`
+    const resetUrl = `${process.env.VERCEL_PROJECT_PRODUCTION_URL}/reset-password?token=${token}`
     const userName = user.firstName ? `${user.firstName} ${user.lastName}` : undefined
 
     await sendEmail({
