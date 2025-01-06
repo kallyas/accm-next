@@ -53,6 +53,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "1.0.0",
+    "country-list": "^2.3.0",
     "date-fns": "^4.1.0",
     "embla-carousel-autoplay": "^8.5.1",
     "embla-carousel-react": "^8.5.1",
@@ -85,6 +86,7 @@
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
+    "@types/country-list": "^2.1.4",
     "@types/node": "^20",
     "@types/papaparse": "^5.3.15",
     "@types/pdf-parse": "^1.1.4",
