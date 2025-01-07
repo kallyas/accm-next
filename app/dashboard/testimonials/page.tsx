@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import {
   Card,
   CardContent,
@@ -13,54 +14,87 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogFooter,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { toast } from "@/hooks/use-toast";
 
 type Testimonial = {
   id: string;
   content: string;
+  author: string;
   rating: number;
-  date: string;
+  createdAt: string;
 };
 
+async function fetchTestimonials(): Promise<Testimonial[]> {
+  const response = await fetch("/api/user/testimonials");
+  if (!response.ok) {
+    throw new Error("Failed to fetch testimonials");
+  }
+  return response.json();
+}
+
 export default function UserTestimonialsPage() {
-  const [testimonials, setTestimonials] = useState<Testimonial[]>([
-    {
-      id: "1",
-      content: "Great mentorship program!",
-      rating: 5,
-      date: "2023-06-15",
-    },
-    {
-      id: "2",
-      content: "Learned a lot from my mentor.",
-      rating: 4,
-      date: "2023-07-01",
-    },
-  ]);
+  const {
+    data: testimonials,
+    isLoading,
+    error,
+    refetch,
+  } = useQuery<Testimonial[]>({
+    queryKey: ["testimonials"],
+    queryFn: fetchTestimonials,
+  });
   const [isNewTestimonialModalOpen, setIsNewTestimonialModalOpen] =
     useState(false);
 
-  const handleAddTestimonial = (
-    newTestimonial: Omit<Testimonial, "id" | "date">
+  const handleAddTestimonial = async (
+    event: React.FormEvent<HTMLFormElement>
   ) => {
-    const testimonial: Testimonial = {
-      ...newTestimonial,
-      id: Date.now().toString(),
-      date: new Date().toISOString().split("T")[0],
-    };
-    setTestimonials([...testimonials, testimonial]);
-    setIsNewTestimonialModalOpen(false);
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const content = formData.get("content") as string;
+    const rating = parseInt(formData.get("rating") as string);
+
+    try {
+      const response = await fetch("/api/user/testimonials", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ content, rating }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to add testimonial");
+      }
+
+      toast({
+        title: "Testimonial Added",
+        description: "Your testimonial has been successfully added.",
+      });
+      setIsNewTestimonialModalOpen(false);
+      refetch();
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to add testimonial. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
+  if (isLoading) return <div>Loading testimonials...</div>;
+  if (error)
+    return <div>Error loading testimonials: {(error as Error).message}</div>;
+
   return (
-    <div className="container mx-auto py-10">
+    <div className="container py-10">
       <h1 className="text-3xl font-bold mb-6">My Testimonials</h1>
       <div className="mb-4">
         <Dialog
@@ -71,22 +105,13 @@ export default function UserTestimonialsPage() {
             <Button>Add New Testimonial</Button>
           </DialogTrigger>
           <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Add New Testimonial</DialogTitle>
-              <DialogDescription>
-                Share your experience with the mentorship program.
-              </DialogDescription>
-            </DialogHeader>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                const formData = new FormData(e.currentTarget);
-                handleAddTestimonial({
-                  content: formData.get("content") as string,
-                  rating: Number(formData.get("rating")),
-                });
-              }}
-            >
+            <form onSubmit={handleAddTestimonial}>
+              <DialogHeader>
+                <DialogTitle>Add New Testimonial</DialogTitle>
+                <DialogDescription>
+                  Share your experience with Pearl Mentor Hub.
+                </DialogDescription>
+              </DialogHeader>
               <div className="grid gap-4 py-4">
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="content" className="text-right">
@@ -121,12 +146,14 @@ export default function UserTestimonialsPage() {
           </DialogContent>
         </Dialog>
       </div>
-      <div className="grid gap-6 md:grid-cols-2">
-        {testimonials.map((testimonial) => (
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {testimonials?.map((testimonial) => (
           <Card key={testimonial.id}>
             <CardHeader>
               <CardTitle>Testimonial</CardTitle>
-              <CardDescription>{testimonial.date}</CardDescription>
+              <CardDescription>
+                {new Date(testimonial.createdAt).toLocaleDateString()}
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <p>{testimonial.content}</p>
