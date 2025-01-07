@@ -12,7 +12,6 @@ body {
   }
 }
 
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -42,7 +41,11 @@ body {
     --chart-5: 27 87% 67%;
     --brand-blue: 221 83% 53%;
     --brand-teal: 199 89% 48%;
-    --brand-gradient: linear-gradient(to right, hsl(var(--brand-blue)), hsl(var(--brand-teal)));
+    --brand-gradient: linear-gradient(
+      to right,
+      hsl(var(--brand-blue)),
+      hsl(var(--brand-teal))
+    );
   }
 
   .dark {
@@ -72,7 +75,6 @@ body {
     --chart-5: 340 75% 55%;
   }
 }
-
 
 @layer base {
   * {
@@ -188,4 +190,12 @@ iframe {
 /* Custom utilities */
 .text-balance {
   text-wrap: balance;
+}
+
+/* Simplified card styles */
+.card,
+[class*="bg-card"] {
+  @apply bg-white/80 dark:bg-gray-950/80 
+         border-gray-200/50 dark:border-gray-800/50 
+         transition-shadow;
 }
