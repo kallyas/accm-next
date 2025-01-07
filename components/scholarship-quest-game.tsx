@@ -1,17 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { User } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -25,206 +20,238 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { toast } from "@/hooks/use-toast";
 import {
-  Trophy,
-  ChevronRight,
-  ChevronLeft,
-  Star,
-  AlertCircle,
-} from "lucide-react";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { ChevronRight, ChevronLeft, Trophy } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-const scholarshipAssessmentSchema = z.object({
-  reasonForDegree: z
-    .string()
-    .min(10, "Please provide a detailed reason (minimum 10 characters)"),
-  whyNow: z
-    .string()
-    .min(10, "Please provide a detailed explanation (minimum 10 characters)"),
-  undergraduateCGPA: z
-    .number()
-    .min(0, "CGPA cannot be negative")
-    .max(5, "CGPA must be between 0 and 5"),
-  undergraduateCourse: z.string().min(2, "Please provide your course name"),
-  workExperienceYears: z
-    .number()
-    .int("Please enter a whole number")
-    .min(0, "Work experience cannot be negative"),
-  leadershipExperience: z.boolean(),
-  leadershipDetails: z
-    .string()
-    .optional()
-    .refine((val) => {
-      if (val === undefined) return true;
-      return val.length >= 10 || val.length === 0;
-    }, "Please provide detailed leadership experience (minimum 10 characters)"),
-  communityService: z.boolean(),
-  awardsAndHonors: z.boolean(),
-  publications: z.boolean(),
-  hasLinkedIn: z.boolean(),
+const careerQuestSchema = z.object({
+  educationLevel: z.enum([
+    "high_school",
+    "certificate",
+    "diploma",
+    "bachelors",
+    "masters",
+    "phd",
+    "other"
+  ], {
+    required_error: "Please select your education level"
+  }),
+  
+  fieldPreference: z.enum(["arts", "sciences"], {
+    required_error: "Please select your field preference"
+  }),
+  
+  ageRange: z.enum([
+    "under_18",
+    "18_24",
+    "25_34",
+    "35_44",
+    "45_54",
+    "55_plus"
+  ], {
+    required_error: "Please select your age range"
+  }),
+  
+  gender: z.enum([
+    "male",
+    "female",
+    "non_binary",
+    "prefer_not_to_say",
+    "other"
+  ], {
+    required_error: "Please select your gender"
+  }),
+  
+  employmentPreference: z.enum([
+    "self_employed",
+    "government",
+    "private"
+  ], {
+    required_error: "Please select your preferred employment type"
+  }),
+  
+  selfEmploymentType: z.enum(["profit", "non_profit"]).optional(),
+  
+  careerSector: z.enum([
+    "academia",
+    "policy",
+    "industry"
+  ], {
+    required_error: "Please select your preferred career sector"
+  }),
+  
+  unpaidPassion: z.string().min(10, "Please provide more detail about your interests"),
+  personalPassion: z.string().min(10, "Please describe your passion in more detail"),
+  lifeGoal: z.string().min(10, "Please elaborate on the problem you want to solve"),
+  futureTitle: z.string().min(2, "Please specify your desired future title"),
+  futureTasks: z.string().min(10, "Please describe your future tasks in more detail"),
+  requiredSkills: z.string().min(10, "Please list the required skills"),
+  desiredCourses: z.string().min(10, "Please specify the courses you need")
 });
 
-type ScholarshipAssessmentFormValues = z.infer<
-  typeof scholarshipAssessmentSchema
->;
+type CareerQuestFormValues = z.infer<typeof careerQuestSchema>;
 
-interface ScholarshipQuestGameProps {
-  user: User & {
-    scholarshipAssessment: ScholarshipAssessmentFormValues | null;
-  };
-}
-
-export function ScholarshipQuestGame({
-  user,
-}: ScholarshipQuestGameProps) {
+export function CareerGuidanceQuest() {
   const [currentStep, setCurrentStep] = useState(0);
-  const [score, setScore] = useState(0);
   const [validationError, setValidationError] = useState<string | null>(null);
+  const [isComplete, setIsComplete] = useState(false);
 
-  const form = useForm<ScholarshipAssessmentFormValues>({
-    resolver: zodResolver(scholarshipAssessmentSchema),
+  const form = useForm<CareerQuestFormValues>({
+    resolver: zodResolver(careerQuestSchema),
     mode: "onChange",
-    defaultValues: user?.scholarshipAssessment || {
-      reasonForDegree: "",
-      whyNow: "",
-      undergraduateCGPA: 0,
-      undergraduateCourse: "",
-      workExperienceYears: 0,
-      leadershipExperience: false,
-      leadershipDetails: "",
-      communityService: false,
-      awardsAndHonors: false,
-      publications: false,
-      hasLinkedIn: false,
-    },
   });
 
   const questions = [
     {
-      field: "reasonForDegree",
-      label: "Why do you want to do a masters degree or PhD?",
-      description:
-        "Share your motivations and career goals (minimum 10 characters)",
+      field: "educationLevel",
+      label: "What level of education are you?",
+      type: "select",
+      options: [
+        { value: "high_school", label: "High School" },
+        { value: "certificate", label: "Certificate" },
+        { value: "diploma", label: "Diploma" },
+        { value: "bachelors", label: "Bachelor's Degree" },
+        { value: "masters", label: "Master's Degree" },
+        { value: "phd", label: "PhD" },
+        { value: "other", label: "Other" }
+      ],
+      icon: "🎓"
+    },
+    {
+      field: "fieldPreference",
+      label: "Do you want to be in Arts or Sciences?",
+      type: "radio",
+      options: [
+        { value: "arts", label: "Arts" },
+        { value: "sciences", label: "Sciences" }
+      ],
+      icon: "🎨"
+    },
+    {
+      field: "ageRange",
+      label: "How old are you?",
+      type: "select",
+      options: [
+        { value: "under_18", label: "Under 18" },
+        { value: "18_24", label: "18-24" },
+        { value: "25_34", label: "25-34" },
+        { value: "35_44", label: "35-44" },
+        { value: "45_54", label: "45-54" },
+        { value: "55_plus", label: "55+" }
+      ],
+      icon: "📅"
+    },
+    {
+      field: "gender",
+      label: "What is your gender?",
+      type: "select",
+      options: [
+        { value: "male", label: "Male" },
+        { value: "female", label: "Female" },
+        { value: "non_binary", label: "Non-binary" },
+        { value: "prefer_not_to_say", label: "Prefer not to say" },
+        { value: "other", label: "Other" }
+      ],
+      icon: "👤"
+    },
+    {
+      field: "employmentPreference",
+      label: "What type of employment do you prefer?",
+      type: "radio",
+      options: [
+        { value: "self_employed", label: "Self Employment" },
+        { value: "government", label: "Government/Public Job" },
+        { value: "private", label: "Private/Non-government Job" }
+      ],
+      icon: "💼"
+    },
+    {
+      field: "selfEmploymentType",
+      label: "If self employment, what type do you prefer?",
+      type: "radio",
+      options: [
+        { value: "profit", label: "Business (Profit)" },
+        { value: "non_profit", label: "Non-profit Work" }
+      ],
+      condition: (values: CareerQuestFormValues) => 
+        values.employmentPreference === "self_employed",
+      icon: "🏢"
+    },
+    {
+      field: "careerSector",
+      label: "Which sector do you want to work in?",
+      type: "radio",
+      options: [
+        { value: "academia", label: "Academia (Research)" },
+        { value: "policy", label: "Policy (Government Agencies)" },
+        { value: "industry", label: "Industry (Private/Non-government)" }
+      ],
+      icon: "🌟"
+    },
+    {
+      field: "unpaidPassion",
+      label: "What do you love doing even without being financially paid?",
       type: "textarea",
-      icon: "🎓",
+      icon: "❤️"
     },
     {
-      field: "whyNow",
-      label: "Why Now?",
-      description:
-        "Explain what makes this the right time (minimum 10 characters)",
+      field: "personalPassion",
+      label: "What are you passionate about in your life?",
       type: "textarea",
-      icon: "⏰",
+      icon: "🔥"
     },
     {
-      field: "undergraduateCGPA",
-      label: "Undergraduate CGPA",
-      description: "Your CGPA on a scale of 0-5",
-      type: "number",
-      icon: "📊",
+      field: "lifeGoal",
+      label: "What issue/problem/strategic issue do you want to solve or contribute to before you die?",
+      type: "textarea",
+      icon: "🎯"
     },
     {
-      field: "undergraduateCourse",
-      label: "Undergraduate Course",
-      description: "Your previous field of study",
+      field: "futureTitle",
+      label: "Whom do you want to be called (Title/rank) 30 years from now?",
       type: "text",
-      icon: "📚",
+      icon: "👑"
     },
     {
-      field: "workExperienceYears",
-      label: "Years of Work Experience",
-      description: "Relevant professional experience in your field",
-      type: "number",
-      icon: "💼",
-    },
-    {
-      field: "leadershipExperience",
-      label: "Leadership Experience",
-      description: "Have you held any leadership positions?",
-      type: "boolean",
-      icon: "👥",
-    },
-    {
-      field: "leadershipDetails",
-      label: "Leadership Achievements",
-      description:
-        "Describe 5 key leadership accomplishments (minimum 10 characters if you have leadership experience)",
+      field: "futureTasks",
+      label: "What do you want to be doing during that time? (Describe the tasks)",
       type: "textarea",
-      icon: "🎯",
-      condition: (values: ScholarshipAssessmentFormValues) =>
-        values.leadershipExperience,
+      icon: "📋"
     },
     {
-      field: "communityService",
-      label: "Community Service",
-      description: "Have you participated in community service?",
-      type: "boolean",
-      icon: "🤝",
+      field: "requiredSkills",
+      label: "What exactly skills do you need to do these tasks?",
+      type: "textarea",
+      icon: "🛠️"
     },
     {
-      field: "awardsAndHonors",
-      label: "Awards & Honors",
-      description:
-        "Have you received any academic or professional recognition?",
-      type: "boolean",
-      icon: "🏆",
-    },
-    {
-      field: "publications",
-      label: "Publications",
-      description: "Academic papers, articles, or conference presentations",
-      type: "boolean",
-      icon: "📝",
-    },
-    {
-      field: "hasLinkedIn",
-      label: "LinkedIn Profile",
-      description: "Do you maintain a professional online presence?",
-      type: "boolean",
-      icon: "💼",
-    },
+      field: "desiredCourses",
+      label: "What course(s) do you think you need to undertake to gain these skills?",
+      type: "textarea",
+      icon: "📚"
+    }
   ];
-
-  const calculateScore = (values: ScholarshipAssessmentFormValues) => {
-    let newScore = 0;
-    if (values.undergraduateCGPA >= 3.5) newScore += 20;
-    if (values.workExperienceYears >= 2) newScore += 15;
-    if (values.leadershipExperience) newScore += 15;
-    if (values.communityService) newScore += 10;
-    if (values.awardsAndHonors) newScore += 10;
-    if (values.publications) newScore += 20;
-    if (values.hasLinkedIn) newScore += 10;
-    return newScore;
-  };
 
   const validateCurrentStep = async () => {
     const currentField = questions[currentStep].field;
     const result = await form.trigger(currentField as any);
-
+    
     if (!result) {
-      const error =
-        form.formState.errors[
-          currentField as keyof ScholarshipAssessmentFormValues
-        ];
-      setValidationError(
-        error?.message || "Please complete this field correctly"
-      );
+      const error = form.formState.errors[currentField as keyof CareerQuestFormValues];
+      setValidationError(error?.message || "Please complete this field correctly");
       return false;
     }
-
-    // Special handling for leadership details
-    if (
-      currentField === "leadershipDetails" &&
-      form.getValues("leadershipExperience")
-    ) {
-      const details = form.getValues("leadershipDetails");
-      if (!details || details.length < 10) {
-        setValidationError("Please provide detailed leadership experience");
-        return false;
-      }
-    }
-
+    
     setValidationError(null);
     return true;
   };
@@ -235,48 +262,93 @@ export function ScholarshipQuestGame({
       if (currentStep === questions.length - 1) {
         form.handleSubmit(onSubmit)();
       } else {
-        // Skip leadership details if no leadership experience
-        if (
-          questions[currentStep + 1].field === "leadershipDetails" &&
-          !form.getValues("leadershipExperience")
-        ) {
-          setCurrentStep(currentStep + 2);
-        } else {
-          setCurrentStep(currentStep + 1);
+        // Skip conditional questions if condition is not met
+        let nextStep = currentStep + 1;
+        const nextQuestion = questions[nextStep];
+        if (nextQuestion.condition && !nextQuestion.condition(form.getValues())) {
+          nextStep += 1;
         }
+        setCurrentStep(nextStep);
       }
     }
   };
 
-  const onSubmit = async (data: ScholarshipAssessmentFormValues) => {
-    try {
-      const response = await fetch("/api/scholarship-assessment", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-
-      if (!response.ok)
-        throw new Error("Failed to submit scholarship assessment");
-
-      const finalScore = calculateScore(data);
-      setScore(finalScore);
-      setCurrentStep(questions.length);
-
-      toast({
-        title: "Quest Complete! 🎉",
-        description: `Your scholarship potential score: ${finalScore}/100`,
-      });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to submit assessment. Please try again.",
-        variant: "destructive",
-      });
-    }
+  const onSubmit = async (data: CareerQuestFormValues) => {
+    setIsComplete(true);
+    // Here you would typically send the data to your backend
+    console.log("Form submitted:", data);
   };
 
-  const currentQuestion = questions[currentStep];
+  const renderField = (question: any) => {
+    const { field, type, options } = question;
+
+    return (
+      <FormField
+        control={form.control}
+        name={field as any}
+        render={({ field: formField }) => (
+          <FormItem>
+            <FormControl>
+              {type === "textarea" ? (
+                <Textarea
+                  {...formField}
+                  className="min-h-32"
+                  placeholder="Type your answer here..."
+                  onChange={(e) => {
+                    formField.onChange(e);
+                    setValidationError(null);
+                  }}
+                />
+              ) : type === "radio" ? (
+                <RadioGroup
+                  onValueChange={formField.onChange}
+                  defaultValue={formField.value}
+                  className="flex flex-col gap-4"
+                >
+                  {options.map((option: any) => (
+                    <FormItem key={option.value} className="flex items-center space-x-2">
+                      <FormControl>
+                        <RadioGroupItem value={option.value} />
+                      </FormControl>
+                      <FormLabel className="font-normal">
+                        {option.label}
+                      </FormLabel>
+                    </FormItem>
+                  ))}
+                </RadioGroup>
+              ) : type === "select" ? (
+                <Select
+                  onValueChange={formField.onChange}
+                  defaultValue={formField.value}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select an option" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {options.map((option: any) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              ) : (
+                <Input
+                  {...formField}
+                  placeholder="Enter your answer..."
+                  onChange={(e) => {
+                    formField.onChange(e);
+                    setValidationError(null);
+                  }}
+                />
+              )}
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+    );
+  };
 
   const renderProgressBar = () => {
     const progress = (currentStep / questions.length) * 100;
@@ -290,27 +362,29 @@ export function ScholarshipQuestGame({
     );
   };
 
+  const currentQuestion = questions[currentStep];
+
   return (
     <div className="max-w-3xl mx-auto p-4">
       <Card className="w-full">
         <CardHeader>
           <div className="flex items-center justify-between mb-2">
             <CardTitle className="text-2xl font-bold">
-              Scholarship Quest
+              Career Guidance Quest
             </CardTitle>
-            {currentStep < questions.length && (
+            {!isComplete && (
               <span className="text-sm text-gray-500">
                 Step {currentStep + 1} of {questions.length}
               </span>
             )}
           </div>
-          {renderProgressBar()}
+          {!isComplete && renderProgressBar()}
         </CardHeader>
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <CardContent>
-              {currentStep < questions.length ? (
+              {!isComplete ? (
                 <div className="space-y-6">
                   <div className="flex items-center gap-2 mb-6">
                     <span className="text-2xl">{currentQuestion.icon}</span>
@@ -318,9 +392,6 @@ export function ScholarshipQuestGame({
                       <h3 className="text-lg font-semibold">
                         {currentQuestion.label}
                       </h3>
-                      <p className="text-sm text-gray-500">
-                        {currentQuestion.description}
-                      </p>
                     </div>
                   </div>
 
@@ -331,68 +402,7 @@ export function ScholarshipQuestGame({
                     </Alert>
                   )}
 
-                  <FormField
-                    control={form.control}
-                    name={currentQuestion.field as any}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          {currentQuestion.type === "textarea" ? (
-                            <Textarea
-                              {...field}
-                              className="min-h-32"
-                              placeholder="Type your answer here..."
-                              onChange={(e) => {
-                                field.onChange(e);
-                                setValidationError(null);
-                              }}
-                            />
-                          ) : currentQuestion.type === "boolean" ? (
-                            <RadioGroup
-                              onValueChange={(value) => {
-                                field.onChange(value === "true");
-                                setValidationError(null);
-                              }}
-                              defaultValue={field.value ? "true" : "false"}
-                              className="flex gap-4"
-                            >
-                              <FormItem className="flex items-center space-x-2">
-                                <FormControl>
-                                  <RadioGroupItem value="true" />
-                                </FormControl>
-                                <FormLabel className="font-normal">
-                                  Yes
-                                </FormLabel>
-                              </FormItem>
-                              <FormItem className="flex items-center space-x-2">
-                                <FormControl>
-                                  <RadioGroupItem value="false" />
-                                </FormControl>
-                                <FormLabel className="font-normal">
-                                  No
-                                </FormLabel>
-                              </FormItem>
-                            </RadioGroup>
-                          ) : (
-                            <Input
-                              type={currentQuestion.type}
-                              {...field}
-                              placeholder="Enter your answer..."
-                              onChange={(e) => {
-                                const value =
-                                  currentQuestion.type === "number"
-                                    ? parseFloat(e.target.value)
-                                    : e.target.value;
-                                field.onChange(value);
-                                setValidationError(null);
-                              }}
-                            />
-                          )}
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  {renderField(currentQuestion)}
                 </div>
               ) : (
                 <div className="text-center py-8">
@@ -400,52 +410,40 @@ export function ScholarshipQuestGame({
                     <Trophy className="w-16 h-16 text-blue-600" />
                   </div>
                   <h2 className="text-3xl font-bold mb-4">Quest Complete!</h2>
-                  <div className="flex items-center justify-center gap-2 mb-8">
-                    {[...Array(Math.floor(score / 20))].map((_, i) => (
-                      <Star
-                        key={i}
-                        className="w-6 h-6 text-yellow-400 fill-current"
-                      />
-                    ))}
-                  </div>
-                  <p className="text-xl mb-2">
-                    Your Scholarship Potential Score:
+                  <p className="text-xl mb-4">
+                    Thank you for completing the Career Guidance Quest!
                   </p>
-                  <p className="text-5xl font-bold text-blue-600 mb-8">
-                    {score}
-                    <span className="text-2xl text-gray-500">/100</span>
+                  <p className="text-gray-600 mb-8">
+                    Your responses will help guide your career path.
                   </p>
                   <Button
                     onClick={() => {
                       setCurrentStep(0);
+                      setIsComplete(false);
                       setValidationError(null);
                       form.reset();
                     }}
-                    className="gap-2"
                   >
-                    Retake Quest
+                    Start Over
                   </Button>
                 </div>
               )}
             </CardContent>
 
-            {currentStep < questions.length && (
+            {!isComplete && (
               <CardFooter className="flex justify-between">
                 <Button
                   type="button"
                   variant="outline"
                   onClick={() => {
                     setValidationError(null);
-                    // Skip leadership details if no leadership experience when going back
-                    if (
-                      questions[currentStep - 1]?.field ===
-                        "leadershipDetails" &&
-                      !form.getValues("leadershipExperience")
-                    ) {
-                      setCurrentStep(currentStep - 2);
-                    } else {
-                      setCurrentStep(currentStep - 1);
+                    let prevStep = currentStep - 1;
+                    // Skip conditional questions when going back
+                    const prevQuestion = questions[prevStep];
+                    if (prevQuestion?.condition && !prevQuestion.condition(form.getValues())) {
+                      prevStep -= 1;
                     }
+                    setCurrentStep(Math.max(0, prevStep));
                   }}
                   disabled={currentStep === 0}
                   className="gap-2"
@@ -453,12 +451,13 @@ export function ScholarshipQuestGame({
                   <ChevronLeft className="w-4 h-4" />
                   Previous
                 </Button>
-                <Button type="button" onClick={handleNext} className="gap-2">
+                <Button 
+                  type="button" 
+                  onClick={handleNext} 
+                  className="gap-2"
+                >
                   {currentStep === questions.length - 1 ? (
-                    <>
-                      Submit
-                      <ChevronRight className="w-4 h-4" />
-                    </>
+                    "Submit"
                   ) : (
                     <>
                       Next
