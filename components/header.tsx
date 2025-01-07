@@ -12,7 +12,7 @@ export function Header() {
   const { data: session } = useSession();
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b border-gray-200 dark:border-gray-800 bg-gradient-to-r from-blue-50/90 via-white/90 to-purple-50/90 dark:from-gray-900/90 dark:via-gray-900/90 dark:to-gray-800/90 backdrop-blur-sm">
       <div className="container flex h-16 items-center">
         <MainNav />
         <MobileNav />
@@ -23,10 +23,17 @@ export function Header() {
             ) : (
               <div className="flex-end space-x-2">
                 <Link href="/login">
-                  <Button variant="ghost">Login</Button>
+                  <Button
+                    variant="ghost"
+                    className="hover:bg-blue-100/50 dark:hover:bg-gray-800/50 transition-colors"
+                  >
+                    Login
+                  </Button>
                 </Link>
                 <Link href="/register">
-                  <Button>Get Started</Button>
+                  <Button className="bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 text-white transition-all duration-300 border-0">
+                    Get Started
+                  </Button>
                 </Link>
               </div>
             )}
