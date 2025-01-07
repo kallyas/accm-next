@@ -173,7 +173,7 @@ export default function EventsPage() {
   };
 
   return (
-    <div className="container py-10">
+    <div className="container py-10 inset-0 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800">
       <div className="flex flex-col space-y-6">
         <div className="flex flex-col space-y-2">
           <h1 className="text-4xl font-bold tracking-tight">Upcoming Events</h1>
