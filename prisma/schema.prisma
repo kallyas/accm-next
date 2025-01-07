@@ -56,6 +56,7 @@ model PersonalDiscovery {
   coursesAndTrainings          String[]
   strategies                   String[]
   shortTermGoals               String[]
+  documentAnalysis             String?
   createdAt                    DateTime @default(now())
   updatedAt                    DateTime @updatedAt
 }
@@ -64,19 +65,32 @@ model ScholarshipAssessment {
   id                    String   @id @default(cuid())
   userId                String
   user                  User     @relation(fields: [userId], references: [id])
-  reasonForDegree       String
-  whyNow                String
-  undergraduateCGPA     Float
-  undergraduateCourse   String
-  workExperienceYears   Int
-  leadershipExperience  Boolean
-  leadershipDetails     String?
-  communityService      Boolean
-  awardsAndHonors       Boolean
-  publications          Boolean
-  hasLinkedIn           Boolean
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
+  
+  // Education and Field
+  educationLevel        String   // Enum in the application: high_school, certificate, diploma, bachelors, masters, phd, other
+  fieldPreference       String   // Enum: arts, sciences
+  
+  // Demographics
+  ageRange             String   // Enum: under_18, 18_24, 25_34, 35_44, 45_54, 55_plus
+  gender               String   // Enum: male, female, non_binary, prefer_not_to_say, other
+  
+  // Employment Preferences
+  employmentPreference String   // Enum: self_employed, government, private
+  selfEmploymentType   String?  // Optional enum: profit, non_profit (only if self_employed)
+  careerSector        String   // Enum: academia, policy, industry
+  
+  // Personal Aspirations
+  unpaidPassion       String   @db.Text  // What they love doing without pay
+  personalPassion     String   @db.Text  // What they're passionate about
+  lifeGoal            String   @db.Text  // Problem they want to solve
+  futureTitle         String   // Desired title in 30 years
+  futureTasks         String   @db.Text  // Description of future tasks
+  requiredSkills      String   @db.Text  // Skills needed
+  desiredCourses      String   @db.Text  // Courses needed
+  
+  // Timestamps
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 
   @@unique([userId])
 }
