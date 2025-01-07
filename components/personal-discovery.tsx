@@ -15,8 +15,25 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { PersonalDiscoveryData } from "@/types/general";
 import Link from "next/link";
+
+type PersonalDiscoveryData = {
+  strengths: string[];
+  weaknesses: string[];
+  opportunities: string[];
+  achievements: string[];
+  threats: string[];
+  familyAspirations: string[];
+  careerAspirations: string[];
+  financialBusinessAspirations: string[];
+  socialAspirations: string[];
+  desiredPosition: string[];
+  requiredSkills: string[];
+  coursesAndTrainings: string[];
+  strategies: string[];
+  shortTermGoals: string[];
+  documentAnalysis: string | null;
+};
 
 export function PersonalDiscovery({
   personalDiscovery,
@@ -81,13 +98,27 @@ export function PersonalDiscovery({
               <AccordionTrigger>{section.title}</AccordionTrigger>
               <AccordionContent>
                 <ul className="list-disc pl-6">
-                  {section.data.map((item, itemIndex) => (
-                    <li key={itemIndex}>{item}</li>
-                  ))}
+                  {Array.isArray(section.data) ? (
+                    section.data.map((item, itemIndex) => (
+                      <li key={itemIndex}>{item}</li>
+                    ))
+                  ) : (
+                    <li>{section.data}</li>
+                  )}
                 </ul>
               </AccordionContent>
             </AccordionItem>
           ))}
+          {personalDiscovery.documentAnalysis && (
+            <AccordionItem value="document-analysis">
+              <AccordionTrigger>Document Analysis</AccordionTrigger>
+              <AccordionContent>
+                <pre className="whitespace-pre-wrap">
+                  {personalDiscovery.documentAnalysis}
+                </pre>
+              </AccordionContent>
+            </AccordionItem>
+          )}
         </Accordion>
         <Button className="mt-4" onClick={() => setIsEditing(true)}>
           Edit Personal Discovery
