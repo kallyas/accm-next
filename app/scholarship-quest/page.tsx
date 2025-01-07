@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { ScholarshipQuestGame } from "@/components/scholarship-quest-game";
+import { CareerGuidanceQuest } from "@/components/scholarship-quest-game";
 import { GraduationCap } from "lucide-react";
 
 export default async function ScholarshipQuestPage() {
@@ -31,7 +31,7 @@ export default async function ScholarshipQuestPage() {
         
         <div className="flex justify-center">
           <div className="w-full">
-            <ScholarshipQuestGame user={user} />
+            <CareerGuidanceQuest />
           </div>
         </div>
       </div>
