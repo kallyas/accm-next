@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -33,60 +35,21 @@ type Plan = {
   features: string[];
 };
 
-const plans: Plan[] = [
-  {
-    id: "1",
-    name: "Basic",
-    description: "Essential mentorship services",
-    price: 49.99,
-    services: ["1-on-1 Mentorship", "Career Resources Library"],
-    features: [
-      "1 mentorship session per month",
-      "Access to basic career resources",
-      "Email support",
-    ],
-  },
-  {
-    id: "2",
-    name: "Pro",
-    description: "Advanced mentorship and resources",
-    price: 99.99,
-    services: [
-      "1-on-1 Mentorship",
-      "Career Resources Library",
-      "Skill Development Workshops",
-    ],
-    features: [
-      "2 mentorship sessions per month",
-      "Access to all career resources",
-      "Monthly skill development workshop",
-      "Priority email support",
-    ],
-  },
-  {
-    id: "3",
-    name: "Enterprise",
-    description: "Comprehensive career development suite",
-    price: 199.99,
-    services: [
-      "1-on-1 Mentorship",
-      "Career Resources Library",
-      "Skill Development Workshops",
-      "Networking Events",
-    ],
-    features: [
-      "4 mentorship sessions per month",
-      "Unlimited access to all resources",
-      "Weekly skill development workshops",
-      "Exclusive networking events",
-      "24/7 priority support",
-    ],
-  },
-];
+async function getPlans(): Promise<Plan[]> {
+  const res = await fetch("/api/plans");
+  if (!res.ok) {
+    throw new Error("Failed to fetch plans");
+  }
+  return res.json();
+}
 
 export function SubscribePlan() {
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
   const [paymentProof, setPaymentProof] = useState<File | null>(null);
+  const { data: plans, isLoading } = useQuery({
+    queryKey: ["plans"],
+    queryFn: getPlans,
+  });
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -105,8 +68,8 @@ export function SubscribePlan() {
     }
 
     // Here you would typically send the subscription request and payment proof to your backend
-    
-    
+    console.log("Subscribing to plan:", selectedPlan);
+    console.log("Payment proof:", paymentProof);
 
     toast({
       title: "Subscription Submitted",
@@ -116,6 +79,14 @@ export function SubscribePlan() {
     setSelectedPlan(null);
     setPaymentProof(null);
   };
+
+  if (isLoading) {
+    return <div>Loading plans...</div>;
+  }
+
+  if (!plans || plans.length === 0) {
+    return <div>No plans available.</div>;
+  }
 
   return (
     <div>
@@ -181,7 +152,7 @@ export function SubscribePlan() {
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
-                    <DialogTitle>Subscribe to {plan.name} Plan</DialogTitle>
+                    <DialogTitle>Subscribe to {plan?.name} Plan</DialogTitle>
                     <DialogDescription>
                       Please upload proof of payment to complete your
                       subscription.
