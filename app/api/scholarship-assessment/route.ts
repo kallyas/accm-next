@@ -4,19 +4,91 @@ import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { z } from "zod";
 
-// Schema for validating the request body
 const scholarshipAssessmentSchema = z.object({
-  reasonForDegree: z.string().min(1, "Please provide a reason for pursuing the degree"),
-  whyNow: z.string().min(1, "Please explain why you want to pursue the degree now"),
-  undergraduateCGPA: z.number().min(0).max(5, "CGPA must be between 0 and 5"),
-  undergraduateCourse: z.string().min(1, "Please provide your undergraduate course"),
-  workExperienceYears: z.number().int().min(0, "Work experience must be a positive number"),
-  leadershipExperience: z.boolean(),
-  leadershipDetails: z.string().optional(),
-  communityService: z.boolean(),
-  awardsAndHonors: z.boolean(),
-  publications: z.boolean(),
-  hasLinkedIn: z.boolean(),
+  // Education and Field Questions
+  educationLevel: z.enum(
+    [
+      "high_school",
+      "certificate",
+      "diploma",
+      "bachelors",
+      "masters",
+      "phd",
+      "other",
+    ],
+    {
+      required_error: "Please select your education level",
+    }
+  ),
+
+  fieldPreference: z.enum(["arts", "sciences"], {
+    required_error: "Please select arts or sciences",
+  }),
+
+  // Demographics
+  ageRange: z.enum(
+    ["under_18", "18_24", "25_34", "35_44", "45_54", "55_plus"],
+    {
+      required_error: "Please select your age range",
+    }
+  ),
+
+  gender: z.enum(
+    ["male", "female", "non_binary", "prefer_not_to_say", "other"],
+    {
+      required_error: "Please select your gender",
+    }
+  ),
+
+  // Employment Preferences
+  employmentPreference: z.enum(["self_employed", "government", "private"], {
+    required_error: "Please select your preferred employment type",
+  }),
+
+  selfEmploymentType: z.enum(["profit", "non_profit"]).optional().nullable(),
+
+  careerSector: z.enum(["academia", "policy", "industry"], {
+    required_error: "Please select your preferred career sector",
+  }),
+
+  // Personal Aspirations
+  unpaidPassion: z
+    .string()
+    .min(
+      1,
+      "Please describe what you love doing without financial compensation"
+    )
+    .max(1000, "Response too long - please be more concise"),
+
+  personalPassion: z
+    .string()
+    .min(1, "Please describe what you are passionate about")
+    .max(1000, "Response too long - please be more concise"),
+
+  lifeGoal: z
+    .string()
+    .min(1, "Please describe the problem you want to solve")
+    .max(1000, "Response too long - please be more concise"),
+
+  futureTitle: z
+    .string()
+    .min(1, "Please specify your desired future title")
+    .max(100, "Title too long - please be more concise"),
+
+  futureTasks: z
+    .string()
+    .min(1, "Please describe your future tasks")
+    .max(1000, "Response too long - please be more concise"),
+
+  requiredSkills: z
+    .string()
+    .min(1, "Please list the required skills")
+    .max(1000, "Response too long - please be more concise"),
+
+  desiredCourses: z
+    .string()
+    .min(1, "Please specify the courses you need")
+    .max(1000, "Response too long - please be more concise"),
 });
 
 export async function POST(req: Request) {
@@ -25,10 +97,7 @@ export async function POST(req: Request) {
     const session = await getServerSession(authOptions);
 
     if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     // Parse and validate request body
@@ -81,10 +150,7 @@ export async function GET(req: Request) {
     const session = await getServerSession(authOptions);
 
     if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const assessment = await db.scholarshipAssessment.findUnique({
