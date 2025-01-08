@@ -117,7 +117,8 @@ model Plan {
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   subscriptions Subscription[]
-  services      Service[]
+  services      String[]
+  features      String[]
 }
 
 model Subscription {
@@ -174,16 +175,6 @@ model TrackProgress {
   userId    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
-
-model Service {
-  id          String   @id @default(cuid())
-  name        String
-  description String
-  plan        Plan     @relation(fields: [planId], references: [id])
-  planId      String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
 }
 
 model Publication {
@@ -370,6 +361,7 @@ enum SubscriptionStatus {
   ACTIVE
   EXPIRED
   CANCELLED
+  PENDING
 }
 
 enum PaymentStatus {
