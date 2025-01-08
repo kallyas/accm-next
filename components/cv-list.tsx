@@ -214,21 +214,6 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
                         </div>
                       </div>
                     </div>
-
-                    <DialogFooter className="mt-2">
-                      <Button
-                        variant="secondary"
-                        onClick={() => {
-                          toast({
-                            title: "Detailed Report",
-                            description:
-                              "Detailed CV improvement guide coming soon!",
-                          });
-                        }}
-                      >
-                        Get Detailed Report
-                      </Button>
-                    </DialogFooter>
                   </DialogContent>
                 </Dialog>
               </CardContent>
