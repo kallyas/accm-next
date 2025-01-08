@@ -26,7 +26,7 @@ export function CurrentPlan({ plan }: { plan: Plan | null }) {
           <div className="space-y-2">
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-semibold">{plan.name}</h3>
-              <Badge>{plan.billingCycle}</Badge>
+              <Badge>{plan.billingCycle === "Monthly" ? "Monthly" : "Yearly"}</Badge>
             </div>
             <p className="text-2xl font-bold">
               ${plan.price.toFixed(2)}/
