@@ -18,10 +18,6 @@ export default async function BillingPage() {
         orderBy: { createdAt: 'desc' },
         take: 1,
       },
-    //   bills: {
-    //     orderBy: { date: 'desc' },
-    //     take: 5,
-    //   },
     },
   })
 
