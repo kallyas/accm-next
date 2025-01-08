@@ -3,22 +3,14 @@ import { db } from "@/lib/db";
 
 export async function GET(req: Request) {
   try {
-    const plans = await db.plan.findMany({
-      include: {
-        services: {
-          select: {
-            name: true,
-          },
-        },
-      },
-    });
+    const plans = await db.plan.findMany();
 
     const formattedPlans = plans.map((plan) => ({
       id: plan.id,
       name: plan.name,
       description: plan.description,
       price: plan.price,
-      services: plan.services.map((service) => service.name),
+      services: plan.services,
       features: [], // Placeholder for features - add as needed
     }));
 
