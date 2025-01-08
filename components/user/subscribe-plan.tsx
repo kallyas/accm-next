@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -31,6 +32,7 @@ type Plan = {
   name: string;
   description: string;
   price: number;
+  duration: number; // Added duration field
   services: string[];
   features: string[];
 };
@@ -43,19 +45,59 @@ async function getPlans(): Promise<Plan[]> {
   return res.json();
 }
 
-export function SubscribePlan() {
-  const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
-  const [paymentProof, setPaymentProof] = useState<File | null>(null);
-  const { data: plans, isLoading } = useQuery({
-    queryKey: ["plans"],
-    queryFn: getPlans,
+interface SubscriptionResponse {
+  message: string;
+}
+
+interface SubscriptionError {
+  error: string;
+}
+
+const subscribeToPlan = async (
+  formData: FormData
+): Promise<SubscriptionResponse> => {
+  const response = await fetch("/api/subscribe", {
+    method: "POST",
+    body: formData,
   });
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setPaymentProof(e.target.files[0]);
-    }
-  };
+  if (!response.ok) {
+    const errorData: SubscriptionError = await response.json();
+    throw new Error(errorData.error || "Failed to subscribe to plan");
+  }
+
+  return response.json();
+};
+
+export const useSubscribeMutation = (onSuccess: (open: boolean) => void) => {
+  const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
+  const [paymentProof, setPaymentProof] = useState<File | null>(null);
+
+  const mutation = useMutation({
+    mutationFn: subscribeToPlan,
+    onSuccess: (data) => {
+      toast({
+        title: "Subscription Submitted",
+        description:
+          "Your subscription request has been submitted for approval.",
+      });
+
+      // Reset form state
+      setSelectedPlan(null);
+      setPaymentProof(null);
+
+      // Call optional success callback
+      onSuccess(false);
+      console.log("reached here");
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
 
   const handleSubscribe = () => {
     if (!selectedPlan || !paymentProof) {
@@ -67,17 +109,49 @@ export function SubscribePlan() {
       return;
     }
 
-    // Here you would typically send the subscription request and payment proof to your backend
-    console.log("Subscribing to plan:", selectedPlan);
-    console.log("Payment proof:", paymentProof);
+    const formData = new FormData();
+    formData.append("planId", selectedPlan.id);
+    formData.append("paymentProof", paymentProof);
 
-    toast({
-      title: "Subscription Submitted",
-      description: "Your subscription request has been submitted for approval.",
-    });
-
+    mutation.mutate(formData);
     setSelectedPlan(null);
-    setPaymentProof(null);
+  };
+
+  return {
+    handleSubscribe,
+    isLoading: mutation.isPending,
+    isError: mutation.isError,
+    error: mutation.error,
+    selectedPlan,
+    setSelectedPlan,
+    paymentProof,
+    setPaymentProof,
+  };
+};
+
+export function SubscribePlan() {
+  const [open, setOpen] = useState(false);
+  const { data: session } = useSession();
+  const { data: plans, isLoading } = useQuery({
+    queryKey: ["plans"],
+    queryFn: getPlans,
+  });
+
+  const {
+    handleSubscribe,
+    isLoading: isSubscribing,
+    isError,
+    error,
+    selectedPlan: subscriptionPlan,
+    setSelectedPlan: setSubscriptionPlan,
+    paymentProof: subscriptionPaymentProof,
+    setPaymentProof: setSubscriptionPaymentProof,
+  } = useSubscribeMutation(setOpen);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setSubscriptionPaymentProof(e.target.files[0]);
+    }
   };
 
   if (isLoading) {
@@ -100,7 +174,8 @@ export function SubscribePlan() {
             </CardHeader>
             <CardContent>
               <p className="text-2xl font-bold mb-4">
-                ${plan.price.toFixed(2)}/month
+                ${plan.price.toFixed(2)}/{plan.duration} month
+                {plan.duration > 1 ? "s" : ""}
               </p>
               <ul className="space-y-2">
                 {plan.services.map((service, index) => (
@@ -123,7 +198,8 @@ export function SubscribePlan() {
                   </DialogHeader>
                   <div className="space-y-4">
                     <p className="text-lg font-semibold">
-                      Price: ${plan.price.toFixed(2)}/month
+                      Price: ${plan.price.toFixed(2)}/{plan.duration} month
+                      {plan.duration > 1 ? "s" : ""}
                     </p>
                     <div>
                       <h4 className="font-semibold mb-2">Included Services:</h4>
@@ -144,36 +220,50 @@ export function SubscribePlan() {
                   </div>
                 </DialogContent>
               </Dialog>
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button onClick={() => setSelectedPlan(plan)}>
-                    Subscribe
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Subscribe to {plan?.name} Plan</DialogTitle>
-                    <DialogDescription>
-                      Please upload proof of payment to complete your
-                      subscription.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="grid w-full items-center gap-1.5">
-                    <Label htmlFor="payment-proof">Payment Proof</Label>
-                    <Input
-                      id="payment-proof"
-                      type="file"
-                      accept="image/*"
-                      onChange={handleFileChange}
-                    />
-                  </div>
-                  <DialogFooter>
-                    <Button onClick={handleSubscribe}>
-                      Complete Subscription
+              {session ? (
+                <Dialog open={open} onOpenChange={setOpen}>
+                  <DialogTrigger asChild>
+                    <Button
+                      onClick={() => {
+                        setSubscriptionPlan(plan);
+                        setOpen(true);
+                      }}
+                    >
+                      Subscribe
                     </Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Subscribe to {plan?.name} Plan</DialogTitle>
+                      <DialogDescription>
+                        Please upload proof of payment to complete your
+                        subscription.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="grid w-full items-center gap-1.5">
+                      <Label htmlFor="payment-proof">Payment Proof</Label>
+                      <Input
+                        id="payment-proof"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                      />
+                    </div>
+                    <DialogFooter>
+                      <Button
+                        disabled={isSubscribing}
+                        onClick={handleSubscribe}
+                      >
+                        {isSubscribing ? "Subscribing..." : "Subscribe"}
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              ) : (
+                <Link href="/login">
+                  <Button>Login to Subscribe</Button>
+                </Link>
+              )}
             </CardFooter>
           </Card>
         ))}
