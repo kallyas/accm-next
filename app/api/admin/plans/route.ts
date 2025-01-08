@@ -22,13 +22,6 @@ export async function GET(req: Request) {
 
   try {
     const plans = await db.plan.findMany({
-      include: {
-        services: {
-          select: {
-            name: true,
-          },
-        },
-      },
       orderBy: { createdAt: "desc" },
     });
 
@@ -38,7 +31,7 @@ export async function GET(req: Request) {
       description: plan.description,
       price: plan.price,
       duration: plan.duration,
-      services: plan.services.map((service) => service.name),
+      services: plan.services,
       features: plan.features || [],
     }));
 
@@ -70,15 +63,6 @@ export async function POST(req: Request) {
     const plan = await db.plan.create({
       data: {
         ...body,
-        services: {
-          connectOrCreate: body.services.map((serviceName) => ({
-            where: { id: serviceName },
-            create: { id: serviceName, name: serviceName, description: body.description },
-          })),
-        },
-      },
-      include: {
-        services: true,
       },
     });
 
