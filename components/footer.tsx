@@ -130,7 +130,7 @@ export function Footer() {
                 <Twitter className="h-6 w-6" />
               </Link>
               <Link
-                href="#"
+                href="https://www.instagram.com/africancentre_careermentorship/"
                 className="text-muted-foreground hover:text-primary transition-colors"
               >
                 <span className="sr-only">Instagram</span>
