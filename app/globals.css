@@ -193,7 +193,7 @@ iframe {
 }
 
 /* Simplified card styles */
-.card,
+.card,aside,
 [class*="bg-card"] {
   @apply bg-white/80 dark:bg-gray-950/80 
          border-gray-200/50 dark:border-gray-800/50 
