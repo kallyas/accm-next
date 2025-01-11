@@ -17,7 +17,7 @@ export default function PrivacyPolicyPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           <p>
-            At African Centre For Career Mentorship, accessible from www.pearlmentorhub.com, one of
+            At African Centre For Career Mentorship, accessible from africanccm.com, one of
             our main priorities is the privacy of our visitors. This Privacy
             Policy document contains types of information that is collected and
             recorded by African Centre For Career Mentorship and how we use it.
@@ -111,7 +111,7 @@ export default function PrivacyPolicyPage() {
             <li>By email: privacy@pearlmentorhub.com</li>
             <li>
               By visiting this page on our website:
-              www.pearlmentorhub.com/contact
+              africanccm.com/contact
             </li>
           </ul>
         </CardContent>
