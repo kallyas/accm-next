@@ -28,7 +28,7 @@ import { toast } from "@/hooks/use-toast";
 import {
   AlertCircle,
   ArrowRight,
-  Badge,
+  BadgeCheck,
   Check,
   Clock,
   CreditCard,
@@ -222,9 +222,7 @@ export function SubscribePlan() {
                     {plan.description}
                   </CardDescription>
                 </div>
-                <Badge className="border-2 outline-sm">
-                  {plan.duration} {plan.duration > 1 ? "months" : "month"}
-                </Badge>
+                <BadgeCheck className="w-6 h-6 text-green-500" />
               </div>
               <div className="mt-4">
                 <span className="text-3xl font-bold">
