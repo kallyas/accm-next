@@ -26,6 +26,7 @@ import {
   GraduationCap,
   ArrowLeft,
   Info,
+  Lock,
 } from "lucide-react";
 
 interface PageProps {
@@ -35,27 +36,25 @@ interface PageProps {
   };
 }
 
+type StepStatus = 'completed' | 'current' | 'upcoming' | 'pending' | 'locked';
+
+interface Step {
+  title: string;
+  description: string;
+  icon: React.ElementType;
+  status: StepStatus;
+  action: string;
+  link: string;
+  requiresPrevious?: boolean;
+}
+
 export default async function StatusPage({ searchParams }: PageProps) {
   const session = await getServerSession(authOptions);
-  if (!session) {
-    redirect("/login");
-  }
 
   const user = await db.user.findUnique({
-    where: { id: session.user.id },
+    where: { id: session!.user!.id },
     include: { subscriptions: true },
   });
-
-  if (!user) {
-    redirect("/login");
-  }
-
-  if (
-    user.progressStatus !== "PAYMENT_PENDING" &&
-    user.progressStatus !== "PERSONAL_DISCOVERY_PENDING"
-  ) {
-    redirect("/dashboard");
-  }
 
   const message = searchParams.message
     ? decodeURIComponent(searchParams.message)
@@ -65,78 +64,124 @@ export default async function StatusPage({ searchParams }: PageProps) {
     ? decodeURIComponent(searchParams.returnTo)
     : null;
 
-  const steps = [
+  // Define step completion conditions
+  const hasActiveSubscription = user?.subscriptions.some(
+    (sub) => sub.status === "ACTIVE"
+  );
+  const hasPendingSubscription = user?.subscriptions.some(
+    (sub) => sub.status === "PENDING"
+  );
+  const hasCompletedPersonalDiscovery = 
+    user?.progressStatus !== "PERSONAL_DISCOVERY_PENDING" && 
+    user?.progressStatus !== undefined;
+  const hasCompletedCVAlignment = 
+    user?.progressStatus !== "CV_ALIGNMENT_PENDING" && 
+    hasCompletedPersonalDiscovery;
+
+  // Helper function to determine step status
+  const determineStepStatus = (
+    index: number,
+    isCompleted: boolean,
+    previousCompleted: boolean
+  ): StepStatus => {
+    if (isCompleted) return 'completed';
+    if (!previousCompleted) return 'locked';
+    if (index === 0 || previousCompleted) return 'current';
+    return 'upcoming';
+  };
+
+  const steps: Step[] = [
     {
       title: "Payment",
       description: "Complete your subscription payment",
       icon: CreditCard,
-      status: user.subscriptions.some((sub) => sub.status === "ACTIVE")
-        ? "completed"
-        : "pending",
-      action: user.subscriptions.some((sub) => sub.status === "PENDING")
+      status: hasActiveSubscription 
+        ? 'completed' 
+        : 'current',
+      action: hasPendingSubscription 
         ? "Awaiting approval"
         : "Subscribe now",
       link: "/dashboard/billing",
+      requiresPrevious: false,
     },
     {
       title: "Personal Discovery",
       description: "Complete your personal profile",
       icon: UserCircle,
-      status:
-        user.progressStatus === "PERSONAL_DISCOVERY_PENDING"
-          ? "current"
-          : "upcoming",
-      action: "Start now",
+      status: determineStepStatus(1, !!hasCompletedPersonalDiscovery, !!hasActiveSubscription),
+      action: hasCompletedPersonalDiscovery 
+        ? "Completed" 
+        : "Start now",
       link: "/dashboard/personal-discovery",
+      requiresPrevious: true,
     },
     {
       title: "CV Alignment",
       description: "Upload and align your CV",
       icon: FileText,
-      status: "upcoming",
-      action: "Align now",
+      status: determineStepStatus(2, !!hasCompletedCVAlignment, !!hasCompletedPersonalDiscovery),
+      action: hasCompletedCVAlignment 
+        ? "Completed" 
+        : "Align now",
       link: "/cv-alignment",
+      requiresPrevious: true,
     },
     {
       title: "Scholarship Matrix",
       description: "Complete your scholarship assessment",
       icon: GraduationCap,
-      status: "upcoming",
-      action: "Coming soon",
-      link: "#",
+      status: determineStepStatus(3, false, !!hasCompletedCVAlignment),
+      action: "Start assessment",
+      link: "/scholarship-quest",
+      requiresPrevious: true,
     },
   ];
 
   // Calculate progress
-  const completedSteps = steps.filter(
-    (step) => step.status === "completed"
-  ).length;
+  const completedSteps = steps.filter(step => step.status === 'completed').length;
   const progress = (completedSteps / steps.length) * 100;
 
-  const getStatusIcon = (status: string) => {
+  const getStatusIcon = (status: StepStatus) => {
     switch (status) {
-      case "completed":
+      case 'completed':
         return <CheckCircle2 className="h-5 w-5 text-green-500" />;
-      case "current":
+      case 'current':
         return <Circle className="h-5 w-5 text-blue-500" />;
+      case 'locked':
+        return <Lock className="h-5 w-5 text-gray-400" />;
       default:
         return <Circle className="h-5 w-5 text-gray-300" />;
     }
   };
 
-  const getStatusBadge = (status: string) => {
+  const getStatusBadge = (status: StepStatus) => {
     const variants = {
       completed: "success",
       current: "default",
       upcoming: "secondary",
       pending: "warning",
+      locked: "secondary",
     } as const;
 
+    const labels = {
+      completed: "Completed",
+      current: "In Progress",
+      upcoming: "Upcoming",
+      pending: "Pending",
+      locked: "Locked",
+    };
+
     return (
-      <Badge variant={variants[status as keyof typeof variants]}>
-        {status.charAt(0).toUpperCase() + status.slice(1)}
+      <Badge variant={variants[status]}>
+        {labels[status]}
       </Badge>
     );
+  };
+
+  const isStepAccessible = (index: number): boolean => {
+    if (index === 0) return true;
+    const previousStep = steps[index - 1];
+    return previousStep.status === 'completed';
   };
 
   return (
@@ -144,7 +189,7 @@ export default async function StatusPage({ searchParams }: PageProps) {
       <div className="container mx-auto px-4 py-10">
         {message && (
           <div className="mb-6">
-            <Alert className="alert-info alert-accented alert-animate-in relative border-l-4 border-blue-500">
+            <Alert className="relative border-l-4 border-blue-500 alert-info alert-with-icon alert-accented">
               <Info className="h-5 w-5" />
               <AlertTitle>Action Required</AlertTitle>
               <AlertDescription>
@@ -166,15 +211,13 @@ export default async function StatusPage({ searchParams }: PageProps) {
         )}
 
         <div className="space-y-6">
-          {/* Header Section */}
           <div className="space-y-2">
             <h1 className="text-3xl font-bold tracking-tight">Your Journey</h1>
-            <p className="text-muted-foreground text-lg">
-              Complete these steps to unlock all features of Pearl Mentor Hub.
+            <p className="text-lg text-muted-foreground">
+              Complete these steps to unlock all features of ACCM
             </p>
           </div>
 
-          {/* Progress Overview */}
           <Card>
             <CardHeader>
               <CardTitle>Overall Progress</CardTitle>
@@ -187,18 +230,21 @@ export default async function StatusPage({ searchParams }: PageProps) {
             </CardContent>
           </Card>
 
-          {/* Steps Grid */}
           <div className="grid gap-6 md:grid-cols-2">
             {steps.map((step, index) => {
               const Icon = step.icon;
+              const isAccessible = isStepAccessible(index);
+              const isCompleted = step.status === 'completed';
+              const isCurrent = step.status === 'current';
+              
               return (
                 <Card
                   key={index}
-                  className={
-                    step.status === "current"
-                      ? "border-2 border-primary"
-                      : undefined
-                  }
+                  className={`${
+                    isCurrent ? "border-2 border-primary" : ""
+                  } ${
+                    !isAccessible ? "opacity-75" : ""
+                  }`}
                 >
                   <CardHeader>
                     <div className="flex items-start justify-between">
@@ -218,9 +264,11 @@ export default async function StatusPage({ searchParams }: PageProps) {
                     <div className="flex items-center space-x-2">
                       {getStatusIcon(step.status)}
                       <span className="text-sm text-muted-foreground">
-                        {step.status === "completed"
+                        {step.status === 'locked' 
+                          ? "Complete previous steps first"
+                          : step.status === 'completed'
                           ? "Completed"
-                          : step.status === "current"
+                          : step.status === 'current'
                           ? "In Progress"
                           : "Not Started"}
                       </span>
@@ -229,18 +277,22 @@ export default async function StatusPage({ searchParams }: PageProps) {
                   <CardFooter>
                     <Button
                       className="w-full"
-                      asChild
-                      disabled={step.status === "upcoming" || step.status === "completed"}
-                      variant={
-                        step.status === "current" ? "default" : "outline"
-                      }
+                      asChild={isAccessible && !isCompleted}
+                      disabled={!isAccessible || isCompleted || step.action === "Awaiting approval"}
+                      variant={isCurrent ? "default" : "outline"}
                     >
                       <Link
-                        href={step.link}
+                        href={isAccessible ? step.link : "#"}
                         className="flex items-center justify-center"
                       >
-                        {step.action}
-                        <ArrowRight className="ml-2 h-4 w-4" />
+                        {isCompleted 
+                          ? "Completed" 
+                          : !isAccessible 
+                          ? "Locked" 
+                          : step.action}
+                        {isAccessible && !isCompleted && (
+                          <ArrowRight className="ml-2 h-4 w-4" />
+                        )}
                       </Link>
                     </Button>
                   </CardFooter>
