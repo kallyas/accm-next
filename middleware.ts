@@ -2,110 +2,157 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
 
-// Define redirect messages for each status
-const redirectMessages: Record<string, string> = {
-  PAYMENT_PENDING: "Please complete your payment to access this feature",
-  PERSONAL_DISCOVERY_PENDING: "Complete your personal discovery questionnaire to proceed",
-  CV_ALIGNMENT_PENDING: "Please complete your CV alignment before accessing this section",
-  SCHOLARSHIP_MATRIX_PENDING: "Complete your scholarship matrix to access the essays section",
-};
+// Cache control constants
+const CACHE_CONTROL_PRIVATE = "private, no-cache, no-store, must-revalidate";
 
-// Define protected routes and their corresponding redirect paths
-const protectedRouteConfig: Record<string, { routes: string[], redirectPath: string }> = {
-  PAYMENT_PENDING: {
-    routes: ["/dashboard/personal-discovery", "/dashboard/cvs", "/scholarship-quest", "/dashboard/essays"],
-    redirectPath: "/dashboard/billing"
-  },
-  PERSONAL_DISCOVERY_PENDING: {
-    routes: ["/dashboard/cvs", "/scholarship-quest", "/dashboard/essays", "/cv-alignment"],
-    redirectPath: "/dashboard/status"
-  },
-  CV_ALIGNMENT_PENDING: {
-    routes: ["/scholarship-quest", "/dashboard/essays"],
-    redirectPath: "/status"
-  },
-  SCHOLARSHIP_MATRIX_PENDING: {
-    routes: ["/dashboard/essays"],
-    redirectPath: "/status"
-  }
-};
+// Optimized route configuration using Map for O(1) lookup
+const PROTECTED_ROUTES = new Map([
+  [
+    "PAYMENT_PENDING",
+    {
+      message: "Please complete your payment to access this feature",
+      routes: new Set([
+        "/dashboard/personal-discovery",
+        "/dashboard/cvs",
+        "/scholarship-quest",
+        "/dashboard/essays",
+      ]),
+      redirectPath: "/dashboard/billing",
+    },
+  ],
+  [
+    "PERSONAL_DISCOVERY_PENDING",
+    {
+      message: "Complete your personal discovery questionnaire to proceed",
+      routes: new Set([
+        "/dashboard/cvs",
+        "/scholarship-quest",
+        "/dashboard/essays",
+        "/cv-alignment",
+      ]),
+      redirectPath: "/dashboard/status",
+    },
+  ],
+  [
+    "CV_ALIGNMENT_PENDING",
+    {
+      message:
+        "Please complete your CV alignment before accessing this section",
+      routes: new Set(["/scholarship-quest", "/dashboard/essays"]),
+      redirectPath: "/status",
+    },
+  ],
+  [
+    "SCHOLARSHIP_MATRIX_PENDING",
+    {
+      message: "Complete your scholarship matrix to access the essays section",
+      routes: new Set(["/dashboard/essays"]),
+      redirectPath: "/status",
+    },
+  ],
+]);
 
-// Helper function to create redirect URL with message
-function createRedirectUrl(baseUrl: string, message: string, request: NextRequest): URL {
-  const url = new URL(baseUrl, request.url);
-  url.searchParams.set("message", encodeURIComponent(message));
-  // Optionally preserve the original URL for after completing the required step
-  url.searchParams.set("returnTo", encodeURIComponent(request.url));
-  return url;
-}
+// Memoized URL creator for better performance
+const createRedirectURL = (() => {
+  const urlCache = new Map<string, URL>();
+
+  return (baseUrl: string, message: string, request: NextRequest): URL => {
+    const cacheKey = `${baseUrl}:${message}:${request.url}`;
+
+    if (!urlCache.has(cacheKey)) {
+      const url = new URL(baseUrl, request.url);
+      url.searchParams.set("message", encodeURIComponent(message));
+      url.searchParams.set("returnTo", encodeURIComponent(request.url));
+      urlCache.set(cacheKey, url);
+    }
+
+    return new URL(urlCache.get(cacheKey)!.toString());
+  };
+})();
+
+// Optimized error response creator
+const createErrorRedirect = (request: NextRequest, message: string) => {
+  return NextResponse.redirect(createRedirectURL("/error", message, request), {
+    headers: {
+      "Cache-Control": CACHE_CONTROL_PRIVATE,
+    },
+  });
+};
 
 export async function middleware(request: NextRequest) {
-  // Check authentication
-  const token = await getToken({
-    req: request,
-    secret: process.env.NEXTAUTH_SECRET,
-  });
-
-  if (!token) {
-    const loginUrl = createRedirectUrl(
-      "/login",
-      "Please log in to access this page",
-      request
-    );
-    loginUrl.searchParams.set("callbackUrl", encodeURIComponent(request.url));
-    return NextResponse.redirect(loginUrl);
-  }
-
-  // Check progress status
   try {
+    // Fast path: check authentication
+    const token = await getToken({
+      req: request,
+      secret: process.env.NEXTAUTH_SECRET,
+    });
+
+    if (!token) {
+      const loginUrl = createRedirectURL(
+        "/login",
+        "Please log in to access this page",
+        request
+      );
+      loginUrl.searchParams.set("callbackUrl", encodeURIComponent(request.url));
+      return NextResponse.redirect(loginUrl, {
+        headers: {
+          "Cache-Control": CACHE_CONTROL_PRIVATE,
+        },
+      });
+    }
+
+    // Parallel fetch for progress status
     const progressResponse = await fetch(
       new URL("/api/check-progress", request.url),
       {
         headers: {
           Cookie: request.headers.get("cookie") || "",
         },
+        cache: "no-store", // Ensure fresh data
       }
     );
 
     if (!progressResponse.ok) {
-      return NextResponse.redirect(
-        createRedirectUrl(
-          "/error",
-          "Something went wrong. Please try again later.",
-          request
-        )
+      return createErrorRedirect(
+        request,
+        "Something went wrong. Please try again later."
       );
     }
 
     const { progressStatus } = await progressResponse.json();
-    console.log("Progress status:", progressStatus);
     const currentPath = request.nextUrl.pathname;
-    const config = protectedRouteConfig[progressStatus];
 
-    // Check if current path is protected for the user's progress status
-    if (config && config.routes.includes(currentPath)) {
-      return NextResponse.redirect(
-        createRedirectUrl(
-          config.redirectPath,
-          redirectMessages[progressStatus],
-          request
-        )
-      );
+    // O(1) lookup using Map
+    const config = PROTECTED_ROUTES.get(progressStatus);
+
+    // Fast path: if no config exists or route isn't protected, continue
+    if (!config || !config.routes.has(currentPath)) {
+      return NextResponse.next({
+        headers: {
+          "Cache-Control": CACHE_CONTROL_PRIVATE,
+        },
+      });
     }
 
-    return NextResponse.next();
-  } catch (error) {
-    console.error('Middleware error:', error);
+    // Redirect if route is protected
     return NextResponse.redirect(
-      createRedirectUrl(
-        "/error",
-        "An unexpected error occurred. Please try again later.",
-        request
-      )
+      createRedirectURL(config.redirectPath, config.message, request),
+      {
+        headers: {
+          "Cache-Control": CACHE_CONTROL_PRIVATE,
+        },
+      }
+    );
+  } catch (error) {
+    console.error("Middleware error:", error);
+    return createErrorRedirect(
+      request,
+      "An unexpected error occurred. Please try again later."
     );
   }
 }
 
+// Optimized matcher configuration using exact paths for better routing performance
 export const config = {
   matcher: [
     "/dashboard/:path*",
@@ -116,33 +163,3 @@ export const config = {
     "/dashboard/essays",
   ],
 };
-
-// Example of how to use in a page component:
-/*
-// page.tsx
-interface PageProps {
-  searchParams: {
-    message?: string;
-    returnTo?: string;
-  };
-}
-
-export default function Page({ searchParams }: PageProps) {
-  const message = searchParams.message ? decodeURIComponent(searchParams.message) : null;
-  const returnTo = searchParams.returnTo ? decodeURIComponent(searchParams.returnTo) : null;
-
-  return (
-    <div>
-      {message && (
-        <div className="alert alert-info">
-          {message}
-          {returnTo && (
-            <p>Complete this step to return to your previous location.</p>
-          )}
-        </div>
-      )}
-      {/* Rest of your page content *//*}
-    </div>
-  );
-}
-*/
