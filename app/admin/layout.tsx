@@ -50,6 +50,11 @@ export default async function AdminLayout({
       icon: <CreditCard className="h-4 w-4" />,
     },
     {
+      href: "/admin/subscriptions",
+      label: "Subscriptions",
+      icon: <CreditCard className="h-4 w-4" />,
+    },
+    {
       href: "/admin/publications",
       label: "Publications",
       icon: <BookOpen className="h-4 w-4" />,
