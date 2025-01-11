@@ -94,8 +94,8 @@ export default async function StatusPage({ searchParams }: PageProps) {
       description: "Upload and align your CV",
       icon: FileText,
       status: "upcoming",
-      action: "Coming soon",
-      link: "#",
+      action: "Align now",
+      link: "/cv-alignment",
     },
     {
       title: "Scholarship Matrix",
