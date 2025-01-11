@@ -34,6 +34,11 @@ export default async function UserDashboardLayout({
       icon: <Star className="h-4 w-4" />,
     },
     {
+      href: "/dashboard/status",
+      label: "Status",
+      icon: <Star className="h-4 w-4" />,
+    },
+    {
       href: "/dashboard/events",
       label: "My Events",
       icon: <Calendar className="h-4 w-4" />,
