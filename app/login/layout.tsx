@@ -16,7 +16,7 @@ export default async function Layout({
     redirect("/dashboard");
   }
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-background p-6 md:p-10">
+    <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 p-6 md:p-10">
       <div className="w-full max-w-sm">{children}</div>
     </div>
   );
