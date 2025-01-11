@@ -17,7 +17,7 @@ const protectedRouteConfig: Record<string, { routes: string[], redirectPath: str
     redirectPath: "/dashboard/billing"
   },
   PERSONAL_DISCOVERY_PENDING: {
-    routes: ["/dashboard/cvs", "/scholarship-quest", "/dashboard/essays"],
+    routes: ["/dashboard/cvs", "/scholarship-quest", "/dashboard/essays", "/cv-alignment"],
     redirectPath: "/dashboard/status"
   },
   CV_ALIGNMENT_PENDING: {
@@ -78,6 +78,7 @@ export async function middleware(request: NextRequest) {
     }
 
     const { progressStatus } = await progressResponse.json();
+    console.log("Progress status:", progressStatus);
     const currentPath = request.nextUrl.pathname;
     const config = protectedRouteConfig[progressStatus];
 
