@@ -52,7 +52,7 @@ export default function BookSessionPage() {
         </CardHeader>
         <CardContent>
           <div
-            data-url="https://calendly.com/wabelwilson/30min"
+            data-url="https://calendly.com/abelwalekhwa_accm/30min"
             className="calendly-inline-widget rounded rounded-lg"
             style={{ minWidth: "320px", height: "630px", colorScheme: "dark" }}
           />
