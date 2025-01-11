@@ -18,15 +18,15 @@ const protectedRouteConfig: Record<string, { routes: string[], redirectPath: str
   },
   PERSONAL_DISCOVERY_PENDING: {
     routes: ["/dashboard/cvs", "/scholarship-quest", "/dashboard/essays"],
-    redirectPath: "/dashboard/personal-discovery/start"
+    redirectPath: "/dashboard/status"
   },
   CV_ALIGNMENT_PENDING: {
     routes: ["/scholarship-quest", "/dashboard/essays"],
-    redirectPath: "/cv-alignment"
+    redirectPath: "/status"
   },
   SCHOLARSHIP_MATRIX_PENDING: {
     routes: ["/dashboard/essays"],
-    redirectPath: "/scholarship-quest"
+    redirectPath: "/status"
   }
 };
 
