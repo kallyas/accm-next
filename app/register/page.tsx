@@ -26,6 +26,14 @@ import {
 } from "@/components/ui/select";
 import Link from "next/link";
 import { getNames } from "country-list";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 
 const formSchema = z.object({
   firstName: z.string().min(2, {
@@ -106,35 +114,25 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4 bg-background">
-      <div className="w-full max-w-2xl mx-auto border border-border rounded-lg shadow-lg">
-        <div className="flex flex-col gap-6 p-6 md:p-8">
-          {/* Header Section */}
-          <div className="flex flex-col items-center gap-4 text-center">
-            <a
-              href="#"
-              className="flex flex-col items-center gap-2 font-medium"
-            >
-              <div className="flex h-10 w-10 items-center justify-center rounded-md bg-primary/10">
-                <GalleryVerticalEnd className="size-6 text-primary" />
-              </div>
-              <span className="sr-only">ACCM</span>
-            </a>
-            <div>
-              <h1 className="text-2xl font-bold mb-2">Welcome to ACCM</h1>
-              <p className="text-sm text-muted-foreground">
-                Already have an account?{" "}
-                <Link href="/login" className="text-primary underline">
-                  Log in
-                </Link>
-              </p>
+    <div className="container mx-auto flex min-h-screen items-center justify-center py-8">
+      <Card className="w-full max-w-2xl">
+        <CardHeader className="space-y-1">
+          <div className="flex justify-center">
+            <div className="rounded-full bg-primary/10 p-2">
+              <GalleryVerticalEnd className="h-6 w-6 text-primary" />
             </div>
           </div>
-
-          {/* Registration Form */}
+          <CardTitle className="text-2xl font-bold text-center">
+            Create an account
+          </CardTitle>
+          <p className="text-center text-sm text-muted-foreground">
+            Enter your information to get started
+          </p>
+        </CardHeader>
+        <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <FormField
                   control={form.control}
                   name="firstName"
@@ -142,11 +140,7 @@ export default function RegisterPage() {
                     <FormItem>
                       <FormLabel>First Name</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="John"
-                          {...field}
-                          className="w-full"
-                        />
+                        <Input placeholder="John" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -159,18 +153,12 @@ export default function RegisterPage() {
                     <FormItem>
                       <FormLabel>Last Name</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="Doe"
-                          {...field}
-                          className="w-full"
-                        />
+                        <Input placeholder="Doe" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-
-                {/* Email */}
                 <FormField
                   control={form.control}
                   name="email"
@@ -178,18 +166,12 @@ export default function RegisterPage() {
                     <FormItem>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="john@example.com"
-                          {...field}
-                          className="w-full"
-                        />
+                        <Input placeholder="john@example.com" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-
-                {/* Phone */}
                 <FormField
                   control={form.control}
                   name="phone"
@@ -197,18 +179,12 @@ export default function RegisterPage() {
                     <FormItem>
                       <FormLabel>Phone</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="+1234567890"
-                          {...field}
-                          className="w-full"
-                        />
+                        <Input placeholder="+1234567890" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-
-                {/* Service */}
                 <FormField
                   control={form.control}
                   name="service"
@@ -220,7 +196,7 @@ export default function RegisterPage() {
                         defaultValue={field.value}
                       >
                         <FormControl>
-                          <SelectTrigger className="w-full">
+                          <SelectTrigger>
                             <SelectValue placeholder="Select a service" />
                           </SelectTrigger>
                         </FormControl>
@@ -238,8 +214,6 @@ export default function RegisterPage() {
                     </FormItem>
                   )}
                 />
-
-                {/* Gender */}
                 <FormField
                   control={form.control}
                   name="gender"
@@ -251,7 +225,7 @@ export default function RegisterPage() {
                         defaultValue={field.value}
                       >
                         <FormControl>
-                          <SelectTrigger className="w-full">
+                          <SelectTrigger>
                             <SelectValue placeholder="Select gender" />
                           </SelectTrigger>
                         </FormControl>
@@ -265,8 +239,6 @@ export default function RegisterPage() {
                     </FormItem>
                   )}
                 />
-
-                {/* Country */}
                 <FormField
                   control={form.control}
                   name="country"
@@ -278,7 +250,7 @@ export default function RegisterPage() {
                         defaultValue={field.value}
                       >
                         <FormControl>
-                          <SelectTrigger className="w-full">
+                          <SelectTrigger>
                             <SelectValue placeholder="Select a country" />
                           </SelectTrigger>
                         </FormControl>
@@ -294,8 +266,6 @@ export default function RegisterPage() {
                     </FormItem>
                   )}
                 />
-
-                {/* Education Level */}
                 <FormField
                   control={form.control}
                   name="educationLevel"
@@ -307,7 +277,7 @@ export default function RegisterPage() {
                         defaultValue={field.value}
                       >
                         <FormControl>
-                          <SelectTrigger className="w-full">
+                          <SelectTrigger>
                             <SelectValue placeholder="Select education level" />
                           </SelectTrigger>
                         </FormControl>
@@ -328,48 +298,32 @@ export default function RegisterPage() {
                     </FormItem>
                   )}
                 />
-
-                {/* Password */}
                 <FormField
                   control={form.control}
                   name="password"
                   render={({ field }) => (
-                    <FormItem className="md:col-span-2">
+                    <FormItem className="col-span-full">
                       <FormLabel>Password</FormLabel>
                       <FormControl>
-                        <Input type="password" {...field} className="w-full" />
+                        <Input type="password" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
               </div>
-
-              {/* Submit Button */}
-              <Button
-                className="w-full mt-4"
-                type="submit"
-                disabled={isLoading}
-              >
+              <Button className="w-full" type="submit" disabled={isLoading}>
                 {isLoading ? "Creating account..." : "Create account"}
               </Button>
             </form>
           </Form>
-
-          {/* Divider */}
-          <div
-            className="relative text-center text-sm my-4 
-            after:absolute after:inset-0 after:top-1/2 
-            after:z-0 after:flex after:items-center 
-            after:border-t after:border-border"
-          >
-            <span className="relative z-10 bg-background px-2 text-muted-foreground">
-              Or
+          <div className="relative my-6">
+            <Separator />
+            <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-background px-2 text-xs text-muted-foreground">
+              Or continue with
             </span>
           </div>
-
-          {/* Social Login Buttons */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4">
             <Button variant="outline" className="w-full">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -381,7 +335,7 @@ export default function RegisterPage() {
                   fill="currentColor"
                 />
               </svg>
-              Continue with Apple
+              Apple
             </Button>
             <Button variant="outline" className="w-full">
               <svg
@@ -394,24 +348,39 @@ export default function RegisterPage() {
                   fill="currentColor"
                 />
               </svg>
-              Continue with Google
+              Google
             </Button>
           </div>
-
-          {/* Terms of Service */}
-          <div className="text-center text-xs text-muted-foreground mt-4">
+        </CardContent>
+        <CardFooter className="flex flex-col items-center justify-center space-y-2">
+          <p className="text-center text-sm text-muted-foreground">
             By clicking continue, you agree to our{" "}
-            <Link href="#" className="underline">
+            <Link
+              href="/terms"
+              className="underline underline-offset-4 hover:text-primary"
+            >
               Terms of Service
             </Link>{" "}
             and{" "}
-            <Link href="#" className="underline">
+            <Link
+              href="/privacy"
+              className="underline underline-offset-4 hover:text-primary"
+            >
               Privacy Policy
             </Link>
             .
-          </div>
-        </div>
-      </div>
+          </p>
+          <p className="text-center text-sm text-muted-foreground">
+            Already have an account?{" "}
+            <Link
+              href="/login"
+              className="font-medium text-primary underline underline-offset-4"
+            >
+              Log in
+            </Link>
+          </p>
+        </CardFooter>
+      </Card>
     </div>
   );
 }
