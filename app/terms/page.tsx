@@ -69,7 +69,7 @@ export default function TermsPage() {
             </li>
             <li>
               <strong>Website</strong> refers to African Centre For Career Mentorship, accessible
-              from www.pearlmentorhub.com
+              from africanccm.com
             </li>
             <li>
               <strong>You</strong> means the individual accessing or using the
@@ -121,7 +121,7 @@ export default function TermsPage() {
             <li>By email: admin@africanccm.com</li>
             <li>
               By visiting this page on our website:
-              www.pearlmentorhub.com/contact
+              africanccm.com/contact
             </li>
           </ul>
         </CardContent>
