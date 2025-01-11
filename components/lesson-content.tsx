@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import {
   Card,
   CardContent,
@@ -10,48 +11,53 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, Loader2 } from "lucide-react";
 
-type Lesson = {
+interface Lesson {
   id: string;
   title: string;
   content: string;
   order: number;
-};
+}
 
-type LessonContentProps = {
+interface LessonContentProps {
   lesson: Lesson;
   courseId: string;
   isCompleted: boolean;
-};
+}
 
 export function LessonContent({
   lesson,
   courseId,
-  isCompleted,
+  isCompleted: initialIsCompleted,
 }: LessonContentProps) {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
   const [completing, setCompleting] = useState(false);
-  const [completed, setCompleted] = useState(isCompleted);
+  const [isCompleted, setIsCompleted] = useState(initialIsCompleted);
 
-  const handleComplete = async () => {
+  const handleComplete = useCallback(async () => {
+    if (completing || isCompleted) return;
+
     setCompleting(true);
     try {
       const response = await fetch("/api/courses/progress", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ courseId, lessonId: lesson.id }),
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to update progress");
-      }
+      if (!response.ok) throw new Error("Failed to update progress");
 
-      setCompleted(true);
+      setIsCompleted(true);
       toast({
         title: "Lesson Completed",
         description: "Your progress has been updated.",
+      });
+
+      // Refresh the page data
+      startTransition(() => {
+        router.refresh();
       });
     } catch (error) {
       toast({
@@ -62,7 +68,7 @@ export function LessonContent({
     } finally {
       setCompleting(false);
     }
-  };
+  }, [completing, isCompleted, courseId, lesson.id, router]);
 
   return (
     <Card>
@@ -72,16 +78,27 @@ export function LessonContent({
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div dangerouslySetInnerHTML={{ __html: lesson.content }} />
+        <div
+          className="prose dark:prose-invert max-w-none"
+          dangerouslySetInnerHTML={{ __html: lesson.content }}
+        />
       </CardContent>
       <CardFooter>
-        {completed ? (
+        {isCompleted ? (
           <div className="flex items-center text-green-500">
             <CheckCircle className="mr-2" />
             Lesson Completed
+            {isPending && <Loader2 className="ml-2 h-4 w-4 animate-spin" />}
           </div>
         ) : (
-          <Button onClick={handleComplete} disabled={completing}>
+          <Button
+            onClick={handleComplete}
+            disabled={completing || isPending}
+            className="relative"
+          >
+            {(completing || isPending) && (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            )}
             {completing ? "Marking as Complete..." : "Mark as Complete"}
           </Button>
         )}
