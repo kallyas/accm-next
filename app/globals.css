@@ -199,3 +199,126 @@ iframe {
          border-gray-200/50 dark:border-gray-800/50 
          transition-shadow;
 }
+
+/* alert styles */
+/* Base alert styles */
+.alert,
+[role="alert"] {
+  @apply relative p-4 mb-4 rounded-lg border transition-all duration-200;
+}
+
+/* Alert variants */
+.alert-info {
+  @apply bg-blue-50 text-blue-800 border-blue-200
+         dark:bg-blue-900/30 dark:text-blue-200 dark:border-blue-800/50;
+}
+
+.alert-success {
+  @apply bg-green-50 text-green-800 border-green-200
+         dark:bg-green-900/30 dark:text-green-200 dark:border-green-800/50;
+}
+
+.alert-warning {
+  @apply bg-yellow-50 text-yellow-800 border-yellow-200
+         dark:bg-yellow-900/30 dark:text-yellow-200 dark:border-yellow-800/50;
+}
+
+.alert-error {
+  @apply bg-red-50 text-red-800 border-red-200
+         dark:bg-red-900/30 dark:text-red-200 dark:border-red-800/50;
+}
+
+/* Alert sizes */
+.alert-sm {
+  @apply p-2.5 text-sm;
+}
+
+.alert-lg {
+  @apply p-5 text-lg;
+}
+
+/* Alert with icon */
+.alert-with-icon {
+  @apply pl-12;
+}
+
+.alert-icon {
+  @apply absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5;
+}
+
+/* Alert with action */
+.alert-action {
+  @apply flex items-center justify-between gap-4;
+}
+
+.alert-close {
+  @apply p-1 rounded-md opacity-60 hover:opacity-100 transition-opacity
+         focus:outline-none focus:ring-2 focus:ring-offset-2;
+}
+
+/* Alert animations */
+@keyframes alertSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.alert-animate-in {
+  animation: alertSlideIn 0.2s ease-out;
+}
+
+/* Alert with links */
+.alert a {
+  @apply font-medium underline hover:opacity-80 transition-opacity;
+}
+
+/* Alert with title and description */
+.alert-title {
+  @apply font-semibold mb-1;
+}
+
+.alert-description {
+  @apply text-sm opacity-90;
+}
+
+/* Alert with border accent */
+.alert-accented {
+  @apply border-l-4;
+}
+
+.alert-accented.alert-info {
+  @apply border-l-blue-500;
+}
+
+.alert-accented.alert-success {
+  @apply border-l-green-500;
+}
+
+.alert-accented.alert-warning {
+  @apply border-l-yellow-500;
+}
+
+.alert-accented.alert-error {
+  @apply border-l-red-500;
+}
+
+/* Alert groups for stacking */
+.alert-group {
+  @apply space-y-2;
+}
+
+/* Alert with custom background opacity */
+.alert-subtle {
+  @apply bg-opacity-50 dark:bg-opacity-10;
+}
+
+/* Alert with focus state for interactive alerts */
+.alert-interactive {
+  @apply cursor-pointer hover:brightness-95 dark:hover:brightness-110
+         focus:outline-none focus:ring-2 focus:ring-offset-2;
+}
