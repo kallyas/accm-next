@@ -1,161 +1,230 @@
-import { DashboardHeader } from "@/components/dashboard/header";
-import { DashboardShell } from "@/components/dashboard/shell";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CalendarDateRangePicker } from "@/components/date-range-picker";
-import { Overview } from "@/components/overview";
-import { RecentSales } from "@/components/recent-sales";
+'use client'
 
-export function AdminDashboard() {
+import { useEffect, useState } from 'react'
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
+import { 
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, 
+  ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell 
+} from 'recharts'
+import { 
+  Users, UserCheck, GraduationCap, ScrollText, 
+  TrendingUp, Calendar, Book, Activity 
+} from 'lucide-react'
+import { Badge } from '@/components/ui/badge'
+import { Progress } from '@/components/ui/progress'
+import { ExtendedAnalyticsData } from '@/types/general'
+
+const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff8042']
+
+
+export function AnalyticsDashboard({ _data }: { _data: ExtendedAnalyticsData }) {
+  const [data, setData] = useState<ExtendedAnalyticsData>(_data)
+
+  // Format user growth data for chart
+  const growthData = data.users?.growth?.map(item => ({
+    date: `${item?.year}-${item?.month}`,
+    users: item?._count
+  }))
+
   return (
-    <DashboardShell>
-      <DashboardHeader heading="Dashboard" text="Overview of your admin panel">
-        <div className="flex items-center space-x-2">
-          <CalendarDateRangePicker />
-          <Button>Download</Button>
-        </div>
-      </DashboardHeader>
-      <Tabs defaultValue="overview" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="analytics">Analytics</TabsTrigger>
-          <TabsTrigger value="reports">Reports</TabsTrigger>
-          <TabsTrigger value="notifications">Notifications</TabsTrigger>
-        </TabsList>
-        <TabsContent value="overview" className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Total Revenue
-                </CardTitle>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  className="h-4 w-4 text-muted-foreground"
+    <div className="space-y-8">
+      {/* Overview Section */}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">
+              Total Users
+            </CardTitle>
+            <Users className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{data?.overview?.totalUsers}</div>
+            <p className="text-xs text-muted-foreground">
+              {data?.overview?.activityRate}% active this month
+            </p>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">
+              Active Mentors
+            </CardTitle>
+            <UserCheck className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{data?.overview?.totalMentors}</div>
+            <p className="text-xs text-muted-foreground">
+              Supporting {data?.overview?.totalUsers} users
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">
+              Course Engagement
+            </CardTitle>
+            <Book className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {data?.engagement?.courseEngagement?.averageProgress}%
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Average completion rate
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">
+              Active Subscriptions
+            </CardTitle>
+            <Activity className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{data?.overview?.activeSubscriptions}</div>
+            <p className="text-xs text-muted-foreground">
+              Of {data?.overview?.totalSubscriptions} total
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Charts Section */}
+      <div className="grid gap-4 md:grid-cols-2">
+        <Card className="col-span-1">
+          <CardHeader>
+            <CardTitle>User Growth</CardTitle>
+            <CardDescription>Monthly user registration trend</CardDescription>
+          </CardHeader>
+          <CardContent className="h-[300px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={growthData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="date" />
+                <YAxis />
+                <Tooltip />
+                <Line 
+                  type="monotone" 
+                  dataKey="users" 
+                  stroke="#8884d8" 
+                  strokeWidth={2}
+                  dot={{ r: 4 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+
+        <Card className="col-span-1">
+          <CardHeader>
+            <CardTitle>Progress Distribution</CardTitle>
+            <CardDescription>User journey stages</CardDescription>
+          </CardHeader>
+          <CardContent className="h-[300px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={data?.users?.progressDistribution}
+                  dataKey="_count"
+                  nameKey="progressStatus"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={100}
+                  label
                 >
-                  <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-                </svg>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">$45,231.89</div>
-                <p className="text-xs text-muted-foreground">
-                  +20.1% from last month
+                  {data?.users?.progressDistribution?.map((_, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Course Performance */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Course Performance</CardTitle>
+          <CardDescription>Average completion rates by course</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {data?.learning?.courseCompletions?.map((course) => (
+              <div key={course?.title} className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="font-medium">{course?.title}</span>
+                  <span className="text-sm text-muted-foreground">
+                    {course?._count?.enrollments} enrollments
+                  </span>
+                </div>
+                <Progress value={parseFloat(course?.averageProgress)} />
+                <p className="text-sm text-muted-foreground">
+                  {course?.averageProgress}% average completion
                 </p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Subscriptions
-                </CardTitle>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  className="h-4 w-4 text-muted-foreground"
-                >
-                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                  <circle cx="9" cy="7" r="4" />
-                  <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
-                </svg>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">+2350</div>
-                <p className="text-xs text-muted-foreground">
-                  +180.1% from last month
-                </p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Sales</CardTitle>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  className="h-4 w-4 text-muted-foreground"
-                >
-                  <rect width="20" height="14" x="2" y="5" rx="2" />
-                  <path d="M2 10h20" />
-                </svg>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">+12,234</div>
-                <p className="text-xs text-muted-foreground">
-                  +19% from last month
-                </p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Active Now
-                </CardTitle>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  className="h-4 w-4 text-muted-foreground"
-                >
-                  <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-                </svg>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">+573</div>
-                <p className="text-xs text-muted-foreground">
-                  +201 since last hour
-                </p>
-              </CardContent>
-            </Card>
+              </div>
+            ))}
           </div>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-            <Card className="col-span-4">
-              <CardHeader>
-                <CardTitle>Overview</CardTitle>
-              </CardHeader>
-              <CardContent className="pl-2">
-                <Overview />
-              </CardContent>
-            </Card>
-            <Card className="col-span-3">
-              <CardHeader>
-                <CardTitle>Recent Sales</CardTitle>
-                <CardDescription>
-                  You made 265 sales this month.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <RecentSales />
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
-      </Tabs>
-    </DashboardShell>
-  );
+        </CardContent>
+      </Card>
+
+      {/* Recent Users & Popular Plans */}
+      <div className="grid gap-4 md:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle>Recent Users</CardTitle>
+            <CardDescription>Latest registrations</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {data?.users?.recent?.map((user) => (
+                <div key={user.id} className="flex items-center justify-between">
+                  <div>
+                    <p className="font-medium">
+                      {user?.firstName} {user?.lastName}
+                    </p>
+                    <p className="text-sm text-muted-foreground">{user?.email}</p>
+                  </div>
+                  <Badge variant="outline">
+                    {user?.progressStatus.replace(/_/g, ' ').toLowerCase()}
+                  </Badge>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Popular Plans</CardTitle>
+            <CardDescription>Most subscribed packages</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {data?.subscriptions?.popularPlans?.map((plan) => (
+                <div key={plan?.name} className="flex items-center justify-between">
+                  <div>
+                    <p className="font-medium">{plan?.name}</p>
+                    <p className="text-sm text-muted-foreground">
+                      ${plan?.price} per month
+                    </p>
+                  </div>
+                  <Badge variant="secondary">
+                    {plan?._count?.subscriptions} subscribers
+                  </Badge>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  )
 }
