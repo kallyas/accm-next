@@ -12,30 +12,31 @@ datasource db {
 }
 
 model User {
-  id             String          @id @default(cuid())
-  firstName      String
-  lastName       String
-  email          String          @unique
-  phone          String?
-  service        String?
-  gender         Gender?
-  country        String?
-  educationLevel String?
-  password       String
-  role           Role            @default(USER)
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
-  profile        UserProfile?
-  subscriptions  Subscription[]
-  feedbacks      Feedback[]
-  notifications  Notification[]
-  trackProgress  TrackProgress[]
-  paymentProofs  PaymentProof[]
-  events         UserEvent[]
-  enrollments    Enrollment[]
-  cvs            CV[]
-  personalDiscovery PersonalDiscovery?
+  id                    String                 @id @default(cuid())
+  firstName             String
+  lastName              String
+  email                 String                 @unique
+  phone                 String?
+  service               String?
+  gender                Gender?
+  country               String?
+  educationLevel        String?
+  password              String
+  role                  Role                   @default(USER)
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  profile               UserProfile?
+  subscriptions         Subscription[]
+  feedbacks             Feedback[]
+  notifications         Notification[]
+  trackProgress         TrackProgress[]
+  paymentProofs         PaymentProof[]
+  events                UserEvent[]
+  enrollments           Enrollment[]
+  cvs                   CV[]
+  personalDiscovery     PersonalDiscovery?
   scholarshipAssessment ScholarshipAssessment?
+  progressStatus ProgressStatus @default(PAYMENT_PENDING)
 }
 
 model PersonalDiscovery {
@@ -62,39 +63,38 @@ model PersonalDiscovery {
 }
 
 model ScholarshipAssessment {
-  id                    String   @id @default(cuid())
-  userId                String
-  user                  User     @relation(fields: [userId], references: [id])
-  
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
   // Education and Field
-  educationLevel        String   // Enum in the application: high_school, certificate, diploma, bachelors, masters, phd, other
-  fieldPreference       String   // Enum: arts, sciences
-  
+  educationLevel  String // Enum in the application: high_school, certificate, diploma, bachelors, masters, phd, other
+  fieldPreference String // Enum: arts, sciences
+
   // Demographics
-  ageRange             String   // Enum: under_18, 18_24, 25_34, 35_44, 45_54, 55_plus
-  gender               String   // Enum: male, female, non_binary, prefer_not_to_say, other
-  
+  ageRange String // Enum: under_18, 18_24, 25_34, 35_44, 45_54, 55_plus
+  gender   String // Enum: male, female, non_binary, prefer_not_to_say, other
+
   // Employment Preferences
-  employmentPreference String   // Enum: self_employed, government, private
-  selfEmploymentType   String?  // Optional enum: profit, non_profit (only if self_employed)
-  careerSector        String   // Enum: academia, policy, industry
-  
+  employmentPreference String // Enum: self_employed, government, private
+  selfEmploymentType   String? // Optional enum: profit, non_profit (only if self_employed)
+  careerSector         String // Enum: academia, policy, industry
+
   // Personal Aspirations
-  unpaidPassion       String   @db.Text  // What they love doing without pay
-  personalPassion     String   @db.Text  // What they're passionate about
-  lifeGoal            String   @db.Text  // Problem they want to solve
-  futureTitle         String   // Desired title in 30 years
-  futureTasks         String   @db.Text  // Description of future tasks
-  requiredSkills      String   @db.Text  // Skills needed
-  desiredCourses      String   @db.Text  // Courses needed
-  
+  unpaidPassion   String @db.Text // What they love doing without pay
+  personalPassion String @db.Text // What they're passionate about
+  lifeGoal        String @db.Text // Problem they want to solve
+  futureTitle     String // Desired title in 30 years
+  futureTasks     String @db.Text // Description of future tasks
+  requiredSkills  String @db.Text // Skills needed
+  desiredCourses  String @db.Text // Courses needed
+
   // Timestamps
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([userId])
 }
-
 
 model UserProfile {
   id          String   @id @default(cuid())
@@ -178,14 +178,14 @@ model TrackProgress {
 }
 
 model Publication {
-  id        String   @id @default(cuid())
-  title     String
-  authors   String
-  abstract  String
-  externalUrl String
+  id            String   @id @default(cuid())
+  title         String
+  authors       String
+  abstract      String
+  externalUrl   String
   publishedDate DateTime
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model Testimonial {
@@ -348,6 +348,15 @@ model PasswordResetToken {
   expiresAt DateTime
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+enum ProgressStatus {
+  PAYMENT_PENDING
+  PERSONAL_DISCOVERY_PENDING
+  CV_ALIGNMENT_PENDING
+  SCHOLARSHIP_MATRIX_PENDING
+  ESSAYS_PENDING
+  COMPLETED
 }
 
 enum Role {
