@@ -25,7 +25,16 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
-import { Check } from "lucide-react";
+import {
+  AlertCircle,
+  ArrowRight,
+  Badge,
+  Check,
+  Clock,
+  CreditCard,
+  Shield,
+  Zap,
+} from "lucide-react";
 
 type Plan = {
   id: string;
@@ -131,6 +140,9 @@ export const useSubscribeMutation = (onSuccess: (open: boolean) => void) => {
 
 export function SubscribePlan() {
   const [open, setOpen] = useState(false);
+  const [selectedCycle, setSelectedCycle] = useState<"monthly" | "yearly">(
+    "monthly"
+  );
   const { data: session } = useSession();
   const { data: plans, isLoading } = useQuery({
     queryKey: ["plans"],
@@ -140,8 +152,6 @@ export function SubscribePlan() {
   const {
     handleSubscribe,
     isLoading: isSubscribing,
-    isError,
-    error,
     selectedPlan: subscriptionPlan,
     setSelectedPlan: setSubscriptionPlan,
     paymentProof: subscriptionPaymentProof,
@@ -155,118 +165,220 @@ export function SubscribePlan() {
   };
 
   if (isLoading) {
-    return <div>Loading plans...</div>;
+    return (
+      <div className="flex items-center justify-center p-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
   }
 
   if (!plans || plans.length === 0) {
-    return <div>No plans available.</div>;
+    return (
+      <div className="text-center p-8">
+        <CreditCard className="w-12 h-12 mx-auto mb-4 text-gray-400" />
+        <p className="text-gray-500">No plans available at the moment.</p>
+      </div>
+    );
   }
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-4">Available Plans</h2>
+    <div className="space-y-8">
+      {/* Billing Cycle Toggle */}
+      <div className="flex justify-end">
+        <div className="inline-flex items-center space-x-2 bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
+          <Button
+            variant={selectedCycle === "monthly" ? "default" : "ghost"}
+            size="sm"
+            onClick={() => setSelectedCycle("monthly")}
+          >
+            Monthly
+          </Button>
+          <Button
+            variant={selectedCycle === "yearly" ? "default" : "ghost"}
+            size="sm"
+            onClick={() => setSelectedCycle("yearly")}
+          >
+            Yearly (Save 15%)
+          </Button>
+        </div>
+      </div>
+
+      {/* Plans Grid */}
       <div className="grid gap-6 md:grid-cols-3">
         {plans.map((plan) => (
-          <Card key={plan.id}>
+          <Card
+            key={plan.id}
+            className={`border-2 transition-all duration-200 hover:shadow-lg ${
+              subscriptionPlan?.id === plan.id
+                ? "border-primary"
+                : "hover:border-primary/50"
+            }`}
+          >
             <CardHeader>
-              <CardTitle>{plan.name}</CardTitle>
-              <CardDescription>{plan.description}</CardDescription>
+              <div className="flex justify-between items-start">
+                <div>
+                  <CardTitle className="text-xl">{plan.name}</CardTitle>
+                  <CardDescription className="mt-1">
+                    {plan.description}
+                  </CardDescription>
+                </div>
+                <Badge className="border-2 outline-sm">
+                  {plan.duration} {plan.duration > 1 ? "months" : "month"}
+                </Badge>
+              </div>
+              <div className="mt-4">
+                <span className="text-3xl font-bold">
+                  $
+                  {selectedCycle === "yearly"
+                    ? (plan.price * 12 * 0.85).toFixed(2)
+                    : plan.price.toFixed(2)}
+                </span>
+                <span className="text-gray-500 ml-1">
+                  /{selectedCycle === "yearly" ? "yr" : "mo"}
+                </span>
+                {selectedCycle === "yearly" && (
+                  <span className="block text-sm text-green-600 dark:text-green-400 mt-1">
+                    Save 15% with yearly billing
+                  </span>
+                )}
+              </div>
             </CardHeader>
-            <CardContent>
-              <p className="text-2xl font-bold mb-4">
-                ${plan.price.toFixed(2)}/{plan.duration} month
-                {plan.duration > 1 ? "s" : ""}
-              </p>
-              <ul className="space-y-2">
+
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
                 {plan.services.map((service, index) => (
-                  <li key={index} className="flex items-center">
-                    <Check className="mr-2 h-4 w-4 text-green-500" />
-                    {service}
-                  </li>
+                  <div key={index} className="flex items-start">
+                    <Check className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-600 dark:text-gray-300">
+                      {service}
+                    </span>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </CardContent>
-            <CardFooter className="flex justify-between">
+
+            <CardFooter className="flex flex-col space-y-3">
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button variant="outline">View Details</Button>
+                  <Button variant="outline" className="w-full">
+                    View Details
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
                 </DialogTrigger>
-                <DialogContent>
+                <DialogContent className="sm:max-w-[500px]">
                   <DialogHeader>
-                    <DialogTitle>{plan.name} Plan Details</DialogTitle>
+                    <DialogTitle className="flex items-center">
+                      <Shield className="w-5 h-5 mr-2 text-primary" />
+                      {plan.name} Plan Details
+                    </DialogTitle>
                     <DialogDescription>{plan.description}</DialogDescription>
                   </DialogHeader>
-                  <div className="space-y-4">
-                    <p className="text-lg font-semibold">
-                      Price: ${plan.price.toFixed(2)}/{plan.duration} month
-                      {plan.duration > 1 ? "s" : ""}
-                    </p>
-                    <div>
-                      <h4 className="font-semibold mb-2">Included Services:</h4>
-                      <ul className="list-disc list-inside space-y-1">
+                  <div className="space-y-6 py-4">
+                    <div className="space-y-4">
+                      <h4 className="font-semibold flex items-center">
+                        <Zap className="w-4 h-4 mr-2 text-primary" />
+                        Included Services
+                      </h4>
+                      <ul className="space-y-2">
                         {plan.services.map((service, index) => (
-                          <li key={index}>{service}</li>
+                          <li key={index} className="flex items-start">
+                            <Check className="h-4 w-4 text-green-500 mr-2 mt-1" />
+                            <span>{service}</span>
+                          </li>
                         ))}
                       </ul>
                     </div>
-                    <div>
-                      <h4 className="font-semibold mb-2">Features:</h4>
-                      <ul className="list-disc list-inside space-y-1">
+                    <div className="space-y-4">
+                      <h4 className="font-semibold flex items-center">
+                        <Clock className="w-4 h-4 mr-2 text-primary" />
+                        Additional Features
+                      </h4>
+                      <ul className="space-y-2">
                         {plan.features.map((feature, index) => (
-                          <li key={index}>{feature}</li>
+                          <li key={index} className="flex items-start">
+                            <Check className="h-4 w-4 text-green-500 mr-2 mt-1" />
+                            <span>{feature}</span>
+                          </li>
                         ))}
                       </ul>
                     </div>
                   </div>
                 </DialogContent>
               </Dialog>
+
               {session ? (
                 <Dialog open={open} onOpenChange={setOpen}>
                   <DialogTrigger asChild>
                     <Button
+                      className="w-full"
                       onClick={() => {
                         setSubscriptionPlan(plan);
                         setOpen(true);
                       }}
                     >
-                      Subscribe
+                      Subscribe Now
                     </Button>
                   </DialogTrigger>
                   <DialogContent>
                     <DialogHeader>
-                      <DialogTitle>Subscribe to {plan?.name} Plan</DialogTitle>
+                      <DialogTitle>Subscribe to {plan.name}</DialogTitle>
                       <DialogDescription>
-                        Please upload proof of payment to complete your
-                        subscription.
+                        Please upload your payment proof to complete the
+                        subscription process.
                       </DialogDescription>
                     </DialogHeader>
-                    <div className="grid w-full items-center gap-1.5">
-                      <Label htmlFor="payment-proof">Payment Proof</Label>
-                      <Input
-                        id="payment-proof"
-                        type="file"
-                        accept="image/*"
-                        onChange={handleFileChange}
-                      />
+                    <div className="space-y-4 py-4">
+                      <div className="grid w-full items-center gap-1.5">
+                        <Label htmlFor="payment-proof">Payment Proof</Label>
+                        <Input
+                          id="payment-proof"
+                          type="file"
+                          accept="image/*"
+                          onChange={handleFileChange}
+                          className="cursor-pointer"
+                        />
+                      </div>
                     </div>
                     <DialogFooter>
                       <Button
                         disabled={isSubscribing}
                         onClick={handleSubscribe}
+                        className="w-full sm:w-auto"
                       >
-                        {isSubscribing ? "Subscribing..." : "Subscribe"}
+                        {isSubscribing
+                          ? "Processing..."
+                          : "Complete Subscription"}
                       </Button>
                     </DialogFooter>
                   </DialogContent>
                 </Dialog>
               ) : (
-                <Link href="/login">
-                  <Button>Login to Subscribe</Button>
+                <Link href="/login" className="w-full">
+                  <Button className="w-full">Login to Subscribe</Button>
                 </Link>
               )}
             </CardFooter>
           </Card>
         ))}
+      </div>
+
+      {/* Help Section */}
+      <div className="mt-8 p-6 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+        <div className="flex items-start space-x-4">
+          <AlertCircle className="w-6 h-6 text-blue-500 mt-0.5" />
+          <div>
+            <h4 className="font-semibold text-gray-900 dark:text-gray-100">
+              Need help choosing?
+            </h4>
+            <p className="text-gray-600 dark:text-gray-400 mt-1">
+              Our team can help you find the perfect plan for your needs. Get in
+              touch for a personalized recommendation.
+            </p>
+            <Button variant="link" className="p-0 h-auto mt-2">
+              Contact Support
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );
