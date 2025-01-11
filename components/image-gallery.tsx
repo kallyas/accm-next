@@ -15,11 +15,22 @@ const images = Array(71)
     span: index % 7 === 0 ? "col-span-2" : "row-span-2",
   }));
 
+const whatsappImages = Array(9)
+  .fill(0)
+  .map((_, index) => ({
+    id: index + 1,
+    src: `/whatsapp/whatsapp_${index + 1}.jpeg`,
+    alt: `Gallery image ${index + 1}`,
+    span: index % 7 === 0 ? "col-span-2" : "row-span-2",
+  }));
+
+const galleryImages = images.concat(whatsappImages);
+
 export function ImageGallery() {
   return (
     <div className="grid grid-cols-3 gap-4">
-      {images
-      .map((image) => (
+      {galleryImages &&
+        galleryImages.map((image) => (
           <GalleryImage key={image.id} image={image} />
         ))}
     </div>
