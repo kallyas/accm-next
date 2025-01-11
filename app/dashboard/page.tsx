@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
-import { UserDashboard } from "@/components/user-dashboard";
+import { UserDashboardContent } from "@/components/user-dashboard";
 import { SubscribePlan } from "@/components/user/subscribe-plan";
 import { EnrolledCourses } from "@/components/enrolled-courses";
 
@@ -32,7 +32,7 @@ export default async function UserDashboardPage() {
 
   return (
     <div className="space-y-10">
-      <UserDashboard />
+      <UserDashboardContent user={session?.user} />
       <EnrolledCourses courses={formattedCourses} />
       <SubscribePlan />
     </div>
