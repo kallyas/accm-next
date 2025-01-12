@@ -81,20 +81,6 @@ const teamMembers: TeamMember[] = [
     },
   },
   {
-    id: "5",
-    name: "Isabella Atuganyire",
-    position: "Chief Executive Officer",
-    department: "Management",
-    expertise: ["Leadership", "Strategic Planning", "Business Development"],
-    about: `She is the chief Executive officer at the African Centre for Career Mentorship where she supports professionals and students discover their full potential for success at workplaces and winning international scholarships.`,
-    imageUrl: "/team/isabella.png",
-    socialLinks: {
-      linkedin: "https://linkedin.com/in/sarahjones",
-      twitter: "https://twitter.com/sarahjones",
-      email: "isa@gmail.com",
-    },
-  },
-  {
     id: "6",
     name: "Harriet Ocitti",
     position: "A proficient and passionate communication coach",
