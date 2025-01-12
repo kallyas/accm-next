@@ -42,7 +42,7 @@ const teamMembers: TeamMember[] = [
     department: "Engineering",
     expertise: ["Data Analysis", "Data Visualization", "Machine Learning"],
     about:
-      "Jane Smith is our Chief Technology Officer and leads our engineering team. She has a strong background in software development and cloud computing, with a focus on building scalable and reliable systems. Jane is passionate about mentoring junior developers and fostering a culture of continuous learning.",
+      "A data analysis officer specialized in collecting, processing, and performing statistical analyses on large datasets to discover useful information, suggest conclusions, and support decision-making. Using various techniques under various umbrellas, such as descriptive statistics, exploratory data analysis (EDA), and inferential statistics, to interpret and understand the patterns and behaviors within data.",
     imageUrl: "/team/tim.jpeg",
     socialLinks: {
       linkedin: "https://linkedin.com/in/janesmith",
@@ -114,7 +114,7 @@ const teamMembers: TeamMember[] = [
   },
   {
     id: "7",
-    name: "Harriet Ocitti",
+    name: "Evalyne Birungi",
     position: "Learning and Development Specialist",
     department: "Learning and Development",
     expertise: [
