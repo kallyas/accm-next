@@ -74,21 +74,21 @@ export default async function AdminLayout({
       label: "Users",
       icon: <Users className="h-4 w-4" />,
     },
-    {
-      href: "/admin/resources",
-      label: "Resources",
-      icon: <Download className="h-4 w-4" />,
-    },
-    {
-      href: "/admin/team",
-      label: "Team Members",
-      icon: <UsersIcon className="h-4 w-4" />,
-    },
-    {
-      href: "/admin/mentors",
-      label: "Mentors",
-      icon: <Users className="h-4 w-4" />,
-    },
+    // {
+    //   href: "/admin/resources",
+    //   label: "Resources",
+    //   icon: <Download className="h-4 w-4" />,
+    // },
+    // {
+    //   href: "/admin/team",
+    //   label: "Team Members",
+    //   icon: <UsersIcon className="h-4 w-4" />,
+    // },
+    // {
+    //   href: "/admin/mentors",
+    //   label: "Mentors",
+    //   icon: <Users className="h-4 w-4" />,
+    // },
     {
       href: "/admin/testimonials",
       label: "Testimonials",
