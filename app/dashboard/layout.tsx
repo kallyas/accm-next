@@ -28,11 +28,11 @@ export default async function UserDashboardLayout({
       label: "Overview",
       icon: <LayoutDashboard className="h-4 w-4" />,
     },
-    {
-      href: "/dashboard/services",
-      label: "Services",
-      icon: <Star className="h-4 w-4" />,
-    },
+    // {
+    //   href: "/dashboard/services",
+    //   label: "Services",
+    //   icon: <Star className="h-4 w-4" />,
+    // },
     {
       href: "/dashboard/status",
       label: "Status",
