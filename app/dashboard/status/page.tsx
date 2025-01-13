@@ -73,10 +73,10 @@ export default async function StatusPage({ searchParams }: PageProps) {
   );
   const hasCompletedPersonalDiscovery = 
     user?.progressStatus !== "PERSONAL_DISCOVERY_PENDING" && 
-    user?.progressStatus !== undefined;
+    user?.progressStatus !== undefined && hasActiveSubscription;
   const hasCompletedCVAlignment = 
     user?.progressStatus !== "CV_ALIGNMENT_PENDING" && 
-    hasCompletedPersonalDiscovery;
+    hasCompletedPersonalDiscovery && hasActiveSubscription;
 
   // Helper function to determine step status
   const determineStepStatus = (
