@@ -17,7 +17,7 @@ interface ApiSuccess {
 
 // Validate request parameters
 const ParamsSchema = z.object({
-  id: z.string().uuid({
+  id: z.string({
     message: "Invalid event ID format",
   }),
 });
