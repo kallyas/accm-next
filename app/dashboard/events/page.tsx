@@ -6,9 +6,36 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+
+const LoadingState = () => (
+  <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+    {Array(3)
+      .fill(0)
+      .map((_, i) => (
+        <Card key={i} className="overflow-hidden">
+          <CardHeader>
+            <Skeleton className="h-8 w-3/4 mb-2" />
+            <Skeleton className="h-4 w-full" />
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-3/4" />
+              <Skeleton className="h-4 w-1/2" />
+            </div>
+          </CardContent>
+          <CardFooter>
+            <Skeleton className="h-10 w-28" />
+          </CardFooter>
+        </Card>
+      ))}
+  </div>
+);
 
 export default function UserEventsPage() {
   const { userEvents } = useEvents();
@@ -23,11 +50,16 @@ export default function UserEventsPage() {
         </CardHeader>
         <CardContent>
           {userEvents.isLoading ? (
-            <p>Loading events...</p>
+            <LoadingState />
           ) : userEvents.isError ? (
-            <p>Error loading events: {userEvents.error.message}</p>
+            <div className="text-red-500">
+              Error loading events: {userEvents.error.message}
+            </div>
           ) : (
-            <UserEventList events={userEvents.data || []} />
+            <UserEventList
+              events={userEvents.data || []}
+              queryKey={["user-events"]}
+            />
           )}
         </CardContent>
       </Card>
