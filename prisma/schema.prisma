@@ -192,7 +192,7 @@ model Testimonial {
   id        String   @id @default(cuid())
   content   String
   author    String
-  role      String?
+  rating    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
