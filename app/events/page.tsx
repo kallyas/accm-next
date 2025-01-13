@@ -18,90 +18,143 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Event } from "@/types/event";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+
+// Separate hook for checking registration status
+const useRegistrationStatus = (eventId: string) => {
+  return useQuery({
+    queryKey: ["registration-status", eventId],
+    queryFn: async () => {
+      try {
+        const response = await axios.get(
+          `/api/events/${eventId}/is-registered`
+        );
+        return response.data.isRegistered;
+      } catch (error) {
+        return false;
+      }
+    },
+    enabled: !!eventId,
+  });
+};
 
 interface EventCardProps {
   event: Event;
   onRegister: (eventId: string) => void;
-  onUnregister?: (eventId: string) => void;
+  onUnregister: (eventId: string) => void;
   isRegistering: boolean;
-  alreadyRegistered?: boolean;
+  isAuthenticated: boolean;
 }
 
 const EventCard = ({
   event,
   onRegister,
   onUnregister,
-  alreadyRegistered = false,
   isRegistering,
-}: EventCardProps) => (
-  <Card className="overflow-hidden transition-all hover:shadow-lg">
-    {event.bannerUrl && (
-      <div className="relative h-48 w-full">
-        <Image
-          src={event.bannerUrl}
-          alt={event.title}
-          layout="fill"
-          objectFit="cover"
-          className="transition-transform hover:scale-105"
-        />
-      </div>
-    )}
-    <CardHeader>
-      <CardTitle className="line-clamp-2">{event.title}</CardTitle>
-      <CardDescription className="line-clamp-3">
-        {event.description}
-      </CardDescription>
-    </CardHeader>
-    <CardContent>
-      <div className="space-y-3">
-        <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-          <Calendar className="h-4 w-4" />
-          <div className="flex flex-col">
-            <span>
-              Starts: {new Date(event.startDate).toLocaleDateString()} at{" "}
-              {new Date(event.startDate).toLocaleTimeString()}
-            </span>
-            <span>
-              Ends: {new Date(event.endDate).toLocaleDateString()} at{" "}
-              {new Date(event.endDate).toLocaleTimeString()}
-            </span>
-          </div>
-        </div>
-        <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-          <MapPin className="h-4 w-4" />
-          <span className="line-clamp-1">{event.location}</span>
-        </div>
-        <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-          <Users className="h-4 w-4" />
-          <span>
-            {event.registeredCount}{" "}
-            {event.registeredCount === 1 ? "person" : "people"} registered
-          </span>
-        </div>
-      </div>
-    </CardContent>
-    <CardFooter>
-      {alreadyRegistered ? (
+  isAuthenticated,
+}: EventCardProps) => {
+  const router = useRouter();
+  const { data: isRegistered = false, isLoading: isCheckingRegistration } =
+    useRegistrationStatus(event.id);
+
+  const handleLoginRedirect = () => {
+    router.push("/login?callbackUrl=/events");
+  };
+
+  const renderButton = () => {
+    if (!isAuthenticated) {
+      return (
+        <Button className="w-full" onClick={handleLoginRedirect}>
+          Login to Register
+        </Button>
+      );
+    }
+
+    if (isCheckingRegistration) {
+      return (
+        <Button className="w-full" disabled>
+          Checking status...
+        </Button>
+      );
+    }
+
+    if (isRegistered) {
+      return (
         <Button
           className="w-full"
-          onClick={() => onUnregister!(event.id)}
+          onClick={() => onUnregister(event.id)}
           disabled={isRegistering}
           variant="destructive"
         >
           {isRegistering ? "Unregistering..." : "Unregister"}
         </Button>
-      ) : (
-        <Button
-          className="w-full"
-          onClick={() => onRegister(event.id)}
-          disabled={isRegistering}
-        >
-          {isRegistering ? "Registering..." : "Register Now"}
-        </Button>
+      );
+    }
+
+    return (
+      <Button
+        className="w-full"
+        onClick={() => onRegister(event.id)}
+        disabled={isRegistering}
+      >
+        {isRegistering ? "Registering..." : "Register Now"}
+      </Button>
+    );
+  };
+
+  return (
+    <Card className="overflow-hidden transition-all hover:shadow-lg">
+      {event.bannerUrl && (
+        <div className="relative h-48 w-full">
+          <Image
+            src={event.bannerUrl}
+            alt={event.title}
+            layout="fill"
+            objectFit="cover"
+            className="transition-transform hover:scale-105"
+          />
+        </div>
       )}
-    </CardFooter>
-  </Card>
-);
+      <CardHeader>
+        <CardTitle className="line-clamp-2">{event.title}</CardTitle>
+        <CardDescription className="line-clamp-3">
+          {event.description}
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-3">
+          <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+            <Calendar className="h-4 w-4" />
+            <div className="flex flex-col">
+              <span>
+                Starts: {new Date(event.startDate).toLocaleDateString()} at{" "}
+                {new Date(event.startDate).toLocaleTimeString()}
+              </span>
+              <span>
+                Ends: {new Date(event.endDate).toLocaleDateString()} at{" "}
+                {new Date(event.endDate).toLocaleTimeString()}
+              </span>
+            </div>
+          </div>
+          <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+            <MapPin className="h-4 w-4" />
+            <span className="line-clamp-1">{event.location}</span>
+          </div>
+          <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+            <Users className="h-4 w-4" />
+            <span>
+              {event.registeredCount}{" "}
+              {event.registeredCount === 1 ? "person" : "people"} registered
+            </span>
+          </div>
+        </div>
+      </CardContent>
+      <CardFooter>{renderButton()}</CardFooter>
+    </Card>
+  );
+};
 
 const LoadingEventCard = () => (
   <Card className="overflow-hidden">
@@ -128,10 +181,15 @@ const LoadingEventCard = () => (
 
 export default function EventsPage() {
   const router = useRouter();
-  const { events, registerForEvent, unregisterForEvent, isUserRegistered } =
-    useEvents();
+  const { data: session } = useSession();
+  const { events, registerForEvent, unregisterForEvent } = useEvents();
 
   const handleRegister = async (eventId: string) => {
+    if (!session) {
+      router.push("/login?callbackUrl=/events");
+      return;
+    }
+
     try {
       await registerForEvent.mutateAsync(eventId);
       toast({
@@ -165,11 +223,6 @@ export default function EventsPage() {
         variant: "destructive",
       });
     }
-  };
-
-  const handleCheckIsRegistered = (eventId: string) => {
-    const result = isUserRegistered(eventId);
-    return result.data ?? false;
   };
 
   return (
@@ -218,18 +271,16 @@ export default function EventsPage() {
           )}
 
           {events.isSuccess &&
-            events.data.map((event) => {
-              return (
-                <EventCard
-                  key={event.id}
-                  event={event}
-                  onRegister={handleRegister}
-                  isRegistering={registerForEvent.isPending}
-                  onUnregister={handleUnregister}
-                  // alreadyRegistered={handleCheckIsRegistered(event.id)}
-                />
-              );
-            })}
+            events.data.map((event) => (
+              <EventCard
+                key={event.id}
+                event={event}
+                onRegister={handleRegister}
+                onUnregister={handleUnregister}
+                isRegistering={registerForEvent.isPending}
+                isAuthenticated={!!session}
+              />
+            ))}
         </div>
       </div>
     </div>
