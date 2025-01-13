@@ -57,10 +57,10 @@ const teamMembers: TeamMember[] = [
     department: "Marketing",
     expertise: ["Content Strategy", "Brand Management", "Digital Marketing"],
     about:
-      "I have witnessed firsthand the transformative power of career guidance and how it can redirect someone's life. That's why I am so passionate about my work with the African Centre for Career Mentorship (ACCM). As a Communication Officer, I am driven by a sense of purpose to help others find their way, to empower them with the knowledge and confidence to pursue their dreams. Every message I craft, every word I write, is a chance to make a real difference. I believe that everyone deserves to find fulfillment and purpose in their career, and I am honored to be a part of that journey.",
+      "As a Communication Officer, I enjoy telling a story and ACCM’s story is one that particularly inspires me. One of the best parts of my work is writing and designing graphics. I have been honored to support ACCM’s social media growth by more than 40 % in less than a year. I have also supported personal brands, growing them by more than 100% in less than three months. I am passionate about communication and growth. Being able to learn and contribute is an enriching experience for me.",
     imageUrl: "/team/berna.png",
     socialLinks: {
-      linkedin: "https://linkedin.com/in/alicejohnson",
+      linkedin: "https://ug.linkedin.com/in/bainomugisha-bernadatte-95a98b201",
       twitter: "https://twitter.com/alicejohnson",
       email: "alice@gmail.com",
     },
@@ -68,16 +68,23 @@ const teamMembers: TeamMember[] = [
   {
     id: "4",
     name: "Abel Wilson Walekhwa",
-    position: "A Public Health Specialist",
-    department: "Health",
+    position: "Founder and CEO",
+    department: "Leadership",
     expertise: ["Public Health", "Health Policy", "Health Promotion"],
-    about: `He is the visionary founder of the African Centre for Career Mentorship, a pioneering organization dedicated to empowering African professionals and students to excel in their careers and academic pursuits. Through personalized mentorship programs, strategic career guidance, and comprehensive scholarship application support, he has helped hundreds of individuals transform their professional trajectories.
- `,
+    about: `Abel Wilson Walekhwa helps professionals and prospective students discover their potential for success. This is done through tools and frameworks that he has developed over the last four years under African Centre for Career Mentorship (Pearl Mentor Hub LTD), a registered non government organization in Uganda. 
+
+Since 2022 to date, he has directly mentored 25 African students from five countries to win fully funded scholarships (7-PhDs, 17-Masters and 1-Bachelor’s degree) to nine different countries globally. 
+
+Through the African Centre for Career Mentorship, he has organized over 70 weekly meetings (zoom webinars) training over 817 professionals and generated over 60 YouTube recordings/videos. The YouTube recordings have attracted over 780 subscribers and 19,870 views since August 6th 2023 when he opened it. 
+
+Given his passion for capacity building and mentorship, he also founded IDEMU Mathematical Modeling Unit, Uganda, a research group that has so far trained 74 professionals from six African countries in infectious diseases modeling, a skill I felt was missing to enable infectious disease predictions across Africa. 
+
+This initiative, earned him a position as a One Health High Level Expert Panel member at the World Health Organisation where he serves in his individual capacity as a consultant. He is currently a 3rd Year PhD Student at University of Cambridge, UK`,
     imageUrl: "/team/abel.png",
     socialLinks: {
-      linkedin: "https://linkedin.com/in/bobwilliams",
-      twitter: "https://twitter.com/bobwilliams",
-      email: "bob@gmail.com",
+      linkedin: "https://www.linkedin.com/in/abel-w-walekhwa-81b249a5?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app",
+      twitter: "https://x.com/abelwalekhwa?s=11",
+      email: "wabelwilson@gmail.com",
     },
   },
   {
@@ -104,12 +111,30 @@ const teamMembers: TeamMember[] = [
     position: "Learning and Development Specialist",
     department: "Learning and Development",
     expertise: [
-        "Public Speaking",
-        "Communication Skills",
-        "Presentation Skills",
+      "Public Speaking",
+      "Communication Skills",
+      "Presentation Skills",
     ],
     about: `Lead HR-Learning and Development at Wagagai Limited, one of the largest horticulture farms in Uganda.`,
     imageUrl: "/team/birungi.png",
+    socialLinks: {
+      linkedin: "https://linkedin.com/in/sarahjones",
+      twitter: "https://twitter.com/sarahjones",
+      email: "isa@gmail.com",
+    },
+  },
+  {
+    id: "8",
+    name: "Dr. Jean-Vincent LAMIEN,",
+    position: "ACCM ambassador for West Africa",
+    department: "Learning and Development",
+    expertise: ["Public Health", "Health Policy", "Health Promotion"],
+    about: `Dr Jean-Vincent LAMIEN is a medical doctor and public health professional from Burkina Faso. He is currently pursuing an MSc in Public Health with a focus on Health Systems and Disease Control at the prestigious Institute of Tropical Medicine in Antwerp, Belgium. Prior to his MSc studies, Dr LAMIEN worked as a clinical investigator at the Clinical Research Unit of Nanoro in Burkina Faso, where he participated in the clinical trial for the malaria vaccine R21/Matrix M. This vaccine was approved by the World Health Organisation in October 2023 for widespread use in endemic countries to combat clinical malaria in African children. He also spent nearly a year as the Malaria Advocacy Lead for Burkina Faso at the US non-governmental organisation 1Day Sooner, ensuring that all eligible children in Burkina Faso were immunised with the malaria vaccine.
+
+Dr LAMIEN is an accomplished young leader who has participated in prestigious leadership programmes worldwide. In 2023, he took part in the Mandela Washington Fellowship as part of the US Young African Leaders Initiative (YALI) Programme, where he received training in Leadership in Public Management. As a way to give back to his community, he voluntarily provides coaching to young professionals for their career development.
+
+Dr LAMIEN is passionate about health policy and governance, health system strengthening, health financing, the design and evaluation of health programmes, and global health. His career goal is to contribute to the strengthening of health systems in Africa through evidence-based policy decision-making.`,
+    imageUrl: "/team/jeans.jpeg",
     socialLinks: {
       linkedin: "https://linkedin.com/in/sarahjones",
       twitter: "https://twitter.com/sarahjones",
