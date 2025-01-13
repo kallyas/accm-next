@@ -81,6 +81,8 @@ const createErrorRedirect = (request: NextRequest, message: string) => {
 
 export async function middleware(request: NextRequest) {
   try {
+    const currentPath = request.nextUrl.pathname;
+
     // Fast path: check authentication
     const token = await getToken({
       req: request,
@@ -101,7 +103,23 @@ export async function middleware(request: NextRequest) {
       });
     }
 
-    // Parallel fetch for progress status
+    // Fast path: skip progress check for admin routes
+    if (currentPath.startsWith('/admin')) {
+      // Verify admin role for admin routes
+      if (!token.role || token.role !== "USER") {
+        return createErrorRedirect(
+          request,
+          "You don't have permission to access this page"
+        );
+      }
+      return NextResponse.next({
+        headers: {
+          "Cache-Control": CACHE_CONTROL_PRIVATE,
+        },
+      });
+    }
+
+    // Only fetch progress status for non-admin routes
     const progressResponse = await fetch(
       new URL("/api/check-progress", request.url),
       {
@@ -120,7 +138,6 @@ export async function middleware(request: NextRequest) {
     }
 
     const { progressStatus } = await progressResponse.json();
-    const currentPath = request.nextUrl.pathname;
 
     // O(1) lookup using Map
     const config = PROTECTED_ROUTES.get(progressStatus);
