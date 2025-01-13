@@ -136,14 +136,16 @@ export const useEvents = () => {
   const unregisterForEventMutation = useMutation({
     mutationFn: unregisterForEvent,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["events", "user-events"] });
+      queryClient.invalidateQueries({ queryKey: ["events"] });
+      queryClient.invalidateQueries({ queryKey: ["user-events"] });
     },
   });
 
   const useRegistrationStatus = (eventId: string) => {
     return useQuery({
-      queryKey: ['registration-status', eventId],
-      queryFn: () => isRegisteredQuery({ queryKey: ['registration-status', eventId] }),
+      queryKey: ["registration-status", eventId],
+      queryFn: () =>
+        isRegisteredQuery({ queryKey: ["registration-status", eventId] }),
       enabled: !!eventId, // Only run the query if we have an eventId
     });
   };
