@@ -33,7 +33,6 @@ export async function extractDocxContent(url: string): Promise<string> {
 
 // Main POST handler function
 export async function POST(req: Request) {
-  
   const session = await getServerSession(authOptions);
 
   // Unauthorized if no session
@@ -52,7 +51,6 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "CV not found" }, { status: 404 });
     }
 
- 
     const cvUrl = await getR2Url(cvRecord.fileUrl);
     let cvContent: string;
 
@@ -84,6 +82,13 @@ export async function POST(req: Request) {
         content: `Your CV ${cvRecord.fileName} has been analyzed`,
         title: `CV Analysis Complete for ${cvRecord.fileName}`,
         user: { connect: { id: session!.user!.id } },
+      },
+    });
+
+    await db.user.update({
+      where: { id: session!.user!.id },
+      data: {
+        progressStatus: "SCHOLARSHIP_MATRIX_PENDING",
       },
     });
 
