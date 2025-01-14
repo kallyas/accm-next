@@ -181,6 +181,8 @@ export function SubscribePlan() {
     );
   }
 
+  console.log(plans);
+
   return (
     <div className="space-y-8">
       {/* Billing Cycle Toggle */}
