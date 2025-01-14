@@ -1,4 +1,5 @@
 import { Inter } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
@@ -52,6 +53,7 @@ export default async function RootLayout({
             </QueryProvider>
           </ThemeProvider>
         </Providers>
+        <Analytics />
       </body>
     </html>
   );
