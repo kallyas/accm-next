@@ -57,7 +57,7 @@ export async function GET(req: Request) {
       break;
     case ProgressStatus.SCHOLARSHIP_MATRIX_PENDING:
       if (user.scholarshipAssessment) {
-        newStatus = ProgressStatus.ESSAYS_PENDING;
+        newStatus = ProgressStatus.COMPLETED;
       }
       break;
     // ... other stages
