@@ -17,13 +17,13 @@ export default function ErrorPage({
   const [mounted, setMounted] = useState(false);
 
   // Get error message from search params
-  const errorMessage = searchParams.get("message");
+  const errorMessage = decodeURIComponent(searchParams.get("message") || "");
 
   useEffect(() => {
     setMounted(true);
   }, []);
+  
 
-  console.log("Error:", error);
 
   return (
     <div className="relative flex flex-col items-center justify-center min-h-screen overflow-hidden">
