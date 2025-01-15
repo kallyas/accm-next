@@ -44,6 +44,22 @@ export async function POST(req: Request) {
     }`;
     const paymentProofUrl = await uploadToR2(buffer, fileName, file.type);
 
+    // check if user already has an active subscription for the plan
+    const activeSubscription = await db.subscription.findFirst({
+      where: {
+        userId: session!.user!.id,
+        planId: body.planId,
+        status: SubscriptionStatus.ACTIVE,
+      },
+    });
+
+    if (activeSubscription) {
+      return NextResponse.json(
+        { error: "You already have an active subscription for this plan" },
+        { status: 400 }
+      );
+    }
+
     // Create subscription with explicit enum value
     const subscription = await db.subscription.create({
       data: {
