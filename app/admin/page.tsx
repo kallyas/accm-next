@@ -19,12 +19,6 @@ export default function AdminDashboardPage() {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["analytics"],
     queryFn: fetchAnalytics,
-    // Customize stale time and cache time
-    staleTime: 5 * 60 * 1000, // Data is considered fresh for 5 minutes
-    gcTime: 10 * 60 * 1000, // Keep unused data in cache for 10 minutes
-    // Add retry configuration
-    retry: 3,
-    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
   });
 
   if (isLoading) {
