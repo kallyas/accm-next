@@ -150,7 +150,6 @@ export function SubscribePlan() {
     "monthly"
   );
   const { data: session } = useSession();
-  const queryClient = useQueryClient();
 
   const {
     data: plans,
@@ -161,7 +160,6 @@ export function SubscribePlan() {
   } = useQuery({
     queryKey: ["plans"],
     queryFn: getPlans,
-    staleTime: 1000 * 60 * 5, // Consider data fresh for 5 minutes
     retry: 3,
     refetchOnWindowFocus: true,
   });
