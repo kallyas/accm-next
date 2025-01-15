@@ -32,7 +32,7 @@ export default async function UserDashboardPage() {
 
   return (
     <div className="space-y-10">
-      <UserDashboardContent user={session?.user} />
+      {/* <UserDashboardContent user={session?.user} /> */}
       <EnrolledCourses courses={formattedCourses} />
       <SubscribePlan />
     </div>
