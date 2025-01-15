@@ -22,13 +22,13 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "@/hooks/use-toast";
 import Image from "next/image";
-import { CheckCircle, XCircle, Eye, AlertCircle } from "lucide-react";
+import { CheckCircle, XCircle, Eye, AlertCircle, Ban } from "lucide-react";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 
 interface Subscription {
   id: string;
   userId: string;
-  status: "PENDING" | "APPROVED" | "REJECTED";
+  status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED" | "ACTIVE";
   receiptUrl: string;
   createdAt: string;
   user: {
@@ -52,7 +52,7 @@ async function fetchSubscriptions(): Promise<Subscription[]> {
 
 async function updateSubscriptionStatus(
   id: string,
-  status: "APPROVED" | "REJECTED"
+  status: "APPROVED" | "REJECTED" | "CANCELLED"
 ) {
   const response = await fetch("/api/admin/subscriptions", {
     method: "PUT",
@@ -97,10 +97,9 @@ function StatusBadge({ status }: { status: Subscription["status"] }) {
   const variants = {
     APPROVED: { variant: "secondary", icon: CheckCircle },
     REJECTED: { variant: "destructive", icon: XCircle },
-    PENDING: { variant: "default", icon: AlertCircle },
-    ACTIVE: { variant: "primary", icon: CheckCircle },
-    CANCELLED: { variant: "destructive", icon: XCircle },
-    EXPIRED: { variant: "warning", icon: AlertCircle },
+    PENDING: { variant: "outline", icon: AlertCircle },
+    ACTIVE: { variant: "default", icon: CheckCircle },
+    CANCELLED: { variant: "destructive", icon: Ban },
   } as const;
 
   const { variant, icon: Icon } = variants[status];
@@ -115,7 +114,6 @@ function StatusBadge({ status }: { status: Subscription["status"] }) {
 
 // Receipt dialog component
 function ReceiptDialog({ receiptUrl }: { receiptUrl: string }) {
-  console.log(receiptUrl);
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -166,7 +164,7 @@ export function SubscriptionsTable() {
       status,
     }: {
       id: string;
-      status: "APPROVED" | "REJECTED";
+      status: "APPROVED" | "REJECTED" | "CANCELLED";
     }) => updateSubscriptionStatus(id, status),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["subscriptions"] });
@@ -271,6 +269,23 @@ export function SubscriptionsTable() {
                       Reject
                     </Button>
                   </div>
+                )}
+                {(subscription.status === "APPROVED" ||
+                  subscription.status === "ACTIVE") && (
+                  <Button
+                    size="sm"
+                    variant="destructive"
+                    onClick={() =>
+                      updateMutation.mutate({
+                        id: subscription.id,
+                        status: "CANCELLED",
+                      })
+                    }
+                    disabled={updateMutation.isPending}
+                  >
+                    <Ban className="mr-1 h-4 w-4" />
+                    Cancel Subscription
+                  </Button>
                 )}
               </TableCell>
             </TableRow>
