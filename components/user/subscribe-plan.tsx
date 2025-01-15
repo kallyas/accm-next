@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
@@ -34,24 +34,35 @@ import {
   CreditCard,
   Shield,
   Zap,
+  RefreshCw,
 } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 type Plan = {
   id: string;
   name: string;
   description: string;
   price: number;
-  duration: number; // Added duration field
+  duration: number;
   services: string[];
   features: string[];
 };
 
 async function getPlans(): Promise<Plan[]> {
-  const res = await fetch("/api/plans");
+  const res = await fetch("/api/plans", {
+    cache: "no-store",
+    headers: {
+      "Cache-Control": "no-cache",
+    },
+  });
+
   if (!res.ok) {
     throw new Error("Failed to fetch plans");
   }
-  return res.json();
+
+  const data = await res.json();
+
+  return data;
 }
 
 interface SubscriptionResponse {
@@ -81,6 +92,7 @@ const subscribeToPlan = async (
 export const useSubscribeMutation = (onSuccess: (open: boolean) => void) => {
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
   const [paymentProof, setPaymentProof] = useState<File | null>(null);
+  const queryClient = useQueryClient();
 
   const mutation = useMutation({
     mutationFn: subscribeToPlan,
@@ -90,14 +102,10 @@ export const useSubscribeMutation = (onSuccess: (open: boolean) => void) => {
         description:
           "Your subscription request has been submitted for approval.",
       });
-
-      // Reset form state
       setSelectedPlan(null);
       setPaymentProof(null);
-
-      // Call optional success callback
       onSuccess(false);
-      console.log("reached here");
+      queryClient.invalidateQueries({ queryKey: ["plans"] });
     },
     onError: (error: Error) => {
       toast({
@@ -121,9 +129,7 @@ export const useSubscribeMutation = (onSuccess: (open: boolean) => void) => {
     const formData = new FormData();
     formData.append("planId", selectedPlan.id);
     formData.append("paymentProof", paymentProof);
-
     mutation.mutate(formData);
-    setSelectedPlan(null);
   };
 
   return {
@@ -144,9 +150,20 @@ export function SubscribePlan() {
     "monthly"
   );
   const { data: session } = useSession();
-  const { data: plans, isLoading } = useQuery({
+  const queryClient = useQueryClient();
+
+  const {
+    data: plans,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useQuery({
     queryKey: ["plans"],
     queryFn: getPlans,
+    staleTime: 1000 * 60 * 5, // Consider data fresh for 5 minutes
+    retry: 3,
+    refetchOnWindowFocus: true,
   });
 
   const {
@@ -172,21 +189,48 @@ export function SubscribePlan() {
     );
   }
 
+  if (isError) {
+    return (
+      <Alert variant="destructive" className="mb-4">
+        <AlertCircle className="h-4 w-4" />
+        <AlertDescription className="flex items-center justify-between">
+          <span>Failed to load plans. Please try again.</span>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => refetch()}
+            className="ml-4"
+          >
+            <RefreshCw className="h-4 w-4 mr-2" />
+            Retry
+          </Button>
+        </AlertDescription>
+      </Alert>
+    );
+  }
+
   if (!plans || plans.length === 0) {
     return (
       <div className="text-center p-8">
         <CreditCard className="w-12 h-12 mx-auto mb-4 text-gray-400" />
         <p className="text-gray-500">No plans available at the moment.</p>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => refetch()}
+          className="mt-4"
+        >
+          <RefreshCw className="h-4 w-4 mr-2" />
+          Check Again
+        </Button>
       </div>
     );
   }
 
-  console.log(plans);
-
   return (
     <div className="space-y-8">
       {/* Billing Cycle Toggle */}
-      <div className="flex justify-end">
+      <div className="flex justify-between items-center">
         <div className="inline-flex items-center space-x-2 bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
           <Button
             variant={selectedCycle === "monthly" ? "default" : "ghost"}
@@ -203,6 +247,15 @@ export function SubscribePlan() {
             Yearly (Save 15%)
           </Button>
         </div>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => refetch()}
+          className="flex items-center gap-2"
+        >
+          <RefreshCw className="h-4 w-4" />
+          Refresh Plans
+        </Button>
       </div>
 
       {/* Plans Grid */}
@@ -216,6 +269,7 @@ export function SubscribePlan() {
                 : "hover:border-primary/50"
             }`}
           >
+            {/* Rest of the card content remains the same */}
             <CardHeader>
               <div className="flex justify-between items-start">
                 <div>
