@@ -51,21 +51,6 @@ const teamMembers: TeamMember[] = [
     },
   },
   {
-    id: "3",
-    name: "Bainomugisha Bernadatte",
-    position: "Communications Officer",
-    department: "Marketing",
-    expertise: ["Content Strategy", "Brand Management", "Digital Marketing"],
-    about:
-      "As a Communication Officer, I enjoy telling a story and ACCM’s story is one that particularly inspires me. One of the best parts of my work is writing and designing graphics. I have been honored to support ACCM’s social media growth by more than 40 % in less than a year. I have also supported personal brands, growing them by more than 100% in less than three months. I am passionate about communication and growth. Being able to learn and contribute is an enriching experience for me.",
-    imageUrl: "/team/berna.png",
-    socialLinks: {
-      linkedin: "https://ug.linkedin.com/in/bainomugisha-bernadatte-95a98b201",
-      twitter: "https://twitter.com/alicejohnson",
-      email: "alice@gmail.com",
-    },
-  },
-  {
     id: "4",
     name: "Abel Wilson Walekhwa",
     position: "Founder and CEO",
