@@ -57,6 +57,14 @@ export function Footer() {
               </li>
               <li>
                 <Link
+                  href="/career-map"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Career Assessment
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/contact"
                   className="text-sm text-muted-foreground hover:text-primary transition-colors"
                 >
