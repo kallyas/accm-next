@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const mentors = [
   {
-    name: "Dr. Abel Wilson Walekhwa",
+    name: "Abel Wilson Walekhwa",
     role: "Founder & Lead Mentor",
     image: "/mentors/banner-image.jpeg",
     expertise: "Career Development, Leadership",
