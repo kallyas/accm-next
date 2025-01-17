@@ -15,6 +15,7 @@ import {
   CalendarCheckIcon,
   Library,
   BookMarkedIcon,
+  BookCopyIcon,
 } from "lucide-react";
 
 export default async function AdminLayout({
@@ -73,6 +74,11 @@ export default async function AdminLayout({
       href: "/admin/users",
       label: "Users",
       icon: <Users className="h-4 w-4" />,
+    },
+    {
+      href: "/admin/career-assessments",
+      label: "Career Assessments",
+      icon: <BookCopyIcon className="h-4 w-4" />,
     },
     // {
     //   href: "/admin/resources",
