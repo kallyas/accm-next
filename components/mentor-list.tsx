@@ -5,11 +5,11 @@ import { Badge } from "@/components/ui/badge";
 const mentors = [
   {
     id: 1,
-    name: "Dr. Abel Wilson Walekhwa",
+    name: "Abel Wilson Walekhwa",
     title: "Founder & Lead Mentor",
     image: "/mentors/banner-image.jpeg",
     expertise: ["Career Development", "4WFramework", "Leadership"],
-    bio: "Dr. Walekhwa is the founder of African Centre for Career Mentorship and developer of the 4WFramework. With over 15 years of experience in career counseling, he has helped thousands of professionals across Africa realize their potential.",
+    bio: "Walekhwa is the founder of African Centre for Career Mentorship and developer of the 4WFramework. With over 15 years of experience in career counseling, he has helped thousands of professionals across Africa realize their potential.",
   },
   {
     id: 2,
@@ -34,14 +34,6 @@ const mentors = [
       "communication coaching",
     ],
     bio: "Harriet Ocitti serves as the Executive Director at the Institute for National Transformation (INT), whose mission is to develop no-excuse leaders who will transform their spheres of influence to greater levels of performance and excellence.she brings a wealth of experience in communication and leadership coaching.",
-  },
-  {
-    id: 4,
-    name: "Bainomugisha Bernnet",
-    title: "Communication Officer",
-    image: "/mentors/Baino.jpeg",
-    expertise: ["Communication", "Publicity", "Public Speaking"],
-    bio: "I have witnessed firsthand the transformative power of career guidance and how it  can redirect someone's life. That's why I am so passionate about my work with the African Centre for Career Mentorship (ACCM). As a Communication Officer, I am driven by a sense of purpose to help others find their way, to empower them with the knowledge and confidence to pursue their dreams. Every message I craft, every word I write, is a chance to make a real difference. I believe that everyone deserves to find fulfillment and purpose in their career, and I am honored to be a part of that journey.",
   },
 ];
 
