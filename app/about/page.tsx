@@ -20,7 +20,7 @@ export default function AboutPage() {
             through expert guidance and innovative career development programs.
           </p>
           <p className="text-lg mb-4">
-            Founded by Dr. Abel Wilson Walekhwa, our mission is to bridge the
+            Founded by Abel Wilson Walekhwa, our mission is to bridge the
             gap between education and industry needs, fostering a new generation
             of skilled and confident professionals ready to take on the
             challenges of the modern workplace.
