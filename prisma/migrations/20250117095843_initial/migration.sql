@@ -1,4 +1,7 @@
 -- CreateEnum
+CREATE TYPE "AssessmentStatus" AS ENUM ('IN_PROGRESS', 'COMPLETED', 'ABANDONED');
+
+-- CreateEnum
 CREATE TYPE "ProgressStatus" AS ENUM ('PAYMENT_PENDING', 'PERSONAL_DISCOVERY_PENDING', 'CV_ALIGNMENT_PENDING', 'SCHOLARSHIP_MATRIX_PENDING', 'ESSAYS_PENDING', 'COMPLETED');
 
 -- CreateEnum
@@ -372,6 +375,94 @@ CREATE TABLE "PasswordResetToken" (
     CONSTRAINT "PasswordResetToken_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "career_users" (
+    "id" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "name" TEXT NOT NULL,
+    "email" TEXT,
+    "age" TEXT NOT NULL,
+    "gender" TEXT,
+    "location" TEXT,
+    "isAuthenticated" BOOLEAN NOT NULL DEFAULT false,
+    "authUserId" TEXT,
+
+    CONSTRAINT "career_users_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "career_assessments" (
+    "id" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "careerUserId" TEXT NOT NULL,
+    "status" "AssessmentStatus" NOT NULL DEFAULT 'IN_PROGRESS',
+    "completedAt" TIMESTAMP(3),
+    "education" TEXT NOT NULL,
+    "field" TEXT NOT NULL,
+    "employment" TEXT NOT NULL,
+    "selfEmployment" TEXT,
+    "sector" TEXT NOT NULL,
+    "passion" TEXT NOT NULL,
+    "lifePassion" TEXT NOT NULL,
+    "lifeGoal" TEXT NOT NULL,
+    "futureTitle" TEXT NOT NULL,
+    "futureTasks" TEXT NOT NULL,
+    "requiredSkills" TEXT NOT NULL,
+    "requiredCourses" TEXT NOT NULL,
+    "suggestedCareer" TEXT,
+    "confidenceScore" DOUBLE PRECISION,
+    "matchingFactors" TEXT[],
+    "isShared" BOOLEAN NOT NULL DEFAULT false,
+    "shareCode" TEXT,
+
+    CONSTRAINT "career_assessments_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "user_feedback" (
+    "id" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "assessmentId" TEXT NOT NULL,
+    "rating" INTEGER NOT NULL,
+    "isRelevant" BOOLEAN NOT NULL,
+    "comments" TEXT,
+    "wouldRecommend" BOOLEAN NOT NULL,
+
+    CONSTRAINT "user_feedback_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "career_analytics" (
+    "id" TEXT NOT NULL,
+    "careerPath" TEXT NOT NULL,
+    "totalSuggestions" INTEGER NOT NULL DEFAULT 0,
+    "averageConfidence" DOUBLE PRECISION NOT NULL DEFAULT 0,
+    "positiveRatings" INTEGER NOT NULL DEFAULT 0,
+    "negativeRatings" INTEGER NOT NULL DEFAULT 0,
+    "ageRangeDistribution" JSONB,
+    "genderDistribution" JSONB,
+    "fieldDistribution" JSONB,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "career_analytics_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "analytics_index" (
+    "id" TEXT NOT NULL,
+    "date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "totalUsers" INTEGER NOT NULL DEFAULT 0,
+    "activeUsers" INTEGER NOT NULL DEFAULT 0,
+    "completionRate" DOUBLE PRECISION NOT NULL DEFAULT 0,
+    "newAssessments" INTEGER NOT NULL DEFAULT 0,
+    "completedAssessments" INTEGER NOT NULL DEFAULT 0,
+    "sharedResults" INTEGER NOT NULL DEFAULT 0,
+
+    CONSTRAINT "analytics_index_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
@@ -395,6 +486,36 @@ CREATE UNIQUE INDEX "Category_name_key" ON "Category"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "PasswordResetToken_token_key" ON "PasswordResetToken"("token");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "career_users_authUserId_key" ON "career_users"("authUserId");
+
+-- CreateIndex
+CREATE INDEX "career_users_email_idx" ON "career_users"("email");
+
+-- CreateIndex
+CREATE INDEX "career_users_authUserId_idx" ON "career_users"("authUserId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "career_assessments_shareCode_key" ON "career_assessments"("shareCode");
+
+-- CreateIndex
+CREATE INDEX "career_assessments_careerUserId_idx" ON "career_assessments"("careerUserId");
+
+-- CreateIndex
+CREATE INDEX "career_assessments_status_idx" ON "career_assessments"("status");
+
+-- CreateIndex
+CREATE INDEX "career_assessments_shareCode_idx" ON "career_assessments"("shareCode");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "user_feedback_assessmentId_key" ON "user_feedback"("assessmentId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "career_analytics_careerPath_key" ON "career_analytics"("careerPath");
+
+-- CreateIndex
+CREATE INDEX "analytics_index_date_idx" ON "analytics_index"("date");
 
 -- AddForeignKey
 ALTER TABLE "PersonalDiscovery" ADD CONSTRAINT "PersonalDiscovery_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -455,3 +576,9 @@ ALTER TABLE "LearningObjective" ADD CONSTRAINT "LearningObjective_courseId_fkey"
 
 -- AddForeignKey
 ALTER TABLE "CV" ADD CONSTRAINT "CV_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "career_assessments" ADD CONSTRAINT "career_assessments_careerUserId_fkey" FOREIGN KEY ("careerUserId") REFERENCES "career_users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "user_feedback" ADD CONSTRAINT "user_feedback_assessmentId_fkey" FOREIGN KEY ("assessmentId") REFERENCES "career_assessments"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

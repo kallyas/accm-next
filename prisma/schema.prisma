@@ -350,6 +350,140 @@ model PasswordResetToken {
   updatedAt DateTime @updatedAt
 }
 
+// This is your Prisma schema file
+
+model CareerUser {
+  id             String   @id @default(cuid())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  
+  // Basic user information - required for all users
+  name           String
+  email          String?  // Optional, only if user wants to save/share results
+  age            String   // Age range rather than specific age
+  gender         String?
+  location       String?  // Country/region
+  
+  // Authentication related fields
+  isAuthenticated Boolean @default(false)
+  authUserId      String? @unique  // External auth provider user ID (if logged in)
+  
+  // Relationship with assessments
+  assessments    CareerAssessment[]
+
+  @@index([email])
+  @@index([authUserId])
+  @@map("career_users")
+}
+
+model CareerAssessment {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Link to CareerUser (can be anonymous or authenticated)
+  careerUser  CareerUser @relation(fields: [careerUserId], references: [id])
+  careerUserId String
+  
+  // Assessment Status
+  status      AssessmentStatus @default(IN_PROGRESS)
+  completedAt DateTime?
+  
+  // Educational Background
+  education   String
+  field       String
+  
+  // Career Preferences
+  employment    String  // Self/Government/Private
+  selfEmployment String? // Business/Non-profit (if employment is Self)
+  sector        String  // Academia/Policy/Industry
+  
+  // Personal Aspirations
+  passion       String   @db.Text
+  lifePassion   String   @db.Text
+  lifeGoal      String   @db.Text
+  futureTitle   String
+  futureTasks   String   @db.Text
+  
+  // Skills and Education Planning
+  requiredSkills   String   @db.Text
+  requiredCourses  String   @db.Text
+  
+  // Results
+  suggestedCareer  String?
+  confidenceScore  Float?
+  matchingFactors  String[]  // Factors that influenced the career suggestion
+  
+  // Feedback and Sharing
+  userFeedback     UserFeedback?
+  isShared         Boolean      @default(false)
+  shareCode        String?      @unique // For sharing results via link
+  
+  @@index([careerUserId])
+  @@index([status])
+  @@index([shareCode])
+  @@map("career_assessments")
+}
+
+model UserFeedback {
+  id                String   @id @default(cuid())
+  createdAt         DateTime @default(now())
+  
+  // Relationship with assessment
+  assessment        CareerAssessment @relation(fields: [assessmentId], references: [id])
+  assessmentId      String   @unique
+  
+  // Feedback data
+  rating            Int // 1-5 rating
+  isRelevant        Boolean
+  comments          String?  @db.Text
+  wouldRecommend    Boolean
+  
+  @@map("user_feedback")
+}
+
+// Analytics for improving suggestions
+model CareerAnalytics {
+  id                String   @id @default(cuid())
+  careerPath        String   @unique
+  totalSuggestions  Int      @default(0)
+  averageConfidence Float    @default(0)
+  positiveRatings   Int      @default(0)
+  negativeRatings   Int      @default(0)
+  
+  // Demographic breakdowns
+  ageRangeDistribution Json?  // Distribution across age ranges
+  genderDistribution   Json?  // Distribution across genders
+  fieldDistribution    Json?  // Distribution across educational fields
+  
+  updatedAt     DateTime @updatedAt
+
+  @@map("career_analytics")
+}
+
+enum AssessmentStatus {
+  IN_PROGRESS
+  COMPLETED
+  ABANDONED
+}
+
+// Index for faster analytics queries
+model AnalyticsIndex {
+  id            String   @id @default(cuid())
+  date          DateTime @default(now())
+  totalUsers    Int      @default(0)
+  activeUsers   Int      @default(0)
+  completionRate Float   @default(0)
+  
+  // Daily statistics
+  newAssessments    Int @default(0)
+  completedAssessments Int @default(0)
+  sharedResults     Int @default(0)
+  
+  @@index([date])
+  @@map("analytics_index")
+}
+
 enum ProgressStatus {
   PAYMENT_PENDING
   PERSONAL_DISCOVERY_PENDING
