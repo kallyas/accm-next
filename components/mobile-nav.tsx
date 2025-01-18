@@ -49,10 +49,6 @@ const navigationItems = [
     href: "/payment-instructions",
   },
   {
-    title: "Blog",
-    href: "/blogs",
-  },
-  {
     title: "Contact",
     href: "/contact",
   },
