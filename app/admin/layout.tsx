@@ -25,8 +25,8 @@ export default async function AdminLayout({
 }) {
   const session = await getServerSession(authOptions);
 
-  if (session?.user?.role !== "USER") {
-    redirect(`/`);
+  if (session?.user?.role !== "ADMIN") {
+    redirect(`/dashboard`);
   }
 
   const sidebarLinks = [
