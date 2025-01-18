@@ -72,11 +72,10 @@ const createRedirectURL = (() => {
 
 // Optimized error response creator
 const createErrorRedirect = (request: NextRequest, message: string) => {
-  return NextResponse.redirect(createRedirectURL("/error", message, request), {
-    headers: {
-      "Cache-Control": CACHE_CONTROL_PRIVATE,
-    },
-  });
+  return NextResponse.redirect(
+    createRedirectURL("/error", message, request),
+    {}
+  );
 };
 
 export async function middleware(request: NextRequest) {
@@ -96,11 +95,7 @@ export async function middleware(request: NextRequest) {
         request
       );
       loginUrl.searchParams.set("callbackUrl", encodeURIComponent(request.url));
-      return NextResponse.redirect(loginUrl, {
-        headers: {
-          "Cache-Control": CACHE_CONTROL_PRIVATE,
-        },
-      });
+      return NextResponse.redirect(loginUrl, {});
     }
 
     // Fast path: skip progress check for admin routes
@@ -112,11 +107,7 @@ export async function middleware(request: NextRequest) {
           "You don't have permission to access this page"
         );
       }
-      return NextResponse.next({
-        headers: {
-          "Cache-Control": CACHE_CONTROL_PRIVATE,
-        },
-      });
+      return NextResponse.next({});
     }
 
     // Only fetch progress status for non-admin routes
@@ -144,21 +135,13 @@ export async function middleware(request: NextRequest) {
 
     // Fast path: if no config exists or route isn't protected, continue
     if (!config || !config.routes.has(currentPath)) {
-      return NextResponse.next({
-        headers: {
-          "Cache-Control": CACHE_CONTROL_PRIVATE,
-        },
-      });
+      return NextResponse.next({});
     }
 
     // Redirect if route is protected
     return NextResponse.redirect(
       createRedirectURL(config.redirectPath, config.message, request),
-      {
-        headers: {
-          "Cache-Control": CACHE_CONTROL_PRIVATE,
-        },
-      }
+      {}
     );
   } catch (error) {
     console.error("Middleware error:", error);
