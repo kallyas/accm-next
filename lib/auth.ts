@@ -91,19 +91,3 @@ export const authOptions: NextAuthOptions = {
     },
   },
 };
-
-export const getSession = async () => {
-  try {
-    const session = await getServerSession(authOptions);
-    return session;
-  } catch (error) {
-    console.error("Session error:", error);
-    return null;
-  }
-};
-
-// Helper function to check if user is admin
-export const isAdmin = async () => {
-  const session = await getSession();
-  return session?.user?.role === "ADMIN";
-};
