@@ -1,10 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -15,7 +14,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/hooks/use-toast";
 import {
   Card,
   CardContent,
@@ -26,6 +24,7 @@ import {
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { CheckCircle2 } from "lucide-react";
 import Link from "next/link";
+import { useAuth } from "@/hooks/use-auth";
 
 const formSchema = z
   .object({
@@ -42,11 +41,9 @@ const formSchema = z
   });
 
 export default function ResetPasswordPage() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
   const searchParams = useSearchParams();
-  const router = useRouter();
   const token = searchParams.get("token");
+  const { resetPasswordMutation } = useAuth();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -56,41 +53,13 @@ export default function ResetPasswordPage() {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    if (!token) {
-      toast({
-        title: "Error",
-        description:
-          "Invalid reset token. Please try resetting your password again.",
-        variant: "destructive",
-      });
-      return;
-    }
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    if (!token) return;
 
-    setIsLoading(true);
-    try {
-      const response = await fetch("/api/auth/reset-password", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ...values, token }),
-      });
-
-      if (response.ok) {
-        setIsSubmitted(true);
-      } else {
-        throw new Error("Failed to reset password");
-      }
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to reset password. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
+    resetPasswordMutation.mutate({
+      password: values.password,
+      token,
+    });
   }
 
   if (!token) {
@@ -121,7 +90,7 @@ export default function ResetPasswordPage() {
           <CardDescription>Enter your new password</CardDescription>
         </CardHeader>
         <CardContent>
-          {isSubmitted ? (
+          {resetPasswordMutation.isSuccess ? (
             <div className="text-center">
               <Alert className="mb-4">
                 <CheckCircle2 className="h-4 w-4" />
@@ -166,8 +135,14 @@ export default function ResetPasswordPage() {
                     </FormItem>
                   )}
                 />
-                <Button className="w-full" type="submit" disabled={isLoading}>
-                  {isLoading ? "Resetting..." : "Reset Password"}
+                <Button
+                  className="w-full"
+                  type="submit"
+                  disabled={resetPasswordMutation.isPending}
+                >
+                  {resetPasswordMutation.isPending
+                    ? "Resetting..."
+                    : "Reset Password"}
                 </Button>
               </form>
             </Form>
