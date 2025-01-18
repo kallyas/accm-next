@@ -16,7 +16,7 @@ const planSchema = z.object({
 export async function GET(req: Request) {
   const session = await getServerSession(authOptions);
 
-  if (!session || session!.user!.role !== "USER") {
+  if (!session || session!.user!.role !== "ADMIN") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -48,7 +48,7 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
 
-  if (!session || session!.user!.role !== "USER") {
+  if (!session || session!.user!.role !== "ADMIN") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
