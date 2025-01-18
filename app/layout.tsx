@@ -7,8 +7,9 @@ import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { Providers } from "./providers";
 import "./globals.css";
-import { getSession } from "@/lib/auth";
+import { authOptions } from "@/lib/auth";
 import QueryProvider from "@/components/query-provider";
+import { getServerSession } from "next-auth";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,7 +23,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getSession();
+  const session = await getServerSession(authOptions);
   return (
     <html lang="en" suppressHydrationWarning>
       <body
