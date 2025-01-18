@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -41,6 +41,7 @@ export default function LoginPage() {
   const router = useRouter();
   const params = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
+  const { data: session } = useSession();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -68,7 +69,11 @@ export default function LoginPage() {
       });
     } else {
       const callBackUrl = decodeURIComponent(params.get("callbackUrl") || "");
-      router.push(callBackUrl || "/dashboard");
+      if (session?.user?.role === "ADMIN") {
+        router.push("/admin/");
+      } else {
+        router.push(callBackUrl || "/dashboard");
+      }
     }
   }
 
