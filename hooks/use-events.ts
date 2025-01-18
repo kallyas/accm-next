@@ -150,6 +150,17 @@ export const useEvents = () => {
     });
   };
 
+  const useSendReminders = () => {
+    return useMutation({
+      mutationFn: async (userIds: string[]) => {
+        const response = await axios.post("/api/admin/send-reminders", {
+          userIds,
+        });
+        return response.data;
+      },
+    });
+  }
+
   return {
     events: eventsQuery,
     createEvent: createEventMutation,
@@ -159,5 +170,6 @@ export const useEvents = () => {
     unregisterForEvent: unregisterForEventMutation,
     isUserRegistered: useRegistrationStatus,
     userEvents: userEventsQuery,
+    sendReminders: useSendReminders,
   };
 };
