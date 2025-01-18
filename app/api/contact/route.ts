@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { z } from "zod";
+import { getContactFormEmailTemplate } from "@/lib/email-templates/contact-submission";
+import { sendEmail } from "@/lib/email";
 
 const contactFormSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -18,9 +20,32 @@ export async function POST(req: Request) {
       data: body,
     });
 
-    // Here you would typically send an email notification
-    // For now, we'll just log the submission
-    
+    const emailHtml = getContactFormEmailTemplate({
+      name: body.name,
+      email: body.email,
+      subject: body.subject,
+      message: body.message,
+    });
+
+    const adminUser = await db.user.findFirst({
+      where: { role: "ADMIN" },
+    });
+
+    if (adminUser) {
+      await sendEmail({
+        to: adminUser.email,
+        subject:
+          "New Contact Form Submission - African Centre For Career Mentorship",
+        html: emailHtml,
+        text: `New contact form submission from ${body.name} <${body.email}>`,
+      });
+    } else {
+      console.error("Admin user not found");
+      return NextResponse.json(
+        { error: "Admin user not found" },
+        { status: 500 }
+      );
+    }
 
     return NextResponse.json({ message: "Form submitted successfully" });
   } catch (error) {
