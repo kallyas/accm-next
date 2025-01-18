@@ -20,7 +20,7 @@ export async function GET(req: Request) {
   const session = await getServerSession({ req, ...authOptions });
 
   // Check if user is authenticated
-  if (!session || !session.user || session.user.role !== 'USER') {
+  if (!session || !session.user || session.user.role !== 'ADMIN') {
     return NextResponse.json(
       { error: 'Unauthorized' },
       { status: 401 }
