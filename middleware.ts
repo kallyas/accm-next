@@ -5,7 +5,29 @@ import { getToken } from "next-auth/jwt";
 // Cache control constants
 const CACHE_CONTROL_PRIVATE = "private, no-cache, no-store, must-revalidate";
 
-// Optimized route configuration using Map for O(1) lookup
+// Define route access patterns
+const ROUTE_ACCESS = {
+  ADMIN: {
+    allowedPaths: new Set(["/admin"]),
+    redirectPath: "/admin",
+    restrictedRedirectMessage: "",
+  },
+  USER: {
+    allowedPaths: new Set([
+      "/dashboard",
+      "/dashboard/personal-discovery",
+      "/dashboard/cvs",
+      "/scholarship-quest",
+      "/dashboard/essays",
+      "/cv-alignment",
+      "/book-session",
+    ]),
+    redirectPath: "/dashboard",
+    restrictedRedirectMessage: "",
+  },
+};
+
+// Protected routes configuration
 const PROTECTED_ROUTES = new Map([
   [
     "PAYMENT_PENDING",
@@ -52,7 +74,7 @@ const PROTECTED_ROUTES = new Map([
   ],
 ]);
 
-// Memoized URL creator for better performance
+// Memoized URL creator
 const createRedirectURL = (() => {
   const urlCache = new Map<string, URL>();
 
@@ -70,7 +92,7 @@ const createRedirectURL = (() => {
   };
 })();
 
-// Optimized error response creator
+// Error response creator
 const createErrorRedirect = (request: NextRequest, message: string) => {
   return NextResponse.redirect(createRedirectURL("/error", message, request), {
     headers: {
@@ -79,11 +101,26 @@ const createErrorRedirect = (request: NextRequest, message: string) => {
   });
 };
 
+// Check if path is allowed for role
+const isPathAllowedForRole = (
+  path: string,
+  role: "ADMIN" | "USER"
+): boolean => {
+  const normalizedPath = path.replace(/\/$/, "");
+  const roleConfig = ROUTE_ACCESS[role];
+
+  return Array.from(roleConfig.allowedPaths).some(
+    (allowedPath) =>
+      normalizedPath === allowedPath ||
+      normalizedPath.startsWith(`${allowedPath}/`)
+  );
+};
+
 export async function middleware(request: NextRequest) {
   try {
     const currentPath = request.nextUrl.pathname;
 
-    // Fast path: check authentication
+    // Authentication check
     const token = await getToken({
       req: request,
       secret: process.env.NEXTAUTH_SECRET,
@@ -103,15 +140,27 @@ export async function middleware(request: NextRequest) {
       });
     }
 
-    // Fast path: skip progress check for admin routes
-    if (currentPath.startsWith("/admin")) {
-      // Verify admin role for admin routes
-      if (!token.role || token.role !== "USER") {
-        return createErrorRedirect(
-          request,
-          "You don't have permission to access this page"
-        );
-      }
+    const userRole = token.role as "ADMIN" | "USER";
+
+    // Role-based access control
+    if (!isPathAllowedForRole(currentPath, userRole)) {
+      const roleConfig = ROUTE_ACCESS[userRole];
+      return NextResponse.redirect(
+        createRedirectURL(
+          roleConfig.redirectPath,
+          roleConfig.restrictedRedirectMessage,
+          request
+        ),
+        {
+          headers: {
+            "Cache-Control": CACHE_CONTROL_PRIVATE,
+          },
+        }
+      );
+    }
+
+    // Skip progress check for admin routes
+    if (userRole === "ADMIN") {
       return NextResponse.next({
         headers: {
           "Cache-Control": CACHE_CONTROL_PRIVATE,
@@ -119,14 +168,14 @@ export async function middleware(request: NextRequest) {
       });
     }
 
-    // Only fetch progress status for non-admin routes
+    // Progress check for user routes
     const progressResponse = await fetch(
       new URL("/api/check-progress", request.url),
       {
         headers: {
           Cookie: request.headers.get("cookie") || "",
         },
-        cache: "no-store", // Ensure fresh data
+        cache: "no-store",
       }
     );
 
@@ -138,28 +187,24 @@ export async function middleware(request: NextRequest) {
     }
 
     const { progressStatus } = await progressResponse.json();
-
-    // O(1) lookup using Map
     const config = PROTECTED_ROUTES.get(progressStatus);
 
-    // Fast path: if no config exists or route isn't protected, continue
-    if (!config || !config.routes.has(currentPath)) {
-      return NextResponse.next({
-        headers: {
-          "Cache-Control": CACHE_CONTROL_PRIVATE,
-        },
-      });
+    if (config && config.routes.has(currentPath)) {
+      return NextResponse.redirect(
+        createRedirectURL(config.redirectPath, config.message, request),
+        {
+          headers: {
+            "Cache-Control": CACHE_CONTROL_PRIVATE,
+          },
+        }
+      );
     }
 
-    // Redirect if route is protected
-    return NextResponse.redirect(
-      createRedirectURL(config.redirectPath, config.message, request),
-      {
-        headers: {
-          "Cache-Control": CACHE_CONTROL_PRIVATE,
-        },
-      }
-    );
+    return NextResponse.next({
+      headers: {
+        "Cache-Control": CACHE_CONTROL_PRIVATE,
+      },
+    });
   } catch (error) {
     console.error("Middleware error:", error);
     return createErrorRedirect(
@@ -169,7 +214,6 @@ export async function middleware(request: NextRequest) {
   }
 }
 
-// Optimized matcher configuration using exact paths for better routing performance
 export const config = {
   matcher: [
     "/dashboard/:path*",
