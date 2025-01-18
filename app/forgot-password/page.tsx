@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -14,7 +13,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/hooks/use-toast";
 import {
   Card,
   CardContent,
@@ -25,6 +23,7 @@ import {
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Mail } from "lucide-react";
 import Link from "next/link";
+import { useAuth } from "@/hooks/use-auth";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -33,8 +32,7 @@ const formSchema = z.object({
 });
 
 export default function ForgotPasswordPage() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const { forgotPasswordMutation } = useAuth();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -43,31 +41,8 @@ export default function ForgotPasswordPage() {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true);
-    try {
-      const response = await fetch("/api/auth/forgot-password", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      });
-
-      if (response.ok) {
-        setIsSubmitted(true);
-      } else {
-        throw new Error("Failed to send password reset email");
-      }
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to send password reset email. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    forgotPasswordMutation.mutate(values);
   }
 
   return (
@@ -80,7 +55,7 @@ export default function ForgotPasswordPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {isSubmitted ? (
+          {forgotPasswordMutation.isSuccess ? (
             <Alert>
               <Mail className="h-4 w-4" />
               <AlertTitle>Check your email</AlertTitle>
@@ -107,8 +82,14 @@ export default function ForgotPasswordPage() {
                     </FormItem>
                   )}
                 />
-                <Button className="w-full" type="submit" disabled={isLoading}>
-                  {isLoading ? "Sending..." : "Send Reset Link"}
+                <Button
+                  className="w-full"
+                  type="submit"
+                  disabled={forgotPasswordMutation.isPending}
+                >
+                  {forgotPasswordMutation.isPending
+                    ? "Sending..."
+                    : "Send Reset Link"}
                 </Button>
               </form>
             </Form>
