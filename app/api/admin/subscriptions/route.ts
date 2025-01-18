@@ -101,7 +101,7 @@ export async function PUT(req: Request) {
         planName: updatedSubscription.plan.name,
         planDetails: updatedSubscription.plan.description.split("\n"),
         startDate: updatedSubscription.startDate.toDateString(),
-        dashboardUrl: `${process.env.VERCEL_URL}/dashboard`,
+        dashboardUrl: `${process.env.VERCEL_PROJECT_PRODUCTION_URL}/dashboard`,
       }),
     });
   }
