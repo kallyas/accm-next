@@ -12,7 +12,7 @@ export async function DELETE(
       user: { role: string };
     };
 
-    if (session?.user?.role !== "USER") {
+    if (session?.user?.role !== "ADMIN") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
