@@ -9,6 +9,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { toast } from "@/hooks/use-toast";
 import * as XLSX from "xlsx";
 import { debounce } from "lodash";
+import { useEvents } from "@/hooks/use-events";
 
 const PAGE_SIZE = 10;
 
@@ -26,38 +27,12 @@ export default function UserEventsPage() {
   const [page, setPage] = useState(0);
   const [filterValue, setFilterValue] = useState("");
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+  const { sendReminders } = useEvents();
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["userEvents", page],
     queryFn: () => fetchUserEvents(page + 1),
     staleTime: 30000,
-  });
-
-  const sendRemindersMutation = useMutation({
-    mutationFn: async (userIds: string[]) => {
-      const response = await fetch("/api/admin/send-reminders", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userIds }),
-      });
-      if (!response.ok) {
-        throw new Error("Failed to send reminders");
-      }
-      return response.json();
-    },
-    onSuccess: () => {
-      toast({
-        title: "Success",
-        description: "Reminders sent successfully",
-      });
-    },
-    onError: () => {
-      toast({
-        title: "Error",
-        description: "Failed to send reminders",
-        variant: "destructive",
-      });
-    },
   });
 
   const handleExport = useCallback(() => {
@@ -83,7 +58,7 @@ export default function UserEventsPage() {
 
   const handleSendReminders = () => {
     if (selectedUsers.length === 0) return;
-    sendRemindersMutation.mutate(selectedUsers);
+    sendReminders().mutate(selectedUsers);
   };
 
   if (error) {
