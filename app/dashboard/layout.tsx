@@ -21,6 +21,9 @@ export default async function UserDashboardLayout({
 }) {
   const session = await getServerSession(authOptions);
 
+  if (session?.user?.role !== "USER") {
+    redirect("/admin");
+  }
 
   const sidebarLinks = [
     {

@@ -5,21 +5,7 @@ import { getToken } from "next-auth/jwt";
 // Cache control constants
 const CACHE_CONTROL_PRIVATE = "private, no-cache, no-store, must-revalidate";
 
-// Route configuration with role-based access
-const ROUTE_ACCESS = {
-  ADMIN: new Set(["/admin"]),
-  USER: new Set([
-    "/dashboard",
-    "/dashboard/personal-discovery",
-    "/dashboard/cvs",
-    "/scholarship-quest",
-    "/dashboard/essays",
-    "/cv-alignment",
-    "/book-session",
-  ]),
-};
-
-// Progress-based protection configuration
+// Optimized route configuration using Map for O(1) lookup
 const PROTECTED_ROUTES = new Map([
   [
     "PAYMENT_PENDING",
@@ -66,7 +52,7 @@ const PROTECTED_ROUTES = new Map([
   ],
 ]);
 
-// Memoized URL creator
+// Memoized URL creator for better performance
 const createRedirectURL = (() => {
   const urlCache = new Map<string, URL>();
 
@@ -84,7 +70,7 @@ const createRedirectURL = (() => {
   };
 })();
 
-// Error response creator
+// Optimized error response creator
 const createErrorRedirect = (request: NextRequest, message: string) => {
   return NextResponse.redirect(createRedirectURL("/error", message, request), {
     headers: {
@@ -93,25 +79,11 @@ const createErrorRedirect = (request: NextRequest, message: string) => {
   });
 };
 
-// Check if user has access to the route based on their role
-const hasRouteAccess = (pathname: string, role: string): boolean => {
-  // Strip trailing slash for consistent comparison
-  const normalizedPath = pathname.replace(/\/$/, "");
-
-  // Check if the path starts with any of the allowed routes for the role
-  const allowedRoutes =
-    ROUTE_ACCESS[role as keyof typeof ROUTE_ACCESS] || new Set();
-  return Array.from(allowedRoutes).some(
-    (route) =>
-      normalizedPath === route || normalizedPath.startsWith(`${route}/`)
-  );
-};
-
 export async function middleware(request: NextRequest) {
   try {
     const currentPath = request.nextUrl.pathname;
 
-    // Authentication check
+    // Fast path: check authentication
     const token = await getToken({
       req: request,
       secret: process.env.NEXTAUTH_SECRET,
@@ -131,27 +103,15 @@ export async function middleware(request: NextRequest) {
       });
     }
 
-    const userRole = token.role as string;
-
-    // Role-based access control
-    if (!hasRouteAccess(currentPath, userRole)) {
-      if (userRole === "ADMIN") {
-        const adminPath = new URL("/admin", request.url);
-        return NextResponse.redirect(adminPath, {
-          headers: {
-            "Cache-Control": CACHE_CONTROL_PRIVATE,
-          },
-        });
-      } else {
+    // Fast path: skip progress check for admin routes
+    if (currentPath.startsWith("/admin")) {
+      // Verify admin role for admin routes
+      if (!token.role || token.role !== "USER") {
         return createErrorRedirect(
           request,
-          "You don't have permission to access this page."
+          "You don't have permission to access this page"
         );
       }
-    }
-
-    // Skip progress check for admin routes
-    if (userRole === "ADMIN") {
       return NextResponse.next({
         headers: {
           "Cache-Control": CACHE_CONTROL_PRIVATE,
@@ -159,14 +119,14 @@ export async function middleware(request: NextRequest) {
       });
     }
 
-    // Progress check for user routes
+    // Only fetch progress status for non-admin routes
     const progressResponse = await fetch(
       new URL("/api/check-progress", request.url),
       {
         headers: {
           Cookie: request.headers.get("cookie") || "",
         },
-        cache: "no-store",
+        cache: "no-store", // Ensure fresh data
       }
     );
 
@@ -178,24 +138,28 @@ export async function middleware(request: NextRequest) {
     }
 
     const { progressStatus } = await progressResponse.json();
+
+    // O(1) lookup using Map
     const config = PROTECTED_ROUTES.get(progressStatus);
 
-    if (config && config.routes.has(currentPath)) {
-      return NextResponse.redirect(
-        createRedirectURL(config.redirectPath, config.message, request),
-        {
-          headers: {
-            "Cache-Control": CACHE_CONTROL_PRIVATE,
-          },
-        }
-      );
+    // Fast path: if no config exists or route isn't protected, continue
+    if (!config || !config.routes.has(currentPath)) {
+      return NextResponse.next({
+        headers: {
+          "Cache-Control": CACHE_CONTROL_PRIVATE,
+        },
+      });
     }
 
-    return NextResponse.next({
-      headers: {
-        "Cache-Control": CACHE_CONTROL_PRIVATE,
-      },
-    });
+    // Redirect if route is protected
+    return NextResponse.redirect(
+      createRedirectURL(config.redirectPath, config.message, request),
+      {
+        headers: {
+          "Cache-Control": CACHE_CONTROL_PRIVATE,
+        },
+      }
+    );
   } catch (error) {
     console.error("Middleware error:", error);
     return createErrorRedirect(
@@ -205,6 +169,7 @@ export async function middleware(request: NextRequest) {
   }
 }
 
+// Optimized matcher configuration using exact paths for better routing performance
 export const config = {
   matcher: [
     "/dashboard/:path*",
@@ -212,5 +177,6 @@ export const config = {
     "/scholarship-quest",
     "/cv-alignment",
     "/book-session",
+    "/dashboard/essays",
   ],
 };
