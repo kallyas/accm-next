@@ -11,7 +11,7 @@ export async function GET(req: Request) {
       description: plan.description,
       price: plan.price,
       services: plan.services,
-      features: [], // Placeholder for features - add as needed
+      features: plan.features || [],
     }));
 
     return NextResponse.json(formattedPlans);
