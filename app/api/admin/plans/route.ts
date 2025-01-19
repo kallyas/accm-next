@@ -21,8 +21,20 @@ export async function GET(req: Request) {
   }
 
   try {
+    // Get pagination parameters from URL
+    const url = new URL(req.url);
+    const page = parseInt(url.searchParams.get("page") || "1");
+    const pageSize = parseInt(url.searchParams.get("pageSize") || "10");
+    const skip = (page - 1) * pageSize;
+
+    // Get total count for pagination
+    const totalPlans = await db.plan.count();
+
+    // Get paginated plans
     const plans = await db.plan.findMany({
       orderBy: { createdAt: "desc" },
+      skip,
+      take: pageSize,
     });
 
     const formattedPlans = plans.map((plan) => ({
@@ -35,7 +47,15 @@ export async function GET(req: Request) {
       features: plan.features || [],
     }));
 
-    return NextResponse.json(formattedPlans);
+    return NextResponse.json({
+      plans: formattedPlans,
+      pagination: {
+        total: totalPlans,
+        pageCount: Math.ceil(totalPlans / pageSize),
+        currentPage: page,
+        pageSize,
+      },
+    });
   } catch (error) {
     console.error("Error fetching plans:", error);
     return NextResponse.json(
@@ -59,6 +79,8 @@ export async function POST(req: Request) {
     json.price = parseFloat(json.price);
     json.duration = parseInt(json.duration);
     const body = planSchema.parse(json);
+
+    console.log("body", body);
 
     const plan = await db.plan.create({
       data: {
