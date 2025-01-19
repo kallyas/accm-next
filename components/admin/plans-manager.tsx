@@ -27,7 +27,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-const planSchema = z.object({
+// Base schema for plan data without ID
+const basePlanSchema = z.object({
   name: z.string().min(1, "Plan name is required"),
   description: z.string().min(1, "Description is required"),
   price: z.string().min(0, "Price must be non-negative"),
@@ -36,10 +37,33 @@ const planSchema = z.object({
   features: z.array(z.string()),
 });
 
-type Plan = z.infer<typeof planSchema> & { id: string };
+// Extended schema that includes ID for editing
+const planWithIdSchema = basePlanSchema.extend({
+  id: z.string(),
+});
 
-const fetchPlans = async (): Promise<Plan[]> => {
-  const response = await fetch("/api/admin/plans");
+type BasePlan = z.infer<typeof basePlanSchema>;
+type Plan = z.infer<typeof planWithIdSchema>;
+
+interface PaginationData {
+  total: number;
+  pageCount: number;
+  currentPage: number;
+  pageSize: number;
+}
+
+interface PlansResponse {
+  plans: Plan[];
+  pagination: PaginationData;
+}
+
+const fetchPlans = async (
+  page: number,
+  pageSize: number
+): Promise<PlansResponse> => {
+  const response = await fetch(
+    `/api/admin/plans?page=${page}&pageSize=${pageSize}`
+  );
   if (!response.ok) {
     throw new Error("Failed to fetch plans");
   }
@@ -48,22 +72,15 @@ const fetchPlans = async (): Promise<Plan[]> => {
 
 export function PlansManager() {
   const queryClient = useQueryClient();
-
-  const {
-    data: plans,
-    isLoading,
-    error,
-  } = useQuery<Plan[]>({
-    queryKey: ["plans"],
-    queryFn: fetchPlans,
-  });
-
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editingPlan, setEditingPlan] = useState<Plan | null>(null);
 
-  const form = useForm<Plan>({
-    resolver: zodResolver(planSchema),
+  // Create separate forms for add and edit
+  const addForm = useForm<BasePlan>({
+    resolver: zodResolver(basePlanSchema),
     defaultValues: {
       name: "",
       description: "",
@@ -74,8 +91,26 @@ export function PlansManager() {
     },
   });
 
-  const addPlanMutation = useMutation<Plan, Error, Omit<Plan, "id">>({
-    mutationFn: async (plan: Omit<Plan, "id">): Promise<Plan> => {
+  const editForm = useForm<Plan>({
+    resolver: zodResolver(planWithIdSchema),
+    defaultValues: {
+      id: "",
+      name: "",
+      description: "",
+      price: "0",
+      duration: "1",
+      services: [],
+      features: [],
+    },
+  });
+
+  const { data, isLoading, error } = useQuery<PlansResponse>({
+    queryKey: ["plans", page, pageSize],
+    queryFn: () => fetchPlans(page, pageSize),
+  });
+
+  const addPlanMutation = useMutation<Plan, Error, BasePlan>({
+    mutationFn: async (plan: BasePlan): Promise<Plan> => {
       const response = await fetch("/api/admin/plans", {
         method: "POST",
         headers: {
@@ -91,9 +126,10 @@ export function PlansManager() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["plans"] });
       setIsAddDialogOpen(false);
+      addForm.reset();
       toast({ title: "Plan created successfully" });
     },
-    onError: (error: { message: any; }) => {
+    onError: (error) => {
       toast({
         title: "Error creating plan",
         description: error.message,
@@ -116,24 +152,27 @@ export function PlansManager() {
       }
       return response.json();
     },
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["plans"] });
-        setIsEditDialogOpen(false);
-        toast({ title: "Plan updated successfully" });
-      },
-      onError: (error) => {
-        toast({
-          title: "Error updating plan",
-          description: error.message,
-          variant: "destructive",
-        });
-      },
-    }
-  );
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["plans"] });
+      setIsEditDialogOpen(false);
+      setEditingPlan(null);
+      editForm.reset();
+      toast({ title: "Plan updated successfully" });
+    },
+    onError: (error) => {
+      toast({
+        title: "Error updating plan",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
 
   const deletePlanMutation = useMutation({
     mutationFn: async (id: string): Promise<void> => {
-      const response = await fetch(`/api/admin/plans/${id}`, { method: "DELETE" });
+      const response = await fetch(`/api/admin/plans/${id}`, {
+        method: "DELETE",
+      });
       if (!response.ok) {
         throw new Error("Failed to delete plan");
       }
@@ -157,7 +196,7 @@ export function PlansManager() {
     {
       accessorKey: "price",
       header: "Price",
-      cell: ({ row }) => `$${row.getValue("price").toFixed(2)}`,
+      cell: ({ row }) => `$${row.getValue("price")}`,
     },
     { accessorKey: "duration", header: "Duration" },
     {
@@ -177,7 +216,7 @@ export function PlansManager() {
               onClick={() => {
                 setEditingPlan(plan);
                 setIsEditDialogOpen(true);
-                form.reset(plan); // Reset form with the current plan data
+                editForm.reset(plan); // Reset form with the current plan data
               }}
             >
               <Pencil className="h-4 w-4" />
@@ -203,31 +242,49 @@ export function PlansManager() {
     return <div>Error: {error.message}</div>;
   }
 
+  const handlePageSizeChange = (size: number) => {
+    if (page > 1 && data?.pagination.pageCount === 1) {
+      setPage(1);
+    }
+  };
+
   return (
     <div>
       <Button onClick={() => setIsAddDialogOpen(true)} className="mb-4">
         <Plus className="mr-2 h-4 w-4" />
         Add Plan
       </Button>
-      <DataTable columns={columns} data={plans || []} />
+      <DataTable
+        pageCount={data?.pagination.pageCount ?? 0}
+        pageIndex={page}
+        pageSize={pageSize}
+        onPaginationChange={handlePageSizeChange}
+        isLoading={isLoading}
+        columns={columns}
+        data={data?.plans ?? []}
+      />
 
       {/* Add Plan Dialog */}
-      <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+      <Dialog
+        open={isAddDialogOpen}
+        onOpenChange={(open) => {
+          setIsAddDialogOpen(open);
+          if (!open) addForm.reset();
+        }}
+      >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Add New Plan</DialogTitle>
           </DialogHeader>
-          <Form {...form}>
+          <Form {...addForm}>
             <form
-              // trasform string to number for price and duration before validation
-              
-              onSubmit={form.handleSubmit((data) =>
+              onSubmit={addForm.handleSubmit((data) =>
                 addPlanMutation.mutate(data)
               )}
               className="space-y-4"
             >
               <FormField
-                control={form.control}
+                control={addForm.control}
                 name="name"
                 render={({ field }) => (
                   <FormItem>
@@ -240,7 +297,7 @@ export function PlansManager() {
                 )}
               />
               <FormField
-                control={form.control}
+                control={addForm.control}
                 name="description"
                 render={({ field }) => (
                   <FormItem>
@@ -253,33 +310,33 @@ export function PlansManager() {
                 )}
               />
               <FormField
-                control={form.control}
+                control={addForm.control}
                 name="price"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Price</FormLabel>
                     <FormControl>
-                      <Input type="number" {...field} />
+                      <Input {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
               <FormField
-                control={form.control}
+                control={addForm.control}
                 name="duration"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Duration (Months)</FormLabel>
                     <FormControl>
-                      <Input type="number" {...field} />
+                      <Input {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
               <FormField
-                control={form.control}
+                control={addForm.control}
                 name="services"
                 render={({ field }) => (
                   <FormItem>
@@ -287,6 +344,7 @@ export function PlansManager() {
                     <FormControl>
                       <Input
                         {...field}
+                        value={field.value.join(", ")}
                         onChange={(e) =>
                           field.onChange(
                             e.target.value.split(",").map((s) => s.trim())
@@ -299,7 +357,7 @@ export function PlansManager() {
                 )}
               />
               <FormField
-                control={form.control}
+                control={addForm.control}
                 name="features"
                 render={({ field }) => (
                   <FormItem>
@@ -307,6 +365,7 @@ export function PlansManager() {
                     <FormControl>
                       <Input
                         {...field}
+                        value={field.value.join(", ")}
                         onChange={(e) =>
                           field.onChange(
                             e.target.value.split(",").map((s) => s.trim())
@@ -327,20 +386,31 @@ export function PlansManager() {
       </Dialog>
 
       {/* Edit Plan Dialog */}
-      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+      <Dialog
+        open={isEditDialogOpen}
+        onOpenChange={(open) => {
+          setIsEditDialogOpen(open);
+          if (!open) {
+            setEditingPlan(null);
+            editForm.reset();
+          }
+        }}
+      >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Edit Plan</DialogTitle>
           </DialogHeader>
-          <Form {...form}>
+          <Form {...editForm}>
             <form
-              onSubmit={form.handleSubmit((data) =>
-                editPlanMutation.mutate(data)
-              )}
+              onSubmit={editForm.handleSubmit((data) => {
+                if (editingPlan) {
+                  editPlanMutation.mutate({ ...data, id: editingPlan.id });
+                }
+              })}
               className="space-y-4"
             >
               <FormField
-                control={form.control}
+                control={editForm.control}
                 name="name"
                 render={({ field }) => (
                   <FormItem>
@@ -353,7 +423,7 @@ export function PlansManager() {
                 )}
               />
               <FormField
-                control={form.control}
+                control={editForm.control}
                 name="description"
                 render={({ field }) => (
                   <FormItem>
@@ -366,33 +436,33 @@ export function PlansManager() {
                 )}
               />
               <FormField
-                control={form.control}
+                control={editForm.control}
                 name="price"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Price</FormLabel>
                     <FormControl>
-                      <Input type="number" {...field} />
+                      <Input {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
               <FormField
-                control={form.control}
+                control={editForm.control}
                 name="duration"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Duration (Months)</FormLabel>
                     <FormControl>
-                      <Input type="number" {...field} />
+                      <Input {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
               <FormField
-                control={form.control}
+                control={editForm.control}
                 name="services"
                 render={({ field }) => (
                   <FormItem>
@@ -400,6 +470,7 @@ export function PlansManager() {
                     <FormControl>
                       <Input
                         {...field}
+                        value={field.value.join(", ")}
                         onChange={(e) =>
                           field.onChange(
                             e.target.value.split(",").map((s) => s.trim())
@@ -412,7 +483,7 @@ export function PlansManager() {
                 )}
               />
               <FormField
-                control={form.control}
+                control={editForm.control}
                 name="features"
                 render={({ field }) => (
                   <FormItem>
@@ -420,6 +491,7 @@ export function PlansManager() {
                     <FormControl>
                       <Input
                         {...field}
+                        value={field.value.join(", ")}
                         onChange={(e) =>
                           field.onChange(
                             e.target.value.split(",").map((s) => s.trim())

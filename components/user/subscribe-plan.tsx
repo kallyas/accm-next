@@ -164,6 +164,8 @@ export function SubscribePlan() {
     refetchOnWindowFocus: true,
   });
 
+  console.log("plans", plans);
+
   const {
     handleSubscribe,
     isLoading: isSubscribing,
