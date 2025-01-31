@@ -36,7 +36,6 @@ const PROTECTED_ROUTES = new Map([
       routes: new Set([
         "/dashboard/personal-discovery",
         "/dashboard/cvs",
-        "/scholarship-quest",
         "/dashboard/essays",
       ]),
       redirectPath: "/dashboard/billing",
@@ -48,7 +47,6 @@ const PROTECTED_ROUTES = new Map([
       message: "Complete your personal discovery questionnaire to proceed",
       routes: new Set([
         "/dashboard/cvs",
-        "/scholarship-quest",
         "/dashboard/essays",
         "/cv-alignment",
       ]),
@@ -60,7 +58,7 @@ const PROTECTED_ROUTES = new Map([
     {
       message:
         "Please complete your CV alignment before accessing this section",
-      routes: new Set(["/scholarship-quest", "/dashboard/essays"]),
+      routes: new Set(["/dashboard/essays"]),
       redirectPath: "/status",
     },
   ],
