@@ -34,224 +34,168 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-const careerQuestSchema = z.object({
-  educationLevel: z.enum([
-    "high_school",
-    "certificate",
-    "diploma",
-    "bachelors",
-    "masters",
-    "phd",
-    "other"
-  ], {
-    required_error: "Please select your education level"
+const academicQuestSchema = z.object({
+  motivation: z
+    .string()
+    .min(50, "Please provide a detailed explanation of your motivation"),
+  timing: z.string().min(50, "Please explain why you want to pursue this now"),
+  undergradCGPA: z.string().min(1, "Please enter your CGPA"),
+  gpaScale: z.enum(["4", "5"], {
+    required_error: "Please select your GPA scale",
   }),
-  
-  fieldPreference: z.enum(["arts", "sciences"], {
-    required_error: "Please select your field preference"
+  undergradCourses: z
+    .string()
+    .min(10, "Please list all your undergraduate courses"),
+  workExperience: z.string().min(1, "Please enter your years of experience"),
+  leadership: z.enum(["yes", "no"], {
+    required_error: "Please indicate if you have leadership experience",
   }),
-  
-  ageRange: z.enum([
-    "under_18",
-    "18_24",
-    "25_34",
-    "35_44",
-    "45_54",
-    "55_plus"
-  ], {
-    required_error: "Please select your age range"
+  leadershipDetails: z
+    .string()
+    .min(50, "Please provide details about your leadership experience")
+    .optional(),
+  communityService: z.enum(["yes", "no"], {
+    required_error: "Please indicate if you have community service experience",
   }),
-  
-  gender: z.enum([
-    "male",
-    "female",
-    "non_binary",
-    "prefer_not_to_say",
-    "other"
-  ], {
-    required_error: "Please select your gender"
+  awards: z.enum(["yes", "no"], {
+    required_error: "Please indicate if you have any awards",
   }),
-  
-  employmentPreference: z.enum([
-    "self_employed",
-    "government",
-    "private"
-  ], {
-    required_error: "Please select your preferred employment type"
+  publications: z.enum(["yes", "no"], {
+    required_error: "Please indicate if you have any publications",
   }),
-  
-  selfEmploymentType: z.enum(["profit", "non_profit"]).optional(),
-  
-  careerSector: z.enum([
-    "academia",
-    "policy",
-    "industry"
-  ], {
-    required_error: "Please select your preferred career sector"
+  linkedin: z.enum(["yes", "no"], {
+    required_error: "Please indicate if you have a LinkedIn account",
   }),
-  
-  unpaidPassion: z.string().min(10, "Please provide more detail about your interests"),
-  personalPassion: z.string().min(10, "Please describe your passion in more detail"),
-  lifeGoal: z.string().min(10, "Please elaborate on the problem you want to solve"),
-  futureTitle: z.string().min(2, "Please specify your desired future title"),
-  futureTasks: z.string().min(10, "Please describe your future tasks in more detail"),
-  requiredSkills: z.string().min(10, "Please list the required skills"),
-  desiredCourses: z.string().min(10, "Please specify the courses you need")
 });
 
-type CareerQuestFormValues = z.infer<typeof careerQuestSchema>;
+type AcademicQuestFormValues = z.infer<typeof academicQuestSchema>;
 
-export function CareerGuidanceQuest() {
+export function AcademicQuestionnaire() {
   const [currentStep, setCurrentStep] = useState(0);
   const [validationError, setValidationError] = useState<string | null>(null);
   const [isComplete, setIsComplete] = useState(false);
 
-  const form = useForm<CareerQuestFormValues>({
-    resolver: zodResolver(careerQuestSchema),
+  const form = useForm<AcademicQuestFormValues>({
+    resolver: zodResolver(academicQuestSchema),
     mode: "onChange",
   });
 
   const questions = [
     {
-      field: "educationLevel",
-      label: "What level of education are you?",
-      type: "select",
-      options: [
-        { value: "high_school", label: "High School" },
-        { value: "certificate", label: "Certificate" },
-        { value: "diploma", label: "Diploma" },
-        { value: "bachelors", label: "Bachelor's Degree" },
-        { value: "masters", label: "Master's Degree" },
-        { value: "phd", label: "PhD" },
-        { value: "other", label: "Other" }
-      ],
-      icon: "🎓"
-    },
-    {
-      field: "fieldPreference",
-      label: "Do you want to be in Arts or Sciences?",
-      type: "radio",
-      options: [
-        { value: "arts", label: "Arts" },
-        { value: "sciences", label: "Sciences" }
-      ],
-      icon: "🎨"
-    },
-    {
-      field: "ageRange",
-      label: "How old are you?",
-      type: "select",
-      options: [
-        { value: "under_18", label: "Under 18" },
-        { value: "18_24", label: "18-24" },
-        { value: "25_34", label: "25-34" },
-        { value: "35_44", label: "35-44" },
-        { value: "45_54", label: "45-54" },
-        { value: "55_plus", label: "55+" }
-      ],
-      icon: "📅"
-    },
-    {
-      field: "gender",
-      label: "What is your gender?",
-      type: "select",
-      options: [
-        { value: "male", label: "Male" },
-        { value: "female", label: "Female" },
-        { value: "non_binary", label: "Non-binary" },
-        { value: "prefer_not_to_say", label: "Prefer not to say" },
-        { value: "other", label: "Other" }
-      ],
-      icon: "👤"
-    },
-    {
-      field: "employmentPreference",
-      label: "What type of employment do you prefer?",
-      type: "radio",
-      options: [
-        { value: "self_employed", label: "Self Employment" },
-        { value: "government", label: "Government/Public Job" },
-        { value: "private", label: "Private/Non-government Job" }
-      ],
-      icon: "💼"
-    },
-    {
-      field: "selfEmploymentType",
-      label: "If self employment, what type do you prefer?",
-      type: "radio",
-      options: [
-        { value: "profit", label: "Business (Profit)" },
-        { value: "non_profit", label: "Non-profit Work" }
-      ],
-      condition: (values: CareerQuestFormValues) => 
-        values.employmentPreference === "self_employed",
-      icon: "🏢"
-    },
-    {
-      field: "careerSector",
-      label: "Which sector do you want to work in?",
-      type: "radio",
-      options: [
-        { value: "academia", label: "Academia (Research)" },
-        { value: "policy", label: "Policy (Government Agencies)" },
-        { value: "industry", label: "Industry (Private/Non-government)" }
-      ],
-      icon: "🌟"
-    },
-    {
-      field: "unpaidPassion",
-      label: "What do you love doing even without being financially paid?",
+      field: "motivation",
+      label: "Why do you want to do a masters degree or PhD?",
       type: "textarea",
-      icon: "❤️"
+      icon: "🎓",
     },
     {
-      field: "personalPassion",
-      label: "What are you passionate about in your life?",
+      field: "timing",
+      label: "Why Now?",
       type: "textarea",
-      icon: "🔥"
+      icon: "⏰",
     },
     {
-      field: "lifeGoal",
-      label: "What issue/problem/strategic issue do you want to solve or contribute to before you die?",
-      type: "textarea",
-      icon: "🎯"
-    },
-    {
-      field: "futureTitle",
-      label: "Whom do you want to be called (Title/rank) 30 years from now?",
+      field: "undergradCGPA",
+      label: "What was your CGPA at UNDERGRADUATE?",
       type: "text",
-      icon: "👑"
+      icon: "📊",
     },
     {
-      field: "futureTasks",
-      label: "What do you want to be doing during that time? (Describe the tasks)",
-      type: "textarea",
-      icon: "📋"
+      field: "gpaScale",
+      label: "Select your GPA Scale",
+      type: "radio",
+      options: [
+        { value: "4", label: "4.0 Scale" },
+        { value: "5", label: "5.0 Scale" },
+      ],
+      icon: "📏",
     },
     {
-      field: "requiredSkills",
-      label: "What exactly skills do you need to do these tasks?",
+      field: "undergradCourses",
+      label: "What was your course at Undergraduate? (List all courses)",
       type: "textarea",
-      icon: "🛠️"
+      icon: "📚",
     },
     {
-      field: "desiredCourses",
-      label: "What course(s) do you think you need to undertake to gain these skills?",
+      field: "workExperience",
+      label: "How many years of relevant work experience do you have?",
+      type: "text",
+      icon: "💼",
+    },
+    {
+      field: "leadership",
+      label: "Have you been a leader?",
+      type: "radio",
+      options: [
+        { value: "yes", label: "Yes" },
+        { value: "no", label: "No" },
+      ],
+      icon: "👥",
+    },
+    {
+      field: "leadershipDetails",
+      label:
+        "What are those 5 things you did as a leader and what came out of that?",
       type: "textarea",
-      icon: "📚"
-    }
+      condition: (values: AcademicQuestFormValues) =>
+        values.leadership === "yes",
+      icon: "🎯",
+    },
+    {
+      field: "communityService",
+      label: "Have you been involved in community service?",
+      type: "radio",
+      options: [
+        { value: "yes", label: "Yes" },
+        { value: "no", label: "No" },
+      ],
+      icon: "🤝",
+    },
+    {
+      field: "awards",
+      label: "Do you have any awards/Honors?",
+      type: "radio",
+      options: [
+        { value: "yes", label: "Yes" },
+        { value: "no", label: "No" },
+      ],
+      icon: "🏆",
+    },
+    {
+      field: "publications",
+      label:
+        "Do you have any publications (News paper articles, journal papers, conference presentations)?",
+      type: "radio",
+      options: [
+        { value: "yes", label: "Yes" },
+        { value: "no", label: "No" },
+      ],
+      icon: "📝",
+    },
+    {
+      field: "linkedin",
+      label: "Do you have a LinkedIn Account?",
+      type: "radio",
+      options: [
+        { value: "yes", label: "Yes" },
+        { value: "no", label: "No" },
+      ],
+      icon: "💼",
+    },
   ];
 
   const validateCurrentStep = async () => {
     const currentField = questions[currentStep].field;
     const result = await form.trigger(currentField as any);
-    
+
     if (!result) {
-      const error = form.formState.errors[currentField as keyof CareerQuestFormValues];
-      setValidationError(error?.message || "Please complete this field correctly");
+      const error =
+        form.formState.errors[currentField as keyof AcademicQuestFormValues];
+      setValidationError(
+        error?.message || "Please complete this field correctly"
+      );
       return false;
     }
-    
+
     setValidationError(null);
     return true;
   };
@@ -262,10 +206,12 @@ export function CareerGuidanceQuest() {
       if (currentStep === questions.length - 1) {
         form.handleSubmit(onSubmit)();
       } else {
-        // Skip conditional questions if condition is not met
         let nextStep = currentStep + 1;
         const nextQuestion = questions[nextStep];
-        if (nextQuestion.condition && !nextQuestion.condition(form.getValues())) {
+        if (
+          nextQuestion.condition &&
+          !nextQuestion.condition(form.getValues())
+        ) {
           nextStep += 1;
         }
         setCurrentStep(nextStep);
@@ -273,9 +219,8 @@ export function CareerGuidanceQuest() {
     }
   };
 
-  const onSubmit = async (data: CareerQuestFormValues) => {
+  const onSubmit = async (data: AcademicQuestFormValues) => {
     setIsComplete(true);
-    // Here you would typically send the data to your backend
     console.log("Form submitted:", data);
   };
 
@@ -306,7 +251,10 @@ export function CareerGuidanceQuest() {
                   className="flex flex-col gap-4"
                 >
                   {options.map((option: any) => (
-                    <FormItem key={option.value} className="flex items-center space-x-2">
+                    <FormItem
+                      key={option.value}
+                      className="flex items-center space-x-2"
+                    >
                       <FormControl>
                         <RadioGroupItem value={option.value} />
                       </FormControl>
@@ -316,22 +264,6 @@ export function CareerGuidanceQuest() {
                     </FormItem>
                   ))}
                 </RadioGroup>
-              ) : type === "select" ? (
-                <Select
-                  onValueChange={formField.onChange}
-                  defaultValue={formField.value}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select an option" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {options.map((option: any) => (
-                      <SelectItem key={option.value} value={option.value}>
-                        {option.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
               ) : (
                 <Input
                   {...formField}
@@ -370,11 +302,11 @@ export function CareerGuidanceQuest() {
         <CardHeader>
           <div className="flex items-center justify-between mb-2">
             <CardTitle className="text-2xl font-bold">
-              Career Guidance Quest
+              Academic Background Questionnaire
             </CardTitle>
             {!isComplete && (
               <span className="text-sm text-gray-500">
-                Step {currentStep + 1} of {questions.length}
+                Question {currentStep + 1} of {questions.length}
               </span>
             )}
           </div>
@@ -409,12 +341,15 @@ export function CareerGuidanceQuest() {
                   <div className="inline-block p-4 bg-blue-50 rounded-full mb-6">
                     <Trophy className="w-16 h-16 text-blue-600" />
                   </div>
-                  <h2 className="text-3xl font-bold mb-4">Quest Complete!</h2>
+                  <h2 className="text-3xl font-bold mb-4">
+                    Questionnaire Complete!
+                  </h2>
                   <p className="text-xl mb-4">
-                    Thank you for completing the Career Guidance Quest!
+                    Thank you for completing the Academic Background
+                    Questionnaire!
                   </p>
                   <p className="text-gray-600 mb-8">
-                    Your responses will help guide your career path.
+                    Your responses will help evaluate your academic preparation.
                   </p>
                   <Button
                     onClick={() => {
@@ -438,9 +373,11 @@ export function CareerGuidanceQuest() {
                   onClick={() => {
                     setValidationError(null);
                     let prevStep = currentStep - 1;
-                    // Skip conditional questions when going back
                     const prevQuestion = questions[prevStep];
-                    if (prevQuestion?.condition && !prevQuestion.condition(form.getValues())) {
+                    if (
+                      prevQuestion?.condition &&
+                      !prevQuestion.condition(form.getValues())
+                    ) {
                       prevStep -= 1;
                     }
                     setCurrentStep(Math.max(0, prevStep));
@@ -451,11 +388,7 @@ export function CareerGuidanceQuest() {
                   <ChevronLeft className="w-4 h-4" />
                   Previous
                 </Button>
-                <Button 
-                  type="button" 
-                  onClick={handleNext} 
-                  className="gap-2"
-                >
+                <Button type="button" onClick={handleNext} className="gap-2">
                   {currentStep === questions.length - 1 ? (
                     "Submit"
                   ) : (
