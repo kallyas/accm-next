@@ -83,6 +83,11 @@ export default async function UserDashboardLayout({
       label: "Billing",
       icon: <CreditCard className="h-4 w-4" />,
     },
+    {
+      href: "/career-map",
+      label: "Career Map",
+      icon: <Star className="h-4 w-4" />,
+    }
   ];
 
   return (
