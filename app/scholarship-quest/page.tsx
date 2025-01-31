@@ -1,8 +1,8 @@
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { CareerGuidanceQuest } from "@/components/scholarship-quest-game";
 import { GraduationCap } from "lucide-react";
+import { AcademicQuestionnaire } from "@/components/scholarship-quest-game";
 
 export default async function ScholarshipQuestPage() {
   const session = await getServerSession(authOptions);
@@ -28,10 +28,10 @@ export default async function ScholarshipQuestPage() {
             Embark on a journey to discover your scholarship potential!
           </p>
         </div>
-        
+
         <div className="flex justify-center">
           <div className="w-full">
-            <CareerGuidanceQuest />
+            <AcademicQuestionnaire />
           </div>
         </div>
       </div>
