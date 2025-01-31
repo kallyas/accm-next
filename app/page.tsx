@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TestimonialSlider } from "@/components/testimonial-slider";
-import { StatisticsSection } from "@/components/statistics-section";
 import { FeaturedMentors } from "@/components/featured-mentors";
 import {
   Carousel,
@@ -75,6 +74,13 @@ const carouselSlides = [
     ctaText: "Explore Resources",
     ctaLink: "/resources",
   },
+  {
+    image: "/accm/IMG_4713.JPG",
+    title: "Scholarship Quest",
+    description: "Discover your scholarship potential with our quest",
+    ctaText: "Start Your Quest",
+    ctaLink: "/scholarship-quest",
+  }
 ];
 
 const features = [
