@@ -14,16 +14,32 @@ import { Badge } from "@/components/ui/badge";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogDescription,
 } from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "@/hooks/use-toast";
 import Image from "next/image";
-import { CheckCircle, XCircle, Eye, AlertCircle, Ban } from "lucide-react";
+import {
+  CheckCircle,
+  XCircle,
+  Eye,
+  AlertCircle,
+  Ban,
+  MoreVertical,
+  Timer,
+} from "lucide-react";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { useState } from "react";
 
 interface Subscription {
   id: string;
@@ -43,7 +59,6 @@ interface Subscription {
   }[];
 }
 
-// API functions
 async function fetchSubscriptions(): Promise<Subscription[]> {
   const response = await fetch("/api/admin/subscriptions");
   if (!response.ok) throw new Error("Failed to fetch subscriptions");
@@ -63,57 +78,108 @@ async function updateSubscriptionStatus(
   return response.json();
 }
 
-// Loading row component
 function LoadingRow() {
   return (
     <TableRow>
       <TableCell>
         <div className="space-y-2">
-          <Skeleton className="h-4 w-[200px]" />
-          <Skeleton className="h-3 w-[150px]" />
+          <Skeleton className="h-4 w-48" />
+          <Skeleton className="h-3 w-32" />
         </div>
       </TableCell>
       <TableCell>
-        <Skeleton className="h-6 w-[80px]" />
+        <Skeleton className="h-6 w-24" />
       </TableCell>
       <TableCell>
-        <Skeleton className="h-4 w-[100px]" />
+        <Skeleton className="h-4 w-24" />
       </TableCell>
       <TableCell>
-        <Skeleton className="h-9 w-[100px]" />
+        <Skeleton className="h-8 w-24" />
       </TableCell>
       <TableCell>
-        <div className="flex space-x-2">
-          <Skeleton className="h-9 w-[80px]" />
-          <Skeleton className="h-9 w-[80px]" />
-        </div>
+        <Skeleton className="h-8 w-8" />
       </TableCell>
     </TableRow>
   );
 }
 
-// Status badge component
 function StatusBadge({ status }: { status: Subscription["status"] }) {
-  const variants = {
-    APPROVED: { variant: "secondary", icon: CheckCircle },
-    REJECTED: { variant: "destructive", icon: XCircle },
-    PENDING: { variant: "outline", icon: AlertCircle },
-    ACTIVE: { variant: "default", icon: CheckCircle },
-    CANCELLED: { variant: "destructive", icon: Ban },
-  } as const;
+  const statusConfig = {
+    APPROVED: {
+      variant: "secondary" as const,
+      icon: CheckCircle,
+      label: "Approved",
+    },
+    REJECTED: {
+      variant: "destructive" as const,
+      icon: XCircle,
+      label: "Rejected",
+    },
+    PENDING: {
+      variant: "outline" as const,
+      icon: Timer,
+      label: "Pending",
+    },
+    ACTIVE: {
+      variant: "default" as const,
+      icon: CheckCircle,
+      label: "Active",
+    },
+    CANCELLED: {
+      variant: "destructive" as const,
+      icon: Ban,
+      label: "Cancelled",
+    },
+  };
 
-  const { variant, icon: Icon } = variants[status];
+  const config = statusConfig[status];
 
   return (
-    <Badge variant={variant} className="flex items-center gap-1 p-2">
-      <Icon className="h-3 w-3" />
-      <span>{status}</span>
+    <Badge variant={config.variant} className="flex items-center gap-1">
+      <config.icon className="h-3 w-3" />
+      <span>{config.label}</span>
     </Badge>
   );
 }
 
-// Receipt dialog component
-function ReceiptDialog({ receiptUrl }: { receiptUrl: string }) {
+function ConfirmActionDialog({
+  isOpen,
+  onClose,
+  onConfirm,
+  title,
+  description,
+  actionLabel,
+  variant = "default",
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  title: string;
+  description: string;
+  actionLabel: string;
+  variant?: "default" | "destructive";
+}) {
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription>{description}</DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <Button variant="outline" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button variant={variant} onClick={onConfirm}>
+            {actionLabel}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function ReceiptDialog({ imageUrl }: { imageUrl: string }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -122,16 +188,16 @@ function ReceiptDialog({ receiptUrl }: { receiptUrl: string }) {
           View Receipt
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-3xl">
         <DialogHeader>
           <DialogTitle>Payment Receipt</DialogTitle>
           <DialogDescription>
-            Verify the payment details in the receipt
+            Review the payment details below
           </DialogDescription>
         </DialogHeader>
         <div className="mt-4 rounded-lg overflow-hidden border">
           <Image
-            src={receiptUrl}
+            src={imageUrl}
             alt="Receipt"
             width={800}
             height={1000}
@@ -145,8 +211,11 @@ function ReceiptDialog({ receiptUrl }: { receiptUrl: string }) {
 
 export function SubscriptionsTable() {
   const queryClient = useQueryClient();
+  const [selectedSubscription, setSelectedSubscription] = useState<{
+    id: string;
+    action: "approve" | "reject" | "cancel";
+  } | null>(null);
 
-  // Fetch subscriptions
   const {
     data: subscriptions,
     isLoading,
@@ -154,10 +223,8 @@ export function SubscriptionsTable() {
   } = useQuery({
     queryKey: ["subscriptions"],
     queryFn: fetchSubscriptions,
-    staleTime: 5 * 60 * 1000, // Consider data fresh for 5 minutes
   });
 
-  // Update subscription status
   const updateMutation = useMutation({
     mutationFn: ({
       id,
@@ -169,18 +236,34 @@ export function SubscriptionsTable() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["subscriptions"] });
       toast({
-        title: "Status Updated",
-        description: "The subscription status has been updated successfully.",
+        title: "Success",
+        description: "Subscription status has been updated.",
       });
+      setSelectedSubscription(null);
     },
-    onError: (error) => {
+    onError: () => {
       toast({
         title: "Error",
-        description: "Failed to update subscription status. Please try again.",
+        description: "Failed to update subscription status.",
         variant: "destructive",
       });
     },
   });
+
+  const handleAction = (action: "approve" | "reject" | "cancel") => {
+    if (!selectedSubscription) return;
+
+    const statusMap = {
+      approve: "APPROVED",
+      reject: "REJECTED",
+      cancel: "CANCELLED",
+    } as const;
+
+    updateMutation.mutate({
+      id: selectedSubscription.id,
+      status: statusMap[action],
+    });
+  };
 
   if (error) {
     return (
@@ -188,120 +271,155 @@ export function SubscriptionsTable() {
         <AlertCircle className="h-4 w-4" />
         <AlertTitle>Error</AlertTitle>
         <AlertDescription>
-          Failed to load subscriptions. Please try again later.
+          Failed to load subscriptions. Please try again.
         </AlertDescription>
       </Alert>
     );
   }
 
+  const confirmDialogConfig = {
+    approve: {
+      title: "Approve Subscription",
+      description: "Are you sure you want to approve this subscription?",
+      actionLabel: "Approve",
+      variant: "default" as const,
+    },
+    reject: {
+      title: "Reject Subscription",
+      description: "Are you sure you want to reject this subscription?",
+      actionLabel: "Reject",
+      variant: "destructive" as const,
+    },
+    cancel: {
+      title: "Cancel Subscription",
+      description: "Are you sure you want to cancel this subscription?",
+      actionLabel: "Cancel",
+      variant: "destructive" as const,
+    },
+  };
+
   return (
-    <div className="rounded-md border">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[250px]">User</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Created At</TableHead>
-            <TableHead>Receipt</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {isLoading &&
-            Array.from({ length: 5 }).map((_, i) => <LoadingRow key={i} />)}
-
-          {subscriptions?.map((subscription) => (
-            <TableRow key={subscription.id}>
-              <TableCell className="font-medium">
-                <div>
-                  {subscription.user.firstName} {subscription.user.lastName}
-                </div>
-                <div className="text-sm text-muted-foreground">
-                  {subscription.user.email}
-                </div>
-              </TableCell>
-              <TableCell>
-                <StatusBadge status={subscription.status} />
-              </TableCell>
-              <TableCell className="text-muted-foreground">
-                {new Date(subscription.createdAt).toLocaleDateString(
-                  undefined,
-                  {
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
-                  }
-                )}
-              </TableCell>
-              <TableCell>
-                <ReceiptDialog
-                  receiptUrl={subscription.paymentProofs[0].imageUrl}
-                />
-              </TableCell>
-              <TableCell className="text-right">
-                {subscription.status === "PENDING" && (
-                  <div className="flex justify-end gap-2">
-                    <Button
-                      size="sm"
-                      onClick={() =>
-                        updateMutation.mutate({
-                          id: subscription.id,
-                          status: "APPROVED",
-                        })
-                      }
-                      disabled={updateMutation.isPending}
-                    >
-                      <CheckCircle className="mr-1 h-4 w-4" />
-                      Approve
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="destructive"
-                      onClick={() =>
-                        updateMutation.mutate({
-                          id: subscription.id,
-                          status: "REJECTED",
-                        })
-                      }
-                      disabled={updateMutation.isPending}
-                    >
-                      <XCircle className="mr-1 h-4 w-4" />
-                      Reject
-                    </Button>
-                  </div>
-                )}
-                {(subscription.status === "APPROVED" ||
-                  subscription.status === "ACTIVE") && (
-                  <Button
-                    size="sm"
-                    variant="destructive"
-                    onClick={() =>
-                      updateMutation.mutate({
-                        id: subscription.id,
-                        status: "CANCELLED",
-                      })
-                    }
-                    disabled={updateMutation.isPending}
-                  >
-                    <Ban className="mr-1 h-4 w-4" />
-                    Cancel Subscription
-                  </Button>
-                )}
-              </TableCell>
-            </TableRow>
-          ))}
-
-          {subscriptions?.length === 0 && (
+    <div className="space-y-4">
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
             <TableRow>
-              <TableCell colSpan={5} className="text-center py-8">
-                <div className="text-muted-foreground">
-                  No subscriptions found
-                </div>
-              </TableCell>
+              <TableHead>User</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Created</TableHead>
+              <TableHead>Receipt</TableHead>
+              <TableHead className="w-8"></TableHead>
             </TableRow>
-          )}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {isLoading &&
+              Array.from({ length: 5 }).map((_, i) => <LoadingRow key={i} />)}
+
+            {subscriptions?.map((subscription) => (
+              <TableRow key={subscription.id}>
+                <TableCell>
+                  <div className="font-medium">
+                    {subscription.user.firstName} {subscription.user.lastName}
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    {subscription.user.email}
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <StatusBadge status={subscription.status} />
+                </TableCell>
+                <TableCell className="text-muted-foreground">
+                  {new Date(subscription.createdAt).toLocaleDateString(
+                    undefined,
+                    {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    }
+                  )}
+                </TableCell>
+                <TableCell>
+                  <ReceiptDialog
+                    imageUrl={subscription.paymentProofs[0].imageUrl}
+                  />
+                </TableCell>
+                <TableCell>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                        <MoreVertical className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      {subscription.status === "PENDING" && (
+                        <>
+                          <DropdownMenuItem
+                            onClick={() =>
+                              setSelectedSubscription({
+                                id: subscription.id,
+                                action: "approve",
+                              })
+                            }
+                          >
+                            <CheckCircle className="mr-2 h-4 w-4" />
+                            Approve
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() =>
+                              setSelectedSubscription({
+                                id: subscription.id,
+                                action: "reject",
+                              })
+                            }
+                            className="text-destructive"
+                          >
+                            <XCircle className="mr-2 h-4 w-4" />
+                            Reject
+                          </DropdownMenuItem>
+                        </>
+                      )}
+                      {(subscription.status === "APPROVED" ||
+                        subscription.status === "ACTIVE") && (
+                        <DropdownMenuItem
+                          onClick={() =>
+                            setSelectedSubscription({
+                              id: subscription.id,
+                              action: "cancel",
+                            })
+                          }
+                          className="text-destructive"
+                        >
+                          <Ban className="mr-2 h-4 w-4" />
+                          Cancel
+                        </DropdownMenuItem>
+                      )}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
+            ))}
+
+            {subscriptions?.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={5} className="h-24 text-center">
+                  <div className="text-muted-foreground">
+                    No subscriptions found
+                  </div>
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+
+      {selectedSubscription && (
+        <ConfirmActionDialog
+          isOpen={!!selectedSubscription}
+          onClose={() => setSelectedSubscription(null)}
+          onConfirm={() => handleAction(selectedSubscription.action)}
+          {...confirmDialogConfig[selectedSubscription.action]}
+        />
+      )}
     </div>
   );
 }
