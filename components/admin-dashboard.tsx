@@ -1,144 +1,244 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
-import { 
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, 
-  ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell 
-} from 'recharts'
-import { 
-  Users, UserCheck, GraduationCap, ScrollText, 
-  TrendingUp, Calendar, Book, Activity 
-} from 'lucide-react'
-import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
-import { ExtendedAnalyticsData } from '@/types/general'
+import { useEffect, useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  PieChart,
+  Pie,
+  Cell,
+  AreaChart,
+  Area,
+} from "recharts";
+import {
+  Users,
+  GraduationCap,
+  ScrollText,
+  FileCheck,
+  TrendingUp,
+  Brain,
+  Award,
+  Target,
+  Book,
+} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { ExtendedAnalyticsData } from "@/types/general";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff8042']
+const COLORS = [
+  "#4F46E5",
+  "#10B981",
+  "#F59E0B",
+  "#EF4444",
+  "#8B5CF6",
+  "#EC4899",
+];
+const PROGRESS_COLORS = {
+  PAYMENT_PENDING: "#F59E0B",
+  PERSONAL_DISCOVERY_PENDING: "#10B981",
+  CV_ALIGNMENT_PENDING: "#4F46E5",
+  SCHOLARSHIP_MATRIX_PENDING: "#8B5CF6",
+  ESSAYS_PENDING: "#EC4899",
+  COMPLETED: "#059669",
+};
 
+function MetricCard({
+  title,
+  value,
+  subtitle,
+  icon: Icon,
+  trend,
+}: {
+  title: string;
+  value: string | number;
+  subtitle: string;
+  icon: any;
+  trend?: { value: number; label: string };
+}) {
+  return (
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between pb-2">
+        <CardTitle className="text-sm font-medium">{title}</CardTitle>
+        <Icon className="h-4 w-4 text-muted-foreground" />
+      </CardHeader>
+      <CardContent>
+        <div className="text-2xl font-bold">{value}</div>
+        <div className="flex items-center text-xs text-muted-foreground">
+          {subtitle}
+          {trend && (
+            <Badge
+              variant={trend.value >= 0 ? "default" : "destructive"}
+              className="ml-2"
+            >
+              {trend.value >= 0 ? "+" : ""}
+              {trend.value}% {trend.label}
+            </Badge>
+          )}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
 
-export function AnalyticsDashboard({ _data }: { _data: ExtendedAnalyticsData }) {
-  const [data, setData] = useState<ExtendedAnalyticsData>(_data)
+export function AnalyticsDashboard({
+  _data,
+}: {
+  _data: ExtendedAnalyticsData;
+}) {
+  const [data, setData] = useState<ExtendedAnalyticsData>(_data);
+  const [timeRange, setTimeRange] = useState("3m");
 
-  // Format user growth data for chart
-  const growthData = data.users?.growth?.map(item => ({
-    date: `${item?.year}-${item?.month}`,
-    users: item?._count
-  }))
+  // Format data for visualizations
+  const growthData = data.users?.growth?.map((item) => ({
+    date: `${item.year}-${String(item.month).padStart(2, "0")}`,
+    users: item._count,
+  }));
+
+  const progressData = data.users?.progressDistribution?.map((item) => ({
+    name: item.progressStatus.replace(/_/g, " ").toLowerCase(),
+    value: item._count,
+    color: PROGRESS_COLORS[item.progressStatus as keyof typeof PROGRESS_COLORS],
+  }));
+
+  const userJourneyData = [
+    {
+      name: "Personal Discovery",
+      completed: parseFloat(data.engagement.personalDiscovery.completionRate),
+      pending:
+        100 - parseFloat(data.engagement.personalDiscovery.completionRate),
+    },
+    {
+      name: "Course Progress",
+      completed: parseFloat(data.engagement.courseEngagement.averageProgress),
+      pending:
+        100 - parseFloat(data.engagement.courseEngagement.averageProgress),
+    },
+  ];
 
   return (
     <div className="space-y-8">
-      {/* Overview Section */}
+      {/* Time Range Selector */}
+      <div className="flex justify-end">
+        <Select defaultValue={timeRange} onValueChange={setTimeRange}>
+          <SelectTrigger className="w-36">
+            <SelectValue placeholder="Select Range" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="1m">Last Month</SelectItem>
+            <SelectItem value="3m">Last 3 Months</SelectItem>
+            <SelectItem value="6m">Last 6 Months</SelectItem>
+            <SelectItem value="1y">Last Year</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Key Metrics */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">
-              Total Users
-            </CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{data?.overview?.totalUsers}</div>
-            <p className="text-xs text-muted-foreground">
-              {data?.overview?.activityRate}% active this month
-            </p>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">
-              Active Mentors
-            </CardTitle>
-            <UserCheck className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{data?.overview?.totalMentors}</div>
-            <p className="text-xs text-muted-foreground">
-              Supporting {data?.overview?.totalUsers} users
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">
-              Course Engagement
-            </CardTitle>
-            <Book className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {data?.engagement?.courseEngagement?.averageProgress}%
-            </div>
-            <p className="text-xs text-muted-foreground">
-              Average completion rate
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">
-              Active Subscriptions
-            </CardTitle>
-            <Activity className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{data?.overview?.activeSubscriptions}</div>
-            <p className="text-xs text-muted-foreground">
-              Of {data?.overview?.totalSubscriptions} total
-            </p>
-          </CardContent>
-        </Card>
+        <MetricCard
+          title="Total Users"
+          value={data.overview.totalUsers}
+          subtitle={`${data.overview.activityRate}% active this month`}
+          icon={Users}
+          trend={{ value: 12, label: "vs last month" }}
+        />
+        <MetricCard
+          title="Course Engagement"
+          value={`${data.engagement.courseEngagement.averageProgress}%`}
+          subtitle={`${data.engagement.courseEngagement.totalEnrollments} total enrollments`}
+          icon={Book}
+          trend={{ value: 5, label: "completion rate" }}
+        />
+        <MetricCard
+          title="Personal Discovery"
+          value={data.engagement.personalDiscovery.total}
+          subtitle={`${data.engagement.personalDiscovery.completionRate}% completion rate`}
+          icon={Brain}
+        />
+        <MetricCard
+          title="Active Subscriptions"
+          value={data.overview.activeSubscriptions}
+          subtitle={`of ${data.overview.totalSubscriptions} total`}
+          icon={Award}
+          trend={{ value: -2, label: "churn rate" }}
+        />
       </div>
 
       {/* Charts Section */}
       <div className="grid gap-4 md:grid-cols-2">
         <Card className="col-span-1">
           <CardHeader>
-            <CardTitle>User Growth</CardTitle>
-            <CardDescription>Monthly user registration trend</CardDescription>
+            <CardTitle>User Growth Trend</CardTitle>
+            <CardDescription>
+              Monthly registration and engagement
+            </CardDescription>
           </CardHeader>
-          <CardContent className="h-[300px]">
+          <CardContent className="h-80">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={growthData}>
+              <AreaChart data={growthData}>
+                <defs>
+                  <linearGradient id="userGrowth" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#4F46E5" stopOpacity={0.8} />
+                    <stop offset="95%" stopColor="#4F46E5" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="date" />
                 <YAxis />
                 <Tooltip />
-                <Line 
-                  type="monotone" 
-                  dataKey="users" 
-                  stroke="#8884d8" 
-                  strokeWidth={2}
-                  dot={{ r: 4 }}
+                <Area
+                  type="monotone"
+                  dataKey="users"
+                  stroke="#4F46E5"
+                  fillOpacity={1}
+                  fill="url(#userGrowth)"
                 />
-              </LineChart>
+              </AreaChart>
             </ResponsiveContainer>
           </CardContent>
         </Card>
 
         <Card className="col-span-1">
           <CardHeader>
-            <CardTitle>Progress Distribution</CardTitle>
-            <CardDescription>User journey stages</CardDescription>
+            <CardTitle>User Journey Progress</CardTitle>
+            <CardDescription>Distribution across stages</CardDescription>
           </CardHeader>
-          <CardContent className="h-[300px]">
+          <CardContent className="h-80">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
-                  data={data?.users?.progressDistribution}
-                  dataKey="_count"
-                  nameKey="progressStatus"
+                  data={progressData}
+                  dataKey="value"
+                  nameKey="name"
                   cx="50%"
                   cy="50%"
                   outerRadius={100}
                   label
                 >
-                  {data?.users?.progressDistribution?.map((_, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  {progressData?.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
                 </Pie>
                 <Tooltip />
@@ -152,48 +252,78 @@ export function AnalyticsDashboard({ _data }: { _data: ExtendedAnalyticsData }) 
       {/* Course Performance */}
       <Card>
         <CardHeader>
-          <CardTitle>Course Performance</CardTitle>
-          <CardDescription>Average completion rates by course</CardDescription>
+          <CardTitle>Learning Progress</CardTitle>
+          <CardDescription>
+            Course completion rates and engagement
+          </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            {data?.learning?.courseCompletions?.map((course) => (
-              <div key={course?.title} className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="font-medium">{course?.title}</span>
-                  <span className="text-sm text-muted-foreground">
-                    {course?._count?.enrollments} enrollments
-                  </span>
+          <div className="space-y-8">
+            <div className="h-80">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={data.learning.courseCompletions}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="title" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar
+                    dataKey="_count.enrollments"
+                    name="Enrollments"
+                    fill="#4F46E5"
+                  />
+                  <Bar
+                    dataKey="averageProgress"
+                    name="Completion Rate (%)"
+                    fill="#10B981"
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2">
+              {data.learning.courseCompletions.map((course) => (
+                <div key={course.title} className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="font-medium">{course.title}</span>
+                    <Badge variant="secondary">
+                      {course._count.enrollments} enrolled
+                    </Badge>
+                  </div>
+                  <Progress value={parseFloat(course.averageProgress)} />
+                  <p className="text-sm text-muted-foreground">
+                    {course.averageProgress}% completion rate
+                  </p>
                 </div>
-                <Progress value={parseFloat(course?.averageProgress)} />
-                <p className="text-sm text-muted-foreground">
-                  {course?.averageProgress}% average completion
-                </p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </CardContent>
       </Card>
 
-      {/* Recent Users & Popular Plans */}
+      {/* User Progress & Popular Plans */}
       <div className="grid gap-4 md:grid-cols-2">
         <Card>
           <CardHeader>
             <CardTitle>Recent Users</CardTitle>
-            <CardDescription>Latest registrations</CardDescription>
+            <CardDescription>Latest platform registrations</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              {data?.users?.recent?.map((user) => (
-                <div key={user.id} className="flex items-center justify-between">
-                  <div>
+            <div className="space-y-6">
+              {data.users.recent.map((user) => (
+                <div
+                  key={user.id}
+                  className="flex items-center justify-between"
+                >
+                  <div className="space-y-1">
                     <p className="font-medium">
-                      {user?.firstName} {user?.lastName}
+                      {user.firstName} {user.lastName}
                     </p>
-                    <p className="text-sm text-muted-foreground">{user?.email}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {user.email}
+                    </p>
                   </div>
-                  <Badge variant="outline">
-                    {user?.progressStatus.replace(/_/g, ' ').toLowerCase()}
+                  <Badge variant="secondary">
+                    {user.progressStatus.replace(/_/g, " ").toLowerCase()}
                   </Badge>
                 </div>
               ))}
@@ -207,24 +337,31 @@ export function AnalyticsDashboard({ _data }: { _data: ExtendedAnalyticsData }) 
             <CardDescription>Most subscribed packages</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              {data?.subscriptions?.popularPlans?.map((plan) => (
-                <div key={plan?.name} className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium">{plan?.name}</p>
-                    <p className="text-sm text-muted-foreground">
-                      ${plan?.price} per month
-                    </p>
-                  </div>
-                  <Badge variant="secondary">
-                    {plan?._count?.subscriptions} subscribers
-                  </Badge>
-                </div>
-              ))}
+            <div className="h-[300px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  layout="vertical"
+                  data={data.subscriptions.popularPlans}
+                  margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis type="number" />
+                  <YAxis dataKey="name" type="category" />
+                  <Tooltip />
+                  <Bar dataKey="_count.subscriptions" fill="#4F46E5">
+                    {data.subscriptions.popularPlans.map((_, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={COLORS[index % COLORS.length]}
+                      />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
             </div>
           </CardContent>
         </Card>
       </div>
     </div>
-  )
+  );
 }
