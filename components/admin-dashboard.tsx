@@ -26,17 +26,7 @@ import {
   AreaChart,
   Area,
 } from "recharts";
-import {
-  Users,
-  GraduationCap,
-  ScrollText,
-  FileCheck,
-  TrendingUp,
-  Brain,
-  Award,
-  Target,
-  Book,
-} from "lucide-react";
+import { Users, Brain, Award, Book, Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { ExtendedAnalyticsData } from "@/types/general";
@@ -47,23 +37,35 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useTheme } from "next-themes";
 
-const COLORS = [
-  "#4F46E5",
-  "#10B981",
-  "#F59E0B",
-  "#EF4444",
-  "#8B5CF6",
-  "#EC4899",
-];
-const PROGRESS_COLORS = {
-  PAYMENT_PENDING: "#F59E0B",
-  PERSONAL_DISCOVERY_PENDING: "#10B981",
-  CV_ALIGNMENT_PENDING: "#4F46E5",
-  SCHOLARSHIP_MATRIX_PENDING: "#8B5CF6",
-  ESSAYS_PENDING: "#EC4899",
-  COMPLETED: "#059669",
-};
+// Theme-aware colors
+const getThemeColors = (theme: "dark" | "light") => ({
+  primary: theme === "dark" ? "#94A3B8" : "#475569",
+  secondary: theme === "dark" ? "#1E293B" : "#F1F5F9",
+  accent: theme === "dark" ? "#3B82F6" : "#2563EB",
+  text: theme === "dark" ? "#F1F5F9" : "#1E293B",
+  muted: theme === "dark" ? "#64748B" : "#94A3B8",
+  chartColors: {
+    primary:
+      theme === "dark"
+        ? ["#3B82F6", "#10B981", "#F59E0B", "#EF4444"]
+        : ["#2563EB", "#059669", "#D97706", "#DC2626"],
+    progressStates: {
+      PAYMENT_PENDING: theme === "dark" ? "#F59E0B" : "#D97706",
+      PERSONAL_DISCOVERY_PENDING: theme === "dark" ? "#10B981" : "#059669",
+      CV_ALIGNMENT_PENDING: theme === "dark" ? "#3B82F6" : "#2563EB",
+      SCHOLARSHIP_MATRIX_PENDING: theme === "dark" ? "#8B5CF6" : "#7C3AED",
+      ESSAYS_PENDING: theme === "dark" ? "#EC4899" : "#DB2777",
+      COMPLETED: theme === "dark" ? "#059669" : "#047857",
+    },
+  },
+});
+
+interface DateRange {
+  start: Date;
+  end: Date;
+}
 
 function MetricCard({
   title,
@@ -71,32 +73,52 @@ function MetricCard({
   subtitle,
   icon: Icon,
   trend,
+  isLoading,
 }: {
   title: string;
   value: string | number;
   subtitle: string;
   icon: any;
   trend?: { value: number; label: string };
+  isLoading?: boolean;
 }) {
+  if (isLoading) {
+    return (
+      <Card>
+        <CardContent className="p-6">
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-[120px]" />
+            <Skeleton className="h-7 w-[60px]" />
+            <Skeleton className="h-4 w-[180px]" />
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <CardTitle className="text-sm font-medium">{title}</CardTitle>
-        <Icon className="h-4 w-4 text-muted-foreground" />
-      </CardHeader>
-      <CardContent>
-        <div className="text-2xl font-bold">{value}</div>
-        <div className="flex items-center text-xs text-muted-foreground">
-          {subtitle}
-          {trend && (
-            <Badge
-              variant={trend.value >= 0 ? "default" : "destructive"}
-              className="ml-2"
-            >
-              {trend.value >= 0 ? "+" : ""}
-              {trend.value}% {trend.label}
-            </Badge>
-          )}
+      <CardContent className="p-6">
+        <div className="flex flex-col space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-medium text-muted-foreground">
+              {title}
+            </span>
+            <Icon className="h-4 w-4 text-muted-foreground" />
+          </div>
+          <div className="text-2xl font-bold">{value}</div>
+          <div className="flex items-center text-sm">
+            <span className="text-muted-foreground">{subtitle}</span>
+            {trend && (
+              <Badge
+                variant={trend.value >= 0 ? "default" : "destructive"}
+                className="ml-2"
+              >
+                {trend.value >= 0 ? "+" : ""}
+                {trend.value}% {trend.label}
+              </Badge>
+            )}
+          </div>
         </div>
       </CardContent>
     </Card>
@@ -110,49 +132,84 @@ export function AnalyticsDashboard({
 }) {
   const [data, setData] = useState<ExtendedAnalyticsData>(_data);
   const [timeRange, setTimeRange] = useState("3m");
+  const [isLoading, setIsLoading] = useState(false);
+  const { theme = "light" } = useTheme();
+  const colors = getThemeColors(theme as "dark" | "light");
 
-  // Format data for visualizations
-  const growthData = data.users?.growth?.map((item) => ({
-    date: `${item.year}-${String(item.month).padStart(2, "0")}`,
-    users: item._count,
-  }));
+  // Function to calculate date range based on selected time range
+  const getDateRange = (range: string): DateRange => {
+    const end = new Date();
+    const start = new Date();
+    switch (range) {
+      case "1m":
+        start.setMonth(end.getMonth() - 1);
+        break;
+      case "3m":
+        start.setMonth(end.getMonth() - 3);
+        break;
+      case "6m":
+        start.setMonth(end.getMonth() - 6);
+        break;
+      case "1y":
+        start.setFullYear(end.getFullYear() - 1);
+        break;
+      default:
+        start.setMonth(end.getMonth() - 3);
+    }
+    return { start, end };
+  };
 
-  const progressData = data.users?.progressDistribution?.map((item) => ({
-    name: item.progressStatus.replace(/_/g, " ").toLowerCase(),
-    value: item._count,
-    color: PROGRESS_COLORS[item.progressStatus as keyof typeof PROGRESS_COLORS],
-  }));
+  // Fetch data with date range
+  const fetchData = async (range: string) => {
+    setIsLoading(true);
+    try {
+      const dateRange = getDateRange(range);
+      const params = new URLSearchParams({
+        start: dateRange.start.toISOString(),
+        end: dateRange.end.toISOString(),
+      });
 
-  const userJourneyData = [
-    {
-      name: "Personal Discovery",
-      completed: parseFloat(data.engagement.personalDiscovery.completionRate),
-      pending:
-        100 - parseFloat(data.engagement.personalDiscovery.completionRate),
-    },
-    {
-      name: "Course Progress",
-      completed: parseFloat(data.engagement.courseEngagement.averageProgress),
-      pending:
-        100 - parseFloat(data.engagement.courseEngagement.averageProgress),
-    },
-  ];
+      const response = await fetch(`/api/admin/analytics?${params}`);
+      if (!response.ok) throw new Error("Failed to fetch data");
+      const newData = await response.json();
+      setData(newData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData(timeRange);
+  }, [timeRange]);
 
   return (
     <div className="space-y-8">
       {/* Time Range Selector */}
-      <div className="flex justify-end">
-        <Select defaultValue={timeRange} onValueChange={setTimeRange}>
-          <SelectTrigger className="w-36">
-            <SelectValue placeholder="Select Range" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="1m">Last Month</SelectItem>
-            <SelectItem value="3m">Last 3 Months</SelectItem>
-            <SelectItem value="6m">Last 6 Months</SelectItem>
-            <SelectItem value="1y">Last Year</SelectItem>
-          </SelectContent>
-        </Select>
+      <div className="flex items-center justify-between">
+        <h2 className="text-3xl font-bold tracking-tight">
+          Analytics Overview
+        </h2>
+        <div className="flex items-center gap-4">
+          <Select defaultValue={timeRange} onValueChange={setTimeRange}>
+            <SelectTrigger className="w-36">
+              <SelectValue placeholder="Select Range" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="1m">Last Month</SelectItem>
+              <SelectItem value="3m">Last 3 Months</SelectItem>
+              <SelectItem value="6m">Last 6 Months</SelectItem>
+              <SelectItem value="1y">Last Year</SelectItem>
+            </SelectContent>
+          </Select>
+          {isLoading && (
+            <div className="flex items-center text-sm text-muted-foreground">
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Updating...
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Key Metrics */}
@@ -160,127 +217,166 @@ export function AnalyticsDashboard({
         <MetricCard
           title="Total Users"
           value={data.overview.totalUsers}
-          subtitle={`${data.overview.activityRate}% active this month`}
+          subtitle={`${data.overview.activityRate}% active`}
           icon={Users}
-          trend={{ value: 12, label: "vs last month" }}
+          trend={{ value: 12, label: "growth" }}
+          isLoading={isLoading}
         />
         <MetricCard
           title="Course Engagement"
           value={`${data.engagement.courseEngagement.averageProgress}%`}
-          subtitle={`${data.engagement.courseEngagement.totalEnrollments} total enrollments`}
+          subtitle={`${data.engagement.courseEngagement.totalEnrollments} enrolled`}
           icon={Book}
-          trend={{ value: 5, label: "completion rate" }}
+          isLoading={isLoading}
         />
         <MetricCard
           title="Personal Discovery"
           value={data.engagement.personalDiscovery.total}
-          subtitle={`${data.engagement.personalDiscovery.completionRate}% completion rate`}
+          subtitle={`${data.engagement.personalDiscovery.completionRate}% completed`}
           icon={Brain}
+          isLoading={isLoading}
         />
         <MetricCard
           title="Active Subscriptions"
           value={data.overview.activeSubscriptions}
           subtitle={`of ${data.overview.totalSubscriptions} total`}
           icon={Award}
-          trend={{ value: -2, label: "churn rate" }}
+          isLoading={isLoading}
         />
       </div>
 
-      {/* Charts Section */}
-      <div className="grid gap-4 md:grid-cols-2">
-        <Card className="col-span-1">
+      {/* Charts */}
+      <div className="grid gap-6 md:grid-cols-2">
+        {/* User Growth */}
+        <Card className="col-span-2 md:col-span-1">
           <CardHeader>
-            <CardTitle>User Growth Trend</CardTitle>
-            <CardDescription>
-              Monthly registration and engagement
-            </CardDescription>
+            <CardTitle>User Growth</CardTitle>
+            <CardDescription>Monthly registration trend</CardDescription>
           </CardHeader>
-          <CardContent className="h-80">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={growthData}>
-                <defs>
-                  <linearGradient id="userGrowth" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#4F46E5" stopOpacity={0.8} />
-                    <stop offset="95%" stopColor="#4F46E5" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
-                <YAxis />
-                <Tooltip />
-                <Area
-                  type="monotone"
-                  dataKey="users"
-                  stroke="#4F46E5"
-                  fillOpacity={1}
-                  fill="url(#userGrowth)"
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-
-        <Card className="col-span-1">
-          <CardHeader>
-            <CardTitle>User Journey Progress</CardTitle>
-            <CardDescription>Distribution across stages</CardDescription>
-          </CardHeader>
-          <CardContent className="h-80">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={progressData}
-                  dataKey="value"
-                  nameKey="name"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={100}
-                  label
+          <CardContent>
+            <div className="h-[400px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart
+                  data={data.users.growth.map((item) => ({
+                    date: `${item.year}-${String(item.month).padStart(2, "0")}`,
+                    users: item._count,
+                  }))}
                 >
-                  {progressData?.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip />
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
+                  <defs>
+                    <linearGradient id="userGrowth" x1="0" y1="0" x2="0" y2="1">
+                      <stop
+                        offset="5%"
+                        stopColor={colors.chartColors.primary[0]}
+                        stopOpacity={0.8}
+                      />
+                      <stop
+                        offset="95%"
+                        stopColor={colors.chartColors.primary[0]}
+                        stopOpacity={0}
+                      />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke={colors.muted} />
+                  <XAxis dataKey="date" stroke={colors.text} />
+                  <YAxis stroke={colors.text} />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: colors.secondary,
+                      borderColor: colors.muted,
+                      color: colors.text,
+                    }}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="users"
+                    stroke={colors.chartColors.primary[0]}
+                    fill="url(#userGrowth)"
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
           </CardContent>
         </Card>
-      </div>
 
-      {/* Course Performance */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Learning Progress</CardTitle>
-          <CardDescription>
-            Course completion rates and engagement
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-8">
-            <div className="h-80">
+        {/* Progress Distribution */}
+        <Card className="col-span-2 md:col-span-1">
+          <CardHeader>
+            <CardTitle>User Journey Stages</CardTitle>
+            <CardDescription>Current progress distribution</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="h-[400px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={data.users.progressDistribution}
+                    dataKey="_count"
+                    nameKey="progressStatus"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={150}
+                    label
+                  >
+                    {data.users.progressDistribution.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={
+                          colors.chartColors.progressStates[
+                            entry.progressStatus as keyof typeof colors.chartColors.progressStates
+                          ]
+                        }
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: colors.secondary,
+                      borderColor: colors.muted,
+                      color: colors.text,
+                    }}
+                  />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Course Performance */}
+        <Card className="col-span-2">
+          <CardHeader>
+            <CardTitle>Course Performance</CardTitle>
+            <CardDescription>Enrollment and completion rates</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="h-[400px] mb-8">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={data.learning.courseCompletions}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="title" />
-                  <YAxis />
-                  <Tooltip />
+                  <CartesianGrid strokeDasharray="3 3" stroke={colors.muted} />
+                  <XAxis dataKey="title" stroke={colors.text} />
+                  <YAxis stroke={colors.text} />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: colors.secondary,
+                      borderColor: colors.muted,
+                      color: colors.text,
+                    }}
+                  />
                   <Legend />
                   <Bar
                     dataKey="_count.enrollments"
                     name="Enrollments"
-                    fill="#4F46E5"
+                    fill={colors.chartColors.primary[0]}
                   />
                   <Bar
                     dataKey="averageProgress"
                     name="Completion Rate (%)"
-                    fill="#10B981"
+                    fill={colors.chartColors.primary[1]}
                   />
                 </BarChart>
               </ResponsiveContainer>
             </div>
-            <div className="grid gap-4 md:grid-cols-2">
+            <div className="grid gap-6 md:grid-cols-2">
               {data.learning.courseCompletions.map((course) => (
                 <div key={course.title} className="space-y-2">
                   <div className="flex items-center justify-between">
@@ -295,69 +391,6 @@ export function AnalyticsDashboard({
                   </p>
                 </div>
               ))}
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* User Progress & Popular Plans */}
-      <div className="grid gap-4 md:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Users</CardTitle>
-            <CardDescription>Latest platform registrations</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-6">
-              {data.users.recent.map((user) => (
-                <div
-                  key={user.id}
-                  className="flex items-center justify-between"
-                >
-                  <div className="space-y-1">
-                    <p className="font-medium">
-                      {user.firstName} {user.lastName}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {user.email}
-                    </p>
-                  </div>
-                  <Badge variant="secondary">
-                    {user.progressStatus.replace(/_/g, " ").toLowerCase()}
-                  </Badge>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Popular Plans</CardTitle>
-            <CardDescription>Most subscribed packages</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="h-[300px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                  layout="vertical"
-                  data={data.subscriptions.popularPlans}
-                  margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis type="number" />
-                  <YAxis dataKey="name" type="category" />
-                  <Tooltip />
-                  <Bar dataKey="_count.subscriptions" fill="#4F46E5">
-                    {data.subscriptions.popularPlans.map((_, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={COLORS[index % COLORS.length]}
-                      />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
             </div>
           </CardContent>
         </Card>
