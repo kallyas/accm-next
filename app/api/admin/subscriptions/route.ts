@@ -14,6 +14,11 @@ export async function GET(req: Request) {
   }
 
   const subscriptions = await db.subscription.findMany({
+    where: {
+      status: {
+        notIn: ['CANCELLED', 'EXPIRED']
+      }
+    },
     include: {
       user: {
         select: {
