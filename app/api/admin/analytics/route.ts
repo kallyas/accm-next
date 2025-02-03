@@ -1,36 +1,68 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 
-async function getOverviewMetrics() {
+async function getOverviewMetrics(start: Date, end: Date) {
   return Promise.all([
-    // Basic counts
-    db.user.count(),
-    db.user.count({ where: { role: "MENTOR" } }),
-    db.scholarshipAssessment.count(),
-    db.subscription.count(),
-
-    // Active users in last 30 days
+    // Basic counts within date range
     db.user.count({
       where: {
-        updatedAt: {
-          gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+        createdAt: {
+          gte: start,
+          lte: end,
+        },
+      },
+    }),
+    db.user.count({
+      where: {
+        role: "MENTOR",
+        createdAt: {
+          gte: start,
+          lte: end,
+        },
+      },
+    }),
+    db.subscription.count({
+      where: {
+        createdAt: {
+          gte: start,
+          lte: end,
         },
       },
     }),
 
-    // Active subscriptions
+    // Active users in selected period
+    db.user.count({
+      where: {
+        updatedAt: {
+          gte: start,
+          lte: end,
+        },
+      },
+    }),
+
+    // Active subscriptions in period
     db.subscription.count({
       where: {
         status: "ACTIVE",
+        startDate: {
+          gte: start,
+          lte: end,
+        },
       },
     }),
   ]);
 }
 
-async function getUserInsights() {
+async function getUserInsights(start: Date, end: Date) {
   return Promise.all([
     // Recent users
     db.user.findMany({
+      where: {
+        createdAt: {
+          gte: start,
+          lte: end,
+        },
+      },
       take: 5,
       orderBy: { createdAt: "desc" },
       select: {
@@ -40,33 +72,48 @@ async function getUserInsights() {
         email: true,
         createdAt: true,
         progressStatus: true,
-        profile: {
-          select: {
-            avatar: true,
-          },
-        },
       },
     }),
 
-    // Progress distribution
+    // Progress distribution for the period
     db.user.groupBy({
       by: ["progressStatus"],
+      where: {
+        createdAt: {
+          gte: start,
+          lte: end,
+        },
+      },
       _count: true,
     }),
 
-    // User growth trend
+    // User growth trend by month
     db.user.groupBy({
-      by: "createdAt",
+      by: ["createdAt"],
+      where: {
+        createdAt: {
+          gte: start,
+          lte: end,
+        },
+      },
       _count: true,
-      orderBy: { createdAt: "asc" },
+      orderBy: {
+        createdAt: "asc",
+      },
     }),
   ]);
 }
 
-async function getEngagementMetrics() {
+async function getEngagementMetrics(start: Date, end: Date) {
   return Promise.all([
-    // Course engagement
+    // Course engagement within period
     db.enrollment.aggregate({
+      where: {
+        createdAt: {
+          gte: start,
+          lte: end,
+        },
+      },
       _avg: {
         progress: true,
       },
@@ -75,80 +122,69 @@ async function getEngagementMetrics() {
       },
     }),
 
-    // Personal discovery completion
-    db.personalDiscovery.count(),
-
-    // Recent events and participation
-    db.event.findMany({
-      take: 5,
-      orderBy: { startDate: "desc" },
-      select: {
-        id: true,
-        title: true,
-        startDate: true,
-        _count: {
-          select: {
-            users: true,
-          },
+    // Personal discovery completion in period
+    db.personalDiscovery.count({
+      where: {
+        createdAt: {
+          gte: start,
+          lte: end,
         },
       },
     }),
 
-    // CV submissions
-    db.cV.count(),
-  ]);
-}
-
-async function getSubscriptionAnalytics() {
-  return Promise.all([
-    // Subscription status distribution
-    // Subscription status distribution
-    db.subscription.groupBy({
-      by: ["status"],
-      _count: true,
-    }) as unknown as any[],
-
-    // Popular plans
-    db.plan.findMany({
-      select: {
-        id: true,
-        name: true,
-        price: true,
-        _count: {
-          select: {
-            subscriptions: true,
-          },
+    // CV submissions in period
+    db.cV.count({
+      where: {
+        uploadedAt: {
+          gte: start,
+          lte: end,
         },
       },
+    }),
+
+    // CV submissions trend
+    db.cV.groupBy({
+      by: ["uploadedAt"],
+      where: {
+        uploadedAt: {
+          gte: start,
+          lte: end,
+        },
+      },
+      _count: true,
       orderBy: {
-        subscriptions: {
-          _count: "desc",
-        },
+        uploadedAt: "asc",
       },
-      take: 5,
-    }),
-
-    // Payment status distribution
-    db.paymentProof.groupBy({
-      by: ["status"],
-      _count: true,
     }),
   ]);
 }
 
-async function getLearningProgress() {
+async function getLearningProgress(start: Date, end: Date) {
   return Promise.all([
-    // Course completion rates
+    // Course completion rates within period
     db.course.findMany({
       select: {
         id: true,
         title: true,
         _count: {
           select: {
-            enrollments: true,
+            enrollments: {
+              where: {
+                createdAt: {
+                  gte: start,
+                  lte: end,
+                },
+              },
+            },
           },
         },
         enrollments: {
+          where: {
+            createdAt: {
+              gte: start,
+              lte: end,
+            },
+          },
           select: {
             progress: true,
           },
@@ -162,9 +198,15 @@ async function getLearningProgress() {
       },
     }),
 
-    // Lesson completion trends
+    // Lesson completions trend
     db.lessonCompletion.groupBy({
       by: ["completedAt"],
+      where: {
+        completedAt: {
+          gte: start,
+          lte: end,
+        },
+      },
       _count: true,
       orderBy: [{ completedAt: "asc" }],
       take: 6,
@@ -172,14 +214,21 @@ async function getLearningProgress() {
   ]);
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
+    // Get date range from query parameters
+    const searchParams = req.nextUrl.searchParams;
+    const start = new Date(
+      searchParams.get("start") ||
+        new Date().setMonth(new Date().getMonth() - 3)
+    );
+    const end = new Date(searchParams.get("end") || new Date());
+
     const [
       // Overview metrics
       [
         totalUsers,
         totalMentors,
-        totalScholarships,
         totalSubscriptions,
         activeUsers,
         activeSubscriptions,
@@ -187,28 +236,59 @@ export async function GET() {
       // User insights
       [recentUsers, progressDistribution, userGrowth],
       // Engagement metrics
-      [courseEngagement, personalDiscoveryCount, recentEvents, cvSubmissions],
-      // Subscription analytics
-      [subscriptionStatus, popularPlans, paymentStatus],
+      [
+        courseEngagement,
+        personalDiscoveryCount,
+        cvSubmissionsCount,
+        cvSubmissionsTrend,
+      ],
       // Learning progress
       [courseCompletions, lessonCompletions],
     ] = await Promise.all([
-      getOverviewMetrics(),
-      getUserInsights(),
-      getEngagementMetrics(),
-      getSubscriptionAnalytics(),
-      getLearningProgress(),
+      getOverviewMetrics(start, end),
+      getUserInsights(start, end),
+      getEngagementMetrics(start, end),
+      getLearningProgress(start, end),
     ]);
 
-    // Calculate additional metrics
-    const personalDiscoveryRate = (personalDiscoveryCount / totalUsers) * 100;
-    const averageCourseCompletion = courseEngagement._avg.progress || 0;
+    // Process monthly growth data
+    const monthlyGrowth = userGrowth.reduce((acc: any[], curr: any) => {
+      const date = new Date(curr.createdAt);
+      const month = date.getMonth() + 1;
+      const year = date.getFullYear();
+
+      const existingMonth = acc.find(
+        (m) => m.month === month && m.year === year
+      );
+      if (existingMonth) {
+        existingMonth._count += curr._count;
+      } else {
+        acc.push({ month, year, _count: curr._count });
+      }
+      return acc;
+    }, []);
+
+    // Process CV submissions trend
+    const cvGrowth = cvSubmissionsTrend.reduce((acc: any[], curr: any) => {
+      const date = new Date(curr.uploadedAt);
+      const month = date.getMonth() + 1;
+      const year = date.getFullYear();
+
+      const existingMonth = acc.find(
+        (m) => m.month === month && m.year === year
+      );
+      if (existingMonth) {
+        existingMonth._count += curr._count;
+      } else {
+        acc.push({ month, year, _count: curr._count });
+      }
+      return acc;
+    }, []);
 
     return NextResponse.json({
       overview: {
         totalUsers,
         totalMentors,
-        totalScholarships,
         totalSubscriptions,
         activeUsers,
         activeSubscriptions,
@@ -217,24 +297,23 @@ export async function GET() {
       users: {
         recent: recentUsers,
         progressDistribution,
-        growth: userGrowth,
+        growth: monthlyGrowth,
       },
       engagement: {
         courseEngagement: {
-          averageProgress: averageCourseCompletion.toFixed(1),
+          averageProgress: (courseEngagement._avg.progress || 0).toFixed(1),
           totalEnrollments: courseEngagement._count.id,
         },
         personalDiscovery: {
           total: personalDiscoveryCount,
-          completionRate: personalDiscoveryRate.toFixed(1),
+          completionRate: ((personalDiscoveryCount / totalUsers) * 100).toFixed(
+            1
+          ),
         },
-        recentEvents,
-        cvSubmissions,
-      },
-      subscriptions: {
-        statusDistribution: subscriptionStatus,
-        popularPlans,
-        paymentStatus,
+        cvSubmissions: {
+          total: cvSubmissionsCount,
+          trend: cvGrowth,
+        },
       },
       learning: {
         courseCompletions: courseCompletions.map((course) => ({
@@ -247,7 +326,7 @@ export async function GET() {
                     0
                   ) / course.enrollments.length
                 ).toFixed(1)
-              : 0,
+              : "0",
         })),
         lessonCompletions,
       },
