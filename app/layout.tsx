@@ -1,5 +1,5 @@
 import { Inter } from "next/font/google";
-import { Analytics } from "@vercel/analytics/next";
+import { GoogleAnalytics } from '@next/third-parties/google'
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
@@ -54,8 +54,8 @@ export default async function RootLayout({
             </QueryProvider>
           </ThemeProvider>
         </Providers>
-        <Analytics />
       </body>
+      <GoogleAnalytics gaId="G-ET371HQZ2X" />
     </html>
   );
 }
