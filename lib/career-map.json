@@ -1,0 +1,1515 @@
+{
+  "technology": {
+    "software_engineer": {
+      "title": "Software Engineer",
+      "confidence": 0.9,
+      "description": "Design, develop, and maintain software applications and systems using programming languages, frameworks, and best practices. Collaborate with teams to create efficient, scalable solutions.",
+      "skills": [
+        "Programming",
+        "Problem Solving",
+        "System Design",
+        "Debugging",
+        "Version Control",
+        "Algorithms",
+        "Data Structures",
+        "Testing",
+        "API Development",
+        "Database Design"
+      ],
+      "education": [
+        "Bachelor's in Computer Science",
+        "Bachelor's in Software Engineering",
+        "Coding Bootcamp",
+        "Self-taught with portfolio",
+        "Software Engineering Certifications"
+      ],
+      "matchingFactors": {
+        "interests": [
+          "Technology",
+          "Innovation",
+          "Problem Solving",
+          "Engineering",
+          "Mathematics"
+        ],
+        "strengths": [
+          "Analytical Thinking",
+          "Problem Solving",
+          "Technical Skills",
+          "Attention to Detail"
+        ],
+        "values": [
+          "High Income",
+          "Learning Opportunities",
+          "Innovation",
+          "Work-Life Balance",
+          "Remote Work"
+        ]
+      },
+      "salary": {
+        "entry": 75000,
+        "mid": 120000,
+        "senior": 200000
+      },
+      "growthOutlook": "Very High",
+      "workEnvironment": ["Remote", "Office", "Hybrid"],
+      "sectors": [
+        "Tech",
+        "Finance",
+        "Healthcare",
+        "Entertainment",
+        "E-commerce",
+        "Education"
+      ]
+    },
+    "data_scientist": {
+      "title": "Data Scientist",
+      "confidence": 0.85,
+      "description": "Apply statistical analysis, machine learning, and programming to extract meaningful insights from complex data sets. Transform data into actionable business strategies.",
+      "skills": [
+        "Machine Learning",
+        "Statistics",
+        "Python/R Programming",
+        "SQL",
+        "Data Visualization",
+        "Big Data Technologies",
+        "Deep Learning",
+        "Data Mining",
+        "Predictive Modeling",
+        "A/B Testing"
+      ],
+      "education": [
+        "Master's in Data Science",
+        "Master's in Statistics",
+        "PhD in Related Field",
+        "Bachelor's with Strong Analytics Background"
+      ],
+      "matchingFactors": {
+        "interests": [
+          "Data Analysis",
+          "Machine Learning",
+          "Research",
+          "Technology",
+          "Mathematics"
+        ],
+        "strengths": [
+          "Analytical Thinking",
+          "Statistical Analysis",
+          "Problem Solving",
+          "Research"
+        ],
+        "values": [
+          "Innovation",
+          "High Income",
+          "Learning Opportunities",
+          "Impact"
+        ]
+      },
+      "salary": {
+        "entry": 85000,
+        "mid": 130000,
+        "senior": 180000
+      },
+      "growthOutlook": "Very High",
+      "workEnvironment": ["Hybrid", "Office", "Remote"],
+      "sectors": ["Tech", "Finance", "Healthcare", "Research", "Consulting"]
+    },
+    "cloud_architect": {
+      "title": "Cloud Architect",
+      "confidence": 0.85,
+      "description": "Design and oversee cloud computing infrastructure, ensuring scalability, security, and efficiency of cloud-based systems.",
+      "skills": [
+        "Cloud Platforms (AWS/Azure/GCP)",
+        "Infrastructure as Code",
+        "Network Security",
+        "System Architecture",
+        "DevOps",
+        "Containerization",
+        "Microservices",
+        "Cost Optimization",
+        "Disaster Recovery",
+        "Performance Tuning"
+      ],
+      "education": [
+        "Bachelor's in Computer Science",
+        "Master's in Cloud Computing",
+        "Cloud Certifications",
+        "IT Infrastructure Experience"
+      ],
+      "matchingFactors": {
+        "interests": [
+          "Cloud Computing",
+          "Infrastructure",
+          "Security",
+          "Architecture",
+          "Technology"
+        ],
+        "strengths": [
+          "System Design",
+          "Problem Solving",
+          "Technical Leadership",
+          "Strategic Thinking"
+        ],
+        "values": [
+          "Innovation",
+          "Technical Excellence",
+          "Security",
+          "Scalability"
+        ]
+      },
+      "salary": {
+        "entry": 100000,
+        "mid": 150000,
+        "senior": 200000
+      },
+      "growthOutlook": "Very High",
+      "workEnvironment": ["Remote", "Office", "Hybrid"],
+      "sectors": ["Tech", "Finance", "Enterprise", "Consulting"]
+    },
+    "cybersecurity_analyst": {
+      "title": "Cybersecurity Analyst",
+      "confidence": 0.88,
+      "description": "Protect organizations from cyber threats by monitoring, detecting, investigating, and responding to security incidents.",
+      "skills": [
+        "Security Tools",
+        "Threat Detection",
+        "Incident Response",
+        "Network Security",
+        "Penetration Testing",
+        "Security Frameworks",
+        "Risk Assessment",
+        "Forensics",
+        "Compliance",
+        "Security Architecture"
+      ],
+      "education": [
+        "Bachelor's in Cybersecurity",
+        "Bachelor's in Computer Science",
+        "Security Certifications",
+        "Information Security Degree"
+      ],
+      "matchingFactors": {
+        "interests": [
+          "Cybersecurity",
+          "Technology",
+          "Investigation",
+          "Protection",
+          "Risk Management"
+        ],
+        "strengths": [
+          "Analytical Thinking",
+          "Problem Solving",
+          "Attention to Detail",
+          "Technical Skills"
+        ],
+        "values": ["Security", "Protection", "Innovation", "Integrity"]
+      },
+      "salary": {
+        "entry": 75000,
+        "mid": 110000,
+        "senior": 160000
+      },
+      "growthOutlook": "Very High",
+      "workEnvironment": ["Office", "Remote", "Hybrid"],
+      "sectors": ["Tech", "Finance", "Government", "Healthcare"]
+    }
+  },
+  "healthcare": {
+    "nurse_practitioner": {
+      "title": "Nurse Practitioner",
+      "confidence": 0.88,
+      "description": "Provide advanced nursing care, diagnose and treat various health conditions, prescribe medications, and work closely with healthcare teams to ensure quality patient care.",
+      "skills": [
+        "Patient Care",
+        "Clinical Assessment",
+        "Medical Knowledge",
+        "Prescription Management",
+        "Health Education",
+        "Communication",
+        "Decision Making",
+        "Electronic Health Records",
+        "Care Coordination",
+        "Clinical Procedures"
+      ],
+      "education": [
+        "Master's in Nursing",
+        "Bachelor's in Nursing",
+        "Nurse Practitioner License",
+        "Clinical Experience"
+      ],
+      "matchingFactors": {
+        "interests": [
+          "Healthcare",
+          "Patient Care",
+          "Medicine",
+          "Science",
+          "Education"
+        ],
+        "strengths": [
+          "Communication",
+          "Empathy",
+          "Clinical Skills",
+          "Decision Making"
+        ],
+        "values": [
+          "Making a Difference",
+          "Healthcare Access",
+          "Patient Care",
+          "Work-Life Balance"
+        ]
+      },
+      "salary": {
+        "entry": 90000,
+        "mid": 120000,
+        "senior": 150000
+      },
+      "growthOutlook": "Very High",
+      "workEnvironment": ["Hospital", "Clinic", "Private Practice"],
+      "sectors": ["Healthcare", "Education", "Research"]
+    },
+    "healthcare_administrator": {
+      "title": "Healthcare Administrator",
+      "confidence": 0.82,
+      "description": "Manage healthcare facilities, improve patient care systems, and ensure regulatory compliance while optimizing operational efficiency.",
+      "skills": [
+        "Healthcare Management",
+        "Leadership",
+        "Regulatory Compliance",
+        "Budget Management",
+        "Staff Coordination",
+        "Quality Assurance",
+        "Policy Development",
+        "Strategic Planning",
+        "Communication",
+        "Risk Management"
+      ],
+      "education": [
+        "Master's in Healthcare Administration",
+        "Master's in Business Administration",
+        "Bachelor's in Healthcare Management"
+      ],
+      "matchingFactors": {
+        "interests": [
+          "Healthcare",
+          "Management",
+          "Leadership",
+          "Business",
+          "Policy"
+        ],
+        "strengths": [
+          "Leadership",
+          "Organization",
+          "Problem Solving",
+          "Communication"
+        ],
+        "values": [
+          "Healthcare Improvement",
+          "Leadership",
+          "Impact",
+          "Career Growth"
+        ]
+      },
+      "salary": {
+        "entry": 65000,
+        "mid": 95000,
+        "senior": 150000
+      },
+      "growthOutlook": "High",
+      "workEnvironment": ["Hospital", "Clinic", "Office"],
+      "sectors": ["Healthcare", "Government", "Non-profit"]
+    },
+    "medical_researcher": {
+      "title": "Medical Researcher",
+      "confidence": 0.85,
+      "description": "Conduct research to advance medical knowledge, develop new treatments, and improve healthcare outcomes.",
+      "skills": [
+        "Research Methods",
+        "Data Analysis",
+        "Clinical Trials",
+        "Laboratory Techniques",
+        "Scientific Writing",
+        "Statistical Analysis",
+        "Protocol Development",
+        "Grant Writing",
+        "Literature Review",
+        "Experimental Design"
+      ],
+      "education": [
+        "PhD in Life Sciences",
+        "MD/PhD",
+        "Master's in Medical Research",
+        "Research Experience"
+      ],
+      "matchingFactors": {
+        "interests": [
+          "Medical Research",
+          "Science",
+          "Healthcare",
+          "Innovation",
+          "Discovery"
+        ],
+        "strengths": [
+          "Research",
+          "Analysis",
+          "Scientific Thinking",
+          "Attention to Detail"
+        ],
+        "values": [
+          "Scientific Discovery",
+          "Medical Advancement",
+          "Impact",
+          "Innovation"
+        ]
+      },
+      "salary": {
+        "entry": 70000,
+        "mid": 100000,
+        "senior": 150000
+      },
+      "growthOutlook": "High",
+      "workEnvironment": ["Laboratory", "Research Facility", "Academic"],
+      "sectors": ["Healthcare", "Research", "Academia", "Pharmaceutical"]
+    },
+    "physical_therapist": {
+      "title": "Physical Therapist",
+      "confidence": 0.87,
+      "description": "Help patients improve movement, manage pain, and recover from injuries through exercise and rehabilitation techniques.",
+      "skills": [
+        "Patient Assessment",
+        "Treatment Planning",
+        "Exercise Prescription",
+        "Manual Therapy",
+        "Rehabilitation",
+        "Patient Education",
+        "Documentation",
+        "Anatomy Knowledge",
+        "Pain Management",
+        "Movement Analysis"
+      ],
+      "education": [
+        "Doctor of Physical Therapy",
+        "Physical Therapy License",
+        "Clinical Experience",
+        "Specialization Certifications"
+      ],
+      "matchingFactors": {
+        "interests": [
+          "Healthcare",
+          "Rehabilitation",
+          "Fitness",
+          "Patient Care",
+          "Movement Science"
+        ],
+        "strengths": [
+          "Patient Care",
+          "Communication",
+          "Physical Skills",
+          "Problem Solving"
+        ],
+        "values": ["Patient Recovery", "Healthcare", "Impact", "Wellness"]
+      },
+      "salary": {
+        "entry": 70000,
+        "mid": 85000,
+        "senior": 100000
+      },
+      "growthOutlook": "High",
+      "workEnvironment": ["Clinic", "Hospital", "Private Practice"],
+      "sectors": ["Healthcare", "Sports", "Rehabilitation"]
+    }
+  },
+  "business": {
+    "management_consultant": {
+      "title": "Management Consultant",
+      "confidence": 0.85,
+      "description": "Help organizations improve performance through analysis of existing problems and development of plans for improvement.",
+      "skills": [
+        "Business Analysis",
+        "Strategy Development",
+        "Project Management",
+        "Problem Solving",
+        "Data Analysis",
+        "Presentation",
+        "Change Management",
+        "Process Improvement",
+        "Client Management",
+        "Industry Research"
+      ],
+      "education": [
+        "MBA",
+        "Bachelor's in Business",
+        "Master's in Management",
+        "Consulting Certifications"
+      ],
+      "matchingFactors": {
+        "interests": [
+          "Business",
+          "Strategy",
+          "Analysis",
+          "Problem Solving",
+          "Leadership"
+        ],
+        "strengths": [
+          "Analysis",
+          "Communication",
+          "Leadership",
+          "Problem Solving"
+        ],
+        "values": ["Impact", "Excellence", "Innovation", "Results"]
+      },
+      "salary": {
+        "entry": 85000,
+        "mid": 150000,
+        "senior": 250000
+      },
+      "growthOutlook": "High",
+      "workEnvironment": ["Client Site", "Office", "Travel"],
+      "sectors": ["Consulting", "Corporate", "Strategy"]
+    },
+    "product_manager": {
+      "title": "Product Manager",
+      "confidence": 0.88,
+      "description": "Lead the development and strategy of products, working with various teams to ensure successful product launches and iterations.",
+      "skills": [
+        "Product Strategy",
+        "User Research",
+        "Roadmap Planning",
+        "Stakeholder Management",
+        "Market Analysis",
+        "Agile Methodologies",
+        "Data Analysis",
+        "Feature Prioritization",
+        "Cross-functional Leadership",
+        "Product Analytics"
+      ],
+      "education": [
+        "Bachelor's in Business",
+        "Bachelor's in Technology",
+        "MBA",
+        "Product Management Certifications"
+      ],
+      "matchingFactors": {
+        "interests": [
+          "Product Development",
+          "Technology",
+          "Business",
+          "Innovation",
+          "User Experience"
+        ],
+        "strengths": ["Leadership", "Strategy", "Communication", "Analysis"],
+        "values": ["Innovation", "User Focus", "Impact", "Quality"]
+      },
+      "salary": {
+        "entry": 80000,
+        "mid": 120000,
+        "senior": 180000
+      },
+      "growthOutlook": "Very High",
+      "workEnvironment": ["Office", "Remote", "Hybrid"],
+      "sectors": ["Tech", "Product", "Software", "Consumer Goods"]
+    }
+  },
+  "finance": {
+    "financial_analyst": {
+      "title": "Financial Analyst",
+      "confidence": 0.85,
+      "description": "Analyze financial data, market trends, and investment opportunities to guide business decisions and investment strategies.",
+      "skills": [
+        "Financial Analysis",
+        "Excel",
+        "Financial Modeling",
+        "Market Research",
+        "Risk Assessment",
+        "Forecasting",
+        "Data Analysis",
+        "Investment Analysis",
+        "Business Intelligence",
+        "Statistical Analysis"
+      ],
+      "education": [
+        "Bachelor's in Finance",
+        "Bachelor's in Economics",
+        "MBA",
+        "CFA Certification"
+      ],
+      "matchingFactors": {
+        "interests": [
+          "Finance",
+          "Economics",
+          "Markets",
+          "Analysis",
+          "Business"
+        ],
+        "strengths": [
+          "Analytical Thinking",
+          "Numerical Skills",
+          "Research",
+          "Attention to Detail"
+        ],
+        "values": ["High Income", "Professional Growth", "Analysis", "Impact"]
+      },
+      "salary": {
+        "entry": 65000,
+        "mid": 95000,
+        "senior": 140000
+      },
+      "growthOutlook": "High",
+      "workEnvironment": ["Office", "Hybrid"],
+      "sectors": ["Finance", "Banking", "Corporate", "Investment"]
+    },
+    "investment_banker": {
+      "title": "Investment Banker",
+      "confidence": 0.8,
+      "description": "Facilitate major financial transactions, mergers and acquisitions, and help companies raise capital through various financial instruments.",
+      "skills": [
+        "Financial Analysis",
+        "Deal Structuring",
+        "Valuation",
+        "Negotiation",
+        "Presentation",
+        "Client Relations",
+        "Market Analysis",
+        "Due Diligence",
+        "Financial Modeling",
+        "Strategic Thinking"
+      ],
+      "education": [
+        "MBA",
+        "Bachelor's in Finance",
+        "Bachelor's in Economics",
+        "Master's in Finance"
+      ],
+      "matchingFactors": {
+        "interests": ["Finance", "Business", "Markets", "Deals", "Strategy"],
+        "strengths": [
+          "Analytical Thinking",
+          "Negotiation",
+          "Communication",
+          "Leadership"
+        ],
+        "values": [
+          "High Income",
+          "Professional Success",
+          "Achievement",
+          "Impact"
+        ]
+      },
+      "salary": {
+        "entry": 95000,
+        "mid": 150000,
+        "senior": 300000
+      },
+      "growthOutlook": "Moderate",
+      "workEnvironment": ["Office"],
+      "sectors": ["Investment Banking", "Finance", "Corporate"]
+    }
+  },
+  "creative": {
+    "ux_designer": {
+      "title": "UX Designer",
+      "confidence": 0.88,
+      "description": "Design user-friendly digital experiences and interfaces, focusing on user research, wireframing, and prototyping to create intuitive products.",
+      "skills": [
+        "User Research",
+        "Wireframing",
+        "Prototyping",
+        "UI Design",
+        "User Testing",
+        "Information Architecture",
+        "Visual Design",
+        "Design Thinking",
+        "Interaction Design",
+        "Design Tools"
+      ],
+      "education": [
+        "Bachelor's in Design",
+        "Bachelor's in HCI",
+        "UX/UI Certifications",
+        "Design Portfolio"
+      ],
+      "matchingFactors": {
+        "interests": [
+          "Design",
+          "Technology",
+          "Psychology",
+          "User Behavior",
+          "Creativity"
+        ],
+        "strengths": [
+          "Creativity",
+          "Empathy",
+          "Problem Solving",
+          "Communication"
+        ],
+        "values": [
+          "User Experience",
+          "Innovation",
+          "Design Impact",
+          "Creativity"
+        ]
+      },
+      "salary": {
+        "entry": 70000,
+        "mid": 100000,
+        "senior": 150000
+      },
+      "growthOutlook": "High",
+      "workEnvironment": ["Remote", "Office", "Hybrid"],
+      "sectors": ["Tech", "Design", "Consulting", "Agency"]
+    },
+    "content_creator": {
+      "title": "Content Creator",
+      "confidence": 0.75,
+      "description": "Create engaging digital content across various platforms, including social media, blogs, videos, and podcasts to build audience engagement.",
+      "skills": [
+        "Content Strategy",
+        "Writing",
+        "Video Production",
+        "Social Media",
+        "Storytelling",
+        "Photography",
+        "Editing",
+        "Analytics",
+        "Brand Development",
+        "Community Management"
+      ],
+      "education": [
+        "Bachelor's in Communications",
+        "Bachelor's in Marketing",
+        "Digital Media Certifications",
+        "Portfolio of Work"
+      ],
+      "matchingFactors": {
+        "interests": [
+          "Digital Media",
+          "Creativity",
+          "Communication",
+          "Social Media",
+          "Entertainment"
+        ],
+        "strengths": [
+          "Creativity",
+          "Communication",
+          "Visual Skills",
+          "Strategy"
+        ],
+        "values": ["Creative Freedom", "Independence", "Innovation", "Impact"]
+      },
+      "salary": {
+        "entry": 45000,
+        "mid": 75000,
+        "senior": 120000
+      },
+      "growthOutlook": "High",
+      "workEnvironment": ["Remote", "Hybrid", "Studio"],
+      "sectors": ["Media", "Entertainment", "Marketing", "Tech"]
+    },
+    "game_developer": {
+      "title": "Game Developer",
+      "confidence": 0.85,
+      "description": "Create and program video games, combining technical skills with creativity to develop engaging gaming experiences.",
+      "skills": [
+        "Game Programming",
+        "Game Engines",
+        "3D Graphics",
+        "Game Design",
+        "Animation",
+        "Physics Programming",
+        "AI Programming",
+        "Sound Integration",
+        "Version Control",
+        "Testing"
+      ],
+      "education": [
+        "Bachelor's in Game Development",
+        "Computer Science Degree",
+        "Game Design Degree",
+        "Portfolio of Games"
+      ],
+      "matchingFactors": {
+        "interests": [
+          "Gaming",
+          "Programming",
+          "Design",
+          "Animation",
+          "Entertainment"
+        ],
+        "strengths": [
+          "Creativity",
+          "Technical Skills",
+          "Problem Solving",
+          "Attention to Detail"
+        ],
+        "values": [
+          "Creative Expression",
+          "Innovation",
+          "Entertainment",
+          "Technical Excellence"
+        ]
+      },
+      "salary": {
+        "entry": 65000,
+        "mid": 90000,
+        "senior": 140000
+      },
+      "growthOutlook": "High",
+      "workEnvironment": ["Studio", "Remote", "Office"],
+      "sectors": ["Gaming", "Entertainment", "Tech", "Media"]
+    },
+    "art_director": {
+      "title": "Art Director",
+      "confidence": 0.82,
+      "description": "Lead the visual style and creative direction of projects across various media, managing creative teams and ensuring brand consistency.",
+      "skills": [
+        "Visual Design",
+        "Creative Direction",
+        "Team Management",
+        "Brand Development",
+        "Project Management",
+        "Design Software",
+        "Typography",
+        "Color Theory",
+        "Marketing",
+        "Presentation"
+      ],
+      "education": [
+        "Bachelor's in Fine Arts",
+        "Bachelor's in Design",
+        "Art School Degree",
+        "Extensive Portfolio"
+      ],
+      "matchingFactors": {
+        "interests": [
+          "Art",
+          "Design",
+          "Leadership",
+          "Creativity",
+          "Visual Media"
+        ],
+        "strengths": [
+          "Creative Vision",
+          "Leadership",
+          "Visual Skills",
+          "Communication"
+        ],
+        "values": [
+          "Creativity",
+          "Excellence",
+          "Innovation",
+          "Artistic Expression"
+        ]
+      },
+      "salary": {
+        "entry": 70000,
+        "mid": 100000,
+        "senior": 150000
+      },
+      "growthOutlook": "Moderate",
+      "workEnvironment": ["Studio", "Agency", "Office"],
+      "sectors": ["Advertising", "Media", "Entertainment", "Publishing"]
+    }
+  },
+  "education": {
+    "instructional_designer": {
+      "title": "Instructional Designer",
+      "confidence": 0.82,
+      "description": "Develop educational content and learning experiences for various platforms, combining pedagogy with technology to create effective learning solutions.",
+      "skills": [
+        "Curriculum Development",
+        "E-learning",
+        "Learning Management Systems",
+        "Educational Technology",
+        "Content Creation",
+        "Assessment Design",
+        "Project Management",
+        "Multimedia Design",
+        "Teaching Methods",
+        "Learning Theory"
+      ],
+      "education": [
+        "Master's in Instructional Design",
+        "Master's in Education",
+        "Bachelor's in Education",
+        "Teaching Experience"
+      ],
+      "matchingFactors": {
+        "interests": [
+          "Education",
+          "Technology",
+          "Design",
+          "Learning",
+          "Innovation"
+        ],
+        "strengths": [
+          "Creativity",
+          "Communication",
+          "Organization",
+          "Teaching"
+        ],
+        "values": ["Education", "Impact", "Innovation", "Learning"]
+      },
+      "salary": {
+        "entry": 60000,
+        "mid": 85000,
+        "senior": 120000
+      },
+      "growthOutlook": "High",
+      "workEnvironment": ["Remote", "Office", "Hybrid"],
+      "sectors": ["Education", "Corporate", "Tech", "Consulting"]
+    }
+  },
+  "environmental": {
+    "sustainability_consultant": {
+      "title": "Sustainability Consultant",
+      "confidence": 0.8,
+      "description": "Help organizations develop and implement sustainable practices, reduce environmental impact, and achieve environmental compliance goals.",
+      "skills": [
+        "Environmental Analysis",
+        "Sustainability Planning",
+        "Carbon Footprint Analysis",
+        "Environmental Regulations",
+        "Project Management",
+        "Stakeholder Management",
+        "Research",
+        "Reporting",
+        "Data Analysis",
+        "Green Building Standards"
+      ],
+      "education": [
+        "Master's in Environmental Science",
+        "Master's in Sustainability",
+        "Bachelor's in Environmental Studies",
+        "Professional Certifications"
+      ],
+      "matchingFactors": {
+        "interests": [
+          "Environment",
+          "Sustainability",
+          "Business",
+          "Science",
+          "Policy"
+        ],
+        "strengths": [
+          "Analysis",
+          "Communication",
+          "Problem Solving",
+          "Research"
+        ],
+        "values": [
+          "Environmental Impact",
+          "Sustainability",
+          "Social Responsibility",
+          "Innovation"
+        ]
+      },
+      "salary": {
+        "entry": 55000,
+        "mid": 85000,
+        "senior": 130000
+      },
+      "growthOutlook": "Very High",
+      "workEnvironment": ["Office", "Remote", "Field"],
+      "sectors": ["Consulting", "Corporate", "Government", "Non-profit"]
+    }
+  },
+  "science": {
+    "data_engineer": {
+      "title": "Data Engineer",
+      "confidence": 0.87,
+      "description": "Design and build systems for collecting, storing, and analyzing large datasets, ensuring data quality and accessibility.",
+      "skills": [
+        "Data Pipelines",
+        "ETL Processes",
+        "Database Design",
+        "Big Data Technologies",
+        "SQL",
+        "Python",
+        "Data Modeling",
+        "Cloud Platforms",
+        "Data Warehousing",
+        "Data Security"
+      ],
+      "education": [
+        "Bachelor's in Computer Science",
+        "Bachelor's in Data Engineering",
+        "Master's in Data Science",
+        "Technical Certifications"
+      ],
+      "matchingFactors": {
+        "interests": [
+          "Data",
+          "Engineering",
+          "Technology",
+          "Analytics",
+          "Infrastructure"
+        ],
+        "strengths": [
+          "Technical Skills",
+          "Problem Solving",
+          "Attention to Detail",
+          "System Design"
+        ],
+        "values": [
+          "Data Quality",
+          "Efficiency",
+          "Innovation",
+          "Technical Excellence"
+        ]
+      },
+      "salary": {
+        "entry": 80000,
+        "mid": 120000,
+        "senior": 170000
+      },
+      "growthOutlook": "Very High",
+      "workEnvironment": ["Office", "Remote", "Hybrid"],
+      "sectors": ["Tech", "Finance", "Healthcare", "Research"]
+    },
+    "research_scientist": {
+      "title": "Research Scientist",
+      "confidence": 0.85,
+      "description": "Conduct advanced research in specialized fields, developing new theories, methodologies, and applications.",
+      "skills": [
+        "Research Methods",
+        "Data Analysis",
+        "Scientific Writing",
+        "Experimental Design",
+        "Statistical Analysis",
+        "Grant Writing",
+        "Lab Techniques",
+        "Project Management",
+        "Literature Review",
+        "Technical Documentation"
+      ],
+      "education": [
+        "PhD in Related Field",
+        "Master's Degree",
+        "Research Experience",
+        "Publications"
+      ],
+      "matchingFactors": {
+        "interests": [
+          "Research",
+          "Science",
+          "Discovery",
+          "Innovation",
+          "Analysis"
+        ],
+        "strengths": [
+          "Research",
+          "Analysis",
+          "Scientific Thinking",
+          "Problem Solving"
+        ],
+        "values": ["Scientific Discovery", "Innovation", "Knowledge", "Impact"]
+      },
+      "salary": {
+        "entry": 70000,
+        "mid": 100000,
+        "senior": 150000
+      },
+      "growthOutlook": "High",
+      "workEnvironment": ["Laboratory", "Research Facility", "Academic"],
+      "sectors": ["Research", "Academia", "Industry", "Government"]
+    }
+  },
+  "legal": {
+    "corporate_lawyer": {
+      "title": "Corporate Lawyer",
+      "confidence": 0.88,
+      "description": "Advise businesses on legal rights, obligations, and transactions, handling corporate governance, mergers, acquisitions, and compliance matters.",
+      "skills": [
+        "Corporate Law",
+        "Contract Negotiation",
+        "Legal Research",
+        "Due Diligence",
+        "Regulatory Compliance",
+        "Business Acumen",
+        "Legal Writing",
+        "Risk Assessment",
+        "Client Management",
+        "Case Management"
+      ],
+      "education": [
+        "Juris Doctor (JD)",
+        "Bar Admission",
+        "Bachelor's Degree",
+        "Corporate Law Specialization"
+      ],
+      "matchingFactors": {
+        "interests": [
+          "Law",
+          "Business",
+          "Corporate Affairs",
+          "Regulations",
+          "Negotiations"
+        ],
+        "strengths": [
+          "Analysis",
+          "Communication",
+          "Attention to Detail",
+          "Negotiation"
+        ],
+        "values": [
+          "Professional Excellence",
+          "Ethics",
+          "Impact",
+          "Client Service"
+        ]
+      },
+      "salary": {
+        "entry": 100000,
+        "mid": 160000,
+        "senior": 250000
+      },
+      "growthOutlook": "Moderate",
+      "workEnvironment": ["Office", "Remote", "Court"],
+      "sectors": ["Legal", "Corporate", "Finance"]
+    },
+    "public_defender": {
+      "title": "Public Defender",
+      "confidence": 0.85,
+      "description": "Represent and defend individuals who cannot afford private legal representation in criminal cases.",
+      "skills": [
+        "Criminal Law",
+        "Trial Advocacy",
+        "Legal Research",
+        "Case Management",
+        "Client Advocacy",
+        "Negotiation",
+        "Court Procedures",
+        "Evidence Analysis",
+        "Public Speaking",
+        "Investigation"
+      ],
+      "education": [
+        "Juris Doctor (JD)",
+        "Bar Admission",
+        "Criminal Law Experience",
+        "Trial Experience"
+      ],
+      "matchingFactors": {
+        "interests": [
+          "Criminal Justice",
+          "Public Service",
+          "Advocacy",
+          "Law",
+          "Social Justice"
+        ],
+        "strengths": ["Advocacy", "Communication", "Empathy", "Analysis"],
+        "values": ["Justice", "Public Service", "Equal Rights", "Social Impact"]
+      },
+      "salary": {
+        "entry": 55000,
+        "mid": 75000,
+        "senior": 100000
+      },
+      "growthOutlook": "Stable",
+      "workEnvironment": ["Court", "Office", "Correctional Facilities"],
+      "sectors": ["Legal", "Public Service", "Criminal Justice"]
+    }
+  },
+  "engineering": {
+    "mechanical_engineer": {
+      "title": "Mechanical Engineer",
+      "confidence": 0.9,
+      "description": "Design, develop, and test mechanical devices, including tools, engines, and machines.",
+      "skills": [
+        "CAD/CAM",
+        "Product Design",
+        "Thermodynamics",
+        "Manufacturing Processes",
+        "Materials Science",
+        "Project Management",
+        "3D Modeling",
+        "Structural Analysis",
+        "Quality Control",
+        "Technical Documentation"
+      ],
+      "education": [
+        "Bachelor's in Mechanical Engineering",
+        "Master's in Mechanical Engineering",
+        "Professional Engineering License",
+        "Engineering Certifications"
+      ],
+      "matchingFactors": {
+        "interests": [
+          "Engineering",
+          "Design",
+          "Manufacturing",
+          "Innovation",
+          "Technology"
+        ],
+        "strengths": [
+          "Technical Skills",
+          "Problem Solving",
+          "Analysis",
+          "Design Thinking"
+        ],
+        "values": ["Innovation", "Technical Excellence", "Safety", "Quality"]
+      },
+      "salary": {
+        "entry": 70000,
+        "mid": 95000,
+        "senior": 130000
+      },
+      "growthOutlook": "High",
+      "workEnvironment": ["Office", "Manufacturing", "Lab", "Field"],
+      "sectors": ["Manufacturing", "Automotive", "Aerospace", "Energy"]
+    },
+    "civil_engineer": {
+      "title": "Civil Engineer",
+      "confidence": 0.88,
+      "description": "Design and oversee construction projects including roads, buildings, airports, tunnels, dams, and water supply systems.",
+      "skills": [
+        "Structural Design",
+        "Project Management",
+        "AutoCAD",
+        "Construction Methods",
+        "Site Planning",
+        "Environmental Impact",
+        "Cost Estimation",
+        "Quality Control",
+        "Safety Standards",
+        "Surveying"
+      ],
+      "education": [
+        "Bachelor's in Civil Engineering",
+        "Master's in Civil Engineering",
+        "Professional Engineering License",
+        "Construction Management Certifications"
+      ],
+      "matchingFactors": {
+        "interests": [
+          "Construction",
+          "Infrastructure",
+          "Design",
+          "Urban Development",
+          "Environment"
+        ],
+        "strengths": [
+          "Project Management",
+          "Technical Skills",
+          "Problem Solving",
+          "Analysis"
+        ],
+        "values": [
+          "Infrastructure Development",
+          "Safety",
+          "Sustainability",
+          "Quality"
+        ]
+      },
+      "salary": {
+        "entry": 65000,
+        "mid": 90000,
+        "senior": 125000
+      },
+      "growthOutlook": "High",
+      "workEnvironment": ["Office", "Construction Site", "Field"],
+      "sectors": ["Construction", "Government", "Consulting", "Infrastructure"]
+    }
+  },
+  "transportation": {
+    "logistics_manager": {
+      "title": "Logistics Manager",
+      "confidence": 0.85,
+      "description": "Oversee supply chain operations, coordinate transportation, manage inventory, and optimize delivery systems.",
+      "skills": [
+        "Supply Chain Management",
+        "Inventory Control",
+        "Transportation Planning",
+        "Warehouse Management",
+        "Route Optimization",
+        "Cost Analysis",
+        "Vendor Management",
+        "Risk Management",
+        "ERP Systems",
+        "Team Leadership"
+      ],
+      "education": [
+        "Bachelor's in Logistics",
+        "Bachelor's in Supply Chain Management",
+        "Supply Chain Certifications",
+        "Business Administration Degree"
+      ],
+      "matchingFactors": {
+        "interests": [
+          "Logistics",
+          "Operations",
+          "Management",
+          "Transportation",
+          "Efficiency"
+        ],
+        "strengths": [
+          "Organization",
+          "Problem Solving",
+          "Leadership",
+          "Analysis"
+        ],
+        "values": ["Efficiency", "Reliability", "Quality", "Service Excellence"]
+      },
+      "salary": {
+        "entry": 60000,
+        "mid": 85000,
+        "senior": 120000
+      },
+      "growthOutlook": "High",
+      "workEnvironment": ["Office", "Warehouse", "Field"],
+      "sectors": ["Logistics", "Retail", "Manufacturing", "E-commerce"]
+    },
+    "transportation_planner": {
+      "title": "Transportation Planner",
+      "confidence": 0.82,
+      "description": "Plan and develop transportation systems, considering factors like urban growth, environmental impact, and public needs.",
+      "skills": [
+        "Transportation Planning",
+        "GIS Software",
+        "Data Analysis",
+        "Urban Planning",
+        "Public Policy",
+        "Project Management",
+        "Environmental Impact",
+        "Traffic Analysis",
+        "Stakeholder Management",
+        "Budget Planning"
+      ],
+      "education": [
+        "Master's in Transportation Planning",
+        "Master's in Urban Planning",
+        "Bachelor's in Civil Engineering",
+        "Planning Certifications"
+      ],
+      "matchingFactors": {
+        "interests": [
+          "Urban Planning",
+          "Transportation",
+          "Public Policy",
+          "Environment",
+          "Community Development"
+        ],
+        "strengths": [
+          "Analysis",
+          "Planning",
+          "Communication",
+          "Problem Solving"
+        ],
+        "values": [
+          "Sustainability",
+          "Public Service",
+          "Community Impact",
+          "Innovation"
+        ]
+      },
+      "salary": {
+        "entry": 55000,
+        "mid": 75000,
+        "senior": 100000
+      },
+      "growthOutlook": "Moderate",
+      "workEnvironment": ["Office", "Field", "Government"],
+      "sectors": ["Government", "Urban Planning", "Consulting"]
+    }
+  },
+  "political": {
+    "policy_analyst": {
+      "title": "Policy Analyst",
+      "confidence": 0.85,
+      "description": "Research, analyze, and evaluate public policies and their impacts, providing recommendations for improvement.",
+      "skills": [
+        "Policy Analysis",
+        "Research Methods",
+        "Data Analysis",
+        "Report Writing",
+        "Stakeholder Management",
+        "Legislative Process",
+        "Public Speaking",
+        "Impact Assessment",
+        "Statistical Analysis",
+        "Political Systems"
+      ],
+      "education": [
+        "Master's in Public Policy",
+        "Master's in Political Science",
+        "Bachelor's in Related Field",
+        "Policy Research Experience"
+      ],
+      "matchingFactors": {
+        "interests": [
+          "Politics",
+          "Policy",
+          "Research",
+          "Government",
+          "Social Impact"
+        ],
+        "strengths": ["Analysis", "Research", "Writing", "Critical Thinking"],
+        "values": ["Public Service", "Impact", "Ethics", "Social Change"]
+      },
+      "salary": {
+        "entry": 55000,
+        "mid": 80000,
+        "senior": 120000
+      },
+      "growthOutlook": "Moderate",
+      "workEnvironment": ["Office", "Government", "Think Tank"],
+      "sectors": ["Government", "Non-profit", "Consulting", "Research"]
+    },
+    "campaign_manager": {
+      "title": "Campaign Manager",
+      "confidence": 0.8,
+      "description": "Direct and coordinate political campaigns, managing strategy, messaging, fundraising, and voter outreach.",
+      "skills": [
+        "Campaign Strategy",
+        "Team Management",
+        "Fundraising",
+        "Media Relations",
+        "Voter Outreach",
+        "Event Planning",
+        "Budget Management",
+        "Social Media",
+        "Crisis Management",
+        "Political Communication"
+      ],
+      "education": [
+        "Bachelor's in Political Science",
+        "Bachelor's in Communications",
+        "Campaign Experience",
+        "Political Management Degree"
+      ],
+      "matchingFactors": {
+        "interests": [
+          "Politics",
+          "Campaigns",
+          "Leadership",
+          "Communication",
+          "Strategy"
+        ],
+        "strengths": [
+          "Leadership",
+          "Strategy",
+          "Communication",
+          "Organization"
+        ],
+        "values": [
+          "Political Impact",
+          "Leadership",
+          "Public Service",
+          "Democracy"
+        ]
+      },
+      "salary": {
+        "entry": 45000,
+        "mid": 75000,
+        "senior": 120000
+      },
+      "growthOutlook": "Cyclical",
+      "workEnvironment": ["Campaign Office", "Field", "Travel"],
+      "sectors": ["Politics", "Advocacy", "Consulting"]
+    }
+  },
+  "aviation": {
+    "commercial_pilot": {
+      "title": "Commercial Pilot",
+      "confidence": 0.9,
+      "description": "Operate aircraft for airlines, conducting pre-flight checks, navigating flights, and ensuring passenger safety.",
+      "skills": [
+        "Flight Operations",
+        "Navigation",
+        "Safety Procedures",
+        "Weather Analysis",
+        "Communication",
+        "Decision Making",
+        "Aircraft Systems",
+        "Emergency Procedures",
+        "Crew Resource Management",
+        "Regulations Compliance"
+      ],
+      "education": [
+        "Commercial Pilot License",
+        "Airline Transport Pilot License",
+        "Flight Training",
+        "Aviation Degree"
+      ],
+      "matchingFactors": {
+        "interests": [
+          "Aviation",
+          "Travel",
+          "Technology",
+          "Safety",
+          "Transportation"
+        ],
+        "strengths": [
+          "Technical Skills",
+          "Decision Making",
+          "Communication",
+          "Attention to Detail"
+        ],
+        "values": [
+          "Safety",
+          "Responsibility",
+          "Professional Excellence",
+          "Service"
+        ]
+      },
+      "salary": {
+        "entry": 45000,
+        "mid": 100000,
+        "senior": 200000
+      },
+      "growthOutlook": "Moderate",
+      "workEnvironment": ["Aircraft", "Airport", "Travel"],
+      "sectors": ["Airlines", "Charter", "Corporate Aviation"]
+    },
+    "aerospace_engineer": {
+      "title": "Aerospace Engineer",
+      "confidence": 0.88,
+      "description": "Design, develop, and test aircraft, spacecraft, satellites, and missiles.",
+      "skills": [
+        "Aerodynamics",
+        "CAD Design",
+        "Propulsion Systems",
+        "Materials Science",
+        "Systems Engineering",
+        "Project Management",
+        "Structural Analysis",
+        "Testing Procedures",
+        "Quality Control",
+        "Technical Documentation"
+      ],
+      "education": [
+        "Bachelor's in Aerospace Engineering",
+        "Master's in Aerospace Engineering",
+        "Engineering License",
+        "Specialized Certifications"
+      ],
+      "matchingFactors": {
+        "interests": [
+          "Aviation",
+          "Space",
+          "Engineering",
+          "Innovation",
+          "Technology"
+        ],
+        "strengths": [
+          "Technical Skills",
+          "Analysis",
+          "Problem Solving",
+          "Design"
+        ],
+        "values": [
+          "Innovation",
+          "Safety",
+          "Technical Excellence",
+          "Advancement"
+        ]
+      },
+      "salary": {
+        "entry": 75000,
+        "mid": 110000,
+        "senior": 160000
+      },
+      "growthOutlook": "High",
+      "workEnvironment": ["Office", "Lab", "Manufacturing"],
+      "sectors": ["Aerospace", "Defense", "Research", "Government"]
+    }
+  }
+}

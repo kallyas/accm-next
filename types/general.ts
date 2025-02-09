@@ -98,31 +98,25 @@ export interface TeamMember {
   expertise: string[];
 }
 
-export type Question = {
+export interface Question {
   id: QuestionId;
   question: string;
+  type: "radio" | "multiSelect" | "text" | "textarea";
   options?: string[];
-  type: "radio" | "text" | "textarea" | "checkbox" | "multiSelect";
   required?: boolean;
+  group: string;
   validation?: {
+    required?: boolean;
     minLength?: number;
     maxLength?: number;
     pattern?: RegExp;
     maxSelections?: number;
-    required?: boolean;
   };
-  group:
-    | "personal"
-    | "career"
-    | "education"
-    | "preferences"
-    | "future"
-    | "skills"
-    | "interests"
-    | "values"
-    | "aspirations";
-};
+  placeholder?: string;
+  helper?: string;
+}
 
+// Basic type for question IDs
 export type QuestionId =
   | "education"
   | "field"
@@ -148,19 +142,22 @@ export type QuestionId =
   | "fiveYearGoal"
   | "workEnvironment"
   | "workStyle"
-  | "fieldOfStudy";
+  | "fieldOfStudy"
+  | "techComfort"
+  | "challengePreference"
+  | "futureInterest";
 
+// Type for assessment answers
 export type CareerAssessmentAnswers = {
   [K in QuestionId]: string;
 };
-
-export type CareerSuggestion = {
+// Main career suggestion type
+export interface CareerSuggestion {
   title: string;
   confidence: number;
   description: string;
   skills: string[];
   education: string[];
-  imagePath?: string;
   matchingFactors: {
     interests: string[];
     values: string[];
@@ -174,6 +171,53 @@ export type CareerSuggestion = {
   growthOutlook: string;
   workEnvironment: string[];
   sectors: string[];
+  group: string;
+}
+
+// Type for the entire career database structure
+export type CareerDatabase = {
+  [sector: string]: {
+    [careerId: string]: CareerSuggestion;
+  };
+};
+
+// Types for matching results
+export interface WeightedScore {
+  score: number;
+  weight: number;
+  description: string;
+  category: string;
+}
+
+export interface MatchResult extends CareerSuggestion {
+  matchScore: number;
+  matchingFactors: string[];
+  confidence: number;
+  sectorAlignment: number;
+  detailedScores: {
+    score: number;
+    weight: number;
+    description: string;
+    category: string;
+  }[];
+}
+
+// Types for specific sectors
+export type CareerSector =
+  | "technology"
+  | "healthcare"
+  | "business"
+  | "creative"
+  | "science"
+  | "legal"
+  | "engineering"
+  | "transportation"
+  | "political"
+  | "aviation";
+
+// Utility type for career paths within a sector
+export type CareerPaths = {
+  [K in CareerSector]: Record<string, CareerSuggestion>;
 };
 
 export interface CareerMapState {
