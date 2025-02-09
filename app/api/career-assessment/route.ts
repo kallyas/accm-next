@@ -62,7 +62,7 @@ export async function POST(req: Request) {
         sector: validated.answers.workEnvironment,
 
         // Personal aspirations
-        passion: validated.answers.passion,
+        passion: validated.answers.passion ?? "N/A",
         lifePassion: validated.answers.interests,
         lifeGoal: validated.answers.impact,
         futureTitle: validated.answers.fiveYearGoal,
