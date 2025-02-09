@@ -19,13 +19,14 @@ import { Progress } from "@/components/ui/progress";
 import { toast } from "@/hooks/use-toast";
 import { Loader2, ChevronLeft, ChevronRight } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { CareerAssessmentAnswers, CareerSuggestion } from "@/types/general";
-import { generateCareerMatches, saveAssessmentResults } from "@/lib/career-map";
 import {
-  INITIAL_QUESTIONS,
-  CAREER_QUESTIONS,
-  CAREER_SUGGESTIONS,
-} from "./career-map-config";
+  CareerAssessmentAnswers,
+  CareerSuggestion,
+  MatchResult,
+  CareerDatabase,
+} from "@/types/general";
+import { generateCareerMatches, saveAssessmentResults } from "@/lib/career-map";
+import { INITIAL_QUESTIONS, CAREER_QUESTIONS } from "./career-map-config";
 
 interface FormErrors {
   [key: string]: string;
@@ -41,12 +42,7 @@ export function CareerMapGame() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [formErrors, setFormErrors] = useState<FormErrors>({});
-  const [suggestions, setSuggestions] = useState<Array<
-    CareerSuggestion & {
-      matchingFactors: string[];
-      confidence: number;
-    }
-  > | null>(null);
+  const [suggestions, setSuggestions] = useState<MatchResult[] | null>(null);
 
   const questions =
     currentSection === "initial" ? INITIAL_QUESTIONS : CAREER_QUESTIONS;
@@ -202,13 +198,13 @@ export function CareerMapGame() {
     setError(null);
 
     try {
+      // Use the new matching algorithm with the career database
       const matches = generateCareerMatches(answers as CareerAssessmentAnswers);
-      const topSuggestions = matches.slice(0, 3).map((match) => ({
-        ...CAREER_SUGGESTIONS[match.careerPath],
-        matchingFactors: match.matchingFactors,
-        confidence: match.confidence,
-      }));
 
+      // Take top matches
+      const topSuggestions = matches.slice(0, 3);
+
+      // Save results if user is logged in or provided email
       if (session?.data?.user?.id || answers.email) {
         await saveAssessmentResults(
           session?.data?.user?.id || (answers.email as string),
@@ -269,6 +265,28 @@ export function CareerMapGame() {
     setError(null);
     localStorage.removeItem("careerMapProgress");
   };
+
+  if (isSubmitting) {
+    return (
+      <Card className="w-full max-w-lg mx-auto">
+        <CardContent className="flex flex-col items-center justify-center py-12">
+          <Loader2 className="h-12 w-12 animate-spin mb-4" />
+          <p className="text-lg">Analyzing your responses...</p>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (error) {
+    return (
+      <Card className="w-full max-w-lg mx-auto">
+        <CardContent className="flex flex-col items-center justify-center py-12">
+          <p className="text-red-500 mb-4">{error}</p>
+          <Button onClick={() => setError(null)}>Try Again</Button>
+        </CardContent>
+      </Card>
+    );
+  }
 
   const renderFormField = () => {
     const value = answers[currentQ.id] || "";
@@ -339,27 +357,98 @@ export function CareerMapGame() {
     }
   };
 
-  if (isSubmitting) {
-    return (
-      <Card className="w-full max-w-lg mx-auto">
-        <CardContent className="flex flex-col items-center justify-center py-12">
-          <Loader2 className="h-12 w-12 animate-spin mb-4" />
-          <p className="text-lg">Analyzing your responses...</p>
-        </CardContent>
-      </Card>
-    );
-  }
+  // Update the results rendering to show more detailed match information
+  const renderCareerMatch = (suggestion: MatchResult, index: number) => (
+    <Card key={suggestion.title} className="p-6">
+      <div className="flex items-start gap-6">
+        <div className="flex-1">
+          <h3 className="text-2xl font-bold mb-2">
+            {index + 1}. {suggestion.title}
+          </h3>
+          <div className="mb-4">
+            <p className="text-sm text-muted-foreground mb-1">
+              Match Confidence
+            </p>
+            <Progress value={suggestion.confidence * 100} className="h-2" />
+            <p className="text-sm mt-1">
+              {Math.round(suggestion.confidence * 100)}% match
+            </p>
+          </div>
+          <p className="mb-4">{suggestion.description}</p>
 
-  if (error) {
-    return (
-      <Card className="w-full max-w-lg mx-auto">
-        <CardContent className="flex flex-col items-center justify-center py-12">
-          <p className="text-red-500 mb-4">{error}</p>
-          <Button onClick={() => setError(null)}>Try Again</Button>
-        </CardContent>
-      </Card>
-    );
-  }
+          <div className="grid grid-cols-2 gap-4 mb-4">
+            <div>
+              <h4 className="font-semibold mb-2">Key Skills Required</h4>
+              <ul className="list-disc pl-5 space-y-1">
+                {suggestion.skills.slice(0, 5).map((skill) => (
+                  <li key={skill}>{skill}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-semibold mb-2">Recommended Education</h4>
+              <ul className="list-disc pl-5 space-y-1">
+                {suggestion.education.map((edu) => (
+                  <li key={edu}>{edu}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <div>
+              <h4 className="font-semibold mb-2">Why This Matches You</h4>
+              <ul className="list-disc pl-5 space-y-1">
+                {suggestion.matchingFactors.map((factor) => (
+                  <li key={factor}>{factor}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="font-semibold mb-2">Detailed Match Analysis</h4>
+              <div className="space-y-2">
+                {suggestion.detailedScores.map((score) => (
+                  <div
+                    key={score.category}
+                    className="flex items-center justify-between"
+                  >
+                    <span className="text-sm">{score.category}</span>
+                    <div className="flex items-center gap-2">
+                      <Progress
+                        value={score.score * 100}
+                        className="w-24 h-2"
+                      />
+                      <span className="text-sm w-12 text-right">
+                        {Math.round(score.score * 100)}%
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h4 className="font-semibold mb-2">Career Outlook</h4>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm font-medium">Growth Outlook</p>
+                  <p className="text-sm">{suggestion.growthOutlook}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium">Salary Range</p>
+                  <p className="text-sm">
+                    ${suggestion.salary.entry.toLocaleString()} - $
+                    {suggestion.salary.senior.toLocaleString()}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Card>
+  );
 
   if (suggestions) {
     return (
@@ -369,66 +458,14 @@ export function CareerMapGame() {
             <CardTitle>Your Top Career Matches</CardTitle>
             <CardDescription>
               Based on your responses, here are the careers that best match your
-              profile.
+              profile. Each match includes a detailed analysis of why it might
+              be a good fit for you.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            {suggestions.map((suggestion, index) => (
-              <Card key={suggestion.title} className="p-6">
-                <div className="flex items-start gap-6">
-                  <div className="flex-1">
-                    <h3 className="text-2xl font-bold mb-2">
-                      {index + 1}. {suggestion.title}
-                    </h3>
-                    <div className="mb-4">
-                      <p className="text-sm text-muted-foreground mb-1">
-                        Match Confidence
-                      </p>
-                      <Progress
-                        value={suggestion.confidence * 100}
-                        className="h-2"
-                      />
-                      <p className="text-sm mt-1">
-                        {Math.round(suggestion.confidence * 100)}% match
-                      </p>
-                    </div>
-                    <p className="mb-4">{suggestion.description}</p>
-                    <div className="grid grid-cols-2 gap-4 mb-4">
-                      <div>
-                        <h4 className="font-semibold mb-2">
-                          Key Skills Required
-                        </h4>
-                        <ul className="list-disc pl-5 space-y-1">
-                          {suggestion.skills.map((skill) => (
-                            <li key={skill}>{skill}</li>
-                          ))}
-                        </ul>
-                      </div>
-                      <div>
-                        <h4 className="font-semibold mb-2">
-                          Recommended Education
-                        </h4>
-                        <ul className="list-disc pl-5 space-y-1">
-                          {suggestion.education.map((edu) => (
-                            <li key={edu}>{edu}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold mb-2">
-                        Why This Matches You
-                      </h4>
-                      <ul className="list-disc pl-5 space-y-1">
-                        {suggestion.matchingFactors.map((factor) => (
-                          <li key={factor}>{factor}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </Card>
-            ))}
+            {suggestions.map((suggestion, index) =>
+              renderCareerMatch(suggestion, index)
+            )}
           </CardContent>
         </Card>
 
@@ -438,14 +475,15 @@ export function CareerMapGame() {
           </CardHeader>
           <CardContent className="space-y-4">
             <p>
-              These career suggestions are based on your responses and our
-              matching algorithm. They serve as a starting point for your career
-              exploration journey.
+              These career suggestions are based on our comprehensive matching
+              algorithm that considers multiple factors including your skills,
+              interests, values, and aspirations.
             </p>
             <p>
-              Consider researching these careers further, talking to
-              professionals in these fields, and exploring educational
-              opportunities that align with these paths.
+              Consider: - Researching these careers in more detail - Connecting
+              with professionals in these fields - Exploring educational and
+              training opportunities - Seeking internships or entry-level
+              positions
             </p>
           </CardContent>
           <CardFooter className="flex justify-between">
