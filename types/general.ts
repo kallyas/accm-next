@@ -123,6 +123,7 @@ export type Question = {
     | "aspirations";
 };
 
+// Basic type for question IDs
 export type QuestionId =
   | "education"
   | "field"
@@ -150,17 +151,18 @@ export type QuestionId =
   | "workStyle"
   | "fieldOfStudy";
 
+// Type for assessment answers
 export type CareerAssessmentAnswers = {
   [K in QuestionId]: string;
 };
 
+// Main career suggestion type
 export type CareerSuggestion = {
   title: string;
   confidence: number;
   description: string;
   skills: string[];
   education: string[];
-  imagePath?: string;
   matchingFactors: {
     interests: string[];
     values: string[];
@@ -174,6 +176,51 @@ export type CareerSuggestion = {
   growthOutlook: string;
   workEnvironment: string[];
   sectors: string[];
+};
+
+// Type for the entire career database structure
+export type CareerDatabase = {
+  [sector: string]: {
+    [careerId: string]: CareerSuggestion;
+  };
+};
+
+// Types for matching results
+export interface WeightedScore {
+  score: number;
+  weight: number;
+  description: string;
+  category: string;
+}
+
+export interface MatchResult extends CareerSuggestion {
+  matchScore: number;
+  matchingFactors: {
+    interests: string[];
+    values: string[];
+    strengths: string[];
+  };
+  confidence: number;
+  sectorAlignment: number;
+  detailedScores: WeightedScore[];
+}
+
+// Types for specific sectors
+export type CareerSector =
+  | "technology"
+  | "healthcare"
+  | "business"
+  | "creative"
+  | "science"
+  | "legal"
+  | "engineering"
+  | "transportation"
+  | "political"
+  | "aviation";
+
+// Utility type for career paths within a sector
+export type CareerPaths = {
+  [K in CareerSector]: Record<string, CareerSuggestion>;
 };
 
 export interface CareerMapState {

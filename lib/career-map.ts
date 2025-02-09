@@ -1,194 +1,296 @@
 import { CAREER_SUGGESTIONS } from "@/components/career-map-config";
-import { CareerAssessmentAnswers, CareerSuggestion } from "@/types/general";
+import { CareerAssessmentAnswers, CareerSuggestion, MatchResult } from "@/types/general";
 
-interface MatchScore {
-  careerPath: string;
+import _ from "lodash";
+
+interface WeightedScore {
   score: number;
-  matchingFactors: string[];
-  confidence: number;
+  weight: number;
+  description: string;
+  category: string;
 }
 
 export function generateCareerMatches(
   answers: CareerAssessmentAnswers
-): MatchScore[] {
-  const matches: MatchScore[] = [];
-
-  // Helper function to calculate text similarity
+  // careerData: Record<string, Record<string, CareerSuggestion>>
+): MatchResult[] {
+  // read json data from career-map.json and store it in careerData
+  const careerData = CAREER_SUGGESTIONS;
+  // Helper function to calculate text similarity using Jaccard similarity
   function calculateTextSimilarity(text1: string, text2: string): number {
-    const words1 = new Set(text1.toLowerCase().split(" "));
-    const words2 = new Set(text2.toLowerCase().split(" "));
+    if (!text1 || !text2) return 0;
+    const words1 = new Set(text1.toLowerCase().split(/\s+/));
+    const words2 = new Set(text2.toLowerCase().split(/\s+/));
     const intersection = new Set([...words1].filter((x) => words2.has(x)));
     const union = new Set([...words1, ...words2]);
     return intersection.size / union.size;
   }
 
-  // Helper function to analyze text sentiment and themes
-  function analyzeText(text: string): string[] {
-    const themes: string[] = [];
-    const lowercaseText = text.toLowerCase();
-
-    // Check for common career-related themes
-    const themeKeywords = {
-      innovation: ["create", "innovate", "new", "develop", "invent"],
-      helping: ["help", "support", "assist", "care", "serve"],
-      leadership: ["lead", "manage", "direct", "guide", "organize"],
-      technical: ["build", "code", "design", "analyze", "solve"],
-      creative: ["design", "create", "artistic", "creative", "imagine"],
-      research: ["research", "study", "investigate", "analyze", "discover"],
+  // Enhanced text analysis for career alignment
+  function analyzeCareerAlignment(
+    text: string,
+    careerDescription: string
+  ): WeightedScore {
+    const keywords = {
+      technical: [
+        "software",
+        "engineering",
+        "technology",
+        "data",
+        "technical",
+        "coding",
+        "development",
+      ],
+      creative: ["design", "art", "creative", "content", "visual", "artistic"],
+      business: [
+        "business",
+        "management",
+        "strategy",
+        "leadership",
+        "entrepreneurship",
+      ],
+      healthcare: [
+        "health",
+        "medical",
+        "patient",
+        "care",
+        "clinical",
+        "treatment",
+      ],
+      scientific: [
+        "research",
+        "science",
+        "analysis",
+        "laboratory",
+        "experiment",
+      ],
+      legal: ["legal", "law", "justice", "rights", "advocacy"],
+      education: ["teach", "education", "learning", "training", "instruction"],
     };
 
-    Object.entries(themeKeywords).forEach(([theme, keywords]) => {
-      if (keywords.some((keyword) => lowercaseText.includes(keyword))) {
-        themes.push(theme);
+    let maxCategoryScore = 0;
+    let dominantCategory = "";
+
+    Object.entries(keywords).forEach(([category, words]) => {
+      const categoryScore = words.reduce((score, word) => {
+        const regex = new RegExp(word, "gi");
+        return (
+          score +
+          ((text.match(regex) || []).length +
+            (careerDescription.match(regex) || []).length)
+        );
+      }, 0);
+
+      if (categoryScore > maxCategoryScore) {
+        maxCategoryScore = categoryScore;
+        dominantCategory = category;
       }
     });
 
-    return themes;
+    const similarityScore = calculateTextSimilarity(text, careerDescription);
+
+    return {
+      score: similarityScore,
+      weight: 0.15,
+      description: `${
+        dominantCategory.charAt(0).toUpperCase() + dominantCategory.slice(1)
+      } orientation`,
+      category: "Interest Alignment",
+    };
   }
 
-  // Process each career path
-  Object.entries(CAREER_SUGGESTIONS).forEach(([path, career]) => {
-    let score = 0;
-    const matchingFactors: string[] = [];
+  // Calculate education match with level consideration
+  function calculateEducationMatch(
+    userEducation: string,
+    careerEducation: string[]
+  ): WeightedScore {
+    const educationLevels = {
+      "high school": 1,
+      "some college": 2,
+      associate: 3,
+      bachelor: 4,
+      master: 5,
+      doctorate: 6,
+      phd: 6,
+      "professional degree": 6,
+    };
 
-    // Education match (20%)
-    if (answers.education) {
-      const educationMatch = career.education.some((edu) =>
-        edu.toLowerCase().includes(answers.education.toLowerCase())
-      );
-      if (educationMatch) {
-        score += 0.2;
-        matchingFactors.push("Education alignment");
-      }
-    }
+    const userLevel =
+      Object.entries(educationLevels).find(([level]) =>
+        userEducation.toLowerCase().includes(level)
+      )?.[1] || 0;
 
-    // Field match (15%)
-    if (answers.fieldOfStudy) {
-      const fieldMatch = career.sectors.some((sector) =>
-        sector.toLowerCase().includes(answers.fieldOfStudy.toLowerCase())
-      );
-      if (fieldMatch) {
-        score += 0.15;
-        matchingFactors.push("Field of study match");
-      }
-    }
-
-    // Work environment preference (10%)
-    if (answers.workEnvironment) {
-      const environmentMatch = career.workEnvironment.some(
-        (env) => env.toLowerCase() === answers.workEnvironment.toLowerCase()
-      );
-      if (environmentMatch) {
-        score += 0.1;
-        matchingFactors.push("Preferred work environment");
-      }
-    }
-
-    // Skills match (25%)
-    if (answers.keyStrengths) {
-      const strengthsArray = answers.keyStrengths.split(",");
-      const matchingStrengths = strengthsArray.filter((strength) =>
-        career.skills.some((skill) =>
-          skill.toLowerCase().includes(strength.toLowerCase())
-        )
-      );
-      const strengthScore =
-        (matchingStrengths.length / strengthsArray.length) * 0.25;
-      score += strengthScore;
-      if (matchingStrengths.length > 0) {
-        matchingFactors.push("Matching skills");
-      }
-    }
-
-    // Values alignment (15%)
-    if (answers.values) {
-      const valuesArray = answers.values.split(",");
-      const matchingValues = valuesArray.filter((value) =>
-        career.matchingFactors.values.some((v) =>
-          v.toLowerCase().includes(value.toLowerCase())
-        )
-      );
-      const valueScore = (matchingValues.length / valuesArray.length) * 0.15;
-      score += valueScore;
-      if (matchingValues.length > 0) {
-        matchingFactors.push("Values alignment");
-      }
-    }
-
-    // Interests match (15%)
-    if (answers.interests) {
-      const interestsArray = answers.interests.split(",");
-      const matchingInterests = interestsArray.filter((interest) =>
-        career.matchingFactors.interests.some((i) =>
-          i.toLowerCase().includes(interest.toLowerCase())
-        )
-      );
-      const interestScore =
-        (matchingInterests.length / interestsArray.length) * 0.15;
-      score += interestScore;
-      if (matchingInterests.length > 0) {
-        matchingFactors.push("Interest alignment");
-      }
-    }
-
-    // Passion and Life Goals Analysis (bonus points up to 20%)
-    let passionScore = 0;
-    if (answers.passion) {
-      const passionThemes = analyzeText(answers.passion);
-      const careerThemes = analyzeText(career.description);
-      const matchingThemes = passionThemes.filter((theme) =>
-        careerThemes.includes(theme)
-      );
-      passionScore =
-        (matchingThemes.length / Math.max(passionThemes.length, 1)) * 0.1;
-      score += passionScore;
-      if (matchingThemes.length > 0) {
-        matchingFactors.push("Passion alignment");
-      }
-    }
-
-    if (answers.impact) {
-      const impactThemes = analyzeText(answers.impact);
-      const careerThemes = analyzeText(career.description);
-      const matchingThemes = impactThemes.filter((theme) =>
-        careerThemes.includes(theme)
-      );
-      const impactScore =
-        (matchingThemes.length / Math.max(impactThemes.length, 1)) * 0.1;
-      score += impactScore;
-      if (matchingThemes.length > 0) {
-        matchingFactors.push("Impact goals alignment");
-      }
-    }
-
-    // Calculate confidence based on completeness of answers and strength of matches
-    const confidence = Math.min(
-      score * career.confidence,
-      0.95 // Cap maximum confidence at 95%
+    const requiredLevel = Math.max(
+      ...careerEducation.map(
+        (edu) =>
+          Object.entries(educationLevels).find(([level]) =>
+            edu.toLowerCase().includes(level)
+          )?.[1] || 0
+      )
     );
 
-    matches.push({
-      careerPath: path,
+    const score =
+      userLevel >= requiredLevel ? 1 : userLevel / Math.max(requiredLevel, 1);
+
+    return {
       score,
-      matchingFactors,
-      confidence,
+      weight: 0.2,
+      description:
+        userLevel >= requiredLevel
+          ? "Education requirements met"
+          : "Partial education match",
+      category: "Education",
+    };
+  }
+
+  // Process all sectors and careers
+  const allMatches: MatchResult[] = [];
+
+  Object.entries(careerData).forEach(([sector, careers]) => {
+    Object.entries(careers).forEach(([careerId, career]) => {
+      const scores: WeightedScore[] = [];
+      const matchingFactors: string[] = [];
+
+      // Education match (20%)
+      if (answers.education) {
+        const educationScore = calculateEducationMatch(
+          answers.education,
+          career.education
+        );
+        scores.push(educationScore);
+        if (educationScore.score > 0.7) {
+          matchingFactors.push(educationScore.description);
+        }
+      }
+
+      // Skills match (25%)
+      if (answers.keyStrengths) {
+        const userSkills = answers.keyStrengths.split(",");
+        const matchingSkills = userSkills.filter((skill) =>
+          career.skills.some((s) =>
+            s.toLowerCase().includes(skill.toLowerCase())
+          )
+        );
+        const skillScore = {
+          score: matchingSkills.length / Math.max(userSkills.length, 1),
+          weight: 0.25,
+          description: `${matchingSkills.length} matching skills`,
+          category: "Skills",
+        };
+        scores.push(skillScore);
+        if (skillScore.score > 0.5) {
+          matchingFactors.push("Strong skill alignment");
+        }
+      }
+
+      // Work environment preference (10%)
+      if (answers.workEnvironment) {
+        const envScore = {
+          score: career.workEnvironment.some(
+            (env) =>
+              env.toLowerCase() === answers.workEnvironment?.toLowerCase()
+          )
+            ? 1
+            : 0,
+          weight: 0.1,
+          description: "Preferred work environment",
+          category: "Environment",
+        };
+        scores.push(envScore);
+        if (envScore.score === 1) {
+          matchingFactors.push("Work environment match");
+        }
+      }
+
+      // Field/Sector alignment (15%)
+      if (answers.fieldOfStudy) {
+        const fieldScore = {
+          score: career.sectors.some((s) =>
+            s.toLowerCase().includes(answers.fieldOfStudy?.toLowerCase() || "")
+          )
+            ? 1
+            : 0,
+          weight: 0.15,
+          description: "Field alignment",
+          category: "Field",
+        };
+        scores.push(fieldScore);
+        if (fieldScore.score === 1) {
+          matchingFactors.push("Field of study match");
+        }
+      }
+
+      // Career aspirations analysis (15%)
+      if (answers.passion || answers.impact || answers.fiveYearGoal) {
+        const aspirationText = [
+          answers.passion || "",
+          answers.impact || "",
+          answers.fiveYearGoal || "",
+        ].join(" ");
+
+        const aspirationScore = analyzeCareerAlignment(
+          aspirationText,
+          career.description
+        );
+        scores.push(aspirationScore);
+        if (aspirationScore.score > 0.6) {
+          matchingFactors.push("Strong career aspiration alignment");
+        }
+      }
+
+      // Calculate sector alignment
+      const sectorAlignment = calculateTextSimilarity(
+        answers.fieldOfStudy || "",
+        sector
+      );
+
+      // Calculate final weighted score
+      const totalWeight = scores.reduce((sum, score) => sum + score.weight, 0);
+      const matchScore =
+        scores.reduce((sum, score) => sum + score.score * score.weight, 0) /
+        Math.max(totalWeight, 1);
+
+      // Calculate confidence based on data completeness and match strength
+      const dataCompleteness =
+        Object.values(answers).filter(Boolean).length /
+        Object.keys(answers).length;
+
+      const confidence = Math.min(
+        matchScore * career.confidence * dataCompleteness,
+        0.95
+      );
+
+      allMatches.push({
+        ...career,
+        matchScore,
+        matchingFactors,
+        confidence,
+        sectorAlignment,
+        detailedScores: scores,
+      });
     });
   });
 
-  // Sort matches by score in descending order
-  return matches.sort((a, b) => b.score - a.score);
+  // Sort matches by weighted combination of matchScore and sectorAlignment
+  return _.orderBy(
+    allMatches,
+    [
+      (match) => match.matchScore * 0.7 + match.sectorAlignment * 0.3,
+      "confidence",
+    ],
+    ["desc", "desc"]
+  );
 }
 
 export function getTopCareerSuggestions(
   answers: CareerAssessmentAnswers,
-  limit: number = 3
-): Array<CareerSuggestion & { matchingFactors: string[]; confidence: number }> {
-  const matches = generateCareerMatches(answers);
-
+  careerData: Record<string, Record<string, CareerSuggestion>>,
+  limit: number = 5
+): MatchResult[] {
+  const matches = generateCareerMatches(answers, careerData);
   return matches.slice(0, limit).map((match) => ({
-    ...CAREER_SUGGESTIONS[match.careerPath],
-    matchingFactors: match.matchingFactors,
-    confidence: match.confidence,
+    ...match,
+    matchingFactors: match.matchingFactors.slice(0, 5), // Limit to top 5 matching factors
   }));
 }
 
