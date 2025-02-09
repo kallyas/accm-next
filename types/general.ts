@@ -98,30 +98,23 @@ export interface TeamMember {
   expertise: string[];
 }
 
-export type Question = {
+export interface Question {
   id: QuestionId;
   question: string;
+  type: "radio" | "multiSelect" | "text" | "textarea";
   options?: string[];
-  type: "radio" | "text" | "textarea" | "checkbox" | "multiSelect";
   required?: boolean;
+  group: string;
   validation?: {
+    required?: boolean;
     minLength?: number;
     maxLength?: number;
     pattern?: RegExp;
     maxSelections?: number;
-    required?: boolean;
   };
-  group:
-    | "personal"
-    | "career"
-    | "education"
-    | "preferences"
-    | "future"
-    | "skills"
-    | "interests"
-    | "values"
-    | "aspirations";
-};
+  placeholder?: string;
+  helper?: string;
+}
 
 // Basic type for question IDs
 export type QuestionId =
@@ -149,15 +142,17 @@ export type QuestionId =
   | "fiveYearGoal"
   | "workEnvironment"
   | "workStyle"
-  | "fieldOfStudy";
+  | "fieldOfStudy"
+  | "techComfort"
+  | "challengePreference"
+  | "futureInterest";
 
 // Type for assessment answers
 export type CareerAssessmentAnswers = {
   [K in QuestionId]: string;
 };
-
 // Main career suggestion type
-export type CareerSuggestion = {
+export interface CareerSuggestion {
   title: string;
   confidence: number;
   description: string;
@@ -176,7 +171,8 @@ export type CareerSuggestion = {
   growthOutlook: string;
   workEnvironment: string[];
   sectors: string[];
-};
+  group: string;
+}
 
 // Type for the entire career database structure
 export type CareerDatabase = {
@@ -195,14 +191,15 @@ export interface WeightedScore {
 
 export interface MatchResult extends CareerSuggestion {
   matchScore: number;
-  matchingFactors: {
-    interests: string[];
-    values: string[];
-    strengths: string[];
-  };
+  matchingFactors: string[];
   confidence: number;
   sectorAlignment: number;
-  detailedScores: WeightedScore[];
+  detailedScores: {
+    score: number;
+    weight: number;
+    description: string;
+    category: string;
+  }[];
 }
 
 // Types for specific sectors
