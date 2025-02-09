@@ -22,7 +22,6 @@ const AssessmentSchema = z.object({
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    console.log("Received assessment:", body);
     const validated = AssessmentSchema.parse(body);
 
     // Create or get CareerUser
