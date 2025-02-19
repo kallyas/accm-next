@@ -32,7 +32,7 @@ const teamMembers: TeamMember[] = [
     socialLinks: {
       linkedin: "https://linkedin.com/in/johndoe",
       twitter: "https://twitter.com/johndoe",
-      email: "john@example.com",
+      email: "emmillynamugaga@gmail.com",
     },
   },
   {
