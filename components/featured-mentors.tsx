@@ -12,47 +12,47 @@ const mentors = [
     name: "Birungi Evelyne",
     role: "Learning and Development Specialist",
     image: "/mentors/picture2.png",
-    expertise: "financial literacy, Trainer of trainees.",
+    expertise: "Financial Literacy, Trainer of Trainees",
   },
   {
     name: "Harriet Ocitti",
-    role: "A proficient and passionate communication coach",
+    role: "A Proficient and Passionate Communication Coach",
     image: "/mentors/harriet.jpg",
-    expertise: "public speaking, leadership skills",
+    expertise: "Public Speaking, Leadership Skills",
   },
 ];
 
 export function FeaturedMentors() {
   return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {mentors.map((mentor) => (
         <Card
           key={mentor.name}
-          className="group hover:shadow-lg transition-all duration-300 overflow-hidden"
+          className="group hover:shadow-2xl transition-all duration-300 overflow-hidden shadow-md"
         >
-          <CardHeader className="relative">
+          <CardHeader className="relative p-6">
             <div className="flex items-center space-x-4">
               <div className="relative">
-                <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-teal-500 rounded-full opacity-75 group-hover:opacity-100 transition-opacity blur"></div>
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-teal-500 rounded-full opacity-75 group-hover:opacity-100 transition-opacity blur-md"></div>
                 <Image
                   src={mentor.image}
                   alt={mentor.name}
-                  width={50}
-                  height={50}
+                  width={80}
+                  height={80}
                   className="rounded-full relative bg-white dark:bg-gray-900"
                 />
               </div>
               <div>
-                <CardTitle className="text-lg bg-gradient-to-r from-blue-600 to-teal-500 bg-clip-text text-transparent">
+                <CardTitle className="text-lg sm:text-xl md:text-2xl bg-gradient-to-r from-blue-600 to-teal-500 bg-clip-text text-transparent font-semibold">
                   {mentor.name}
                 </CardTitle>
-                <p className="text-sm text-muted-foreground font-medium">
+                <p className="text-xs sm:text-sm text-muted-foreground font-medium">
                   {mentor.role}
                 </p>
               </div>
             </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-6">
             <div className="space-y-2">
               <div className="text-sm">
                 <span className="font-medium text-muted-foreground">
