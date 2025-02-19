@@ -11,7 +11,7 @@ const mentors = [
   {
     name: "Birungi Evelyne",
     role: "Learning and Development Specialist",
-    image: "/mentors/picture2.png",
+    image: "/mentors/Picture2.png",
     expertise: "Financial Literacy, Trainer of Trainees",
   },
   {
