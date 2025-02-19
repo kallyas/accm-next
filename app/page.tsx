@@ -80,7 +80,7 @@ const carouselSlides = [
     description: "Discover your scholarship potential with our quest",
     ctaText: "Start Your Quest",
     ctaLink: "/scholarship-quest",
-  }
+  },
 ];
 
 const features = [
@@ -220,9 +220,9 @@ export default function Home() {
 
         <ServicesSection />
 
-        <section className="py-20 px-20 bg-secondary rounded-lg">
+        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-secondary rounded-lg">
           <div className="container mx-auto">
-            <h2 className="text-3xl font-bold text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-bold text-center mb-12 text-primary">
               Featured Mentors
             </h2>
             <FeaturedMentors />
@@ -314,7 +314,8 @@ const ServicesSection = () => {
       title: "Mentorship",
       description: "Tailored guidance and strategic career support",
       icon: Users,
-      bgClass: "from-blue-600/90 to-purple-600/90 dark:from-blue-500/30 dark:to-purple-500/30",
+      bgClass:
+        "from-blue-600/90 to-purple-600/90 dark:from-blue-500/30 dark:to-purple-500/30",
       accentClass: "text-blue-600 dark:text-blue-400",
       highlight: "Personalized Growth",
       details: {
@@ -342,7 +343,8 @@ const ServicesSection = () => {
           {
             name: "One-on-One Mentorship",
             icon: UserPlus,
-            bgClass: "from-blue-100 to-blue-50 dark:from-blue-900/20 dark:to-blue-800/20",
+            bgClass:
+              "from-blue-100 to-blue-50 dark:from-blue-900/20 dark:to-blue-800/20",
             focus: [
               {
                 text: "Career path alignment",
@@ -365,7 +367,8 @@ const ServicesSection = () => {
           {
             name: "Executive Coaching",
             icon: Zap,
-            bgClass: "from-purple-100 to-purple-50 dark:from-purple-900/20 dark:to-purple-800/20",
+            bgClass:
+              "from-purple-100 to-purple-50 dark:from-purple-900/20 dark:to-purple-800/20",
             focus: [
               {
                 text: "Leadership development",
@@ -439,7 +442,8 @@ const ServicesSection = () => {
           {
             name: "Career Development Workshops",
             icon: Presentation,
-            bgClass: "from-purple-100 to-purple-50 dark:from-purple-900/20 dark:to-purple-800/20",
+            bgClass:
+              "from-purple-100 to-purple-50 dark:from-purple-900/20 dark:to-purple-800/20",
             focus: [
               {
                 text: "Leadership skills",
@@ -462,7 +466,8 @@ const ServicesSection = () => {
           {
             name: "Tech Career Acceleration",
             icon: Laptop,
-            bgClass: "from-blue-100 to-blue-50 dark:from-blue-900/20 dark:to-blue-800/20",
+            bgClass:
+              "from-blue-100 to-blue-50 dark:from-blue-900/20 dark:to-blue-800/20",
             focus: [
               {
                 text: "Cutting-edge tech skills",
@@ -537,7 +542,8 @@ const ServicesSection = () => {
           {
             name: "Career Resources Library",
             icon: Library,
-            bgClass: "from-purple-100 to-purple-50 dark:from-purple-900/20 dark:to-purple-800/20",
+            bgClass:
+              "from-purple-100 to-purple-50 dark:from-purple-900/20 dark:to-purple-800/20",
             focus: [
               {
                 text: "E-books and guides",
@@ -560,7 +566,8 @@ const ServicesSection = () => {
           {
             name: "Professional Networking",
             icon: Network,
-            bgClass: "from-blue-100 to-blue-50 dark:from-blue-900/20 dark:to-blue-800/20",
+            bgClass:
+              "from-blue-100 to-blue-50 dark:from-blue-900/20 dark:to-blue-800/20",
             focus: [
               {
                 text: "Virtual networking events",
