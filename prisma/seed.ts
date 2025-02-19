@@ -4,32 +4,35 @@ import bcrypt from "bcryptjs";
 const prisma = new PrismaClient();
 
 async function main() {
-  // Check if admin already exists
-  const adminExists = await prisma.user.findUnique({
-    where: {
-      email: "wabelwilson@gmail.com",
-    },
-  });
+  const admins = ["emmillynamugaga@gmail.com", "wabelwilson@gmail.com"];
 
-  if (!adminExists) {
-    // Create default admin user
-    const hashedPassword = await bcrypt.hash("Admin@123", 12);
-
-    await prisma.user.create({
-      data: {
-        email: "wabelwilson@gmail.com",
-        firstName: "Abel",
-        lastName: "Walekhwa",
-        phone: "+256752206865",
-        password: hashedPassword,
-        role: "ADMIN",
-        progressStatus: "COMPLETED", // Admin doesn't need to go through the progress steps
+  for (const email of admins) {
+    const adminExists = await prisma.user.findUnique({
+      where: {
+        email: email,
       },
     });
 
-    console.log("Default admin user created");
-  } else {
-    console.log("Admin user already exists");
+    if (!adminExists) {
+      // Create default admin user
+      const hashedPassword = await bcrypt.hash("Admin@123", 12);
+
+      await prisma.user.create({
+        data: {
+          email: email,
+          firstName: email === "emmillynamugaga@gmail.com" ? "Emmilly" : "Abel",
+          lastName: email === "emmillynamugaga@gmail.com" ? "Namugaga" : "Walekhwa",
+          phone: email === "emmillynamugaga@gmail.com" ? "+256772024843 " : "+256752206865",
+          password: hashedPassword,
+          role: "ADMIN",
+          progressStatus: "COMPLETED", // Admin doesn't need to go through the progress steps
+        },
+      });
+
+      console.log(`Default admin user created for email: ${email}`);
+    } else {
+      console.log(`Admin user already exists for email: ${email}`);
+    }
   }
 }
 
