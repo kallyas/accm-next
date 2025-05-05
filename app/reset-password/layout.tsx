@@ -6,11 +6,11 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 
 export const metadata: Metadata = {
-  title: "Authentication - African Centre For Career Mentorship",
-  description: "Log in or register for the African Centre For Career Mentorship platform",
+  title: "Password Recovery - African Centre For Career Mentorship",
+  description: "Reset your password for the African Centre For Career Mentorship platform",
 };
 
-export default async function AuthLayout({
+export default async function PasswordRecoveryLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -37,8 +37,8 @@ export default async function AuthLayout({
           </Link>
         </div>
         
-        {/* Auth card with animated entry */}
-        <div className="w-full max-w-md">
+        {/* Auth content */}
+        <div>
           {children}
         </div>
         
@@ -63,7 +63,7 @@ export default async function AuthLayout({
         {/* Background image */}
         <div className="absolute inset-0">
           <Image 
-            src="/accm/IMG_4681.JPG" 
+            src="/accm/IMG_4710.JPG" 
             alt="Career mentorship" 
             fill 
             className="object-cover"
@@ -74,19 +74,40 @@ export default async function AuthLayout({
         {/* Content */}
         <div className="absolute inset-0 flex flex-col justify-center items-center text-white p-12 z-30">
           <div className="max-w-lg text-center">
-            <h1 className="text-3xl font-bold mb-6">Empowering Careers, Inspiring Futures</h1>
+            <h1 className="text-3xl font-bold mb-6">Account Security</h1>
             <p className="text-lg mb-8">
-              Join thousands of professionals who have accelerated their careers through our mentorship programs.
+              We're committed to keeping your account secure. A strong password is an important step in protecting your account and personal information.
             </p>
-            <div className="grid grid-cols-2 gap-6 text-sm">
-              <div className="bg-white/10 backdrop-blur-sm p-4 rounded-lg">
-                <div className="text-3xl font-bold mb-2">10,000+</div>
-                <div>Professionals Mentored</div>
-              </div>
-              <div className="bg-white/10 backdrop-blur-sm p-4 rounded-lg">
-                <div className="text-3xl font-bold mb-2">98%</div>
-                <div>Success Rate</div>
-              </div>
+            
+            {/* Security tips */}
+            <div className="bg-white/10 backdrop-blur-sm p-6 rounded-lg">
+              <h2 className="text-xl font-semibold mb-4">Password Security Tips</h2>
+              <ul className="space-y-3 text-left">
+                <li className="flex items-start gap-3">
+                  <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <div className="w-2 h-2 rounded-full bg-white"></div>
+                  </div>
+                  <span>Use a unique password for each of your important accounts</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <div className="w-2 h-2 rounded-full bg-white"></div>
+                  </div>
+                  <span>Use a mix of letters, numbers, and symbols</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <div className="w-2 h-2 rounded-full bg-white"></div>
+                  </div>
+                  <span>Avoid using easily guessed information like birthdays</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <div className="w-2 h-2 rounded-full bg-white"></div>
+                  </div>
+                  <span>Consider using a password manager for secure storage</span>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
