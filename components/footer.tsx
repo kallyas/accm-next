@@ -1,7 +1,5 @@
 import Link from "next/link";
 import { Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 
 export function Footer() {
   return (
@@ -20,7 +18,7 @@ export function Footer() {
           </div>
           <div>
             <h2 className="text-lg font-semibold bg-gradient-to-r from-blue-600 to-teal-500 bg-clip-text text-transparent">
-              Quick Links
+              Links
             </h2>
             <ul className="mt-4 space-y-2">
               <li>
@@ -60,7 +58,22 @@ export function Footer() {
                   href="/career-map"
                   className="text-sm text-muted-foreground hover:text-primary transition-colors"
                 >
-                  Career Assessment
+                  Career Map Assessment
+                </Link>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h2 className="text-lg font-semibold bg-gradient-to-r from-blue-600 to-teal-500 bg-clip-text text-transparent">
+              More Links
+            </h2>
+            <ul className="mt-4 space-y-2">
+              <li>
+                <Link
+                href="/scholarship-quest"
+                className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Scholarship Quest
                 </Link>
               </li>
               <li>
@@ -104,24 +117,6 @@ export function Footer() {
                 Email: admin@africanccm.com
               </li>
             </ul>
-          </div>
-          <div>
-            <h2 className="text-lg font-semibold bg-gradient-to-r from-blue-600 to-teal-500 bg-clip-text text-transparent">
-              Subscribe to Our Newsletter
-            </h2>
-            <form className="mt-4 flex flex-col sm:flex-row">
-              <Input
-                type="email"
-                placeholder="Enter your email"
-                className="mr-2 mb-2 sm:mb-0 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border-gray-200 dark:border-gray-700"
-              />
-              <Button
-                type="submit"
-                className="bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 text-white transition-all duration-300"
-              >
-                Subscribe
-              </Button>
-            </form>
           </div>
         </div>
         <div className="mt-8 border-t border-gray-200 dark:border-gray-700/50 pt-8">
