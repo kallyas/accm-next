@@ -41,27 +41,19 @@ import {
   Timer,
   ArrowUpDown,
   Mail,
-  Calendar,
-  User,
-  CreditCard,
   Loader2,
   Download,
   Info,
   MessageSquare,
   Edit,
   AlertTriangle,
+  SearchIcon,
 } from "lucide-react";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { useState } from "react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Sheet,
   SheetContent,
@@ -71,6 +63,7 @@ import {
   SheetFooter,
   SheetClose,
 } from "@/components/ui/sheet";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -80,23 +73,24 @@ interface Subscription {
   id: string;
   userId: string;
   planId?: string;
-  planName?: string;
-  amount?: number;
-  currency?: string;
-  billingCycle?: string;
   status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED" | "ACTIVE";
-  receiptUrl: string;
   createdAt: string;
   startDate?: string;
   endDate?: string;
-  paymentMethod?: string;
   notes?: string;
+  plan?: {
+    id: string;
+    name: string;
+    price: number;
+    currency: string;
+    duration: string;
+    description: string;
+  };
   user: {
     id: string;
     firstName: string;
     lastName: string;
     email: string;
-    avatar?: string;
   };
   paymentProofs: {
     id: string;
@@ -104,12 +98,14 @@ interface Subscription {
   }[];
 }
 
+// Fetch subscriptions from the backend
 async function fetchSubscriptions(): Promise<Subscription[]> {
   const response = await fetch("/api/admin/subscriptions");
   if (!response.ok) throw new Error("Failed to fetch subscriptions");
   return response.json();
 }
 
+// Update subscription status
 async function updateSubscriptionStatus(
   id: string,
   status: "APPROVED" | "REJECTED" | "CANCELLED" | "ACTIVE" | "PENDING",
@@ -123,147 +119,6 @@ async function updateSubscriptionStatus(
   if (!response.ok) throw new Error("Failed to update subscription status");
   return response.json();
 }
-
-// Sample subscription data for development
-const sampleSubscriptions: Subscription[] = [
-  {
-    id: "sub_1",
-    userId: "user_1",
-    planId: "plan_1",
-    planName: "Pro Plan (Annual)",
-    amount: 149.99,
-    currency: "USD",
-    billingCycle: "Annual",
-    status: "ACTIVE",
-    receiptUrl: "/sample-receipt.jpg",
-    createdAt: "2025-04-15T12:00:00.000Z",
-    startDate: "2025-04-15T12:00:00.000Z",
-    endDate: "2026-04-15T12:00:00.000Z",
-    paymentMethod: "Credit Card",
-    notes: "Renewed from previous subscription",
-    user: {
-      id: "user_1",
-      firstName: "Michael",
-      lastName: "Johnson",
-      email: "michael.johnson@example.com",
-      avatar: "https://ui-avatars.com/api/?name=MJ",
-    },
-    paymentProofs: [
-      {
-        id: "proof_1",
-        imageUrl: "https://placehold.co/600x800",
-      },
-    ],
-  },
-  {
-    id: "sub_2",
-    userId: "user_2",
-    planId: "plan_2",
-    planName: "Standard Plan (Monthly)",
-    amount: 19.99,
-    currency: "USD",
-    billingCycle: "Monthly",
-    status: "PENDING",
-    receiptUrl: "/sample-receipt.jpg",
-    createdAt: "2025-05-01T10:30:00.000Z",
-    user: {
-      id: "user_2",
-      firstName: "Sarah",
-      lastName: "Williams",
-      email: "sarah.williams@example.com",
-      avatar: "https://ui-avatars.com/api/?name=SW",
-    },
-    paymentProofs: [
-      {
-        id: "proof_2",
-        imageUrl: "https://placehold.co/600x800",
-      },
-    ],
-  },
-  {
-    id: "sub_3",
-    userId: "user_3",
-    planId: "plan_1",
-    planName: "Pro Plan (Monthly)",
-    amount: 14.99,
-    currency: "USD",
-    billingCycle: "Monthly",
-    status: "REJECTED",
-    receiptUrl: "/sample-receipt.jpg",
-    createdAt: "2025-04-28T15:45:00.000Z",
-    notes: "Payment verification failed",
-    user: {
-      id: "user_3",
-      firstName: "David",
-      lastName: "Brown",
-      email: "david.brown@example.com",
-      avatar: "https://ui-avatars.com/api/?name=DB",
-    },
-    paymentProofs: [
-      {
-        id: "proof_3",
-        imageUrl: "https://placehold.co/600x800",
-      },
-    ],
-  },
-  {
-    id: "sub_4",
-    userId: "user_4",
-    planId: "plan_3",
-    planName: "Enterprise Plan (Annual)",
-    amount: 299.99,
-    currency: "USD",
-    billingCycle: "Annual",
-    status: "APPROVED",
-    receiptUrl: "/sample-receipt.jpg",
-    createdAt: "2025-05-02T09:15:00.000Z",
-    startDate: "2025-05-02T09:15:00.000Z",
-    endDate: "2026-05-02T09:15:00.000Z",
-    paymentMethod: "Bank Transfer",
-    user: {
-      id: "user_4",
-      firstName: "Emma",
-      lastName: "Davis",
-      email: "emma.davis@example.com",
-      avatar: "https://ui-avatars.com/api/?name=ED",
-    },
-    paymentProofs: [
-      {
-        id: "proof_4",
-        imageUrl: "https://placehold.co/600x800",
-      },
-    ],
-  },
-  {
-    id: "sub_5",
-    userId: "user_5",
-    planId: "plan_2",
-    planName: "Standard Plan (Annual)",
-    amount: 199.99,
-    currency: "USD",
-    billingCycle: "Annual",
-    status: "CANCELLED",
-    receiptUrl: "/sample-receipt.jpg",
-    createdAt: "2025-03-10T11:20:00.000Z",
-    startDate: "2025-03-10T11:20:00.000Z",
-    endDate: "2025-04-30T11:20:00.000Z",
-    paymentMethod: "PayPal",
-    notes: "Cancelled by user before renewal",
-    user: {
-      id: "user_5",
-      firstName: "Alex",
-      lastName: "Wilson",
-      email: "alex.wilson@example.com",
-      avatar: "https://ui-avatars.com/api/?name=AW",
-    },
-    paymentProofs: [
-      {
-        id: "proof_5",
-        imageUrl: "https://placehold.co/600x800",
-      },
-    ],
-  },
-];
 
 function LoadingRow() {
   return (
@@ -329,6 +184,11 @@ function StatusBadge({ status }: { status: Subscription["status"] }) {
       icon: Ban,
       label: "Cancelled",
     },
+    EXPIRED: {
+      variant: "destructive" as const,
+      icon: Ban,
+      label: "Expired",
+    }
   };
 
   const config = statusConfig[status];
@@ -478,7 +338,6 @@ function SubscriptionDetailsSheet({
             {/* User Info */}
             <div className="flex items-center gap-4">
               <Avatar className="h-16 w-16">
-                <AvatarImage src={subscription.user.avatar} />
                 <AvatarFallback>
                   {subscription.user.firstName[0]}
                   {subscription.user.lastName[0]}
@@ -506,23 +365,23 @@ function SubscriptionDetailsSheet({
             {/* Subscription Details */}
             <Card>
               <CardContent className="p-4 space-y-4">
-                <div>
-                  <h4 className="text-sm font-medium mb-2">Plan Details</h4>
-                  <div className="grid grid-cols-2 gap-2 text-sm">
-                    <div className="text-muted-foreground">Plan</div>
-                    <div className="font-medium">{subscription.planName || "N/A"}</div>
-                    <div className="text-muted-foreground">Amount</div>
-                    <div className="font-medium">
-                      {subscription.amount
-                        ? `${subscription.currency || "$"}${subscription.amount}`
-                        : "N/A"}
+                {subscription.plan && (
+                  <div>
+                    <h4 className="text-sm font-medium mb-2">Plan Details</h4>
+                    <div className="grid grid-cols-2 gap-2 text-sm">
+                      <div className="text-muted-foreground">Plan</div>
+                      <div className="font-medium">{subscription.plan.name}</div>
+                      <div className="text-muted-foreground">Amount</div>
+                      <div className="font-medium">
+                        {subscription.plan.price
+                          ? `${subscription.plan.currency}${subscription.plan.price}`
+                          : "N/A"}
+                      </div>
+                      <div className="text-muted-foreground">Duration</div>
+                      <div className="font-medium">{subscription.plan.duration}</div>
                     </div>
-                    <div className="text-muted-foreground">Billing Cycle</div>
-                    <div className="font-medium">{subscription.billingCycle || "N/A"}</div>
-                    <div className="text-muted-foreground">Payment Method</div>
-                    <div className="font-medium">{subscription.paymentMethod || "N/A"}</div>
                   </div>
-                </div>
+                )}
 
                 <div>
                   <h4 className="text-sm font-medium mb-2">Dates</h4>
@@ -553,24 +412,26 @@ function SubscriptionDetailsSheet({
             </Card>
 
             {/* Receipt */}
-            <div>
-              <Label className="mb-2 block">Payment Receipt</Label>
-              <div className="border rounded-md overflow-hidden">
-                <Image
-                  src={subscription.paymentProofs[0]?.imageUrl || ""}
-                  alt="Receipt"
-                  width={400}
-                  height={600}
-                  className="w-full h-auto object-contain"
-                />
+            {subscription.paymentProofs && subscription.paymentProofs.length > 0 && (
+              <div>
+                <Label className="mb-2 block">Payment Receipt</Label>
+                <div className="border rounded-md overflow-hidden">
+                  <Image
+                    src={subscription.paymentProofs[0]?.imageUrl || ""}
+                    alt="Receipt"
+                    width={400}
+                    height={600}
+                    className="w-full h-auto object-contain"
+                  />
+                </div>
+                <div className="flex justify-end mt-2">
+                  <Button variant="outline" size="sm">
+                    <Download className="mr-2 h-3 w-3" />
+                    Download
+                  </Button>
+                </div>
               </div>
-              <div className="flex justify-end mt-2">
-                <Button variant="outline" size="sm">
-                  <Download className="mr-2 h-3 w-3" />
-                  Download
-                </Button>
-              </div>
-            </div>
+            )}
 
             {/* Notes */}
             <div className="space-y-2">
@@ -683,9 +544,10 @@ export function SubscriptionsTable() {
   } | null>(null);
   const [subscriptionDetails, setSubscriptionDetails] = useState<Subscription | null>(null);
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
+  const [filteredStatus, setFilteredStatus] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
   
-  // Uncomment for production, comment out for using sample data
-  /*
+  // Fetch subscriptions from the backend
   const {
     data: subscriptions,
     isLoading,
@@ -694,13 +556,8 @@ export function SubscriptionsTable() {
     queryKey: ["subscriptions"],
     queryFn: fetchSubscriptions,
   });
-  */
-  
-  // Comment this out for production
-  const isLoading = false;
-  const error = null;
-  const subscriptions = sampleSubscriptions;
 
+  // Update subscription status mutation
   const updateMutation = useMutation({
     mutationFn: ({
       id,
@@ -728,6 +585,28 @@ export function SubscriptionsTable() {
     },
   });
 
+  // Filter subscriptions based on search query and status filter
+  const filteredSubscriptions = subscriptions?.filter(subscription => {
+    // Filter by status if a status filter is applied
+    if (filteredStatus && subscription.status !== filteredStatus) {
+      return false;
+    }
+    
+    // Filter by search query
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      const fullName = `${subscription.user.firstName} ${subscription.user.lastName}`.toLowerCase();
+      const email = subscription.user.email.toLowerCase();
+      const planName = subscription.plan?.name?.toLowerCase() || "";
+      
+      return fullName.includes(query) || 
+             email.includes(query) || 
+             planName.includes(query);
+    }
+    
+    return true;
+  });
+
   const handleAction = (action: "approve" | "reject" | "cancel" | "activate") => {
     if (!selectedSubscription) return;
 
@@ -747,14 +626,39 @@ export function SubscriptionsTable() {
   const handleBulkAction = (action: "approve" | "reject" | "cancel" | "activate") => {
     if (selectedRows.length === 0) return;
     
-    // Implement bulk action logic here
-    toast({
-      title: "Bulk Action",
-      description: `${action.charAt(0).toUpperCase() + action.slice(1)} ${selectedRows.length} subscriptions`,
-    });
-    
-    // Reset selection after action
-    setSelectedRows([]);
+    // Confirmation for bulk actions
+    if (confirm(`Are you sure you want to ${action} ${selectedRows.length} subscriptions?`)) {
+      const statusMap = {
+        approve: "APPROVED",
+        reject: "REJECTED",
+        cancel: "CANCELLED",
+        activate: "ACTIVE",
+      } as const;
+      
+      // Process all selected subscriptions
+      const promises = selectedRows.map(id => 
+        updateMutation.mutateAsync({
+          id,
+          status: statusMap[action],
+        })
+      );
+      
+      Promise.all(promises)
+        .then(() => {
+          toast({
+            title: "Bulk Action Completed",
+            description: `Successfully processed ${selectedRows.length} subscriptions.`,
+          });
+          setSelectedRows([]);
+        })
+        .catch(() => {
+          toast({
+            title: "Error",
+            description: "Some subscriptions could not be processed.",
+            variant: "destructive",
+          });
+        });
+    }
   };
   
   const handleStatusChange = (id: string, status: Subscription["status"], notes?: string) => {
@@ -766,10 +670,10 @@ export function SubscriptionsTable() {
   };
 
   const toggleSelectAll = () => {
-    if (selectedRows.length === subscriptions?.length) {
+    if (selectedRows.length === filteredSubscriptions?.length) {
       setSelectedRows([]);
     } else {
-      setSelectedRows(subscriptions?.map(sub => sub.id) || []);
+      setSelectedRows(filteredSubscriptions?.map(sub => sub.id) || []);
     }
   };
   
@@ -822,6 +726,37 @@ export function SubscriptionsTable() {
 
   return (
     <div className="space-y-4">
+      {/* Search and Filter Controls */}
+      <div className="flex flex-col sm:flex-row gap-4">
+        <div className="relative flex-1">
+          <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input
+            type="search"
+            placeholder="Search by name, email or plan..."
+            className="pl-8"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+        <Select 
+          value={filteredStatus || "all"} 
+          onValueChange={(value) => setFilteredStatus(value === "all" ? null : value)}
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Filter by status" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Statuses</SelectItem>
+            <SelectItem value="ACTIVE">Active</SelectItem>
+            <SelectItem value="PENDING">Pending</SelectItem>
+            <SelectItem value="APPROVED">Approved</SelectItem>
+            <SelectItem value="REJECTED">Rejected</SelectItem>
+            <SelectItem value="CANCELLED">Cancelled</SelectItem>
+            <SelectItem value="EXPIRED">Expired</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+      
       {/* Bulk Actions */}
       {selectedRows.length > 0 && (
         <div className="bg-muted/50 p-2 rounded-md flex items-center justify-between mb-4">
@@ -863,7 +798,7 @@ export function SubscriptionsTable() {
             <TableRow>
               <TableHead className="w-[40px]">
                 <Checkbox 
-                  checked={selectedRows.length > 0 && selectedRows.length === subscriptions?.length}
+                  checked={selectedRows.length > 0 && selectedRows.length === filteredSubscriptions?.length}
                   onCheckedChange={toggleSelectAll}
                   aria-label="Select all"
                 />
@@ -899,7 +834,7 @@ export function SubscriptionsTable() {
             {isLoading &&
               Array.from({ length: 5 }).map((_, i) => <LoadingRow key={i} />)}
 
-            {subscriptions?.map((subscription) => (
+            {filteredSubscriptions?.map((subscription) => (
               <TableRow 
                 key={subscription.id}
                 className={
@@ -918,10 +853,6 @@ export function SubscriptionsTable() {
                 <TableCell>
                   <div className="flex items-center gap-3">
                     <Avatar>
-                      <AvatarImage 
-                        src={subscription.user.avatar} 
-                        alt={`${subscription.user.firstName} ${subscription.user.lastName}`} 
-                      />
                       <AvatarFallback>
                         {subscription.user.firstName[0]}
                         {subscription.user.lastName[0]}
@@ -941,14 +872,14 @@ export function SubscriptionsTable() {
                   <StatusBadge status={subscription.status} />
                 </TableCell>
                 <TableCell>
-                  <div className="font-medium">{subscription.planName || "N/A"}</div>
+                  <div className="font-medium">{subscription.plan?.name || "N/A"}</div>
                   <div className="text-xs text-muted-foreground">
-                    {subscription.billingCycle || "N/A"}
+                    {subscription.plan?.duration || "N/A"}
                   </div>
                 </TableCell>
                 <TableCell>
-                  {subscription.amount 
-                    ? `${subscription.currency || "$"}${subscription.amount}` 
+                  {subscription.plan?.price 
+                    ? `${subscription.plan.currency || "$"}${subscription.plan.price}` 
                     : "N/A"
                   }
                 </TableCell>
@@ -964,9 +895,13 @@ export function SubscriptionsTable() {
                   </div>
                 </TableCell>
                 <TableCell>
-                  <ReceiptDialog
-                    imageUrl={subscription.paymentProofs[0].imageUrl}
-                  />
+                  {subscription.paymentProofs && subscription.paymentProofs.length > 0 ? (
+                    <ReceiptDialog
+                      imageUrl={subscription.paymentProofs[0].imageUrl}
+                    />
+                  ) : (
+                    <span className="text-sm text-muted-foreground">No receipt</span>
+                  )}
                 </TableCell>
                 <TableCell>
                   <div className="flex justify-end">
@@ -987,7 +922,7 @@ export function SubscriptionsTable() {
                           Contact User
                         </DropdownMenuItem>
                         <DropdownMenuItem>
-                          <Edit className="mr-2 h-4 w-4" />
+                        <Edit className="mr-2 h-4 w-4" />
                           Edit Notes
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
@@ -1053,14 +988,16 @@ export function SubscriptionsTable() {
               </TableRow>
             ))}
 
-            {subscriptions?.length === 0 && !isLoading && (
+            {!isLoading && filteredSubscriptions?.length === 0 && (
               <TableRow>
                 <TableCell colSpan={8} className="h-32 text-center">
                   <div className="flex flex-col items-center justify-center">
                     <AlertTriangle className="h-8 w-8 text-muted-foreground mb-2" />
                     <div className="text-lg font-medium">No subscriptions found</div>
                     <div className="text-sm text-muted-foreground mt-1">
-                      Try adjusting your filters or search criteria
+                      {searchQuery || filteredStatus 
+                        ? "Try adjusting your filters or search criteria" 
+                        : "No subscriptions available in the system"}
                     </div>
                   </div>
                 </TableCell>
@@ -1071,21 +1008,23 @@ export function SubscriptionsTable() {
       </div>
       
       {/* Pagination */}
-      <div className="flex items-center justify-between">
-        <div className="text-sm text-muted-foreground">
-          Showing <span className="font-medium">1</span> to{" "}
-          <span className="font-medium">{subscriptions?.length || 0}</span> of{" "}
-          <span className="font-medium">{subscriptions?.length || 0}</span> results
+      {filteredSubscriptions && filteredSubscriptions.length > 0 && (
+        <div className="flex items-center justify-between">
+          <div className="text-sm text-muted-foreground">
+            Showing <span className="font-medium">1</span> to{" "}
+            <span className="font-medium">{filteredSubscriptions.length}</span> of{" "}
+            <span className="font-medium">{filteredSubscriptions.length}</span> results
+          </div>
+          <div className="flex items-center space-x-2">
+            <Button variant="outline" size="sm" disabled>
+              Previous
+            </Button>
+            <Button variant="outline" size="sm" disabled>
+              Next
+            </Button>
+          </div>
         </div>
-        <div className="flex items-center space-x-2">
-          <Button variant="outline" size="sm" disabled>
-            Previous
-          </Button>
-          <Button variant="outline" size="sm" disabled>
-            Next
-          </Button>
-        </div>
-      </div>
+      )}
 
       {/* Confirmation Dialog */}
       {selectedSubscription && (
