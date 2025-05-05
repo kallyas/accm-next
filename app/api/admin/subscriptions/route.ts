@@ -229,7 +229,7 @@ export async function PUT(req: Request) {
             planName: updatedSubscription.plan.name,
             planDetails: updatedSubscription.plan.description.split("\n"),
             startDate: updatedSubscription.startDate?.toDateString() || new Date().toDateString(),
-            dashboardUrl: `${process.env.VERCEL_PROJECT_PRODUCTION_URL || 'https://your-domain.com'}/dashboard`,
+            dashboardUrl: `${process.env.VERCEL_PROJECT_PRODUCTION_URL || 'https://africanccm'}/dashboard`,
           }),
         });
       }
