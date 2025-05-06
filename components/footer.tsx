@@ -58,7 +58,7 @@ export function Footer() {
                   href="/career-map"
                   className="text-sm text-muted-foreground hover:text-primary transition-colors"
                 >
-                  Career Map Assessment
+                  CareerMap
                 </Link>
               </li>
             </ul>
