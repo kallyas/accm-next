@@ -963,3 +963,17 @@ iframe {
   background-color: hsl(var(--muted));
   border: 1px solid hsl(var(--border));
 }
+
+.shimmer-effect {
+  animation: shimmer 2s infinite linear;
+  background-size: 400% 100%;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
