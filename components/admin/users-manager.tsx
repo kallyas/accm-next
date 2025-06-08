@@ -639,47 +639,6 @@ export function UsersManager() {
         },
       },
       {
-        accessorKey: "subscriptionStatus",
-        header: "Subscription",
-        cell: ({ row }) => {
-          const status = row.getValue("subscriptionStatus") as string;
-          if (!status)
-            return <span className="text-muted-foreground">None</span>;
-
-          const statusColors = {
-            ACTIVE:
-              "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
-            PENDING:
-              "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
-            CANCELLED:
-              "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200",
-          };
-          return (
-            <Badge
-              className={
-                statusColors[status as keyof typeof statusColors] || ""
-              }
-            >
-              {status}
-            </Badge>
-          );
-        },
-      },
-      {
-        accessorKey: "lastLogin",
-        header: "Last Login",
-        cell: ({ row }) => {
-          const lastLogin = row.getValue("lastLogin") as string;
-          if (!lastLogin)
-            return <span className="text-muted-foreground">Never</span>;
-          return (
-            <div className="text-sm">
-              {new Date(lastLogin).toLocaleDateString()}
-            </div>
-          );
-        },
-      },
-      {
         id: "actions",
         enableHiding: false,
         cell: ({ row }) => {
