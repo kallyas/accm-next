@@ -1,4 +1,5 @@
-import { Metadata } from "next";
+"use client";
+
 import { SubscriptionsTable } from "@/components/admin/subscriptions-table";
 import { Suspense } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,11 +8,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
 import { RefreshCcw, CreditCard, Clock, CheckCircle, Ban } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-
-export const metadata: Metadata = {
-  title: "Subscription Management",
-  description: "View and manage user subscriptions across all plans",
-};
 
 // Fetch subscription statistics from subscriptions data
 async function fetchSubscriptionStats() {
