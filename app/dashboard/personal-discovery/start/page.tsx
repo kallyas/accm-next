@@ -662,7 +662,7 @@ export default function StartPersonalDiscoveryPage() {
             </Card>
 
             {/* Optional document upload */}
-            <Card>
+            <Card className="hidden lg:block">
               <CardHeader>
                 <CardTitle className="text-base flex items-center">
                   <Upload className="mr-2 h-5 w-5 text-blue-500" />
