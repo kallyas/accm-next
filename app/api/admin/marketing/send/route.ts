@@ -15,6 +15,61 @@ interface MarketingEmailRequest {
   scheduledDate?: string;
 }
 
+// Rate limiter utility
+class RateLimiter {
+  private queue: (() => Promise<any>)[] = [];
+  private isProcessing = false;
+  private readonly rateLimit: number;
+  private readonly interval: number;
+
+  constructor(requestsPerSecond: number = 2) {
+    this.rateLimit = requestsPerSecond;
+    this.interval = 1000 / requestsPerSecond; // ms between requests
+  }
+
+  async add<T>(task: () => Promise<T>): Promise<T> {
+    return new Promise((resolve, reject) => {
+      this.queue.push(async () => {
+        try {
+          const result = await task();
+          resolve(result);
+        } catch (error) {
+          reject(error);
+        }
+      });
+
+      if (!this.isProcessing) {
+        this.processQueue();
+      }
+    });
+  }
+
+  private async processQueue() {
+    if (this.isProcessing || this.queue.length === 0) {
+      return;
+    }
+
+    this.isProcessing = true;
+
+    while (this.queue.length > 0) {
+      const task = this.queue.shift();
+      if (task) {
+        await task();
+        
+        // Wait for the interval before processing next task
+        if (this.queue.length > 0) {
+          await new Promise(resolve => setTimeout(resolve, this.interval));
+        }
+      }
+    }
+
+    this.isProcessing = false;
+  }
+}
+
+// Global rate limiter instance (1.8 requests per second to be safe)
+const emailRateLimiter = new RateLimiter(1.8);
+
 // Marketing email template
 function getMarketingEmailTemplate(content: string, userName?: string): string {
   return `
@@ -143,6 +198,89 @@ function getMarketingEmailTemplate(content: string, userName?: string): string {
   `;
 }
 
+// Function to send emails with rate limiting and batch processing
+async function sendEmailsWithRateLimit(
+  recipients: { id: string; email: string; firstName: string; lastName: string }[],
+  subject: string,
+  content: string,
+  campaignId: string
+) {
+  const results = {
+    sent: 0,
+    failed: 0,
+    errors: [] as any[]
+  };
+
+  // Process emails in batches to avoid memory issues with large lists
+  const batchSize = 100;
+  const batches = [];
+  
+  for (let i = 0; i < recipients.length; i += batchSize) {
+    batches.push(recipients.slice(i, i + batchSize));
+  }
+
+  for (const batch of batches) {
+    const batchPromises = batch.map(async (recipient) => {
+      return emailRateLimiter.add(async () => {
+        try {
+          const htmlContent = getMarketingEmailTemplate(
+            content,
+            `${recipient.firstName} ${recipient.lastName}`
+          );
+
+          await sendEmail({
+            to: recipient.email,
+            subject,
+            text: content,
+            html: htmlContent,
+          });
+
+          // Record successful send
+          await db.emailLog.create({
+            data: {
+              campaignId: campaignId,
+              recipientId: recipient.id,
+              email: recipient.email,
+              status: "SENT",
+              sentAt: new Date(),
+            },
+          });
+
+          results.sent++;
+          return { success: true, email: recipient.email };
+        } catch (error) {
+          console.error(`Failed to send email to ${recipient.email}:`, error);
+          
+          // Record failed send
+          await db.emailLog.create({
+            data: {
+              campaignId: campaignId,
+              recipientId: recipient.id,
+              email: recipient.email,
+              status: "FAILED",
+              error: error instanceof Error ? error.message : "Unknown error",
+            },
+          });
+
+          results.failed++;
+          results.errors.push({ email: recipient.email, error });
+          return { success: false, email: recipient.email, error };
+        }
+      });
+    });
+
+    // Wait for current batch to complete before moving to next
+    await Promise.allSettled(batchPromises);
+    
+    // Optional: Add a small delay between batches
+    if (batches.indexOf(batch) < batches.length - 1) {
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+  }
+
+  return results;
+}
+
 export async function POST(request: NextRequest) {
   try {
     // Check authentication and admin role
@@ -249,74 +387,66 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // If sending now, send emails immediately
+    // If sending now, send emails with rate limiting
     if (sendNow) {
-      const sendPromises = recipients.map(async (recipient) => {
-        try {
-          const htmlContent = getMarketingEmailTemplate(
-            content,
-            `${recipient.firstName} ${recipient.lastName}`
-          );
-
-          await sendEmail({
-            to: recipient.email,
-            subject,
-            text: content,
-            html: htmlContent,
+      // For large campaigns, consider processing in background
+      if (recipients.length > 500) {
+        // Start the sending process in background
+        // You might want to use a queue system like Bull/BullMQ for production
+        sendEmailsWithRateLimit(recipients, subject, content, campaign.id)
+          .then(async (results) => {
+            await db.marketingCampaign.update({
+              where: { id: campaign.id },
+              data: {
+                status: "COMPLETED",
+                sentCount: results.sent,
+                completedAt: new Date(),
+              },
+            });
+          })
+          .catch(async (error) => {
+            console.error("Background email sending failed:", error);
+            await db.marketingCampaign.update({
+              where: { id: campaign.id },
+              data: {
+                status: "FAILED",
+              },
+            });
           });
 
-          // Record successful send
-          await db.emailLog.create({
-            data: {
-              campaignId: campaign.id,
-              recipientId: recipient.id,
-              email: recipient.email,
-              status: "SENT",
-              sentAt: new Date(),
-            },
-          });
+        return NextResponse.json({
+          success: true,
+          campaignId: campaign.id,
+          totalRecipients: recipients.length,
+          message: `Large campaign started. Sending ${recipients.length} emails in background with rate limiting.`,
+          estimatedDuration: `Approximately ${Math.ceil(recipients.length / 1.8 / 60)} minutes`,
+        });
+      } else {
+        // For smaller campaigns, send immediately with rate limiting
+        const results = await sendEmailsWithRateLimit(recipients, subject, content, campaign.id);
 
-          return { success: true, email: recipient.email };
-        } catch (error) {
-          console.error(`Failed to send email to ${recipient.email}:`, error);
-          
-          // Record failed send
-          await db.emailLog.create({
-            data: {
-              campaignId: campaign.id,
-              recipientId: recipient.id,
-              email: recipient.email,
-              status: "FAILED",
-              error: error instanceof Error ? error.message : "Unknown error",
-            },
-          });
+        // Update campaign status
+        await db.marketingCampaign.update({
+          where: { id: campaign.id },
+          data: {
+            status: "COMPLETED",
+            sentCount: results.sent,
+            completedAt: new Date(),
+          },
+        });
 
-          return { success: false, email: recipient.email, error };
-        }
-      });
-
-      const results = await Promise.allSettled(sendPromises);
-      const successCount = results.filter(
-        (result) => result.status === "fulfilled" && result.value.success
-      ).length;
-
-      // Update campaign status
-      await db.marketingCampaign.update({
-        where: { id: campaign.id },
-        data: {
-          status: "COMPLETED",
-          sentCount: successCount,
-          completedAt: new Date(),
-        },
-      });
-
-      return NextResponse.json({
-        success: true,
-        campaignId: campaign.id,
-        sentTo: successCount,
-        totalRecipients: recipients.length,
-        message: `Marketing email sent successfully to ${successCount} out of ${recipients.length} recipients.`,
-      });
+        return NextResponse.json({
+          success: true,
+          campaignId: campaign.id,
+          sentTo: results.sent,
+          failed: results.failed,
+          totalRecipients: recipients.length,
+          message: `Marketing email sent successfully to ${results.sent} out of ${recipients.length} recipients.`,
+          ...(results.failed > 0 && { 
+            warning: `${results.failed} emails failed to send. Check the email logs for details.` 
+          }),
+        });
+      }
     } else {
       // For scheduled emails, we'll need a background job or cron
       return NextResponse.json({
@@ -338,4 +468,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-
