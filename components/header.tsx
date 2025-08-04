@@ -97,7 +97,6 @@ export function Header() {
                     <Link href="/register">
                       <Button className="relative overflow-hidden shadow-md group">
                         <span className="absolute inset-0 bg-gradient-to-r from-blue-600 to-teal-500 group-hover:from-blue-700 group-hover:to-teal-600 z-0"></span>
-                        <span className="absolute inset-0 bg-[url('/noise.svg')] opacity-10 z-10"></span>
                         <span className="relative z-20 flex items-center">
                           <UserPlus className="mr-1 h-4 w-4" />
                           Get Started
