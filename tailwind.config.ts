@@ -22,8 +22,8 @@ const config: Config = {
     },
     extend: {
       fontFamily: {
-        sans: ["var(--font-inter)", ...fontFamily.sans],
-        heading: ["var(--font-montserrat)", ...fontFamily.sans],
+        sans: ["var(--font-space-grotesk)", ...fontFamily.sans],
+        heading: ["var(--font-space-grotesk)", ...fontFamily.sans],
       },
       colors: {
         background: "hsl(var(--background))",
