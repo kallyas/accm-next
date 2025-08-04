@@ -557,7 +557,7 @@ export default function Home() {
         <section ref={statsRef} className="py-24 px-4 relative overflow-hidden">
           <div className="absolute inset-0 -z-10">
             <div className="absolute inset-0 bg-gradient-to-r from-blue-600/5 to-teal-500/5 dark:from-blue-800/10 dark:to-teal-700/10" />
-            <div className="absolute inset-0 bg-[url('/pattern-grid.png')] bg-repeat opacity-5" />
+            <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] bg-repeat opacity-5" />
           </div>
 
           <div className="container mx-auto">
