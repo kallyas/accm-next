@@ -1,4 +1,4 @@
-import { Inter, Montserrat } from "next/font/google";
+import { Space_Grotesk } from "next/font/google";
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -12,18 +12,12 @@ import QueryProvider from "@/components/query-provider";
 import { getServerSession } from "next-auth";
 import { ScrollToTop } from "@/components/scroll-to-top";
 
-// Font setup for headings and body text
-const montserrat = Montserrat({
+// Font setup using Space Grotesk
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-montserrat",
+  variable: "--font-space-grotesk",
   display: "swap",
-  weight: ["400", "500", "600", "700", "800"],
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 export const metadata = {
@@ -65,11 +59,11 @@ export default async function RootLayout({
   const session = await getServerSession(authOptions);
   
   return (
-    <html lang="en" suppressHydrationWarning className={`${montserrat.variable} ${inter.variable}`}>
+    <html lang="en" suppressHydrationWarning className={spaceGrotesk.variable}>
       <body
         className={cn(
           "min-h-screen antialiased font-sans bg-background",
-          inter.className
+          spaceGrotesk.className
         )}
       >
         <Providers session={session}>
