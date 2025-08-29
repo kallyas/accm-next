@@ -254,30 +254,29 @@ export default function RegisterPage() {
   );
 
   return (
-    <div className="w-full max-w-3xl mx-auto">
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        <Card className="backdrop-blur-sm bg-white/70 dark:bg-gray-900/50 border-blue-100 dark:border-blue-900/50 shadow-xl">
+    <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-gray-50 dark:bg-gray-900">
+      <div className="w-full max-w-2xl">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-xl rounded-2xl">
           <CardHeader className="space-y-2">
             <motion.div 
               variants={itemVariants} 
               className="flex justify-center"
             >
-              <div className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-600 to-teal-500 p-0.5">
-                <div className="w-full h-full rounded-full bg-white dark:bg-gray-900 flex items-center justify-center">
-                  <UserPlusIcon className="h-6 w-6 text-gradient-primary" />
-                </div>
+              <div className="w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+                <UserPlusIcon className="h-8 w-8 text-gray-600 dark:text-gray-400" />
               </div>
             </motion.div>
             
             <motion.div variants={itemVariants}>
-              <CardTitle className="text-2xl text-center font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-teal-500">
+              <CardTitle className="text-2xl text-center font-bold text-gray-900 dark:text-gray-100">
                 Create Your Account
               </CardTitle>
-              <CardDescription className="text-center pt-1">
+              <CardDescription className="text-center pt-1 text-gray-600 dark:text-gray-400">
                 Join our community and start your mentorship journey
               </CardDescription>
             </motion.div>
@@ -654,7 +653,7 @@ export default function RegisterPage() {
                     <Button
                       type="button"
                       className={cn(
-                        "bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 ml-auto",
+                        "bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-200 rounded-full px-6 ml-auto",
                         !isCurrentStepValid() && "opacity-70"
                       )}
                       onClick={nextStep}
@@ -667,7 +666,7 @@ export default function RegisterPage() {
                   {currentStep === STEPS.length - 1 && (
                     <Button
                       type="submit"
-                      className="bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 ml-auto"
+                      className="bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-200 rounded-full px-6 ml-auto"
                       disabled={isLoading || !isCurrentStepValid()}
                     >
                       {isLoading ? (
@@ -722,8 +721,9 @@ export default function RegisterPage() {
               </Link>
             </motion.p>
           </CardFooter>
-        </Card>
-      </motion.div>
+          </Card>
+        </motion.div>
+      </div>
     </div>
   );
 }
