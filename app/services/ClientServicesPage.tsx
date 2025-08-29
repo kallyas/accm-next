@@ -205,12 +205,11 @@ export default function ClientServicesPage({ session }) {
   };
 
   return (
-    <>
+    <div className="container mx-auto max-w-7xl px-4 py-10">
       {/* Hero Section */}
-      <section className="relative py-16 md:py-24 overflow-hidden">
+      <section className="relative py-16 md:py-24 overflow-hidden rounded-2xl mb-16">
         <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-600/90 to-teal-500/90 z-10"></div>
-          <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] bg-repeat opacity-10 mix-blend-overlay z-20"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-gray-900/80 to-gray-800/80 z-10"></div>
           <Image 
             src="/accm/IMG_4681.JPG"
             alt="Career mentorship services"
@@ -220,7 +219,7 @@ export default function ClientServicesPage({ session }) {
           />
         </div>
         
-        <div className="container relative z-30">
+        <div className="relative z-30 px-6">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -261,8 +260,8 @@ export default function ClientServicesPage({ session }) {
       </section>
       
       {/* Stats Section */}
-      <section className="py-12 bg-blue-50 dark:bg-blue-950/30">
-        <div className="container">
+      <section className="py-12 bg-gray-50 dark:bg-gray-900/50 rounded-2xl mb-16">
+        <div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             {[
               { icon: Users, value: "10,000+", label: "Professionals Mentored" },
@@ -293,7 +292,7 @@ export default function ClientServicesPage({ session }) {
       
       {/* Main Services Section */}
       <section id="services" className="py-16 md:py-24">
-        <div className="container">
+        <div>
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -363,10 +362,8 @@ export default function ClientServicesPage({ session }) {
       </section>
       
       {/* Testimonials */}
-      <section className="py-16 bg-blue-50 dark:bg-blue-950/30 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] bg-repeat opacity-5"></div>
-        
-        <div className="container relative">
+      <section className="py-16 bg-gray-50 dark:bg-gray-900/50 relative overflow-hidden rounded-2xl mb-16">        
+        <div className="relative">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -425,7 +422,7 @@ export default function ClientServicesPage({ session }) {
       
       {/* Subscription Plans */}
       <section className="py-16 md:py-24">
-        <div className="container">
+        <div>
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -466,8 +463,8 @@ export default function ClientServicesPage({ session }) {
       </section>
       
       {/* FAQ & Contact Section */}
-      <section className="py-16 bg-blue-50 dark:bg-blue-950/30">
-        <div className="container">
+      <section className="py-16 bg-gray-50 dark:bg-gray-900/50 rounded-2xl">
+        <div>
           <div className="max-w-4xl mx-auto bg-white dark:bg-gray-900 rounded-xl shadow-lg overflow-hidden">
             <div className="flex flex-col md:flex-row">
               <div className="md:w-1/2 p-8 md:p-10">
@@ -540,6 +537,6 @@ export default function ClientServicesPage({ session }) {
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 }
