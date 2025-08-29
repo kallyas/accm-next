@@ -60,12 +60,11 @@ export default function PaymentInstructionsPage() {
   };
 
   return (
-    <div className="py-10">
+    <div className="container mx-auto max-w-7xl px-4 py-10">
       {/* Hero Section */}
       <section className="relative mb-16 rounded-2xl overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/90 to-teal-500/90 z-10" />
-        <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] bg-repeat opacity-10 mix-blend-overlay" />
-        <div className="container mx-auto px-4 relative z-20 py-16 text-white text-center">
+        <div className="absolute inset-0 bg-gradient-to-r from-gray-900/80 to-gray-800/80 z-10" />
+        <div className="relative px-6 z-20 py-16 text-white text-center">
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -79,7 +78,7 @@ export default function PaymentInstructionsPage() {
         </div>
       </section>
 
-      <div className="container mx-auto px-4">
+      <div>
         {/* Payment Methods Tabs */}
         <motion.div
           variants={containerVariants}
@@ -88,10 +87,10 @@ export default function PaymentInstructionsPage() {
           className="max-w-5xl mx-auto"
         >
           <Tabs defaultValue="mobile" className="w-full">
-            <TabsList className="grid w-full grid-cols-3 mb-10 bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm rounded-lg p-1.5">
+            <TabsList className="grid w-full grid-cols-3 mb-10 bg-gray-100 dark:bg-gray-800 rounded-2xl p-2">
               <TabsTrigger 
                 value="mobile" 
-                className="group data-[state=active]:bg-gradient-to-r data-[state=active]:from-green-500/20 data-[state=active]:to-green-600/20 dark:data-[state=active]:from-green-500/30 dark:data-[state=active]:to-green-600/30"
+                className="group data-[state=active]:bg-white dark:data-[state=active]:bg-gray-900 data-[state=active]:shadow-sm rounded-xl py-3"
               >
                 <div className="flex items-center gap-2 py-2">
                   <SmartphoneIcon className="h-5 w-5 text-green-600 dark:text-green-400" />
@@ -100,7 +99,7 @@ export default function PaymentInstructionsPage() {
               </TabsTrigger>
               <TabsTrigger 
                 value="bank" 
-                className="group data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500/20 data-[state=active]:to-blue-600/20 dark:data-[state=active]:from-blue-500/30 dark:data-[state=active]:to-blue-600/30"
+                className="group data-[state=active]:bg-white dark:data-[state=active]:bg-gray-900 data-[state=active]:shadow-sm rounded-xl py-3"
               >
                 <div className="flex items-center gap-2 py-2">
                   <LandmarkIcon className="h-5 w-5 text-blue-600 dark:text-blue-400" />
@@ -109,7 +108,7 @@ export default function PaymentInstructionsPage() {
               </TabsTrigger>
               <TabsTrigger 
                 value="international" 
-                className="group data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500/20 data-[state=active]:to-purple-600/20 dark:data-[state=active]:from-purple-500/30 dark:data-[state=active]:to-purple-600/30"
+                className="group data-[state=active]:bg-white dark:data-[state=active]:bg-gray-900 data-[state=active]:shadow-sm rounded-xl py-3"
               >
                 <div className="flex items-center gap-2 py-2">
                   <DollarSignIcon className="h-5 w-5 text-purple-600 dark:text-purple-400" />
@@ -121,7 +120,7 @@ export default function PaymentInstructionsPage() {
             {/* Mobile Money Content */}
             <TabsContent value="mobile">
               <motion.div variants={itemVariants}>
-                <Card className="border-green-100 dark:border-green-900/50 overflow-hidden shadow-lg">
+                <Card className="border-green-100 dark:border-green-900/50 overflow-hidden shadow-lg rounded-2xl">
                   <div className="h-2 bg-gradient-to-r from-green-500 to-green-600 w-full"></div>
                   <CardHeader>
                     <div className="flex items-center gap-4">
@@ -187,7 +186,7 @@ export default function PaymentInstructionsPage() {
             {/* Bank Transfer Content */}
             <TabsContent value="bank">
               <motion.div variants={itemVariants}>
-                <Card className="border-blue-100 dark:border-blue-900/50 overflow-hidden shadow-lg">
+                <Card className="border-blue-100 dark:border-blue-900/50 overflow-hidden shadow-lg rounded-2xl">
                   <div className="h-2 bg-gradient-to-r from-blue-500 to-blue-600 w-full"></div>
                   <CardHeader>
                     <div className="flex items-center gap-4">
@@ -269,7 +268,7 @@ export default function PaymentInstructionsPage() {
             {/* International Transfer Content */}
             <TabsContent value="international">
               <motion.div variants={itemVariants}>
-                <Card className="border-purple-100 dark:border-purple-900/50 overflow-hidden shadow-lg">
+                <Card className="border-purple-100 dark:border-purple-900/50 overflow-hidden shadow-lg rounded-2xl">
                   <div className="h-2 bg-gradient-to-r from-purple-500 to-purple-600 w-full"></div>
                   <CardHeader>
                     <div className="flex items-center gap-4">
