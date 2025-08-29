@@ -116,29 +116,29 @@ export default function LoginPage() {
   };
 
   return (
-    <motion.div
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-    >
-      <Card className="backdrop-blur-sm bg-white/70 dark:bg-gray-900/50 border-blue-100 dark:border-blue-900/50 shadow-xl">
+    <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-gray-50 dark:bg-gray-900">
+      <div className="w-full max-w-md">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-xl rounded-2xl">
         <CardHeader className="space-y-2">
           <motion.div 
             variants={itemVariants} 
             className="flex justify-center"
           >
-            <div className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-600 to-teal-500 p-0.5">
-              <div className="w-full h-full rounded-full bg-white dark:bg-gray-900 flex items-center justify-center">
-                <UserIcon className="h-6 w-6 text-gradient-primary" />
-              </div>
+            <div className="w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+              <UserIcon className="h-8 w-8 text-gray-600 dark:text-gray-400" />
             </div>
           </motion.div>
           
           <motion.div variants={itemVariants}>
-            <CardTitle className="text-2xl text-center font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-teal-500">
+            <CardTitle className="text-2xl text-center font-bold text-gray-900 dark:text-gray-100">
               Welcome Back
             </CardTitle>
-            <CardDescription className="text-center pt-1">
+            <CardDescription className="text-center pt-1 text-gray-600 dark:text-gray-400">
               Enter your credentials to access your account
             </CardDescription>
           </motion.div>
@@ -225,7 +225,7 @@ export default function LoginPage() {
               <motion.div variants={itemVariants}>
                 <Button 
                   className={cn(
-                    "w-full bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 transition-all",
+                    "w-full bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-200 rounded-full py-3 h-auto transition-all",
                     isLoading && "opacity-80"
                   )} 
                   type="submit" 
@@ -272,15 +272,17 @@ export default function LoginPage() {
             className="w-full"
           >
             <Button 
-              variant="outline" 
-              className="w-full border-blue-100 dark:border-blue-900/50 hover:bg-blue-50 dark:hover:bg-blue-900/20 text-muted-foreground"
+              variant="ghost" 
+              className="w-full border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 rounded-full py-3 h-auto transition-all"
               onClick={() => router.push("/")}
             >
               Back to Home
             </Button>
           </motion.div>
         </CardFooter>
-      </Card>
-    </motion.div>
+          </Card>
+        </motion.div>
+      </div>
+    </div>
   );
 }
