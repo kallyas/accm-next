@@ -74,28 +74,13 @@ export default async function RootLayout({
             disableTransitionOnChange
           >
             <QueryProvider>
-              <div className="relative flex min-h-svh flex-col">
-                {/* Background decorative elements */}
-                <div className="fixed inset-0 -z-10">
-                  {/* Gradient background layer */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-50/70 via-white to-purple-50/70 dark:from-gray-950 dark:via-gray-900 dark:to-gray-800" />
-                  
-                  {/* Grid pattern overlay */}
-                  <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] bg-repeat opacity-5 dark:opacity-3" />
-                  
-                  {/* Decorative shapes */}
-                  <div className="absolute -top-40 -left-40 w-80 h-80 bg-blue-300/20 dark:bg-blue-700/10 rounded-full blur-3xl" />
-                  <div className="absolute top-1/4 -right-20 w-60 h-60 bg-purple-300/20 dark:bg-purple-700/10 rounded-full blur-3xl" />
-                  <div className="absolute bottom-0 left-1/3 w-60 h-60 bg-teal-300/20 dark:bg-teal-700/10 rounded-full blur-3xl" />
-                </div>
+              <div className="relative flex min-h-svh flex-col bg-white dark:bg-gray-900">
 
                 {/* Main layout */}
                 <Header />
                 
-                <main className="flex-1 w-full mx-auto relative z-10">
-                  <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                    {children}
-                  </div>
+                <main className="flex-1 w-full relative z-10">
+                  {children}
                 </main>
                 
                 <Footer />
