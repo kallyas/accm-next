@@ -49,8 +49,8 @@ export function Header() {
       <motion.header
         className={`sticky top-0 z-50 w-full transition-all duration-300 ${
           scrolled
-            ? "bg-white/95 dark:bg-gray-900/95 backdrop-blur-md shadow-sm border-b border-gray-200 dark:border-gray-800"
-            : "bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm"
+            ? "bg-white/98 dark:bg-gray-900/98 backdrop-blur-md shadow-sm border-b border-gray-100 dark:border-gray-800"
+            : "bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm"
         }`}
         initial={{ y: 0 }}
         animate={{ y: hidden ? -100 : 0 }}
@@ -79,27 +79,28 @@ export function Header() {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: 20 }}
                     transition={{ duration: 0.2 }}
-                    className="flex items-center space-x-2"
+                    className="flex items-center space-x-3"
                   >
                     <Link href="/login">
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="relative group overflow-hidden"
+                        className="relative group hover:bg-gray-50 dark:hover:bg-gray-800/50 rounded-full px-4 py-2 transition-all duration-300"
                       >
-                        <span className="absolute inset-0 bg-gradient-to-r from-blue-100/0 via-blue-100/40 to-blue-100/0 group-hover:via-blue-100/60 dark:from-blue-900/0 dark:via-blue-900/40 dark:to-blue-900/0 dark:group-hover:via-blue-900/60 opacity-0 group-hover:opacity-100 z-0 transition-opacity transform -translate-x-full group-hover:translate-x-full duration-1000"></span>
-                        <span className="relative z-10 flex items-center">
-                          <LogIn className="mr-1 h-4 w-4" />
+                        <span className="flex items-center font-medium text-gray-700 dark:text-gray-300">
+                          <LogIn className="mr-2 h-4 w-4" />
                           Login
                         </span>
                       </Button>
                     </Link>
                     <Link href="/register">
-                      <Button className="relative overflow-hidden shadow-md group">
-                        <span className="absolute inset-0 bg-gradient-to-r from-blue-600 to-teal-500 group-hover:from-blue-700 group-hover:to-teal-600 z-0"></span>
-                        <span className="relative z-20 flex items-center">
-                          <UserPlus className="mr-1 h-4 w-4" />
-                          Get Started
+                      <Button 
+                        size="sm" 
+                        className="relative group bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-200 rounded-full px-6 py-2 shadow-sm hover:shadow-md transition-all duration-300"
+                      >
+                        <span className="flex items-center font-medium">
+                          <UserPlus className="mr-2 h-4 w-4" />
+                          Start Learning
                         </span>
                       </Button>
                     </Link>
