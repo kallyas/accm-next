@@ -194,90 +194,93 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen overflow-hidden">
       <main className="flex-grow">
-        {/* Hero Section */}
-        <section ref={heroRef} className="relative">
-          <AnimatePresence>
-            {heroInView && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="absolute inset-0 -z-10 bg-gradient-to-b from-blue-50 to-transparent dark:from-blue-950/20 dark:to-transparent"
-              >
-                <div className="absolute inset-0">
-                  <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
-                    <div className="absolute -top-40 -left-40 w-80 h-80 bg-blue-300/30 dark:bg-blue-700/20 rounded-full blur-3xl" />
-                    <div className="absolute top-60 -right-20 w-60 h-60 bg-purple-300/20 dark:bg-purple-700/10 rounded-full blur-3xl" />
-                    <div className="absolute -bottom-40 left-20 w-80 h-80 bg-teal-300/20 dark:bg-teal-700/10 rounded-full blur-3xl" />
-                  </div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+        {/* Enhanced Hero Section */}
+        <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden">
+          {/* Subtle background with pattern */}
+          <div className="absolute inset-0 -z-10">
+            <div className="absolute inset-0 bg-gradient-to-br from-gray-50/80 via-white to-gray-50/40 dark:from-gray-900/95 dark:via-gray-900 dark:to-gray-800/80"></div>
+            <div className="absolute inset-0 opacity-30 dark:opacity-10" style={{
+              backgroundImage: `url("data:image/svg+xml,%3csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3e%3cg fill='none' fill-rule='evenodd'%3e%3cg fill='%23f3f4f6' fill-opacity='0.4'%3e%3ccircle cx='30' cy='30' r='1.5'/%3e%3c/g%3e%3c/g%3e%3c/svg%3e")`,
+              backgroundSize: '60px 60px'
+            }}></div>
+          </div>
 
-          <div className="container mx-auto px-4 pt-10 pb-16 md:pt-16 md:pb-24">
-            <div className="grid lg:grid-cols-2 gap-10 items-center">
+          <div className="container mx-auto px-4 py-16 lg:py-20">
+            <div className="grid lg:grid-cols-12 gap-8 lg:gap-16 items-center max-w-7xl mx-auto">
               <motion.div
                 initial={{ opacity: 0, x: -30 }}
                 animate={heroInView ? { opacity: 1, x: 0 } : {}}
                 transition={{ duration: 0.8, delay: 0.2 }}
-                className="space-y-6"
+                className="lg:col-span-6 space-y-8 lg:pr-8"
               >
-                <div className="inline-block px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-sm font-medium">
-                  Africa's Premier Career Development Centre
-                </div>
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
-                  <span className="text-gray-900 dark:text-gray-100">
-                    Build Your{" "}
-                  </span>
-                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-teal-500">
-                    Dream Career
-                  </span>
-                </h1>
-                <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-lg">
-                  African Centre For Career Mentorship provides expert guidance
-                  and resources to help you navigate your professional journey
-                  with confidence.
-                </p>
-                <div className="flex flex-wrap gap-4">
-                  <Button
-                    size="lg"
-                    className="bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 text-white shadow-lg hover:shadow-xl transition-all"
-                  >
-                    <Link href="/register" className="flex items-center gap-2">
-                      Get Started
-                      <ChevronRight className="h-4 w-4" />
-                    </Link>
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    className="group border-blue-200 dark:border-blue-800 hover:bg-blue-50 dark:hover:bg-blue-900/30"
-                  >
-                    <Link href="/about" className="flex items-center gap-2">
-                      <PlayCircle className="h-5 w-5 text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300" />
-                      Watch Our Story
-                    </Link>
-                  </Button>
-                </div>
-                <div className="pt-6 flex items-center gap-6">
-                  <div className="flex -space-x-2">
-                    {[1, 2, 3, 4].map((i) => (
-                      <div
-                        key={i}
-                        className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-teal-400 p-0.5"
-                      >
-                        <div className="w-full h-full rounded-full bg-white dark:bg-gray-900"></div>
-                      </div>
-                    ))}
+                <div className="space-y-6">
+                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-sm font-medium">
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                    Africa's Premier Career Development Centre
                   </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Trusted by{" "}
-                    <span className="font-semibold text-gray-900 dark:text-gray-200">
-                      10,000+
-                    </span>{" "}
-                    professionals
+                  
+                  <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight leading-[1.1]">
+                    <span className="text-gray-900 dark:text-gray-100 block">
+                      Transform Your
+                    </span>
+                    <span className="text-gray-900 dark:text-gray-100 block">
+                      Career Journey
+                    </span>
+                  </h1>
+                  
+                  <p className="text-lg md:text-xl lg:text-2xl text-gray-600 dark:text-gray-400 max-w-xl font-light leading-relaxed">
+                    Get personalized mentorship, expert guidance, and proven resources to accelerate your professional growth.
                   </p>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Link href="/register" className="group">
+                    <Button
+                      size="lg"
+                      className="w-full sm:w-auto bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-200 rounded-2xl px-8 py-4 h-auto shadow-sm hover:shadow-lg transition-all duration-300 font-medium text-lg group-hover:scale-[1.02]"
+                    >
+                      Get Started Today
+                      <ChevronRight className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                    </Button>
+                  </Link>
+                  <Link href="/about" className="group">
+                    <Button
+                      variant="ghost"
+                      size="lg"
+                      className="w-full sm:w-auto group border-2 border-gray-200 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-500 rounded-2xl px-8 py-4 h-auto transition-all duration-300 text-lg group-hover:scale-[1.02]"
+                    >
+                      <PlayCircle className="h-5 w-5 mr-2 text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-100" />
+                      Watch Our Story
+                    </Button>
+                  </Link>
+                </div>
+
+                {/* Enhanced Stats Row */}
+                <div className="pt-8 flex flex-wrap items-center gap-8">
+                  <div className="flex items-center gap-4">
+                    <div className="flex -space-x-3">
+                      {[1, 2, 3, 4].map((i) => (
+                        <div
+                          key={i}
+                          className="w-10 h-10 rounded-full border-2 border-white dark:border-gray-900 bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-xs font-semibold text-gray-600 dark:text-gray-300"
+                        >
+                          {i === 1 ? "AK" : i === 2 ? "MJ" : i === 3 ? "TL" : "5K+"}
+                        </div>
+                      ))}
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">10,000+ Professionals</p>
+                      <p className="text-xs text-gray-600 dark:text-gray-400">Already transforming their careers</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="flex text-yellow-400">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <Star key={star} className="h-4 w-4 fill-current" />
+                      ))}
+                    </div>
+                    <span className="text-sm font-medium text-gray-900 dark:text-gray-100">4.9 (2.1k reviews)</span>
+                  </div>
                 </div>
               </motion.div>
 
@@ -285,111 +288,120 @@ export default function Home() {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={heroInView ? { opacity: 1, scale: 1 } : {}}
                 transition={{ duration: 0.8, delay: 0.4 }}
-                className="relative"
+                className="lg:col-span-6"
               >
-                <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-teal-500 rounded-2xl blur opacity-30 dark:opacity-40 animate-pulse"></div>
-                <div className="relative overflow-hidden rounded-xl shadow-2xl">
-                  <Carousel
-                    ref={emblaRef}
-                    opts={{ loop: true }}
-                    plugins={[Autoplay({ delay: 5000 })]}
-                    className="w-full"
-                  >
-                    <CarouselContent>
-                      {carouselSlides.map((slide, index) => (
-                        <CarouselItem key={index}>
-                          <div className="relative h-[400px] lg:h-[500px] w-full overflow-hidden rounded-xl">
+                {/* Enhanced Carousel with Cards */}
+                <Carousel
+                  ref={emblaRef}
+                  opts={{ loop: true }}
+                  plugins={[Autoplay({ delay: 4000 })]}
+                  className="w-full relative"
+                >
+                  <CarouselContent className="-ml-4">
+                    {carouselSlides.map((slide, index) => (
+                      <CarouselItem key={index} className="pl-4">
+                        <div className="relative group cursor-pointer">
+                          <div className="relative h-[450px] lg:h-[520px] w-full overflow-hidden rounded-3xl bg-gray-100 dark:bg-gray-800 shadow-xl hover:shadow-2xl transition-all duration-500 group-hover:scale-[1.02]">
                             <Image
                               src={slide.image}
                               alt={slide.title}
                               fill
-                              className="object-cover transition-transform duration-500 hover:scale-105"
+                              className="object-cover transition-all duration-700 group-hover:scale-105"
                               priority={index === 0}
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/10 flex flex-col justify-end p-8">
-                              <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
-                                {slide.title}
-                              </h3>
-                              <p className="text-white/90 mb-4">
-                                {slide.description}
-                              </p>
-                              <Button
-                                asChild
-                                className="w-fit bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600"
-                              >
+                            {/* Modern overlay with better contrast */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300" />
+                            
+                            {/* Content positioned better */}
+                            <div className="absolute inset-0 flex flex-col justify-between p-6 lg:p-8">
+                              {/* Top badge */}
+                              <div className="flex justify-end">
+                                <div className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 text-white text-sm font-medium">
+                                  0{index + 1}
+                                </div>
+                              </div>
+
+                              {/* Bottom content */}
+                              <div className="space-y-4">
+                                <div className="space-y-2">
+                                  <h3 className="text-xl lg:text-2xl font-bold text-white leading-tight">
+                                    {slide.title}
+                                  </h3>
+                                  <p className="text-white/90 text-base lg:text-lg leading-relaxed">
+                                    {slide.description}
+                                  </p>
+                                </div>
                                 <Link href={slide.ctaLink}>
-                                  {slide.ctaText}
+                                  <Button className="bg-white hover:bg-gray-50 text-gray-900 rounded-2xl px-6 py-2.5 font-semibold shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-105">
+                                    {slide.ctaText}
+                                    <ChevronRight className="h-4 w-4 ml-2" />
+                                  </Button>
                                 </Link>
-                              </Button>
+                              </div>
                             </div>
                           </div>
-                        </CarouselItem>
-                      ))}
-                    </CarouselContent>
-                    <div className="absolute bottom-4 right-4 flex gap-2 z-10">
-                      <CarouselPrevious className="h-8 w-8 rounded-full bg-white/30 backdrop-blur-sm hover:bg-white/50" />
-                      <CarouselNext className="h-8 w-8 rounded-full bg-white/30 backdrop-blur-sm hover:bg-white/50" />
-                    </div>
-                  </Carousel>
-                </div>
+                        </div>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  
+                  {/* Navigation buttons inside carousel */}
+                  <CarouselPrevious className="absolute top-1/2 -translate-y-1/2 left-4 h-12 w-12 rounded-2xl bg-white/80 backdrop-blur-md hover:bg-white shadow-lg border-0 hover:scale-105 transition-all duration-200" />
+                  <CarouselNext className="absolute top-1/2 -translate-y-1/2 right-4 h-12 w-12 rounded-2xl bg-white/80 backdrop-blur-md hover:bg-white shadow-lg border-0 hover:scale-105 transition-all duration-200" />
+                  
+                  {/* Custom carousel indicators */}
+                  <div className="flex justify-center mt-6 gap-2">
+                    {carouselSlides.map((_, index) => (
+                      <button
+                        key={index}
+                        className="w-3 h-3 rounded-full bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors duration-200"
+                        onClick={() => emblaApi?.scrollTo(index)}
+                      />
+                    ))}
+                  </div>
+                </Carousel>
               </motion.div>
             </div>
           </div>
         </section>
 
-        {/* Features Section */}
+        {/* Features Section - Minimalist */}
         <motion.section
           ref={featuresRef}
           variants={containerVariants}
           initial="hidden"
           animate={featuresInView ? "visible" : "hidden"}
-          className="py-20 md:py-28 relative"
+          className="py-20 md:py-28 relative bg-white dark:bg-gray-900"
         >
-          <div className="absolute inset-0 -z-10">
-            <div className="absolute top-1/4 left-0 w-full h-1/2 bg-gradient-to-b from-blue-50 to-transparent dark:from-blue-950/20 dark:to-transparent" />
-          </div>
-
           <div className="container mx-auto px-4">
             <motion.div
               variants={itemVariants}
-              className="text-center max-w-3xl mx-auto mb-16"
+              className="text-center max-w-2xl mx-auto mb-20"
             >
-              <span className="inline-block px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-sm font-medium mb-4">
-                Why Choose Us
-              </span>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                Empowering Your Professional Journey
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-gray-100">
+                Why Choose ACCM
               </h2>
-              <p className="text-gray-600 dark:text-gray-300 text-lg">
-                At African Centre For Career Mentorship, we provide the
-                guidance, tools, and community you need to excel in your career
-                path.
+              <p className="text-gray-600 dark:text-gray-400 text-lg">
+                The tools and guidance you need to excel in your career
               </p>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
               {features.map((feature, index) => (
                 <motion.div
                   key={index}
                   variants={itemVariants}
-                  className="group relative p-8 rounded-xl backdrop-blur-sm border border-blue-100 dark:border-blue-800/50 
-                    bg-white/60 dark:bg-gray-900/60 hover:bg-white/90 dark:hover:bg-gray-900/90 hover:shadow-xl transition-all duration-300"
+                  className="group text-center"
                 >
-                  <div
-                    className="absolute -inset-0.5 bg-gradient-to-r from-blue-600/20 to-teal-500/20 rounded-xl blur opacity-0 
-                    group-hover:opacity-100 transition-opacity"
-                  />
-                  <div className="relative flex flex-col h-full">
-                    <div className="mb-6 p-3 bg-blue-100 dark:bg-blue-900/40 rounded-xl w-fit text-blue-600 dark:text-blue-400">
-                      {feature.icon}
-                    </div>
-                    <h3 className="text-xl font-semibold mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                      {feature.title}
-                    </h3>
-                    <p className="text-gray-600 dark:text-gray-400">
-                      {feature.description}
-                    </p>
+                  <div className="mb-6 mx-auto w-20 h-20 bg-gray-50 dark:bg-gray-800/50 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-400 group-hover:bg-gray-100 dark:group-hover:bg-gray-700 group-hover:scale-110 transition-all duration-300 border border-gray-200/50 dark:border-gray-700/50">
+                    {feature.icon}
                   </div>
+                  <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-gray-100">
+                    {feature.title}
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-400 leading-relaxed text-sm">
+                    {feature.description}
+                  </p>
                 </motion.div>
               ))}
             </div>
@@ -427,39 +439,32 @@ export default function Home() {
             <FeaturedMentors />
 
             <div className="mt-12 text-center">
-              <Button
-                asChild
-                variant="outline"
-                className="border-purple-200 dark:border-purple-800 hover:bg-purple-50 dark:hover:bg-purple-900/30"
-              >
-                <Link href="/mentors" className="flex items-center gap-2">
+              <Link href="/mentors">
+                <Button
+                  variant="ghost"
+                  className="border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm rounded-full px-8 py-3 h-auto transition-all duration-300"
+                >
                   View All Mentors
-                  <ChevronRight className="h-4 w-4" />
-                </Link>
-              </Button>
+                  <ChevronRight className="h-4 w-4 ml-2" />
+                </Button>
+              </Link>
             </div>
           </div>
         </section>
 
-        {/* Success Stories */}
+        {/* Success Stories - Subtle Design */}
         <section className="py-24 px-4 relative overflow-hidden">
           <div className="absolute inset-0 -z-10">
-            <div className="absolute inset-0 bg-gradient-to-t from-blue-50/30 to-transparent dark:from-blue-950/10 dark:to-transparent" />
-            <div className="absolute top-40 left-0 w-80 h-80 bg-blue-300/20 dark:bg-blue-700/10 rounded-full blur-3xl" />
-            <div className="absolute -bottom-40 right-20 w-80 h-80 bg-teal-300/20 dark:bg-teal-700/10 rounded-full blur-3xl" />
+            <div className="absolute inset-0 bg-gradient-to-t from-gray-50/50 to-transparent dark:from-gray-950/30 dark:to-transparent" />
           </div>
 
           <div className="container mx-auto">
             <div className="text-center max-w-3xl mx-auto mb-16">
-              <span className="inline-block px-3 py-1 rounded-full bg-teal-100 dark:bg-teal-900/40 text-teal-700 dark:text-teal-300 text-sm font-medium mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-gray-100">
                 Success Stories
-              </span>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                Hear From Our Community
               </h2>
-              <p className="text-gray-600 dark:text-gray-300 text-lg">
-                Discover how our mentorship and resources have transformed
-                careers and opened new opportunities.
+              <p className="text-gray-600 dark:text-gray-400 text-lg">
+                See how our community transforms careers
               </p>
             </div>
 
@@ -503,10 +508,7 @@ export default function Home() {
                 viewport={{ once: true }}
                 className="space-y-6"
               >
-                <span className="inline-block px-3 py-1 rounded-full bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 text-sm font-medium">
-                  Join Our Community
-                </span>
-                <h2 className="text-3xl md:text-4xl font-bold">
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100">
                   Grow Together, Succeed Together
                 </h2>
                 <p className="text-lg text-gray-600 dark:text-gray-300">
@@ -530,7 +532,7 @@ export default function Home() {
                     },
                   ].map((item, i) => (
                     <li key={i} className="flex items-start gap-3">
-                      <div className="p-1 mt-1 bg-green-100 dark:bg-green-900/40 rounded-full text-green-600 dark:text-green-400">
+                      <div className="p-2 mt-1 bg-gray-100 dark:bg-gray-800 rounded-full text-gray-600 dark:text-gray-400">
                         <item.icon className="h-4 w-4" />
                       </div>
                       <span className="text-gray-700 dark:text-gray-300">
@@ -539,90 +541,81 @@ export default function Home() {
                     </li>
                   ))}
                 </ul>
-                <div className="pt-4">
-                  <Button
-                    asChild
-                    size="lg"
-                    className="bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 text-white shadow-lg hover:shadow-xl transition-all"
-                  >
-                    <Link href="/register">Join Now</Link>
-                  </Button>
+                <div className="pt-6">
+                  <Link href="/register">
+                    <Button
+                      size="lg"
+                      className="bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-200 rounded-full px-8 py-3 h-auto shadow-sm hover:shadow-md transition-all duration-300 font-medium"
+                    >
+                      Join Now
+                    </Button>
+                  </Link>
                 </div>
               </motion.div>
             </div>
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section ref={statsRef} className="py-24 px-4 relative overflow-hidden">
-          <div className="absolute inset-0 -z-10">
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-600/5 to-teal-500/5 dark:from-blue-800/10 dark:to-teal-700/10" />
-            <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] bg-repeat opacity-5" />
-          </div>
-
+        {/* CTA Section - Minimalist */}
+        <section ref={statsRef} className="py-24 px-4 relative overflow-hidden bg-gray-50 dark:bg-gray-900/50">
           <div className="container mx-auto">
-            <div className="max-w-4xl mx-auto bg-white/80 dark:bg-gray-900/80 backdrop-blur-md rounded-2xl p-8 md:p-12 shadow-xl">
-              <div className="space-y-8 text-center">
-                <span className="inline-block px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-sm font-medium">
-                  Our Impact
-                </span>
-                <h2 className="text-3xl md:text-4xl font-bold">
-                  Making a Difference Across Africa
+            <div className="max-w-4xl mx-auto text-center">
+              <div className="space-y-8">
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100">
+                  Join 10,000+ professionals
                 </h2>
+                <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                  Transform your career with expert mentorship and proven resources
+                </p>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 py-8">
-                  <div className="p-6 rounded-xl bg-blue-50/50 dark:bg-blue-900/20">
-                    <div className="text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2">
+                {/* Simple stats row */}
+                <div className="flex flex-wrap justify-center gap-8 py-8 text-center">
+                  <div>
+                    <div className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-1">
                       {counters.students.toLocaleString()}+
                     </div>
-                    <div className="text-gray-700 dark:text-gray-300">
-                      Students Helped
+                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                      Students helped
                     </div>
                   </div>
-                  <div className="p-6 rounded-xl bg-teal-50/50 dark:bg-teal-900/20">
-                    <div className="text-4xl font-bold text-teal-600 dark:text-teal-400 mb-2">
+                  <div className="h-16 w-px bg-gray-200 dark:bg-gray-700 hidden sm:block"></div>
+                  <div>
+                    <div className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-1">
                       {counters.successRate}%
                     </div>
-                    <div className="text-gray-700 dark:text-gray-300">
-                      Success Rate
+                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                      Success rate
                     </div>
                   </div>
-                  <div className="p-6 rounded-xl bg-purple-50/50 dark:bg-purple-900/20">
-                    <div className="text-4xl font-bold text-purple-600 dark:text-purple-400 mb-2">
+                  <div className="h-16 w-px bg-gray-200 dark:bg-gray-700 hidden sm:block"></div>
+                  <div>
+                    <div className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-1">
                       {counters.scholarships}+
                     </div>
-                    <div className="text-gray-700 dark:text-gray-300">
-                      Scholarships Found
+                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                      Scholarships found
                     </div>
                   </div>
                 </div>
 
-                <div className="space-y-6">
-                  <h3 className="text-2xl font-semibold">
-                    Ready to Take the Next Step?
-                  </h3>
-                  <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-                    Start your journey towards career success with African
-                    Centre For Career Mentorship today. Our expert mentors and
-                    resources are ready to help you achieve your goals.
-                  </p>
-                  <div className="flex flex-wrap justify-center gap-4 pt-4">
+                <div className="flex flex-wrap justify-center gap-4 pt-4">
+                  <Link href="/register">
                     <Button
-                      asChild
                       size="lg"
-                      className="bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 text-white shadow-lg hover:shadow-xl transition-all"
+                      className="bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-200 rounded-full px-8 py-3 h-auto shadow-sm hover:shadow-md transition-all duration-300 font-medium"
                     >
-                      <Link href="/register">Get Started</Link>
+                      Get Started
                     </Button>
+                  </Link>
+                  <Link href="/contact">
                     <Button
-                      asChild
-                      variant="outline"
+                      variant="ghost"
                       size="lg"
-                      className="border-blue-200 dark:border-blue-800"
+                      className="border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm rounded-full px-8 py-3 h-auto transition-all duration-300"
                     >
-                      <Link href="/contact">Contact Us</Link>
+                      Contact Us
                     </Button>
-                  </div>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -726,22 +719,17 @@ function ScholarshipHeroSection() {
             students who've already discovered their opportunities.
           </p>
 
-          {/* CTA Button with animation */}
-          <div className="relative inline-block group pt-4">
-            <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-teal-600 rounded-lg blur opacity-25 group-hover:opacity-75 transition duration-200" />
-            <Button
-              asChild
-              size="lg"
-              className="relative bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 text-white text-lg px-8 py-6 h-auto transition-all duration-300 hover:scale-105 hover:shadow-lg"
-            >
-              <Link
-                href="/scholarship-quest"
-                className="flex items-center gap-2"
+          {/* CTA Button - Clean Design */}
+          <div className="pt-6">
+            <Link href="/scholarship-quest">
+              <Button
+                size="lg"
+                className="bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-200 rounded-full px-8 py-3 h-auto shadow-sm hover:shadow-md transition-all duration-300 font-medium"
               >
                 Start Your Quest
-                <GraduationCap className="w-5 h-5" />
-              </Link>
-            </Button>
+                <GraduationCap className="w-5 h-5 ml-2" />
+              </Button>
+            </Link>
           </div>
 
           {/* Stats with animation */}
@@ -756,12 +744,12 @@ function ScholarshipHeroSection() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.6, delay: 0.2 + index * 0.1 }}
-                className="text-center group p-6 rounded-xl bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm border border-blue-100 dark:border-blue-900/30 hover:shadow-lg transition-all"
+                className="text-center group p-6 rounded-2xl bg-gray-50/80 dark:bg-gray-800/50 backdrop-blur-sm border border-gray-100 dark:border-gray-700 hover:bg-gray-100/80 dark:hover:bg-gray-800/80 transition-all"
               >
-                <div className="font-bold text-3xl bg-gradient-to-r from-blue-600 to-teal-500 bg-clip-text text-transparent mb-2 group-hover:scale-110 transition-transform">
+                <div className="font-bold text-3xl text-gray-900 dark:text-gray-100 mb-2">
                   {stat.value}
                 </div>
-                <div className="text-gray-600 dark:text-gray-400">
+                <div className="text-gray-600 dark:text-gray-400 text-sm">
                   {stat.label}
                 </div>
               </motion.div>
@@ -1099,47 +1087,32 @@ const ServicesSection = () => {
 
   return (
     <section ref={ref} className="py-20 relative overflow-hidden">
-      {/* Background decorations */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-50/30 to-transparent dark:from-transparent dark:via-blue-950/10 dark:to-transparent" />
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
-          <div className="absolute -top-40 -left-40 w-80 h-80 bg-blue-300/10 dark:bg-blue-700/10 rounded-full blur-3xl" />
-          <div className="absolute top-60 -right-20 w-60 h-60 bg-purple-300/10 dark:bg-purple-700/5 rounded-full blur-3xl" />
-        </div>
-      </div>
-
       <motion.div
         initial={{ opacity: 0 }}
         animate={inView ? { opacity: 1 } : {}}
         transition={{ duration: 0.8 }}
         className="container mx-auto px-4"
       >
-        <div className="text-center mb-16">
-          <span className="inline-block px-3 py-1 rounded-full bg-teal-100 dark:bg-teal-900/40 text-teal-700 dark:text-teal-300 text-sm font-medium mb-4">
-            What We Offer
-          </span>
-          <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-teal-600 bg-clip-text text-transparent">
+        <div className="text-center max-w-2xl mx-auto mb-20">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-gray-100">
             Our Services
           </h2>
-          <div className="mt-4 max-w-2xl mx-auto">
-            <p className="text-gray-600 dark:text-gray-300">
-              Discover our comprehensive suite of services designed to
-              accelerate your professional growth
-            </p>
-          </div>
+          <p className="text-gray-600 dark:text-gray-400 text-lg">
+            Comprehensive solutions for your professional growth
+          </p>
         </div>
 
         <Tabs defaultValue="personalized-development" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-8 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm rounded-lg p-1.5">
+          <TabsList className="grid w-full grid-cols-3 mb-8 bg-gray-100 dark:bg-gray-800 rounded-2xl p-2">
             {services.map((service) => (
               <TabsTrigger
                 key={service.value}
                 value={service.value}
-                className="group transition-all duration-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 data-[state=active]:bg-blue-100/80 dark:data-[state=active]:bg-blue-800/30 rounded-md"
+                className="group transition-all duration-300 hover:bg-gray-50 dark:hover:bg-gray-700 data-[state=active]:bg-white dark:data-[state=active]:bg-gray-900 data-[state=active]:shadow-sm rounded-xl py-3"
               >
-                <div className="flex items-center gap-2 py-2">
+                <div className="flex items-center gap-2">
                   <service.icon className="h-5 w-5" />
-                  <span>{service.title}</span>
+                  <span className="font-medium">{service.title}</span>
                 </div>
               </TabsTrigger>
             ))}
@@ -1152,22 +1125,17 @@ const ServicesSection = () => {
               className="space-y-8"
             >
               <AnimatedCard>
-                <Card className="border border-blue-100 dark:border-blue-900/30 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm">
+                <Card className="border border-gray-200 dark:border-gray-700 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm rounded-2xl">
                   <CardHeader>
-                    <div className="flex items-center gap-3">
-                      <div
-                        className={cn(
-                          "p-2 rounded-lg bg-gradient-to-r",
-                          service.bgClass
-                        )}
-                      >
-                        <service.icon className="h-6 w-6 text-white dark:text-white/90" />
+                    <div className="flex items-center gap-4">
+                      <div className="p-4 rounded-full bg-gray-100 dark:bg-gray-800">
+                        <service.icon className="h-6 w-6 text-gray-600 dark:text-gray-400" />
                       </div>
                       <div>
-                        <CardTitle className="text-2xl">
+                        <CardTitle className="text-2xl text-gray-900 dark:text-gray-100">
                           {service.title}
                         </CardTitle>
-                        <CardDescription className="text-base">
+                        <CardDescription className="text-base text-gray-600 dark:text-gray-400">
                           {service.description}
                         </CardDescription>
                       </div>
