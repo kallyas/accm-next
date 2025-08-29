@@ -3,11 +3,11 @@ import { Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="bg-gradient-to-r from-blue-50/90 via-white/90 to-purple-50/90 dark:from-gray-900/90 dark:via-gray-900/90 dark:to-gray-800/90 backdrop-blur-sm rounded-t-lg border-t border-gray-200 dark:border-gray-800">
+    <footer className="bg-gray-50/50 dark:bg-gray-900/50 backdrop-blur-sm border-t border-gray-200 dark:border-gray-800">
       <div className="container mx-auto px-6 py-12">
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <h2 className="text-lg font-semibold bg-gradient-to-r from-blue-600 to-teal-500 bg-clip-text text-transparent">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
               About Us
             </h2>
             <p className="mt-4 text-sm text-muted-foreground">
@@ -17,7 +17,7 @@ export function Footer() {
             </p>
           </div>
           <div>
-            <h2 className="text-lg font-semibold bg-gradient-to-r from-blue-600 to-teal-500 bg-clip-text text-transparent">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
               Links
             </h2>
             <ul className="mt-4 space-y-2">
@@ -64,7 +64,7 @@ export function Footer() {
             </ul>
           </div>
           <div>
-            <h2 className="text-lg font-semibold bg-gradient-to-r from-blue-600 to-teal-500 bg-clip-text text-transparent">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
               More Links
             </h2>
             <ul className="mt-4 space-y-2">
@@ -103,7 +103,7 @@ export function Footer() {
             </ul>
           </div>
           <div>
-            <h2 className="text-lg font-semibold bg-gradient-to-r from-blue-600 to-teal-500 bg-clip-text text-transparent">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
               Contact Us
             </h2>
             <ul className="mt-4 space-y-2">
