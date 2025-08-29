@@ -148,12 +148,11 @@ export default function MentorsPage() {
   };
 
   return (
-    <div className="py-12">
+    <div className="container mx-auto max-w-7xl px-4 py-10">
       {/* Hero Section */}
-      <section className="relative mb-16 rounded-xl overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/90 to-teal-500/90 z-10" />
-        <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] bg-repeat opacity-10 mix-blend-overlay"></div>
-        <div className="relative container mx-auto px-4 z-20 py-20 text-white">
+      <section className="relative mb-16 rounded-2xl overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-gray-900/80 to-gray-800/80 z-10" />
+        <div className="relative px-6 z-20 py-20 text-white">
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -202,7 +201,7 @@ export default function MentorsPage() {
       </section>
       
       {/* Main Content */}
-      <div className="container mx-auto px-4">
+      <div>
         {/* Introduction */}
         <section className="mb-16 max-w-3xl">
           <h2 className="text-3xl font-bold mb-4 text-gradient-primary">Meet Our Leadership Team</h2>
@@ -292,19 +291,17 @@ export default function MentorsPage() {
         </section>
         
         {/* Call to Action */}
-        <section className="relative rounded-xl overflow-hidden mb-10">
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-600/90 to-teal-500/90 z-10" />
-          <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] bg-repeat opacity-10 mix-blend-overlay"></div>
-          <div className="relative container mx-auto z-20 py-16 px-6 text-white text-center">
-            <h2 className="text-3xl font-bold mb-4">Ready to Accelerate Your Career?</h2>
-            <p className="text-xl max-w-2xl mx-auto mb-8">
+        <section className="relative rounded-2xl overflow-hidden bg-gray-50 dark:bg-gray-900/50 p-16 text-center">
+          <div>
+            <h2 className="text-3xl font-bold mb-4 text-gray-900 dark:text-gray-100">Ready to Accelerate Your Career?</h2>
+            <p className="text-xl max-w-2xl mx-auto mb-8 text-gray-600 dark:text-gray-400">
               Join thousands of professionals who have transformed their careers through our mentorship programs.
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
-              <Button className="bg-white text-blue-600 hover:bg-blue-50">
+              <Button className="bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-200 rounded-full px-8">
                 Find Your Mentor
               </Button>
-              <Button variant="outline" className="border-white text-white hover:bg-white/10">
+              <Button variant="ghost" className="border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 rounded-full px-8">
                 Explore Programs
               </Button>
             </div>
