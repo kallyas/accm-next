@@ -49,10 +49,10 @@ export default function AboutPage() {
   };
 
   return (
-    <div className="py-10">
+    <div className="container mx-auto max-w-7xl px-4 py-10">
       {/* Hero Section */}
       <section className="relative mb-16 rounded-2xl overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/90 to-teal-500/90 z-10" />
+        <div className="absolute inset-0 bg-gradient-to-r from-gray-900/80 to-gray-800/80 z-10" />
         <Image
           src="/accm/IMG_4727.JPG"
           alt="African Centre For Career Mentorship Team"
@@ -81,7 +81,7 @@ export default function AboutPage() {
       </section>
 
       {/* Main Content */}
-      <div className="container mx-auto max-w-6xl px-4">
+      <div>
         {/* Our Story Section */}
         <motion.section 
           variants={containerVariants}
