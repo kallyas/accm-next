@@ -59,7 +59,10 @@ export default async function RootLayout({
   const session = await getServerSession(authOptions);
   
   return (
-    <html lang="en" suppressHydrationWarning className={spaceGrotesk.variable}>
+    <html lang="en" 
+    suppressHydrationWarning className={spaceGrotesk.variable} 
+    style={{ opacity: "1%" }}
+    >
       <body
         className={cn(
           "min-h-screen antialiased font-sans bg-background",
