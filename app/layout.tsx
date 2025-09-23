@@ -60,8 +60,7 @@ export default async function RootLayout({
   
   return (
     <html lang="en" 
-    suppressHydrationWarning className={spaceGrotesk.variable} 
-    style={{ opacity: "1%" }}
+    suppressHydrationWarning className={spaceGrotesk.variable}
     >
       <body
         className={cn(
