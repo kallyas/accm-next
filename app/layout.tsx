@@ -15,9 +15,6 @@ import { ScrollToTop } from "@/components/scroll-to-top";
 // Font setup using Space Grotesk
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-space-grotesk",
-  display: "swap",
-  weight: ["300", "400", "500", "600", "700"],
 });
 
 export const metadata = {
@@ -60,11 +57,11 @@ export default async function RootLayout({
   
   return (
     <html lang="en" 
-    suppressHydrationWarning className={spaceGrotesk.variable}
+    suppressHydrationWarning className={spaceGrotesk.className}
     >
       <body
         className={cn(
-          "min-h-screen antialiased font-sans bg-background",
+          "min-h-screen antialiased bg-background",
           spaceGrotesk.className
         )}
       >
