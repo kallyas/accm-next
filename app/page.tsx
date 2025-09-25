@@ -408,6 +408,9 @@ export default function Home() {
           </div>
         </motion.section>
 
+        {/* Special Offers Section */}
+        <SpecialOffersSection />
+
         {/* Scholarship Quest Section */}
         <ScholarshipHeroSection />
 
@@ -623,6 +626,278 @@ export default function Home() {
         </section>
       </main>
     </div>
+  );
+}
+
+// Special Offers Section
+function SpecialOffersSection() {
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  });
+
+  const featuredOffers = [
+    {
+      title: "91.3% Success Rate",
+      description: "Our proven track record with scholarship applications",
+      image: "/offers/WhatsApp Image 2025-09-24 at 08.04.08 (3).jpeg",
+      badge: "Success Stories",
+      newOffer: true,
+      gradient: "from-emerald-500 to-teal-600",
+      link: "/offers"
+    },
+    {
+      title: "Global Opportunities",
+      description: "Scholarships in 13+ countries worldwide",
+      image: "/offers/WhatsApp Image 2025-09-24 at 08.04.07.jpeg",
+      badge: "International",
+      newOffer: true,
+      gradient: "from-blue-500 to-indigo-600",
+      link: "/offers"
+    },
+    {
+      title: "Professional Services",
+      description: "Comprehensive career development packages",
+      image: "/offers/WhatsApp Image 2025-09-24 at 08.04.08 (2).jpeg",
+      badge: "Services",
+      newOffer: false,
+      gradient: "from-purple-500 to-pink-600",
+      link: "/offers"
+    }
+  ];
+
+  return (
+    <section ref={ref} className="py-24 relative overflow-hidden bg-gradient-to-br from-indigo-50 via-white to-cyan-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      {/* Enhanced Background decoration */}
+      <div className="absolute inset-0 opacity-40">
+        <div className="absolute top-10 right-1/4 w-96 h-96 bg-gradient-to-r from-blue-300 to-purple-300 dark:from-blue-800/30 dark:to-purple-800/30 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-10 left-1/4 w-80 h-80 bg-gradient-to-r from-emerald-300 to-cyan-300 dark:from-emerald-800/30 dark:to-cyan-800/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-r from-yellow-300 to-orange-300 dark:from-yellow-800/30 dark:to-orange-800/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+      </div>
+
+      {/* Floating elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-10 w-4 h-4 bg-blue-400 rounded-full animate-bounce opacity-60"></div>
+        <div className="absolute top-40 right-20 w-3 h-3 bg-purple-400 rounded-full animate-bounce opacity-60" style={{ animationDelay: '0.5s' }}></div>
+        <div className="absolute bottom-40 left-1/3 w-5 h-5 bg-emerald-400 rounded-full animate-bounce opacity-60" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute bottom-20 right-1/3 w-2 h-2 bg-pink-400 rounded-full animate-bounce opacity-60" style={{ animationDelay: '1.5s' }}></div>
+      </div>
+
+      <div className="container mx-auto px-4 relative">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8 }}
+          className="max-w-7xl mx-auto"
+        >
+          {/* Enhanced Section Header */}
+          <div className="text-center mb-20">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={inView ? { opacity: 1, scale: 1 } : {}}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-orange-100 to-red-100 dark:from-orange-900/40 dark:to-red-900/40 text-orange-800 dark:text-orange-200 text-sm font-semibold mb-8 shadow-lg border border-orange-200/50 dark:border-orange-700/50"
+            >
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                <Sparkles className="w-5 h-5 animate-spin" style={{ animationDuration: '3s' }} />
+              </div>
+              <span className="uppercase tracking-wide">🔥 Limited Time Offers</span>
+              <div className="px-2 py-1 bg-red-500 text-white text-xs rounded-full font-bold animate-pulse">
+                NEW
+              </div>
+            </motion.div>
+            
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-600 via-purple-600 to-emerald-600 bg-clip-text text-transparent leading-tight"
+            >
+              Exclusive Opportunities
+              <br />
+              <span className="text-3xl md:text-5xl">Await You</span>
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.8, delay: 0.6 }}
+              className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed"
+            >
+              Discover our proven success stories and comprehensive services designed to accelerate your career journey to new heights
+            </motion.p>
+          </div>
+
+          {/* Enhanced Featured Offers Grid */}
+          <div className="grid md:grid-cols-3 gap-8 mb-16">
+            {featuredOffers.map((offer, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
+                transition={{ duration: 0.8, delay: 0.2 + index * 0.15 }}
+                className="relative"
+              >
+                {/* Glowing border effect */}
+                <div className={`absolute -inset-1 bg-gradient-to-r ${offer.gradient} rounded-3xl blur-lg opacity-30 group-hover:opacity-60 transition duration-1000 animate-pulse`}></div>
+                
+                <Link href={offer.link} className="group block relative">
+                  <div className="relative h-64 rounded-3xl overflow-hidden group-hover:shadow-2xl transition-all duration-500 transform group-hover:scale-105 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700">
+                    <Image
+                      src={offer.image}
+                      alt={offer.title}
+                      fill
+                      className="object-cover group-hover:scale-110 transition-transform duration-700"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                    
+                    {/* NEW/OFFER Badge */}
+                    {offer.newOffer && (
+                      <div className="absolute -top-3 -right-3 z-10">
+                        <div className="relative">
+                          <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-pink-500 rounded-full blur-sm animate-pulse"></div>
+                          <div className="relative px-4 py-2 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-bold rounded-full shadow-lg transform rotate-12 animate-bounce">
+                            <span className="flex items-center gap-1">
+                              <Sparkles className="w-3 h-3" />
+                              NEW
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* Enhanced Badge */}
+                    <div className="absolute top-4 left-4">
+                      <div className={`px-4 py-2 bg-gradient-to-r ${offer.gradient} text-white text-sm font-bold rounded-full shadow-lg backdrop-blur-sm border border-white/20`}>
+                        {offer.badge}
+                      </div>
+                    </div>
+                    
+                    {/* Enhanced Overlay content */}
+                    <div className="absolute bottom-4 left-4 right-4">
+                      <h3 className="text-white font-bold text-xl mb-2 group-hover:text-yellow-300 transition-colors drop-shadow-lg">
+                        {offer.title}
+                      </h3>
+                      <p className="text-white/90 text-sm leading-relaxed drop-shadow-md">
+                        {offer.description}
+                      </p>
+                      <div className="mt-3 inline-flex items-center text-yellow-300 text-sm font-semibold group-hover:text-yellow-200 transition-colors">
+                        <span>Learn More</span>
+                        <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Enhanced Key Stats */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.8 }}
+            className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16"
+          >
+            {[
+              { value: "41", label: "Full Scholarships", icon: Trophy, color: "from-yellow-400 to-orange-500" },
+              { value: "13", label: "Countries", icon: Globe, color: "from-blue-400 to-cyan-500" },
+              { value: "91.3%", label: "Success Rate", icon: Star, color: "from-emerald-400 to-teal-500" },
+              { value: "500+", label: "Students Helped", icon: Users, color: "from-purple-400 to-pink-500" }
+            ].map((stat, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={inView ? { opacity: 1, scale: 1 } : {}}
+                transition={{ duration: 0.6, delay: 1 + index * 0.1 }}
+                className="relative group"
+              >
+                {/* Glowing effect */}
+                <div className={`absolute -inset-1 bg-gradient-to-r ${stat.color} rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-300`}></div>
+                <div className="relative text-center p-8 rounded-2xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all border border-gray-100 dark:border-gray-700 group-hover:scale-105">
+                  <div className={`inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r ${stat.color} rounded-2xl mb-4 shadow-lg group-hover:scale-110 transition-transform`}>
+                    <stat.icon className="w-8 h-8 text-white" />
+                  </div>
+                  <div className="font-bold text-3xl text-gray-900 dark:text-gray-100 mb-2">
+                    {stat.value}
+                  </div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400 font-medium">
+                    {stat.label}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+
+          {/* Enhanced CTA Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 1.2 }}
+            className="text-center"
+          >
+            <div className="relative">
+              {/* Glowing border */}
+              <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 via-purple-600 to-emerald-600 rounded-3xl blur-lg opacity-30 animate-pulse"></div>
+              
+              <div className="relative bg-gradient-to-r from-blue-600 via-purple-600 to-emerald-600 rounded-3xl p-10 md:p-16 text-white overflow-hidden shadow-2xl">
+                {/* Enhanced Background decoration */}
+                <div className="absolute inset-0 opacity-20">
+                  <div className="absolute top-4 right-4 w-40 h-40 bg-white rounded-full blur-3xl animate-pulse"></div>
+                  <div className="absolute bottom-4 left-4 w-32 h-32 bg-white rounded-full blur-2xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 bg-white rounded-full blur-xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+                </div>
+                
+                <div className="relative">
+                  <motion.div
+                    initial={{ scale: 0.8 }}
+                    animate={inView ? { scale: 1 } : {}}
+                    transition={{ duration: 0.6, delay: 1.4 }}
+                    className="mb-6"
+                  >
+                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 rounded-full text-sm font-semibold mb-6 backdrop-blur-sm">
+                      <Sparkles className="w-4 h-4 animate-spin" />
+                      Limited Time Only
+                    </div>
+                  </motion.div>
+                  
+                  <h3 className="text-3xl md:text-5xl font-bold mb-6 leading-tight">
+                    Don't Miss These 
+                    <span className="block text-yellow-300">Exclusive Opportunities!</span>
+                  </h3>
+                  <p className="text-xl mb-10 opacity-90 max-w-3xl mx-auto leading-relaxed">
+                    Join thousands of professionals who have transformed their careers with our proven guidance and support. Your success story starts here!
+                  </p>
+                  
+                  <div className="flex flex-wrap justify-center gap-6">
+                    <Link href="/offers">
+                      <Button
+                        size="lg"
+                        className="bg-white hover:bg-gray-50 text-purple-600 rounded-full px-10 py-4 font-bold text-lg shadow-2xl hover:shadow-3xl transition-all transform hover:scale-105 border-2 border-white/50"
+                      >
+                        <Star className="w-6 h-6 mr-3 text-yellow-500" />
+                        View All Offers
+                        <ChevronRight className="w-6 h-6 ml-3" />
+                      </Button>
+                    </Link>
+                    <Link href="/register">
+                      <Button
+                        size="lg"
+                        variant="outline"
+                        className="border-2 border-white text-white hover:bg-white hover:text-purple-600 rounded-full px-10 py-4 font-bold text-lg transition-all transform hover:scale-105 backdrop-blur-sm"
+                      >
+                        <Trophy className="w-6 h-6 mr-3" />
+                        Get Started Today
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+      </div>
+    </section>
   );
 }
 
