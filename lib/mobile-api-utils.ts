@@ -83,9 +83,19 @@ export function validationError(
  * Unauthorized error response
  */
 export function unauthorizedError(
-  message: string = "Authentication required"
+  message: string = "Authentication required",
+  code: string = "UNAUTHORIZED"
 ): Response {
-  return errorResponse(message, "UNAUTHORIZED", 401);
+  return errorResponse(message, code, 401);
+}
+
+/**
+ * Token expired error response
+ */
+export function tokenExpiredError(
+  message: string = "Access token has expired"
+): Response {
+  return errorResponse(message, "TOKEN_EXPIRED", 401);
 }
 
 /**
@@ -108,38 +118,54 @@ export function notFoundError(
 
 /**
  * Get authenticated user from JWT token in Authorization header
+ * Throws specific errors for token expiration and invalid tokens
  */
 export async function getAuthenticatedUser(
   req: NextRequest
 ): Promise<{ id: string; email: string; role: string } | null> {
-  try {
-    const authHeader = req.headers.get("Authorization");
-    const token = extractBearerToken(authHeader);
+  const authHeader = req.headers.get("Authorization");
+  const token = extractBearerToken(authHeader);
 
-    if (!token) {
-      return null;
-    }
-
-    const user = await getUserFromToken(token);
-    return user;
-  } catch (error) {
+  if (!token) {
     return null;
   }
+
+  // This will throw TOKEN_EXPIRED, INVALID_TOKEN, or other errors
+  // which should be caught and handled by requireAuth
+  const user = await getUserFromToken(token);
+  return user;
 }
 
 /**
  * Require authenticated user middleware
+ * Returns specific error responses for different authentication failures
  */
 export async function requireAuth(
   req: NextRequest
 ): Promise<{ id: string; email: string; role: string } | Response> {
-  const user = await getAuthenticatedUser(req);
+  try {
+    const user = await getAuthenticatedUser(req);
 
-  if (!user) {
-    return unauthorizedError();
+    if (!user) {
+      return unauthorizedError("Authentication required. Please provide a valid access token.");
+    }
+
+    return user;
+  } catch (error: any) {
+    // Handle specific token errors
+    if (error.message === "TOKEN_EXPIRED") {
+      return tokenExpiredError("Access token has expired. Please refresh your token.");
+    }
+    if (error.message === "INVALID_TOKEN") {
+      return unauthorizedError("Invalid access token. Please login again.", "INVALID_TOKEN");
+    }
+    if (error.message === "USER_NOT_FOUND") {
+      return unauthorizedError("User account not found. Please login again.", "USER_NOT_FOUND");
+    }
+
+    // Generic authentication error
+    return unauthorizedError("Authentication failed. Please login again.", "AUTH_ERROR");
   }
-
-  return user;
 }
 
 /**
@@ -150,6 +176,7 @@ export async function requireAdmin(
 ): Promise<{ id: string; email: string; role: string } | Response> {
   const user = await requireAuth(req);
 
+  // If requireAuth returned an error response, propagate it
   if (user instanceof Response) {
     return user;
   }
