@@ -20,6 +20,13 @@ const s3Client = new S3Client({
 
 export async function POST(req: NextRequest) {
   try {
+    // Validate required environment variables
+    if (!process.env.R2_BUCKET_NAME) {
+      return handleApiError(
+        new Error("R2_BUCKET_NAME environment variable is not configured")
+      );
+    }
+
     const authResult = await requireAuth(req);
 
     if (authResult instanceof Response) {
@@ -56,7 +63,7 @@ export async function POST(req: NextRequest) {
 
     // Generate pre-signed URL for upload
     const command = new PutObjectCommand({
-      Bucket: process.env.R2_BUCKET_NAME!,
+      Bucket: process.env.R2_BUCKET_NAME,
       Key: key,
       ContentType: fileType,
     });
