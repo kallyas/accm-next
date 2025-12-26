@@ -96,4 +96,39 @@ export const successImages: ImageData[] = Array(15)
     };
   });
 
-export const allImages: ImageData[] = [...eventImages, ...successImages];
+// Actual image filenames that exist in public/others directory
+const otherImageFiles = [
+  "IMG_0529.jpg", "IMG_0534.jpg", "IMG_0535.jpg", "IMG_0536.jpg",
+  "IMG_0543.jpg", "IMG_0544.jpg", "IMG_0545.jpg", "IMG_0547.jpg",
+  "IMG_0548.jpg", "IMG_0550.jpg", "IMG_0551.jpg", "IMG_0552.jpg",
+  "IMG_0554.jpg", "IMG_0555.jpg", "IMG_0565.jpg", "IMG_0566.jpg",
+  "IMG_0567.jpg", "IMG_0571.jpg", "IMG_0572.jpg", "IMG_0576.jpg",
+  "IMG_0577.jpg"
+];
+
+export const otherImages: ImageData[] = otherImageFiles.map((filename, index) => {
+  const dimensions = getRandomDimensions();
+  const date = new Date(
+    2024,
+    Math.floor(Math.random() * 5),
+    Math.floor(Math.random() * 28) + 1
+  );
+  const isFeatured = index % 5 === 0; // Every 5th image is featured
+
+  return {
+    id: index + 200,
+    src: `/others/${filename}`,
+    alt: `Other image ${index + 1}`,
+    category: "others",
+    description: `An additional glimpse into our diverse activities and moments.`,
+    date: date.toISOString(),
+    width: dimensions.width,
+    height: dimensions.height,
+    tags: getTags(),
+    featured: isFeatured,
+  };
+});
+
+// Combine all images
+
+export const allImages: ImageData[] = [...eventImages, ...successImages, ...otherImages];
