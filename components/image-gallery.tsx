@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, memo, useCallback } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useInView } from "react-intersection-observer";
@@ -18,42 +18,41 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { 
+import {
   ChevronLeft,
-  ChevronRight, 
-  ZoomIn, 
-  Download, 
-  X, 
-  Share2, 
-  Heart, 
-  Calendar, 
-  Tag, 
+  ChevronRight,
+  ZoomIn,
+  Download,
+  X,
+  Share2,
+  Heart,
+  Calendar,
+  Tag,
   Search,
   SlidersHorizontal,
   Info
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { allImages, eventImages, successImages } from "@/data";
+import { allImages, eventImages, successImages, otherImages } from "@/data";
 import { ImageData, FilterType, SortType } from "@/types/types";
 import { useGalleryStore } from "@/stores/gallery-store";
 import { ImageModal } from "./image-modal";
 
 export function ImageGallery({ filter = "all" }: { filter?: FilterType }) {
   // State
-  const [images, setImages] = useState<ImageData[]>([]);
   const [visibleCount, setVisibleCount] = useState(16);
   const [searchQuery, setSearchQuery] = useState("");
   const [showFilters, setShowFilters] = useState(false);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const { ref: loadMoreRef, inView } = useInView();
-  
+
   // Get from store
   const { viewMode, sortOrder, selectedImage, setSelectedImage, setSortOrder } = useGalleryStore();
-  
-  // Filter images based on category, search query and tags
-  useEffect(() => {
+
+  // Memoize filtered and sorted images for better performance
+  const images = useMemo(() => {
     let filteredImages: ImageData[] = [];
-    
+
     // Filter by category
     if (filter === "all") {
       filteredImages = [...allImages];
@@ -61,28 +60,30 @@ export function ImageGallery({ filter = "all" }: { filter?: FilterType }) {
       filteredImages = [...eventImages];
     } else if (filter === "success") {
       filteredImages = [...successImages];
+    } else if (filter === "others") {
+      filteredImages = [...otherImages];
     } else if (filter === "featured") {
       filteredImages = allImages.filter(img => img.featured);
     }
-    
+
     // Filter by search query
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       filteredImages = filteredImages.filter(
-        img => img.alt.toLowerCase().includes(query) || 
+        img => img.alt.toLowerCase().includes(query) ||
                img.description.toLowerCase().includes(query)
       );
     }
-    
+
     // Filter by selected tags
     if (selectedTags.length > 0) {
-      filteredImages = filteredImages.filter(img => 
+      filteredImages = filteredImages.filter(img =>
         img.tags?.some(tag => selectedTags.includes(tag))
       );
     }
-    
+
     // Sort images
-    filteredImages = [...filteredImages].sort((a, b) => {
+    return filteredImages.sort((a, b) => {
       if (sortOrder === "newest") {
         return new Date(b.date).getTime() - new Date(a.date).getTime();
       } else if (sortOrder === "oldest") {
@@ -91,9 +92,11 @@ export function ImageGallery({ filter = "all" }: { filter?: FilterType }) {
         return (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
       }
     });
-    
-    setImages(filteredImages);
-    setVisibleCount(16); // Reset visible count when filters change
+  }, [filter, searchQuery, selectedTags, sortOrder]);
+
+  // Reset visible count when filters change
+  useEffect(() => {
+    setVisibleCount(16);
   }, [filter, searchQuery, selectedTags, sortOrder]);
   
   // Automatically load more images when scrolling to the end
@@ -119,13 +122,18 @@ export function ImageGallery({ filter = "all" }: { filter?: FilterType }) {
   
   // Toggle tag selection
   const toggleTag = (tag: string) => {
-    setSelectedTags(prev => 
-      prev.includes(tag) 
+    setSelectedTags(prev =>
+      prev.includes(tag)
         ? prev.filter(t => t !== tag)
         : [...prev, tag]
     );
   };
-  
+
+  // Memoize image click handler to prevent re-creating on every render
+  const handleImageClick = useCallback((image: ImageData) => {
+    setSelectedImage(image);
+  }, [setSelectedImage]);
+
   return (
     <div className="space-y-6">
       {/* Filters and Search */}
@@ -205,11 +213,11 @@ export function ImageGallery({ filter = "all" }: { filter?: FilterType }) {
           {viewMode === 'grid' ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {images.slice(0, visibleCount).map((image, index) => (
-                <GalleryImage 
-                  key={`${image.id}-${index}`} 
-                  image={image} 
+                <GalleryImage
+                  key={`${image.id}-${index}`}
+                  image={image}
                   index={index}
-                  onClick={() => setSelectedImage(image)} 
+                  onClick={() => handleImageClick(image)}
                 />
               ))}
             </div>
@@ -225,11 +233,11 @@ export function ImageGallery({ filter = "all" }: { filter?: FilterType }) {
               columnClassName="pl-4 bg-clip-padding"
             >
               {images.slice(0, visibleCount).map((image, index) => (
-                <GalleryImage 
+                <GalleryImage
                   key={`${image.id}-${index}`}
-                  image={image} 
+                  image={image}
                   index={index}
-                  onClick={() => setSelectedImage(image)} 
+                  onClick={() => handleImageClick(image)}
                 />
               ))}
             </Masonry>
@@ -280,15 +288,42 @@ export function ImageGallery({ filter = "all" }: { filter?: FilterType }) {
   );
 }
 
-// GalleryImage component with framer-motion and hover effects
-function GalleryImage({ 
-  image, 
-  index, 
-  onClick 
-}: { 
-  image: ImageData, 
+// Generate a simple blur placeholder for images
+const generateBlurDataUrl = (id: number): string => {
+  const colorHash = Math.abs(id * 13 % 255);
+  const r = colorHash % 200;
+  const g = (colorHash + 70) % 200;
+  const b = (colorHash + 140) % 200;
+
+  const svg = `
+    <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="g${id}" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop stop-color="rgb(${r},${g},${b})" offset="0%" />
+          <stop stop-color="rgb(${r+20},${g+20},${b+20})" offset="100%" />
+        </linearGradient>
+      </defs>
+      <rect width="100" height="100" fill="url(#g${id})" />
+    </svg>
+  `;
+
+  const toBase64 = (str: string) =>
+    typeof window === 'undefined'
+      ? Buffer.from(str).toString('base64')
+      : window.btoa(str);
+
+  return `data:image/svg+xml;base64,${toBase64(svg)}`;
+};
+
+// GalleryImage component with framer-motion and hover effects - memoized for performance
+const GalleryImage = memo(function GalleryImage({
+  image,
+  index,
+  onClick
+}: {
+  image: ImageData,
   index: number,
-  onClick: () => void 
+  onClick: () => void
 }) {
   const [isLoading, setIsLoading] = useState(true);
   const { ref, inView } = useInView({
@@ -379,29 +414,37 @@ function GalleryImage({
         )}
       </motion.div>
       
-      {/* The actual image */}
+      {/* The actual image with enhanced loading */}
       <div className={cn(
         "relative h-full w-full overflow-hidden",
         isLoading ? "bg-muted" : ""
       )}>
         {inView && (
-          <Image
-            src={image.src}
-            alt={image.alt}
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-            className={cn(
-              "object-cover w-full h-full transition-all duration-500 group-hover:scale-105",
-              isLoading ? "blur-sm opacity-0" : "blur-0 opacity-100"
-            )}
-            onLoadingComplete={() => setIsLoading(false)}
-          />
+          <>
+            <Image
+              src={image.src}
+              alt={image.alt}
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+              placeholder="blur"
+              blurDataURL={generateBlurDataUrl(image.id)}
+              quality={85}
+              className={cn(
+                "object-cover w-full h-full transition-all duration-700 ease-out group-hover:scale-105",
+                isLoading ? "blur-sm opacity-0 scale-95" : "blur-0 opacity-100 scale-100"
+              )}
+              onLoadingComplete={() => setIsLoading(false)}
+            />
+          </>
         )}
-        
+
         {isLoading && (
-          <Skeleton className="h-full w-full absolute inset-0" />
+          <div className="h-full w-full absolute inset-0">
+            <Skeleton className="h-full w-full skeleton-pulse" />
+            <div className="absolute inset-0 gradient-shimmer" />
+          </div>
         )}
       </div>
     </motion.div>
   );
-}
+});
