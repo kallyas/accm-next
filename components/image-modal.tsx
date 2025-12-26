@@ -180,7 +180,7 @@ export function ImageModal({
       open={!!selectedImage}
       onOpenChange={(open) => !open && setSelectedImage(null)}
     >
-      <DialogContent className="sm:max-w-5xl md:max-w-6xl max-h-[90vh] p-0 overflow-hidden bg-background/95 border-border/50 backdrop-blur-md shadow-2xl">
+      <DialogContent className="sm:max-w-5xl md:max-w-6xl max-h-[90vh] p-0 overflow-hidden bg-background/95 border-border/50 backdrop-blur-md shadow-2xl modal-zoom-in">
         <div className="relative h-full flex flex-col">
           {/* Top controls */}
           <div className="absolute top-2 right-2 z-50 flex items-center gap-2">
@@ -232,26 +232,26 @@ export function ImageModal({
                   transition={{ duration: 0.3 }}
                   className="relative max-h-full max-w-full mx-auto"
                 >
-                  {/* Shimmer effect placeholder */}
+                  {/* Enhanced shimmer effect placeholder with blur */}
                   <div className={cn(
-                    "absolute inset-0 overflow-hidden rounded-md transition-opacity duration-500",
-                    isCurrentImageLoaded ? "opacity-0" : "opacity-100"
+                    "absolute inset-0 overflow-hidden rounded-md transition-all duration-700 ease-out",
+                    isCurrentImageLoaded ? "opacity-0 scale-105" : "opacity-100 scale-100"
                   )}>
                     {currentBlurDataUrl ? (
-                      <div 
-                        className="absolute inset-0 bg-cover bg-center"
+                      <div
+                        className="absolute inset-0 bg-cover bg-center blur-to-sharp loading"
                         style={{ backgroundImage: `url(${currentBlurDataUrl})` }}
                       >
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent shimmer-effect" />
+                        <div className="absolute inset-0 gradient-shimmer" />
                       </div>
                     ) : (
-                      <Skeleton className="h-full w-full">
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent shimmer-effect" />
+                      <Skeleton className="h-full w-full skeleton-pulse">
+                        <div className="absolute inset-0 gradient-shimmer" />
                       </Skeleton>
                     )}
                   </div>
                   
-                  {/* Main image that fades in */}
+                  {/* Main image with smooth fade-in transition */}
                   <Image
                     src={selectedImage.src}
                     alt={selectedImage.alt}
@@ -263,8 +263,8 @@ export function ImageModal({
                     placeholder={currentBlurDataUrl ? "blur" : "empty"}
                     blurDataURL={currentBlurDataUrl || undefined}
                     className={cn(
-                      "max-h-[calc(90vh-150px)] max-w-full object-contain mx-auto transition-opacity duration-500",
-                      isCurrentImageLoaded ? "opacity-100" : "opacity-0"
+                      "max-h-[calc(90vh-150px)] max-w-full object-contain mx-auto transition-all duration-700 ease-out",
+                      isCurrentImageLoaded ? "opacity-100 scale-100 blur-0" : "opacity-0 scale-95 blur-sm"
                     )}
                     onLoadingComplete={() => handleImageLoad(selectedImage.id)}
                     onError={() => handleImageError(selectedImage.id)}
@@ -308,10 +308,10 @@ export function ImageModal({
             ))}
           </div>
 
-          {/* Image information panel */}
+          {/* Image information panel with smooth slide animation */}
           <AnimatePresence>
             <motion.div
-              className="p-4 md:p-6 pt-3 bg-background border-t border-border/30"
+              className="p-4 md:p-6 pt-3 bg-background border-t border-border/30 modal-slide-up"
               initial={
                 showInfo ? { height: "auto" } : { height: 0, opacity: 0 }
               }
@@ -321,7 +321,7 @@ export function ImageModal({
                   : { height: 0, opacity: 0 }
               }
               exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
             >
               <div className="overflow-hidden">
                 <DialogTitle className="text-xl font-medium mb-2">
