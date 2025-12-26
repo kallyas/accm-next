@@ -61,10 +61,11 @@ export default function GalleryPage() {
           <CardContent className="p-6">
             <Tabs defaultValue="all" className="w-full">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
-                <TabsList className="grid w-full max-w-md grid-cols-4 bg-background/50">
+                <TabsList className="grid w-full max-w-2xl grid-cols-5 bg-background/50">
                   <TabsTrigger value="all">All</TabsTrigger>
                   <TabsTrigger value="events">Events</TabsTrigger>
                   <TabsTrigger value="success">Success</TabsTrigger>
+                  <TabsTrigger value="others">Others</TabsTrigger>
                   <TabsTrigger value="featured">Featured</TabsTrigger>
                 </TabsList>
 
@@ -84,6 +85,11 @@ export default function GalleryPage() {
               <TabsContent value="success" className="m-0">
                 <Suspense fallback={<GallerySkeleton />}>
                   <ImageGallery filter="success" />
+                </Suspense>
+              </TabsContent>
+              <TabsContent value="others" className="m-0">
+                <Suspense fallback={<GallerySkeleton />}>
+                  <ImageGallery filter="others" />
                 </Suspense>
               </TabsContent>
               <TabsContent value="featured" className="m-0">
