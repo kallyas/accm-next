@@ -52,6 +52,17 @@ import {
   BriefcaseIcon
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { ServiceAgreementContent } from "@/components/service-agreement-content";
 
 const formSchema = z.object({
   firstName: z.string().min(2, {
@@ -78,6 +89,9 @@ const formSchema = z.object({
   educationLevel: z.string({
     required_error: "Please select an education level.",
   }),
+  acceptServiceAgreement: z.boolean().refine((val) => val === true, {
+    message: "You must accept the Service Agreement to continue.",
+  }),
   password: z.string().min(8, {
     message: "Password must be at least 8 characters.",
   }).regex(/[A-Z]/, {
@@ -93,7 +107,7 @@ const formSchema = z.object({
 const STEPS = [
   { name: "Personal Information", fields: ["firstName", "lastName", "email", "phone"] },
   { name: "Additional Details", fields: ["service", "gender", "country", "educationLevel"] },
-  { name: "Security", fields: ["password"] },
+  { name: "Agreement & Security", fields: ["acceptServiceAgreement", "password"] },
 ];
 
 export default function RegisterPage() {
@@ -101,6 +115,7 @@ export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
+  const [showAgreementModal, setShowAgreementModal] = useState(false);
   const [progressPercent, setProgressPercent] = useState(0);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -114,6 +129,7 @@ export default function RegisterPage() {
       gender: undefined,
       country: "",
       educationLevel: "",
+      acceptServiceAgreement: false,
       password: "",
     },
     mode: "onChange",
@@ -554,7 +570,7 @@ export default function RegisterPage() {
                   </motion.div>
                 )}
                 
-                {/* Step 3: Security */}
+                {/* Step 3: Agreement & Security */}
                 {currentStep === 2 && (
                   <motion.div
                     variants={containerVariants}
@@ -562,6 +578,70 @@ export default function RegisterPage() {
                     animate="visible"
                     className="space-y-4"
                   >
+                    {/* Service Agreement Section */}
+                    <motion.div variants={itemVariants} className="space-y-4">
+                      <div className="p-4 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900/50 rounded-lg">
+                        <h3 className="text-sm font-semibold text-foreground mb-2">
+                          ACCM Responsibility and Availability Agreement
+                        </h3>
+                        <p className="text-xs text-muted-foreground mb-3">
+                          Please review and accept our Service Agreement to continue. This agreement outlines the responsibilities
+                          and expectations for both mentees and ACCM.
+                        </p>
+
+                        <Dialog open={showAgreementModal} onOpenChange={setShowAgreementModal}>
+                          <DialogTrigger asChild>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              className="w-full mb-3 border-blue-300 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900/30"
+                            >
+                              View Service Agreement
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-3xl max-h-[80vh]">
+                            <DialogHeader>
+                              <DialogTitle>ACCM Responsibility and Availability Agreement</DialogTitle>
+                              <DialogDescription>
+                                Please read through the agreement carefully before accepting.
+                              </DialogDescription>
+                            </DialogHeader>
+                            <ScrollArea className="h-[60vh] pr-4">
+                              <ServiceAgreementContent />
+                            </ScrollArea>
+                          </DialogContent>
+                        </Dialog>
+
+                        <FormField
+                          control={form.control}
+                          name="acceptServiceAgreement"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel className="text-sm font-normal cursor-pointer">
+                                  I have read and accept the{" "}
+                                  <button
+                                    type="button"
+                                    onClick={() => setShowAgreementModal(true)}
+                                    className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
+                                  >
+                                    ACCM Responsibility and Availability Agreement
+                                  </button>
+                                </FormLabel>
+                                <FormMessage />
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </motion.div>
+
                     <motion.div variants={itemVariants}>
                       <FormField
                         control={form.control}
