@@ -28,6 +28,9 @@ const UserRegistrationSchema = z.object({
       errorMap: () => ({ message: "Invalid education level" }),
     }
   ),
+  acceptServiceAgreement: z.boolean().refine((val) => val === true, {
+    message: "Service agreement must be accepted",
+  }),
   password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
@@ -93,6 +96,9 @@ export async function POST(req: Request) {
         educationLevel,
         firstName,
         lastName,
+        acceptedServiceAgreement: true,
+        serviceAgreementAcceptedAt: new Date(),
+        serviceAgreementVersion: "1.0",
       },
       // Explicitly select fields to return
       select: {
