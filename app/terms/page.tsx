@@ -15,7 +15,7 @@ export default function TermsPage() {
       <Card>
         <CardHeader>
           <CardTitle>Welcome to African Centre For Career Mentorship</CardTitle>
-          <CardDescription>Last updated: June 1, 2023</CardDescription>
+          <CardDescription>Last updated: January 15, 2026</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <p>
@@ -110,6 +110,33 @@ export default function TermsPage() {
             use the Application or the Website and tells You about Your privacy
             rights and how the law protects You. Please read Our Privacy Policy
             carefully before using Our Service.
+          </p>
+
+          <h2 className="text-2xl font-semibold mt-6">Service Agreement</h2>
+          <p>
+            In addition to these Terms and Conditions, users who enroll in ACCM
+            services are required to accept the{" "}
+            <Link
+              href="/service-agreement"
+              className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
+            >
+              ACCM Responsibility and Availability Agreement
+            </Link>
+            . This agreement outlines specific responsibilities, expectations,
+            and commitments for both mentees/clients and ACCM.
+          </p>
+          <p>
+            The Service Agreement covers important aspects including:
+          </p>
+          <ul className="list-disc list-inside space-y-1 ml-4">
+            <li>Client and ACCM responsibilities</li>
+            <li>Availability and timeline expectations</li>
+            <li>Service duration and engagement terms</li>
+            <li>Termination and refund policies</li>
+          </ul>
+          <p>
+            By registering for ACCM services, you agree to comply with both
+            these Terms and Conditions and the Service Agreement.
           </p>
 
           {/* Add more sections as needed */}
