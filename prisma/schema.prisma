@@ -22,8 +22,11 @@ model User {
   role                  Role                   @default(USER)
   createdAt             DateTime               @default(now())
   updatedAt             DateTime               @updatedAt
-  progressStatus        ProgressStatus         @default(PAYMENT_PENDING)
-  cvs                   CV[]
+  progressStatus             ProgressStatus         @default(PAYMENT_PENDING)
+  acceptedServiceAgreement   Boolean                @default(false)
+  serviceAgreementAcceptedAt DateTime?
+  serviceAgreementVersion    String?                @default("1.0")
+  cvs                        CV[]
   enrollments           Enrollment[]
   feedbacks             Feedback[]
   notifications         Notification[]
