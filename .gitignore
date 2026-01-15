@@ -13,6 +13,8 @@
 /.next/
 /out/
 
+*.log
+
 # production
 /build
 *.sh
