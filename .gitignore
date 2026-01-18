@@ -45,7 +45,3 @@ videos/*
 !videos/*.js
 !videos/*.ts
 public/_next-video
-
-# Google Drive API credentials
-google-credentials.json
-google-token.json
