@@ -7,9 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "migrate": "prisma migrate dev",
-    "gdrive:auth": "tsx scripts/authenticate-gdrive.ts",
-    "gdrive:download": "tsx scripts/download-gdrive-images.ts"
+    "migrate": "prisma migrate dev"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
@@ -18,7 +16,7 @@
     "@auth/prisma-adapter": "^2.7.4",
     "@aws-sdk/client-s3": "^3.714.0",
     "@aws-sdk/s3-request-presigner": "^3.714.0",
-    "@bingsjs/pdf-parse": "^1.1.1",
+    "pdf-parse": "^1.1.1",
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
@@ -66,7 +64,6 @@
     "embla-carousel-react": "^8.5.1",
     "framer-motion": "^11.15.0",
     "fs": "^0.0.2",
-    "googleapis": "^170.1.0",
     "input-otp": "^1.4.1",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
