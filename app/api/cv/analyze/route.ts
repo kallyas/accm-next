@@ -4,22 +4,14 @@ import { authOptions } from "@/lib/auth";
 import { getR2Url } from "@/lib/cloudflare-r2";
 import { db } from "@/lib/db";
 import { ZodError, z } from "zod";
-import pdf from "@bingsjs/pdf-parse";
+import pdf from "pdf-parse";
 import mammoth from "mammoth";
-import { LRUCache } from "lru-cache";
 import { analyzeCVContent, CVAnalysisResult, INDUSTRY_KEYWORDS } from "@/lib/utils";
 
 // Define the schema for validating input
 const analyzeSchema = z.object({
   cvId: z.string(),
   industry: z.enum(["tech", "finance", "marketing", "general"]).optional(),
-});
-
-// Analysis result cache
-const analysisCache = new LRUCache<string, CVAnalysisResult>({
-  max: 100, // Maximum 100 items
-  ttl: 1000 * 60 * 60, // 1 hour TTL
-  ttlAutopurge: true, // Auto purge expired items
 });
 
 // Text extraction retry configuration
@@ -129,14 +121,14 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: "CV not found" }, { status: 404 });
       }
 
-      // Check cache first
-      const cacheKey = `${cvId}:${industry}`;
-      const cachedResult = analysisCache.get(cacheKey);
-      
-      if (cachedResult) {
-        // Return cached result but still update DB in background
-        updateDatabase(cvId, cachedResult, session.user.id).catch(console.error);
-        return NextResponse.json(cachedResult);
+      // Check if analysis already exists in database
+      if (cvRecord.analysisResult) {
+        try {
+          const existingAnalysis = JSON.parse(cvRecord.analysisResult);
+          return NextResponse.json(existingAnalysis);
+        } catch {
+          // If parsing fails, continue with new analysis
+        }
       }
 
       // Get CV URL and extract content
@@ -168,9 +160,6 @@ export async function POST(req: Request) {
 
       // Analyze the CV content
       const analysisResult = analyzeCVContent(cvContent, industry as keyof typeof INDUSTRY_KEYWORDS);
-      
-      // Cache the result
-      analysisCache.set(cacheKey, analysisResult);
 
       // Update database
       await updateDatabase(cvId, analysisResult, session.user.id);
