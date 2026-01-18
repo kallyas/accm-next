@@ -1,4 +1,4 @@
-import pdf from "@bingsjs/pdf-parse";
+import pdf from "pdf-parse";
 import mammoth from "mammoth";
 import axios from "axios";
 
