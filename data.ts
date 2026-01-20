@@ -70,6 +70,75 @@ export const eventImages: ImageData[] = Array(40)
     };
   });
 
+// Juba events images
+// "AYAN photos_x.jpg" where x is from 1 to 82
+// "DSC0xxxx.jpg" - actual file numbers (non-sequential)
+// folder path: /accm/juba-2026
+
+// Actual DSC file numbers that exist
+const dscFileNumbers = [
+  8540, 8541, 8552, 8556, 8557, 8559, 8562, 8564, 8567, 8569,
+  8572, 8573, 8575, 8577, 8578, 8580, 8583, 8588, 8589, 8592,
+  8593, 8594, 8595, 8598, 8599, 8601, 8602, 8603, 8607, 8608,
+  8609, 8611, 8613, 8615, 8617, 8618, 8620, 8624, 8625, 8628,
+  8633, 8634, 8635, 8637, 8638, 8640, 8641, 8643, 8644, 8647,
+  8648, 8649, 8654, 8657, 8659, 8661, 8663, 8669, 8670, 8672,
+  8674, 8675, 8676, 8678, 8680, 8682, 8683, 8684, 8686, 8689,
+  8690, 8693, 8694, 8697, 8698, 8699, 8701, 8703, 8707, 8708,
+  8710, 8711, 8714, 8715, 8716, 8717, 8718, 8721, 8722, 8723,
+  8726, 8727, 8729, 8731, 8733, 8736, 8738, 8739, 8741, 8742,
+  8744, 8745, 8746, 8748, 8750, 8751, 8753
+];
+
+export const jubaEventImages: ImageData[] = [
+  ...Array(82)
+    .fill(0)
+    .map((_, index) => {
+      const dimensions = getRandomDimensions();
+      const date = new Date(
+        2026,
+        Math.floor(Math.random() * 5),
+        Math.floor(Math.random() * 28) + 1
+      );
+      const isFeatured = index % 10 === 0; // Every 10th image is featured
+
+      return {
+        id: index + 1000,
+        src: `/accm/juba-2026/AYAN photos_${index + 1}.jpg`,
+        alt: `16th January 2026-Juba, South Sudan - Event ${index + 1}`,
+        category: "events" as const,
+        description: `Captured during our special event in Juba, South Sudan.`,
+        date: date.toISOString(),
+        width: dimensions.width,
+        height: dimensions.height,
+        tags: getTags(),
+        featured: isFeatured,
+      };
+    }),
+  ...dscFileNumbers.map((fileNum, index) => {
+    const dimensions = getRandomDimensions();
+    const date = new Date(
+      2026,
+      Math.floor(Math.random() * 5),
+      Math.floor(Math.random() * 28) + 1
+    );
+    const isFeatured = index % 15 === 0; // Every 15th image is featured
+
+    return {
+      id: index + 2000,
+      src: `/accm/juba-2026/DSC0${fileNum}.jpg`,
+      alt: `16th January 2026-Juba, South Sudan - Event ${index + 1}`,
+      category: "events" as const,
+      description: `Captured during our special event in Juba, South Sudan.`,
+      date: date.toISOString(),
+      width: dimensions.width,
+      height: dimensions.height,
+      tags: getTags(),
+      featured: isFeatured,
+    };
+  }),
+];
+
 // Success story images
 export const successImages: ImageData[] = Array(15)
   .fill(0)
@@ -130,5 +199,6 @@ export const otherImages: ImageData[] = otherImageFiles.map((filename, index) =>
 });
 
 // Combine all images
+const mergedEventImages = [...eventImages, ...jubaEventImages];
 
-export const allImages: ImageData[] = [...eventImages, ...successImages, ...otherImages];
+export const allImages: ImageData[] = [...mergedEventImages, ...successImages, ...otherImages];
