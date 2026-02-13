@@ -45,3 +45,6 @@ videos/*
 !videos/*.js
 !videos/*.ts
 public/_next-video
+
+# Sentry Config File
+.env.sentry-build-plugin
