@@ -266,7 +266,7 @@ export default function ContactPage() {
                   <ContactInfoItem 
                     icon={MapPin} 
                     title="Our Location"
-                    detail="Plot 153, Kira Road, Kampala, Uganda"
+                    detail="Conrad Plaza, 7th Floor, above ISBAT University (City Campus), Next to Andro Smart Options LTD"
                     color="blue"
                   />
                   <ContactInfoItem 
@@ -308,7 +308,7 @@ export default function ContactPage() {
             <CardHeader className="pb-2">
               <CardTitle className="text-2xl text-gradient-primary">Our Location</CardTitle>
               <CardDescription>
-                Visit us at Plot 153, Kira Road, Kampala, Uganda
+                Visit us at Conrad Plaza, 7th Floor, above ISBAT University (City Campus), Next to Andro Smart Options LTD
               </CardDescription>
             </CardHeader>
             <CardContent>

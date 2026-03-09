@@ -108,7 +108,7 @@ export function Footer() {
             </h2>
             <ul className="mt-4 space-y-2">
               <li className="text-sm text-muted-foreground">
-                Plot 153, Kira Road, Kampala, Uganda
+                Conrad Plaza, 7th Floor, above ISBAT University (City Campus), Next to Andro Smart Options LTD
               </li>
               <li className="text-sm text-muted-foreground">
                 Phone: +(477)-570-224-173(whatsapp)
