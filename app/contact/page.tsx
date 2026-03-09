@@ -314,7 +314,7 @@ export default function ContactPage() {
             <CardContent>
               <div className="rounded-lg overflow-hidden shadow-inner border border-blue-100 dark:border-blue-900/50 h-[400px] md:h-[500px]">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3989.7468313008358!2d32.59352!3d0.34298999999999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMMKwMjAnMzQuOCJOIDMywrAzNSczNi43IkU!5e0!3m2!1sen!2sug!4v1736110635232!5m2!1sen!2sug"
+                  src="https://maps.google.com/maps?q=Conrad%20Plaza%2C%207th%20Floor%2C%20above%20ISBAT%20University%20%28City%20Campus%29%2C%20Next%20to%20Andro%20Smart%20Options%20LTD%2C%20Kampala%2C%20Uganda&z=16&output=embed"
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
