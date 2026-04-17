@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/lib/auth"
 import { db } from "@/lib/db"
 import { z } from "zod"
+import bcrypt from "bcryptjs"
 
 const querySchema = z.object({
   page: z.string().optional(),
@@ -88,20 +89,24 @@ export async function POST(req: Request) {
     const json = await req.json()
     const body = createUserSchema.parse(json)
 
+    const normalizedEmail = body.email.toLowerCase().trim()
+
     const existingUser = await db.user.findUnique({
-      where: { email: body.email },
+      where: { email: normalizedEmail },
     })
 
     if (existingUser) {
       return NextResponse.json({ error: "Email already in use" }, { status: 400 })
     }
 
+    const hashedPassword = await bcrypt.hash(body.password, 12)
+
     const user = await db.user.create({
       data: {
         firstName: body.firstName,
         lastName: body.lastName,
-        email: body.email,
-        password: body.password, // Note: In a real application, you should hash this password
+        email: normalizedEmail,
+        password: hashedPassword,
         role: body.role,
       },
     })
@@ -122,4 +127,3 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
   }
 }
-

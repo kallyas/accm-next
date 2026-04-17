@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { authOptions } from "@/lib/auth";
 
 export const metadata: Metadata = {
   title: "Create Account - African Centre For Career Mentorship",
@@ -15,7 +16,7 @@ export default async function RegisterLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   if (session) {
     redirect("/dashboard");
   }
@@ -55,10 +56,10 @@ export default async function RegisterLayout({
             {/* Testimonial card */}
             <div className="bg-white/10 backdrop-blur-sm border border-white/20 p-6 rounded-lg mt-10 text-left">
               <p className="italic mb-4">
-                "African Centre For Career Mentorship has truly been a game
+                &quot;African Centre For Career Mentorship has truly been a game
                 changer for my professional development. The mentorship program
                 provided clear direction and actionable steps that helped me
-                advance in my career path."
+                advance in my career path.&quot;
               </p>
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 rounded-full bg-white/20 overflow-hidden relative flex-shrink-0">

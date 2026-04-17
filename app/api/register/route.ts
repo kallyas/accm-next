@@ -5,9 +5,8 @@ import { z } from "zod";
 import { sendEmail } from "@/lib/email";
 import { getAccountCreationEmailTemplate } from "@/lib/email-templates/account-creation";
 
-// Comprehensive validation schema
 const UserRegistrationSchema = z.object({
-  email: z.string().email("Invalid email address"),
+  email: z.string().trim().email("Invalid email address"),
   firstName: z
     .string()
     .trim()
@@ -16,18 +15,21 @@ const UserRegistrationSchema = z.object({
   phone: z
     .string()
     .trim()
-    .regex(/^\+?[1-9]\d{1,14}$/, "Invalid phone number"),
-  service: z.string().trim().min(1, "Service is required"),
-  gender: z.enum(["MALE", "FEMALE", "OTHER"], {
-    errorMap: () => ({ message: "Invalid gender selection" }),
-  }),
-  country: z.string().trim().min(2, "Country is required"),
-  educationLevel: z.enum(
-    ["HIGH_SCHOOL", "BACHELORS", "MASTERS", "DOCTORATE", "OTHER", "PHD"],
-    {
+    .regex(/^\+?[1-9]\d{1,14}$/, "Invalid phone number")
+    .optional()
+    .or(z.literal("")),
+  service: z.string().trim().optional(),
+  gender: z
+    .enum(["MALE", "FEMALE", "OTHER"], {
+      errorMap: () => ({ message: "Invalid gender selection" }),
+    })
+    .optional(),
+  country: z.string().trim().optional(),
+  educationLevel: z
+    .enum(["HIGH_SCHOOL", "BACHELORS", "MASTERS", "DOCTORATE", "OTHER", "PHD"], {
       errorMap: () => ({ message: "Invalid education level" }),
-    }
-  ),
+    })
+    .optional(),
   acceptServiceAgreement: z.boolean().refine((val) => val === true, {
     message: "Service agreement must be accepted",
   }),
@@ -42,7 +44,11 @@ export async function POST(req: Request) {
     // Validate input
     const validationResult = UserRegistrationSchema.safeParse({
       ...body,
-      educationLevel: body.educationLevel.toUpperCase(),
+      email: typeof body.email === "string" ? body.email.toLowerCase().trim() : body.email,
+      educationLevel:
+        typeof body.educationLevel === "string"
+          ? body.educationLevel.toUpperCase()
+          : body.educationLevel,
     });
 
     // Check validation results
@@ -56,21 +62,12 @@ export async function POST(req: Request) {
       );
     }
 
-    const {
-      email,
-      password,
-      firstName,
-      lastName,
-      phone,
-      service,
-      gender,
-      country,
-      educationLevel,
-    } = validationResult.data;
+    const { email, password, firstName, lastName, phone, service, gender, country, educationLevel } =
+      validationResult.data;
 
     // Check for existing user
     const existingUser = await db.user.findUnique({
-      where: { email },
+      where: { email: email.toLowerCase().trim() },
       select: { id: true },
     });
 
@@ -89,11 +86,11 @@ export async function POST(req: Request) {
       data: {
         email,
         password: hashedPassword,
-        phone,
-        service,
-        gender,
-        country,
-        educationLevel,
+        phone: phone || null,
+        service: service || null,
+        gender: gender || null,
+        country: country || null,
+        educationLevel: educationLevel || null,
         firstName,
         lastName,
         acceptedServiceAgreement: true,
@@ -110,20 +107,31 @@ export async function POST(req: Request) {
       },
     });
 
-    await sendEmail({
-      to: email,
-      subject: "Your account has been created",
-      text: `Welcome to our platform, ${firstName}!`,
-      html: getAccountCreationEmailTemplate({
-        userName: `${firstName} ${lastName}`,
-        loginUrl: `${process.env.VERCEL_PROJECT_PRODUCTION_URL}/login`,
-      }),
-    });
+    let emailNotificationSent = true;
+
+    try {
+      const loginUrlBase = process.env.NEXTAUTH_URL || process.env.VERCEL_PROJECT_PRODUCTION_URL || "";
+      const loginUrl = loginUrlBase ? `${loginUrlBase.replace(/\/$/, "")}/login` : "/login";
+
+      await sendEmail({
+        to: email,
+        subject: "Your account has been created",
+        text: `Welcome to our platform, ${firstName}!`,
+        html: getAccountCreationEmailTemplate({
+          userName: `${firstName} ${lastName}`,
+          loginUrl,
+        }),
+      });
+    } catch (emailError) {
+      emailNotificationSent = false;
+      console.error("Account created but welcome email failed:", emailError);
+    }
 
     return NextResponse.json(
       {
         message: "User registered successfully",
         user,
+        emailNotificationSent,
       },
       { status: 201 } // Created status code
     );

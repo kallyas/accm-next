@@ -1,4 +1,4 @@
-import { getServerSession, NextAuthOptions } from "next-auth";
+import { NextAuthOptions } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { db } from "@/lib/db";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -21,15 +21,20 @@ export const authOptions: NextAuthOptions = {
         email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
           throw new Error("Invalid credentials");
         }
 
         try {
-          const user = await db.user.findUnique({
+          const normalizedEmail = credentials.email.toLowerCase().trim();
+
+          const user = await db.user.findFirst({
             where: {
-              email: credentials.email.toLowerCase().trim(),
+              email: {
+                equals: normalizedEmail,
+                mode: "insensitive",
+              },
             },
             select: {
               id: true,

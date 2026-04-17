@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { authOptions } from "@/lib/auth";
 
 export const metadata: Metadata = {
   title: "Authentication - African Centre For Career Mentorship",
@@ -15,7 +15,7 @@ export default async function AuthLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   if (session) {
     redirect("/dashboard");
   }
