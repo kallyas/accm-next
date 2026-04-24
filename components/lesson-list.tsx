@@ -72,11 +72,11 @@ export function LessonList({ lessons, courseId, enrollment }: LessonListProps) {
             <div className="flex items-center justify-between w-full">
               <div className="flex items-center">
                 {completedLessons.has(lesson.id) ? (
-                  <CheckCircle className="mr-2 h-5 w-5 text-green-500" />
+                  <CheckCircle className="mr-2 h-5 w-5 text-[#26A649]" />
                 ) : enrollment ? (
-                  <PlayCircle className="mr-2 h-5 w-5 text-blue-500" />
+                  <PlayCircle className="mr-2 h-5 w-5 text-[#1A1B4B]" />
                 ) : (
-                  <Lock className="mr-2 h-5 w-5 text-gray-500" />
+                  <Lock className="mr-2 h-5 w-5 text-[#1A1B4B]/70" />
                 )}
                 <span className="font-medium">
                   Lesson {index + 1}: {lesson.title}
