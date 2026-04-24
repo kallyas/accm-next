@@ -1,17 +1,8 @@
 import { getServerSession } from "next-auth/next";
-import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
@@ -19,24 +10,15 @@ import {
   CheckCircle2,
   Circle,
   ArrowRight,
-  AlertCircle,
+  Lock,
   CreditCard,
   UserCircle,
   FileText,
   GraduationCap,
-  ArrowLeft,
-  Info,
-  Lock,
+  Sparkles,
 } from "lucide-react";
 
-interface PageProps {
-  searchParams: {
-    message?: string;
-    returnTo?: string;
-  };
-}
-
-type StepStatus = 'completed' | 'current' | 'upcoming' | 'pending' | 'locked';
+type StepStatus = 'completed' | 'current' | 'upcoming' | 'locked';
 
 interface Step {
   title: string;
@@ -45,10 +27,9 @@ interface Step {
   status: StepStatus;
   action: string;
   link: string;
-  requiresPrevious?: boolean;
 }
 
-export default async function StatusPage({ searchParams }: PageProps) {
+export default async function StatusPage() {
   const session = await getServerSession(authOptions);
 
   const user = await db.user.findUnique({
@@ -56,34 +37,12 @@ export default async function StatusPage({ searchParams }: PageProps) {
     include: { subscriptions: true },
   });
 
-  const message = searchParams.message
-    ? decodeURIComponent(searchParams.message)
-    : null;
+  const hasActiveSubscription = user?.subscriptions.some((sub) => sub.status === "ACTIVE");
+  const hasPendingSubscription = user?.subscriptions.some((sub) => sub.status === "PENDING");
+  const hasCompletedPersonalDiscovery = user?.progressStatus !== "PERSONAL_DISCOVERY_PENDING" && user?.progressStatus !== undefined && hasActiveSubscription;
+  const hasCompletedCVAlignment = user?.progressStatus !== "CV_ALIGNMENT_PENDING" && hasCompletedPersonalDiscovery && hasActiveSubscription;
 
-  const returnTo = searchParams.returnTo
-    ? decodeURIComponent(searchParams.returnTo)
-    : null;
-
-  // Define step completion conditions
-  const hasActiveSubscription = user?.subscriptions.some(
-    (sub) => sub.status === "ACTIVE"
-  );
-  const hasPendingSubscription = user?.subscriptions.some(
-    (sub) => sub.status === "PENDING"
-  );
-  const hasCompletedPersonalDiscovery = 
-    user?.progressStatus !== "PERSONAL_DISCOVERY_PENDING" && 
-    user?.progressStatus !== undefined && hasActiveSubscription;
-  const hasCompletedCVAlignment = 
-    user?.progressStatus !== "CV_ALIGNMENT_PENDING" && 
-    hasCompletedPersonalDiscovery && hasActiveSubscription;
-
-  // Helper function to determine step status
-  const determineStepStatus = (
-    index: number,
-    isCompleted: boolean,
-    previousCompleted: boolean
-  ): StepStatus => {
+  const determineStepStatus = (index: number, isCompleted: boolean, previousCompleted: boolean): StepStatus => {
     if (isCompleted) return 'completed';
     if (!previousCompleted) return 'locked';
     if (index === 0 || previousCompleted) return 'current';
@@ -95,212 +54,143 @@ export default async function StatusPage({ searchParams }: PageProps) {
       title: "Payment",
       description: "Complete your subscription payment",
       icon: CreditCard,
-      status: hasActiveSubscription 
-        ? 'completed' 
-        : 'current',
-      action: hasPendingSubscription 
-        ? "Awaiting approval"
-        : "Subscribe now",
+      status: hasActiveSubscription ? 'completed' : 'current',
+      action: hasPendingSubscription ? "Awaiting approval" : "Subscribe now",
       link: "/dashboard/billing",
-      requiresPrevious: false,
     },
     {
       title: "Personal Discovery",
       description: "Complete your personal profile",
       icon: UserCircle,
       status: determineStepStatus(1, !!hasCompletedPersonalDiscovery, !!hasActiveSubscription),
-      action: hasCompletedPersonalDiscovery 
-        ? "Completed" 
-        : "Start now",
+      action: hasCompletedPersonalDiscovery ? "Completed" : "Start now",
       link: "/dashboard/personal-discovery",
-      requiresPrevious: true,
     },
     {
       title: "CV Alignment",
       description: "Upload and align your CV",
       icon: FileText,
       status: determineStepStatus(2, !!hasCompletedCVAlignment, !!hasCompletedPersonalDiscovery),
-      action: hasCompletedCVAlignment 
-        ? "Completed" 
-        : "Align now",
+      action: hasCompletedCVAlignment ? "Completed" : "Align now",
       link: "/cv-alignment",
-      requiresPrevious: true,
     },
     {
       title: "Scholarship Matrix",
-      description: "Complete your scholarship assessment",
+      description: "Complete scholarship assessment",
       icon: GraduationCap,
       status: determineStepStatus(3, false, !!hasCompletedCVAlignment),
       action: "Start assessment",
       link: "/scholarship-quest",
-      requiresPrevious: true,
     },
   ];
 
-  // Calculate progress
-  const completedSteps = steps.filter(step => step.status === 'completed').length;
+  const completedSteps = steps.filter((step) => step.status === 'completed').length;
   const progress = (completedSteps / steps.length) * 100;
-
-  const getStatusIcon = (status: StepStatus) => {
-    switch (status) {
-      case 'completed':
-        return <CheckCircle2 className="h-5 w-5 text-green-500" />;
-      case 'current':
-        return <Circle className="h-5 w-5 text-blue-500" />;
-      case 'locked':
-        return <Lock className="h-5 w-5 text-gray-400" />;
-      default:
-        return <Circle className="h-5 w-5 text-gray-300" />;
-    }
-  };
-
-  const getStatusBadge = (status: StepStatus) => {
-    const variants = {
-      completed: "success",
-      current: "default",
-      upcoming: "secondary",
-      pending: "warning",
-      locked: "secondary",
-    } as const;
-
-    const labels = {
-      completed: "Completed",
-      current: "In Progress",
-      upcoming: "Upcoming",
-      pending: "Pending",
-      locked: "Locked",
-    };
-
-    return (
-      <Badge variant={variants[status]}>
-        {labels[status]}
-      </Badge>
-    );
-  };
 
   const isStepAccessible = (index: number): boolean => {
     if (index === 0) return true;
-    const previousStep = steps[index - 1];
-    return previousStep.status === 'completed';
+    return steps[index - 1].status === 'completed';
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
-      <div className="container mx-auto px-4 py-10">
-        {message && (
-          <div className="mb-6">
-            <Alert className="relative border-l-4 border-blue-500 alert-info alert-with-icon alert-accented">
-              <Info className="h-5 w-5" />
-              <AlertTitle>Action Required</AlertTitle>
-              <AlertDescription>
-                {message}
-                {returnTo && (
-                  <div className="mt-2">
-                    <Link
-                      href={returnTo}
-                      className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:underline"
-                    >
-                      <ArrowLeft className="mr-2 h-4 w-4" />
-                      Return after {message.toLowerCase()}
-                    </Link>
-                  </div>
-                )}
-              </AlertDescription>
-            </Alert>
-          </div>
-        )}
+    <div className="space-y-8">
+      <div className="space-y-2">
+        <p className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-[#26A649]">
+          <Sparkles className="mr-2 h-3.5 w-3.5 inline" />
+          Your journey
+        </p>
+        <h1 className="text-2xl font-semibold uppercase tracking-tight text-[#1A1B4B] sm:text-3xl">
+          Complete these steps
+        </h1>
+        <p className="text-sm text-[#1A1B4B]/60">
+          Unlock all features of ACCM by completing each step
+        </p>
+      </div>
 
-        <div className="space-y-6">
-          <div className="space-y-2">
-            <h1 className="text-3xl font-bold tracking-tight">Your Journey</h1>
-            <p className="text-lg text-muted-foreground">
-              Complete these steps to unlock all features of ACCM
-            </p>
-          </div>
+      <Card className="border border-[#1A1B4B]/20 bg-white">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-sm uppercase tracking-wider text-[#1A1B4B]">
+            Overall Progress
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Progress value={progress} className="h-2" style={{ "--progress-fill": "#26A649" } as React.CSSProperties} />
+          <p className="mt-2 text-xs text-[#1A1B4B]/50">
+            {completedSteps} of {steps.length} steps completed
+          </p>
+        </CardContent>
+      </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Overall Progress</CardTitle>
-              <CardDescription>
-                {completedSteps} of {steps.length} steps completed
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Progress value={progress} className="h-2" />
-            </CardContent>
-          </Card>
+      <div className="grid gap-4 sm:grid-cols-2">
+        {steps.map((step, index) => {
+          const Icon = step.icon;
+          const isAccessible = isStepAccessible(index);
+          const isCompleted = step.status === 'completed';
+          const isCurrent = step.status === 'current';
 
-          <div className="grid gap-6 md:grid-cols-2">
-            {steps.map((step, index) => {
-              const Icon = step.icon;
-              const isAccessible = isStepAccessible(index);
-              const isCompleted = step.status === 'completed';
-              const isCurrent = step.status === 'current';
-              
-              return (
-                <Card
-                  key={index}
-                  className={`${
-                    isCurrent ? "border-2 border-primary" : ""
-                  } ${
-                    !isAccessible ? "opacity-75" : ""
-                  }`}
-                >
-                  <CardHeader>
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-center space-x-3">
-                        <div className="rounded-full bg-muted p-2">
-                          <Icon className="h-5 w-5" />
-                        </div>
-                        <div>
-                          <CardTitle>{step.title}</CardTitle>
-                          <CardDescription>{step.description}</CardDescription>
-                        </div>
+          return (
+            <div key={index}>
+              <Card
+                className={`h-full border ${
+                  isCurrent
+                    ? "border-[#1A1B4B] bg-white"
+                    : "border-[#1A1B4B]/10 bg-white"
+                } ${!isAccessible ? "opacity-60" : ""}`}
+              >
+                <CardHeader className="pb-2">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-10 w-10 items-center justify-center border border-[#1A1B4B]/20 bg-[#ece8df]">
+                        <Icon className="h-5 w-5 text-[#1A1B4B]" />
                       </div>
-                      {getStatusBadge(step.status)}
+                      <div>
+                        <CardTitle className="text-sm uppercase tracking-wide text-[#1A1B4B]">
+                          {step.title}
+                        </CardTitle>
+                      </div>
                     </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex items-center space-x-2">
-                      {getStatusIcon(step.status)}
-                      <span className="text-sm text-muted-foreground">
-                        {step.status === 'locked' 
-                          ? "Complete previous steps first"
-                          : step.status === 'completed'
-                          ? "Completed"
-                          : step.status === 'current'
-                          ? "In Progress"
-                          : "Not Started"}
-                      </span>
-                    </div>
-                  </CardContent>
-                  <CardFooter>
-                    <Button
-                      className="w-full"
-                      asChild={isAccessible && !isCompleted}
-                      disabled={!isAccessible || isCompleted || step.action === "Awaiting approval"}
-                      variant={isCurrent ? "default" : "outline"}
-                    >
-                      <Link
-                        href={isAccessible ? step.link : "#"}
-                        className="flex items-center justify-center"
-                      >
-                        {isCompleted 
-                          ? "Completed" 
-                          : !isAccessible 
-                          ? "Locked" 
-                          : step.action}
-                        {isAccessible && !isCompleted && (
-                          <ArrowRight className="ml-2 h-4 w-4" />
-                        )}
-                      </Link>
-                    </Button>
-                  </CardFooter>
-                </Card>
-              );
-            })}
-          </div>
-        </div>
+                    {isCompleted && (
+                      <Badge variant="outline" className="border-[#26A649]/30 text-[#26A649]">
+                        <CheckCircle2 className="mr-1 h-3 w-3" />
+                        Done
+                      </Badge>
+                    )}
+                    {step.status === 'locked' && (
+                      <Badge variant="outline" className="border-[#1A1B4B]/20 text-[#1A1B4B]/50">
+                        <Lock className="mr-1 h-3 w-3" />
+                        Locked
+                      </Badge>
+                    )}
+                    {isCurrent && (
+                      <Badge className="bg-[#1A1B4B] text-white">In Progress</Badge>
+                    )}
+                  </div>
+                </CardHeader>
+                <CardContent className="pb-3">
+                  <p className="text-xs text-[#1A1B4B]/60">{step.description}</p>
+                </CardContent>
+                <CardFooter>
+                  <Button
+                    asChild
+                    disabled={!isAccessible || isCompleted || step.action === "Awaiting approval"}
+                    className={`w-full h-9 text-xs uppercase tracking-wider ${
+                      isCompleted
+                        ? "border border-[#26A649]/30 text-[#26A649] bg-transparent"
+                        : isAccessible
+                        ? "bg-[#1A1B4B] text-white"
+                        : "border border-[#1A1B4B]/20 text-[#1A1B4B]/50 bg-transparent"
+                    }`}
+                  >
+                    <Link href={isAccessible ? step.link : "#"} className="flex items-center justify-center">
+                      {isCompleted ? "Completed" : !isAccessible ? "Locked" : step.action}
+                      {isAccessible && !isCompleted && <ArrowRight className="ml-2 h-4 w-4" />}
+                    </Link>
+                  </Button>
+                </CardFooter>
+              </Card>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
