@@ -176,7 +176,7 @@ export default function StartPersonalDiscoveryPage() {
       localStorage.removeItem("personalDiscoveryForm");
 
       router.push("/dashboard/personal-discovery");
-    } catch (error) {
+    } catch {
       toast({
         title: "Error",
         description: "Failed to submit personal discovery. Please try again.",
@@ -231,7 +231,7 @@ export default function StartPersonalDiscoveryPage() {
     {
       id: "strengths",
       title: "Strengths",
-      icon: <Star className="h-5 w-5 text-amber-500" />,
+      icon: <Star className="h-5 w-5 text-[#26A649]" />,
       description:
         "Identify your core competencies, skills, and abilities that set you apart.",
       fields: [
@@ -251,7 +251,7 @@ export default function StartPersonalDiscoveryPage() {
     {
       id: "weaknesses",
       title: "Weaknesses",
-      icon: <XCircle className="h-5 w-5 text-red-500" />,
+      icon: <XCircle className="h-5 w-5 text-[#1A1B4B]" />,
       description:
         "Acknowledge areas where you could improve or develop further.",
       fields: [
@@ -270,7 +270,7 @@ export default function StartPersonalDiscoveryPage() {
     {
       id: "opportunities",
       title: "Opportunities",
-      icon: <CheckCircle2 className="h-5 w-5 text-green-500" />,
+      icon: <CheckCircle2 className="h-5 w-5 text-[#26A649]" />,
       description:
         "External factors that you could leverage for career advancement.",
       fields: [
@@ -290,7 +290,7 @@ export default function StartPersonalDiscoveryPage() {
     {
       id: "threats",
       title: "Threats",
-      icon: <AlertTriangle className="h-5 w-5 text-orange-500" />,
+      icon: <AlertTriangle className="h-5 w-5 text-[#1A1B4B]" />,
       description:
         "External challenges that might hinder your career progression.",
       fields: [
@@ -309,7 +309,7 @@ export default function StartPersonalDiscoveryPage() {
     {
       id: "achievements",
       title: "Achievements",
-      icon: <Award className="h-5 w-5 text-purple-500" />,
+      icon: <Award className="h-5 w-5 text-[#26A649]" />,
       description: "Highlight your significant accomplishments and successes.",
       fields: [
         {
@@ -328,7 +328,7 @@ export default function StartPersonalDiscoveryPage() {
     {
       id: "aspirations",
       title: "Aspirations",
-      icon: <Target className="h-5 w-5 text-blue-500" />,
+      icon: <Target className="h-5 w-5 text-[#1A1B4B]" />,
       description: "Define your life goals across different dimensions.",
       fields: [
         {
@@ -373,7 +373,7 @@ export default function StartPersonalDiscoveryPage() {
     {
       id: "career",
       title: "Career Planning",
-      icon: <Briefcase className="h-5 w-5 text-indigo-500" />,
+      icon: <Briefcase className="h-5 w-5 text-[#1A1B4B]" />,
       description: "Plan your career development path and strategies.",
       fields: [
         {
@@ -412,7 +412,7 @@ export default function StartPersonalDiscoveryPage() {
     {
       id: "strategies",
       title: "Strategies & Goals",
-      icon: <Calendar className="h-5 w-5 text-green-500" />,
+      icon: <Calendar className="h-5 w-5 text-[#26A649]" />,
       description: "Define your action plans and short-term objectives.",
       fields: [
         {
@@ -451,7 +451,7 @@ export default function StartPersonalDiscoveryPage() {
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
       ) => handleInputChange(field.id, e.target.value),
       required: field.required,
-      className: formErrors[field.id] ? "border-red-500" : "",
+      className: formErrors[field.id] ? "border-[#26A649]" : "",
     };
 
     switch (field.type) {
@@ -493,7 +493,7 @@ export default function StartPersonalDiscoveryPage() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center">
-                <BookOpen className="mr-2 h-5 w-5 text-blue-500" />
+                <BookOpen className="mr-2 h-5 w-5 text-[#26A649]" />
                 Introduction to Personal Discovery
               </CardTitle>
               <CardDescription>
@@ -502,7 +502,7 @@ export default function StartPersonalDiscoveryPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="aspect-video bg-muted rounded-md overflow-hidden">
+              <div className="aspect-video overflow-hidden rounded-md bg-[#1A1B4B]/5">
                 <YouTubePlayer
                   videoUrl="https://www.youtube.com/watch?v=an3DR_wv5w8"
                   onComplete={handleVideoComplete}
@@ -511,11 +511,11 @@ export default function StartPersonalDiscoveryPage() {
 
               <div className="mt-6 flex justify-between items-center">
                 <div className="flex items-center">
-                  <div className="w-8 h-8 rounded-full flex items-center justify-center bg-muted">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#1A1B4B]/10">
                     {isVideoWatched ? (
-                      <Check className="h-5 w-5 text-green-500" />
+                      <Check className="h-5 w-5 text-[#26A649]" />
                     ) : (
-                      <Info className="h-5 w-5 text-blue-500" />
+                      <Info className="h-5 w-5 text-[#1A1B4B]" />
                     )}
                   </div>
                   <span className="ml-2 text-sm font-medium">
@@ -541,7 +541,7 @@ export default function StartPersonalDiscoveryPage() {
               <CardTitle>What is Personal Discovery?</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-muted-foreground">
+              <p className="text-[#1A1B4B]/70">
                 The Personal Discovery questionnaire is a self-assessment tool
                 based on the 4W Framework developed by Abel Wilson Walekhwa. It
                 helps you identify your strengths, weaknesses, opportunities,
@@ -549,30 +549,30 @@ export default function StartPersonalDiscoveryPage() {
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-                  <h3 className="font-medium text-blue-800 dark:text-blue-300 mb-2 flex items-center">
+                <div className="rounded-lg bg-[#1A1B4B]/5 p-4">
+                  <h3 className="mb-2 flex items-center font-medium text-[#1A1B4B]">
                     <Star className="mr-2 h-4 w-4" />
                     Benefits of Personal Discovery
                   </h3>
                   <ul className="space-y-2 text-sm">
                     <li className="flex items-start">
-                      <CheckCircle2 className="h-4 w-4 mr-2 mt-0.5 text-green-500" />
+                      <CheckCircle2 className="mr-2 mt-0.5 h-4 w-4 text-[#26A649]" />
                       <span>
                         Align your career goals with your personal aspirations
                       </span>
                     </li>
                     <li className="flex items-start">
-                      <CheckCircle2 className="h-4 w-4 mr-2 mt-0.5 text-green-500" />
+                      <CheckCircle2 className="mr-2 mt-0.5 h-4 w-4 text-[#26A649]" />
                       <span>Identify areas for professional development</span>
                     </li>
                     <li className="flex items-start">
-                      <CheckCircle2 className="h-4 w-4 mr-2 mt-0.5 text-green-500" />
+                      <CheckCircle2 className="mr-2 mt-0.5 h-4 w-4 text-[#26A649]" />
                       <span>
                         Develop strategic plans for career advancement
                       </span>
                     </li>
                     <li className="flex items-start">
-                      <CheckCircle2 className="h-4 w-4 mr-2 mt-0.5 text-green-500" />
+                      <CheckCircle2 className="mr-2 mt-0.5 h-4 w-4 text-[#26A649]" />
                       <span>
                         Create targeted goals that align with your strengths
                       </span>
@@ -580,20 +580,20 @@ export default function StartPersonalDiscoveryPage() {
                   </ul>
                 </div>
 
-                <div className="bg-amber-50 dark:bg-amber-900/20 p-4 rounded-lg">
-                  <h3 className="font-medium text-amber-800 dark:text-amber-300 mb-2 flex items-center">
+                <div className="rounded-lg bg-[#26A649]/10 p-4">
+                  <h3 className="mb-2 flex items-center font-medium text-[#1A1B4B]">
                     <Info className="mr-2 h-4 w-4" />
                     How It Works
                   </h3>
                   <ol className="space-y-2 text-sm">
                     <li className="flex items-start">
-                      <div className="bg-amber-200 dark:bg-amber-800 text-amber-800 dark:text-amber-200 rounded-full h-5 w-5 flex items-center justify-center mr-2 flex-shrink-0 text-xs">
+                      <div className="mr-2 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-[#26A649]/20 text-xs text-[#1A1B4B]">
                         1
                       </div>
                       <span>Complete the Personal Discovery questionnaire</span>
                     </li>
                     <li className="flex items-start">
-                      <div className="bg-amber-200 dark:bg-amber-800 text-amber-800 dark:text-amber-200 rounded-full h-5 w-5 flex items-center justify-center mr-2 flex-shrink-0 text-xs">
+                      <div className="mr-2 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-[#26A649]/20 text-xs text-[#1A1B4B]">
                         2
                       </div>
                       <span>
@@ -601,13 +601,13 @@ export default function StartPersonalDiscoveryPage() {
                       </span>
                     </li>
                     <li className="flex items-start">
-                      <div className="bg-amber-200 dark:bg-amber-800 text-amber-800 dark:text-amber-200 rounded-full h-5 w-5 flex items-center justify-center mr-2 flex-shrink-0 text-xs">
+                      <div className="mr-2 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-[#26A649]/20 text-xs text-[#1A1B4B]">
                         3
                       </div>
                       <span>Use this to inform your CV alignment process</span>
                     </li>
                     <li className="flex items-start">
-                      <div className="bg-amber-200 dark:bg-amber-800 text-amber-800 dark:text-amber-200 rounded-full h-5 w-5 flex items-center justify-center mr-2 flex-shrink-0 text-xs">
+                      <div className="mr-2 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-[#26A649]/20 text-xs text-[#1A1B4B]">
                         4
                       </div>
                       <span>
@@ -665,7 +665,7 @@ export default function StartPersonalDiscoveryPage() {
             <Card className="hidden lg:block">
               <CardHeader>
                 <CardTitle className="text-base flex items-center">
-                  <Upload className="mr-2 h-5 w-5 text-blue-500" />
+                  <Upload className="mr-2 h-5 w-5 text-[#26A649]" />
                   Upload Personal Discovery Document (Optional)
                 </CardTitle>
                 <CardDescription>
@@ -681,7 +681,7 @@ export default function StartPersonalDiscoveryPage() {
                   onChange={handleFileChange}
                   className="cursor-pointer"
                 />
-                <p className="mt-2 text-sm text-muted-foreground">
+                <p className="mt-2 text-sm text-[#1A1B4B]/60">
                   Supported formats: Word (.doc, .docx), PDF (.pdf)
                 </p>
               </CardContent>
@@ -691,7 +691,7 @@ export default function StartPersonalDiscoveryPage() {
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
               {/* Section navigation sidebar */}
               <div className="lg:col-span-1">
-                <div className="bg-muted rounded-lg p-4 sticky top-4">
+                <div className="sticky top-4 rounded-lg bg-[#1A1B4B]/5 p-4">
                   <h2 className="text-lg font-medium mb-4">Sections</h2>
                   <div className="space-y-1">
                     {formSections.map((section) => (
@@ -762,7 +762,7 @@ export default function StartPersonalDiscoveryPage() {
                                             size="icon"
                                             className="h-6 w-6"
                                           >
-                                            <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                                            <HelpCircle className="h-4 w-4 text-[#1A1B4B]/50" />
                                           </Button>
                                         </TooltipTrigger>
                                         <TooltipContent>
@@ -777,13 +777,13 @@ export default function StartPersonalDiscoveryPage() {
                                   {renderFormField(field)}
 
                                   {field.exampleText && (
-                                    <p className="text-xs text-muted-foreground">
+                                    <p className="text-xs text-[#1A1B4B]/55">
                                       {field.exampleText}
                                     </p>
                                   )}
 
                                   {formErrors[field.id] && (
-                                    <p className="text-xs text-red-500">
+                                    <p className="text-xs text-[#26A649]">
                                       {formErrors[field.id]}
                                     </p>
                                   )}
