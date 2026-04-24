@@ -1,45 +1,53 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import Image from "next/image";
-import { 
-  Card, 
-  CardContent, 
-  CardHeader, 
-  CardTitle, 
-  CardDescription,
-  CardFooter 
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import { motion } from "framer-motion";
-import { useInView } from "react-intersection-observer";
+import type { ElementType } from "react";
 import {
-  Users,
-  Calendar,
-  Briefcase,
-  GraduationCap,
-  Star,
+  Award,
+  CheckCircle,
   ChevronRight,
   Globe,
-  Award,
+  GraduationCap,
   LinkedinIcon,
-  TwitterIcon,
   MailIcon,
-  CheckCircle
+  TwitterIcon,
+  Users,
 } from "lucide-react";
-import { 
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { cn } from "@/lib/utils";
 
-const mentors = [
+type Mentor = {
+  id: number;
+  name: string;
+  title: string;
+  image: string;
+  expertise: string[];
+  bio: string;
+  fullBio: string;
+  achievements: string[];
+  education: {
+    degree: string;
+    institution: string;
+  }[];
+  contact: {
+    email: string;
+    linkedin: string;
+    twitter: string;
+  };
+};
+
+const mentors: Mentor[] = [
   {
     id: 1,
     name: "Abel Wilson Walekhwa",
@@ -47,22 +55,27 @@ const mentors = [
     image: "/mentors/banner-image.jpeg",
     expertise: ["Career Development", "4WFramework", "Leadership"],
     bio: "Walekhwa is the founder of African Centre for Career Mentorship and developer of the 4WFramework. With over 15 years of experience in career counseling, he has helped thousands of professionals across Africa realize their potential.",
-    fullBio: "Abel Wilson Walekhwa is a dedicated professional with extensive experience in career development and mentorship. After identifying a significant gap between education and industry needs, he founded the African Centre for Career Mentorship to bridge this divide. Through his innovative 4WFramework methodology, Abel has transformed the career trajectories of countless professionals across the continent.\n\nHis approach focuses on personalized guidance that acknowledges each individual's unique strengths and challenges. Abel's work spans across multiple sectors, providing mentorship to both early-career professionals and established leaders seeking to maximize their impact.",
+    fullBio:
+      "Abel Wilson Walekhwa is a dedicated professional with extensive experience in career development and mentorship. After identifying a significant gap between education and industry needs, he founded the African Centre for Career Mentorship to bridge this divide. Through his innovative 4WFramework methodology, Abel has transformed the career trajectories of countless professionals across the continent.\n\nHis approach focuses on personalized guidance that acknowledges each individual's unique strengths and challenges. Abel's work spans across multiple sectors, providing mentorship to both early-career professionals and established leaders seeking to maximize their impact.",
     achievements: [
       "Developed the 4WFramework for career development",
       "Mentored over 5,000 professionals across Africa",
       "Led career development programs in 10+ countries",
-      "Established partnerships with major corporations and educational institutions"
+      "Established partnerships with major corporations and educational institutions",
     ],
     education: [
-      { degree: "Master's in Human Resource Development", institution: "Makerere University" },
-      { degree: "Bachelor's in Education", institution: "Kyambogo University" }
+      {
+        degree: "Master's in Human Resource Development",
+        institution: "Makerere University",
+      },
+      { degree: "Bachelor's in Education", institution: "Kyambogo University" },
     ],
     contact: {
       email: "abel@africanccm.com",
-      linkedin: "https://www.linkedin.com/in/african-centre-for-career-mentorship-8a476228b/",
-      twitter: "https://x.com/mentorglobally"
-    }
+      linkedin:
+        "https://www.linkedin.com/in/african-centre-for-career-mentorship-8a476228b/",
+      twitter: "https://x.com/mentorglobally",
+    },
   },
   {
     id: 2,
@@ -72,447 +85,434 @@ const mentors = [
     expertise: [
       "Financial Literacy",
       "Trainer of Trainees",
-      "HR-Learning and Development"
+      "HR-Learning and Development",
     ],
     bio: "Evelyne is a Learning and Development specialist currently serving as lead HR-Learning and Development at Wagagai Limited, one of the largest Horticulture farms in Uganda. She has a passion for financial literacy and has trained over 5000 employees in the last 10 years.",
-    fullBio: "Birungi Evelyne has built her career around empowering others through education and skill development. As a Learning and Development specialist at Wagagai Limited, she has designed and implemented comprehensive training programs that address both technical skills and personal growth.\n\nEvelyne's expertise in financial literacy has been particularly transformative, helping employees at all levels make informed decisions about their financial futures. Her approach combines practical knowledge with actionable strategies, making complex financial concepts accessible to everyone.",
+    fullBio:
+      "Birungi Evelyne has built her career around empowering others through education and skill development. As a Learning and Development specialist at Wagagai Limited, she has designed and implemented comprehensive training programs that address both technical skills and personal growth.\n\nEvelyne's expertise in financial literacy has been particularly transformative, helping employees at all levels make informed decisions about their financial futures. Her approach combines practical knowledge with actionable strategies, making complex financial concepts accessible to everyone.",
     achievements: [
       "Designed and implemented training programs for over 5,000 employees",
       "Developed a financial literacy curriculum adopted by multiple organizations",
       "Increased employee retention by 35% through targeted development programs",
-      "Recipient of the HR Excellence Award for Training Innovation"
+      "Recipient of the HR Excellence Award for Training Innovation",
     ],
     education: [
-      { degree: "Master's in Human Resource Management", institution: "Uganda Management Institute" },
-      { degree: "Bachelor's in Business Administration", institution: "Makerere University Business School" }
+      {
+        degree: "Master's in Human Resource Management",
+        institution: "Uganda Management Institute",
+      },
+      {
+        degree: "Bachelor's in Business Administration",
+        institution: "Makerere University Business School",
+      },
     ],
     contact: {
       email: "evelyne@africanccm.com",
-      linkedin: "https://www.linkedin.com/in/african-centre-for-career-mentorship-8a476228b/",
-      twitter: "https://x.com/mentorglobally"
-    }
+      linkedin:
+        "https://www.linkedin.com/in/african-centre-for-career-mentorship-8a476228b/",
+      twitter: "https://x.com/mentorglobally",
+    },
   },
   {
     id: 3,
     name: "Harriet Ocitti",
     title: "Communication Coach",
     image: "/mentors/harriet.jpg",
-    expertise: [
-      "Public Speaking",
-      "Leadership Skills",
-      "Communication Coaching"
-    ],
+    expertise: ["Public Speaking", "Leadership Skills", "Communication Coaching"],
     bio: "Harriet Ocitti serves as the Executive Director at the Institute for National Transformation (INT), whose mission is to develop no-excuse leaders who will transform their spheres of influence to greater levels of performance and excellence. She brings a wealth of experience in communication and leadership coaching.",
-    fullBio: "Harriet Ocitti is a distinguished communication professional who believes in the transformative power of effective communication in leadership. As the Executive Director at the Institute for National Transformation, she works to cultivate leaders who can drive positive change through clear vision and powerful communication.\n\nWith her background in both business and education, Harriet brings a unique perspective to her coaching practice. Her holistic approach addresses not only the technical aspects of communication but also the emotional intelligence and presence that make leaders truly impactful.",
+    fullBio:
+      "Harriet Ocitti is a distinguished communication professional who believes in the transformative power of effective communication in leadership. As the Executive Director at the Institute for National Transformation, she works to cultivate leaders who can drive positive change through clear vision and powerful communication.\n\nWith her background in both business and education, Harriet brings a unique perspective to her coaching practice. Her holistic approach addresses not only the technical aspects of communication but also the emotional intelligence and presence that make leaders truly impactful.",
     achievements: [
       "Coached executives from over 50 organizations across East Africa",
       "Developed the 'Communicate to Lead' framework for effective leadership communication",
       "Featured speaker at international leadership conferences",
-      "Published author on communication strategies for emerging leaders"
+      "Published author on communication strategies for emerging leaders",
     ],
     education: [
-      { degree: "Master's in Communication Studies", institution: "University of Nairobi" },
-      { degree: "Bachelor's in Business Communication", institution: "Makerere University" }
+      {
+        degree: "Master's in Communication Studies",
+        institution: "University of Nairobi",
+      },
+      {
+        degree: "Bachelor's in Business Communication",
+        institution: "Makerere University",
+      },
     ],
     contact: {
       email: "harriet@africanccm.com",
-      linkedin: "https://www.linkedin.com/in/african-centre-for-career-mentorship-8a476228b/",
-      twitter: "https://x.com/mentorglobally"
-    }
+      linkedin:
+        "https://www.linkedin.com/in/african-centre-for-career-mentorship-8a476228b/",
+      twitter: "https://x.com/mentorglobally",
+    },
+  },
+];
+
+const approach = [
+  {
+    title: "Personalized Assessment",
+    description:
+      "We start by understanding your strengths, constraints, and long-term goals.",
+  },
+  {
+    title: "Structured Development Plan",
+    description:
+      "You get a practical roadmap with clear milestones and accountability.",
+  },
+  {
+    title: "Regular Guidance Sessions",
+    description:
+      "Mentors provide continuous support as you implement and adapt your plan.",
+  },
+  {
+    title: "Network Building",
+    description:
+      "You connect with experienced practitioners and high-intent peers.",
   },
 ];
 
 export default function MentorsPage() {
-  const [selectedMentor, setSelectedMentor] = useState(null);
-  const [ref, inView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  });
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-    },
-  };
+  const [selectedMentor, setSelectedMentor] = useState<Mentor | null>(null);
 
   return (
-    <div className="container mx-auto max-w-7xl px-4 py-10">
-      {/* Hero Section */}
-      <section className="relative mb-16 rounded-2xl overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-gray-900/80 to-gray-800/80 z-10" />
-        <div className="relative px-6 z-20 py-20 text-white">
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-            className="max-w-3xl"
-          >
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">Our Expert Mentors & Team</h1>
-            <p className="text-xl">
-              Meet our experienced professionals dedicated to guiding you through your career journey and helping you unlock your full potential.
-            </p>
-            
-            {/* Stats */}
-            <div className="flex flex-wrap gap-8 mt-10">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-white/20 rounded-full">
-                  <Users className="h-5 w-5" />
-                </div>
-                <div>
-                  <div className="text-2xl font-bold">15+</div>
-                  <div className="text-sm text-white/80">Years Experience</div>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-white/20 rounded-full">
-                  <GraduationCap className="h-5 w-5" />
-                </div>
-                <div>
-                  <div className="text-2xl font-bold">10k+</div>
-                  <div className="text-sm text-white/80">Professionals Mentored</div>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-white/20 rounded-full">
-                  <Globe className="h-5 w-5" />
-                </div>
-                <div>
-                  <div className="text-2xl font-bold">10+</div>
-                  <div className="text-sm text-white/80">African Countries</div>
-                </div>
-              </div>
+    <div className="bg-[#f7f5f1] text-gray-900 dark:bg-[#111416] dark:text-gray-100">
+      <main className="mx-auto w-full max-w-[88rem] px-5 py-10 sm:px-7 lg:px-10">
+        <section className="border border-gray-300 dark:border-gray-800">
+          <div className="grid gap-0 lg:grid-cols-[1.05fr_0.95fr]">
+            <div className="bg-[#ece8df] p-7 dark:bg-[#171b1d] sm:p-10">
+              <motion.p
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.35 }}
+                className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-gray-500 dark:text-gray-400"
+              >
+                Mentors
+              </motion.p>
+              <motion.h1
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.05 }}
+                className="mt-4 text-balance text-[clamp(1.9rem,4.2vw,3.8rem)] font-semibold uppercase leading-[0.98]"
+              >
+                Work with experienced professionals who guide outcomes.
+              </motion.h1>
+              <motion.p
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.1 }}
+                className="mt-5 max-w-[58ch] text-sm leading-8 text-gray-700 dark:text-gray-300"
+              >
+                Our mentors combine strategic insight and practical coaching to
+                help you move from intention to measurable career growth.
+              </motion.p>
             </div>
-          </motion.div>
-        </div>
-      </section>
-      
-      {/* Main Content */}
-      <div>
-        {/* Introduction */}
-        <section className="mb-16 max-w-3xl">
-          <h2 className="text-3xl font-bold mb-4 text-gradient-primary">Meet Our Leadership Team</h2>
-          <p className="text-lg text-muted-foreground">
-            Our mentors bring diverse expertise across multiple industries and specialties. 
-            Each mentor is carefully selected for their experience, passion for development, 
-            and commitment to helping others achieve their professional goals.
-          </p>
-        </section>
-        
-        {/* Mentor Cards */}
-        <motion.section
-          ref={ref}
-          variants={containerVariants}
-          initial="hidden"
-          animate={inView ? "visible" : "hidden"}
-          className="mb-20"
-        >
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {mentors.map((mentor, index) => (
-              <MentorCard
-                key={mentor.id}
-                mentor={mentor}
-                index={index}
-                onSelect={() => setSelectedMentor(mentor)}
-              />
-            ))}
+            <div className="grid grid-cols-3 border-t border-gray-300 bg-[#171b1d] px-6 py-10 text-gray-100 dark:border-gray-800 sm:px-10 lg:border-l lg:border-t-0">
+              <Stat value="15+" label="Years experience" icon={Users} />
+              <Stat value="10K+" label="Professionals mentored" icon={GraduationCap} />
+              <Stat value="10+" label="African countries" icon={Globe} />
+            </div>
           </div>
-        </motion.section>
-        
-        {/* Mentorship Approach */}
-        <section className="mb-20">
-          <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-xl overflow-hidden border border-blue-100 dark:border-blue-900/30">
-            <div className="grid lg:grid-cols-2 gap-8 items-center">
-              <div className="p-8 lg:p-12">
-                <h2 className="text-3xl font-bold mb-6 text-gradient-primary">Our Mentorship Approach</h2>
-                <p className="text-lg text-muted-foreground mb-6">
-                  We believe that effective mentorship should be personalized, actionable, and focused on long-term growth. 
-                  Our comprehensive methodology ensures that you receive guidance tailored to your specific career goals.
-                </p>
-                
-                <div className="space-y-4">
-                  {[
-                    {
-                      title: "Personalized Assessment",
-                      description: "We start by understanding your unique strengths, challenges, and career aspirations."
-                    },
-                    {
-                      title: "Structured Development Plan",
-                      description: "Create a clear roadmap with actionable steps toward your professional goals."
-                    },
-                    {
-                      title: "Regular Guidance Sessions",
-                      description: "Ongoing support and accountability to ensure continuous progress."
-                    },
-                    {
-                      title: "Network Building",
-                      description: "Connect with industry professionals and like-minded peers."
-                    }
-                  ].map((item, index) => (
-                    <div key={index} className="flex gap-3">
-                      <CheckCircle className="h-6 w-6 text-blue-600 dark:text-blue-400 flex-shrink-0" />
-                      <div>
-                        <h3 className="font-medium">{item.title}</h3>
-                        <p className="text-muted-foreground">{item.description}</p>
-                      </div>
-                    </div>
+        </section>
+
+        <section className="border-x border-b border-gray-300 py-14 dark:border-gray-800 md:py-16">
+          <div className="mb-8">
+            <p className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-gray-500 dark:text-gray-400">
+              Leadership team
+            </p>
+            <h2 className="mt-2 text-balance text-[clamp(1.5rem,2.8vw,2.4rem)] font-semibold uppercase leading-tight">
+              Mentors selected for depth, delivery, and consistency.
+            </h2>
+          </div>
+          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {mentors.map((mentor, index) => (
+              <article
+                key={mentor.id}
+                className={`group border border-gray-300 bg-white/70 p-4 dark:border-gray-800 dark:bg-[#171b1d] ${
+                  index === 1 ? "lg:translate-y-8" : ""
+                } ${index === 2 ? "lg:-translate-y-4" : ""}`}
+              >
+                <div className="relative h-56 overflow-hidden border border-gray-300 dark:border-gray-700">
+                  <Image
+                    src={mentor.image}
+                    alt={mentor.name}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                </div>
+                <div className="mt-4 border-l-2 border-gray-300 pl-3 dark:border-gray-700">
+                  <p className="text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-gray-500 dark:text-gray-400">
+                    {mentor.title}
+                  </p>
+                  <h3 className="mt-1 text-base font-semibold uppercase tracking-[0.04em]">
+                    {mentor.name}
+                  </h3>
+                </div>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {mentor.expertise.map((skill) => (
+                    <Badge
+                      key={skill}
+                      variant="secondary"
+                      className="rounded-none border border-gray-300 bg-transparent px-2 py-0.5 text-[0.62rem] uppercase tracking-[0.1em] text-gray-700 dark:border-gray-700 dark:text-gray-300"
+                    >
+                      {skill}
+                    </Badge>
                   ))}
                 </div>
-                
-                <Button className="mt-8 bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 text-white">
-                  Learn About Our Process
+                <p className="mt-4 line-clamp-4 text-sm leading-7 text-gray-700 dark:text-gray-300">
+                  {mentor.bio}
+                </p>
+                <Button
+                  variant="ghost"
+                  className="mt-5 h-9 w-full rounded-none border border-gray-300 text-[0.66rem] font-semibold uppercase tracking-[0.14em] text-gray-700 hover:bg-gray-200 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800"
+                  onClick={() => setSelectedMentor(mentor)}
+                >
+                  View profile
+                  <ChevronRight className="ml-1.5 h-4 w-4" />
+                </Button>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="border-x border-b border-gray-300 py-14 dark:border-gray-800 md:py-16">
+          <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
+            <div className="relative min-h-[18rem] overflow-hidden border border-gray-300 dark:border-gray-800">
+              <Image
+                src="/accm/IMG_4713.JPG"
+                alt="Mentorship session"
+                fill
+                className="object-cover"
+              />
+            </div>
+            <div>
+              <p className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-gray-500 dark:text-gray-400">
+                Mentorship approach
+              </p>
+              <h2 className="mt-2 text-balance text-[clamp(1.5rem,2.8vw,2.4rem)] font-semibold uppercase leading-tight">
+                Structured support from diagnosis to execution.
+              </h2>
+              <div className="mt-6 space-y-4">
+                {approach.map((item) => (
+                  <div key={item.title} className="flex gap-3">
+                    <CheckCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-gray-700 dark:text-gray-300" />
+                    <div>
+                      <p className="text-sm font-semibold uppercase tracking-[0.06em]">
+                        {item.title}
+                      </p>
+                      <p className="mt-1 text-sm leading-7 text-gray-700 dark:text-gray-300">
+                        {item.description}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <Button
+                asChild
+                className="mt-7 h-10 rounded-none bg-gray-900 px-5 text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-gray-50 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200"
+              >
+                <Link href="/services">Explore mentorship services</Link>
+              </Button>
+            </div>
+          </div>
+        </section>
+
+        <section className="border border-t-0 border-gray-300 dark:border-gray-800">
+          <div className="grid md:grid-cols-[1.1fr_0.9fr]">
+            <div className="bg-[#171b1d] px-6 py-10 text-gray-100 sm:px-10">
+              <p className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-gray-400">
+                Take action
+              </p>
+              <h2 className="mt-3 text-balance text-[clamp(1.6rem,3vw,2.7rem)] font-semibold uppercase leading-tight">
+                Start with the mentor best aligned to your growth goals.
+              </h2>
+              <p className="mt-4 max-w-[48ch] text-sm leading-8 text-gray-300">
+                We help you identify the right fit, then move quickly into
+                practical sessions that create measurable progress.
+              </p>
+            </div>
+            <div className="flex items-center justify-center bg-[#ece8df] p-6 dark:bg-[#0f1315] sm:p-10">
+              <div className="w-full max-w-sm space-y-3">
+                <Button
+                  asChild
+                  className="h-10 w-full rounded-none bg-gray-900 text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-gray-50 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200"
+                >
+                  <Link href="/register">Find your mentor</Link>
+                </Button>
+                <Button
+                  asChild
+                  variant="ghost"
+                  className="h-10 w-full rounded-none border border-gray-300 text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-gray-700 hover:bg-gray-200 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800"
+                >
+                  <Link href="/services">Explore programs</Link>
                 </Button>
               </div>
-              
-              <div className="relative lg:h-full h-64">
-                <Image
-                  src="/accm/IMG_4713.JPG"
-                  alt="Mentorship session"
-                  fill
-                  className="object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-teal-500/20"></div>
-              </div>
             </div>
           </div>
         </section>
-        
-        {/* Call to Action */}
-        <section className="relative rounded-2xl overflow-hidden bg-gray-50 dark:bg-gray-900/50 p-16 text-center">
-          <div>
-            <h2 className="text-3xl font-bold mb-4 text-gray-900 dark:text-gray-100">Ready to Accelerate Your Career?</h2>
-            <p className="text-xl max-w-2xl mx-auto mb-8 text-gray-600 dark:text-gray-400">
-              Join thousands of professionals who have transformed their careers through our mentorship programs.
-            </p>
-            <div className="flex flex-wrap gap-4 justify-center">
-              <Button className="bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-200 rounded-full px-8">
-                Find Your Mentor
-              </Button>
-              <Button variant="ghost" className="border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 rounded-full px-8">
-                Explore Programs
-              </Button>
-            </div>
-          </div>
-        </section>
-      </div>
-      
-      {/* Mentor Detail Modal */}
-      {selectedMentor && (
-        <Dialog open={!!selectedMentor} onOpenChange={() => setSelectedMentor(null)}>
-          <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>Mentor Profile</DialogTitle>
-              <DialogDescription>Learn more about your potential mentor</DialogDescription>
-            </DialogHeader>
-            
-            <MentorDetail mentor={selectedMentor} />
-          </DialogContent>
-        </Dialog>
-      )}
+      </main>
+
+      <Dialog open={!!selectedMentor} onOpenChange={() => setSelectedMentor(null)}>
+        <DialogContent className="max-h-[90vh] max-w-3xl overflow-y-auto rounded-none border-gray-300 bg-[#f7f5f1] dark:border-gray-800 dark:bg-[#111416]">
+          {selectedMentor ? (
+            <>
+              <DialogHeader>
+                <DialogTitle className="text-lg font-semibold uppercase tracking-[0.06em]">
+                  Mentor profile
+                </DialogTitle>
+                <DialogDescription>Detailed overview and background</DialogDescription>
+              </DialogHeader>
+              <MentorDetail mentor={selectedMentor} />
+            </>
+          ) : null}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
 
-// Mentor Card Component
-function MentorCard({ mentor, index, onSelect }) {
-  const [ref, inView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  });
-  
-  return (
-    <motion.div
-      ref={ref}
-      variants={{
-        hidden: { opacity: 0, y: 30 },
-        visible: { 
-          opacity: 1, 
-          y: 0,
-          transition: { duration: 0.6, delay: index * 0.1 }
-        }
-      }}
-      className="h-full"
-    >
-      <Card className="h-full flex flex-col transition-all duration-300 hover:shadow-lg group border-blue-100 dark:border-blue-900/50 overflow-hidden">
-        <div className="h-2 bg-gradient-to-r from-blue-600 to-teal-500 w-full"></div>
-        <CardHeader className="relative pb-0">
-          <div className="flex flex-col items-center text-center">
-            <div className="relative mb-3">
-              <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-teal-500 rounded-full blur-sm opacity-70 group-hover:opacity-100 transition-opacity"></div>
-              <div className="relative h-28 w-28 rounded-full overflow-hidden border-2 border-white dark:border-gray-800">
-                <Image
-                  src={mentor.image}
-                  alt={mentor.name}
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-              </div>
-            </div>
-            
-            <CardTitle className="text-xl group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-              {mentor.name}
-            </CardTitle>
-            <CardDescription className="text-sm font-medium">
-              {mentor.title}
-            </CardDescription>
-          </div>
-        </CardHeader>
-        
-        <CardContent className="pt-4 pb-2 flex-grow">
-          <div className="space-y-3">
-            <div className="flex flex-wrap gap-2 mb-4">
-              {mentor.expertise.map((skill) => (
-                <Badge key={skill} variant="secondary" className="bg-blue-100/50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-800/50">
-                  {skill}
-                </Badge>
-              ))}
-            </div>
-            
-            <p className="text-sm text-muted-foreground line-clamp-4">
-              {mentor.bio}
-            </p>
-          </div>
-        </CardContent>
-        
-        <CardFooter className="pt-2">
-          <Button 
-            onClick={onSelect} 
-            variant="outline" 
-            className="w-full border-blue-200 dark:border-blue-900/50 hover:border-blue-400 dark:hover:border-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/30 group-hover:text-blue-600 dark:group-hover:text-blue-400"
-          >
-            <span>View Profile</span>
-            <ChevronRight className="h-4 w-4 ml-2" />
-          </Button>
-        </CardFooter>
-      </Card>
-    </motion.div>
-  );
-}
-
-// Mentor Detail Component
-function MentorDetail({ mentor }) {
+function MentorDetail({ mentor }: { mentor: Mentor }) {
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row gap-6 items-center sm:items-start">
-        <div className="relative w-32 h-32 flex-shrink-0">
-          <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-teal-500 rounded-full blur-sm opacity-70"></div>
-          <div className="relative h-full w-full rounded-full overflow-hidden border-2 border-white dark:border-gray-800">
-            <Image
-              src={mentor.image}
-              alt={mentor.name}
-              fill
-              className="object-cover"
-            />
-          </div>
+      <div className="grid gap-5 border border-gray-300 bg-white/70 p-5 dark:border-gray-800 dark:bg-[#171b1d] sm:grid-cols-[auto_1fr] sm:items-start">
+        <div className="relative h-28 w-28 overflow-hidden border border-gray-300 dark:border-gray-700">
+          <Image src={mentor.image} alt={mentor.name} fill className="object-cover" />
         </div>
-        
-        <div className="text-center sm:text-left">
-          <h2 className="text-2xl font-bold">{mentor.name}</h2>
-          <p className="text-muted-foreground">{mentor.title}</p>
-          
-          <div className="flex flex-wrap gap-2 mt-4 justify-center sm:justify-start">
+        <div>
+          <p className="text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-gray-500 dark:text-gray-400">
+            {mentor.title}
+          </p>
+          <h3 className="mt-1 text-xl font-semibold uppercase tracking-[0.03em]">
+            {mentor.name}
+          </h3>
+          <div className="mt-3 flex flex-wrap gap-2">
             {mentor.expertise.map((skill) => (
-              <Badge key={skill} variant="secondary" className="bg-blue-100/50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">
+              <Badge
+                key={skill}
+                variant="secondary"
+                className="rounded-none border border-gray-300 bg-transparent px-2 py-0.5 text-[0.62rem] uppercase tracking-[0.1em] text-gray-700 dark:border-gray-700 dark:text-gray-300"
+              >
                 {skill}
               </Badge>
             ))}
           </div>
-          
-          <div className="flex gap-3 mt-4 justify-center sm:justify-start">
-            <a 
-              href={mentor.contact.linkedin} 
-              target="_blank" 
+          <div className="mt-4 flex gap-2">
+            <a
+              href={mentor.contact.linkedin}
+              target="_blank"
               rel="noopener noreferrer"
-              className="p-2 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-800/50 transition-colors"
+              className="inline-flex h-8 w-8 items-center justify-center border border-gray-300 text-gray-700 hover:bg-gray-200 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
               aria-label="LinkedIn profile"
             >
-              <LinkedinIcon className="h-5 w-5" />
+              <LinkedinIcon className="h-4 w-4" />
             </a>
-            <a 
-              href={mentor.contact.twitter} 
-              target="_blank" 
+            <a
+              href={mentor.contact.twitter}
+              target="_blank"
               rel="noopener noreferrer"
-              className="p-2 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-800/50 transition-colors"
+              className="inline-flex h-8 w-8 items-center justify-center border border-gray-300 text-gray-700 hover:bg-gray-200 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
               aria-label="Twitter profile"
             >
-              <TwitterIcon className="h-5 w-5" />
+              <TwitterIcon className="h-4 w-4" />
             </a>
-            <a 
+            <a
               href={`mailto:${mentor.contact.email}`}
-              className="p-2 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-800/50 transition-colors"
+              className="inline-flex h-8 w-8 items-center justify-center border border-gray-300 text-gray-700 hover:bg-gray-200 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
               aria-label="Email contact"
             >
-              <MailIcon className="h-5 w-5" />
+              <MailIcon className="h-4 w-4" />
             </a>
           </div>
         </div>
       </div>
-      
+
       <Tabs defaultValue="bio" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 mb-6">
-          <TabsTrigger value="bio">Biography</TabsTrigger>
-          <TabsTrigger value="achievements">Achievements</TabsTrigger>
-          <TabsTrigger value="education">Education</TabsTrigger>
+        <TabsList className="grid h-auto w-full grid-cols-3 rounded-none border border-gray-300 bg-white/60 p-1 dark:border-gray-800 dark:bg-[#171b1d]">
+          <TabsTrigger
+            value="bio"
+            className="rounded-none border border-transparent py-2.5 data-[state=active]:border-gray-300 data-[state=active]:bg-[#ece8df] dark:data-[state=active]:border-gray-700 dark:data-[state=active]:bg-[#111416]"
+          >
+            Biography
+          </TabsTrigger>
+          <TabsTrigger
+            value="achievements"
+            className="rounded-none border border-transparent py-2.5 data-[state=active]:border-gray-300 data-[state=active]:bg-[#ece8df] dark:data-[state=active]:border-gray-700 dark:data-[state=active]:bg-[#111416]"
+          >
+            Achievements
+          </TabsTrigger>
+          <TabsTrigger
+            value="education"
+            className="rounded-none border border-transparent py-2.5 data-[state=active]:border-gray-300 data-[state=active]:bg-[#ece8df] dark:data-[state=active]:border-gray-700 dark:data-[state=active]:bg-[#111416]"
+          >
+            Education
+          </TabsTrigger>
         </TabsList>
-        
-        <TabsContent value="bio" className="space-y-4">
-          <div className="p-6 bg-blue-50/50 dark:bg-blue-900/10 rounded-lg border border-blue-100 dark:border-blue-900/30">
-            <p className="whitespace-pre-line text-muted-foreground">
+
+        <TabsContent value="bio" className="mt-4">
+          <div className="border border-gray-300 bg-white/70 p-5 dark:border-gray-800 dark:bg-[#171b1d]">
+            <p className="whitespace-pre-line text-sm leading-8 text-gray-700 dark:text-gray-300">
               {mentor.fullBio}
             </p>
           </div>
         </TabsContent>
-        
-        <TabsContent value="achievements" className="space-y-4">
-          <div className="p-6 bg-blue-50/50 dark:bg-blue-900/10 rounded-lg border border-blue-100 dark:border-blue-900/30">
-            <h3 className="text-lg font-medium mb-4 text-blue-600 dark:text-blue-400">Key Achievements</h3>
+
+        <TabsContent value="achievements" className="mt-4">
+          <div className="border border-gray-300 bg-white/70 p-5 dark:border-gray-800 dark:bg-[#171b1d]">
             <ul className="space-y-3">
-              {mentor.achievements.map((achievement, index) => (
-                <li key={index} className="flex items-start gap-3">
-                  <Award className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5" />
-                  <span className="text-muted-foreground">{achievement}</span>
+              {mentor.achievements.map((achievement) => (
+                <li key={achievement} className="flex items-start gap-2.5">
+                  <Award className="mt-0.5 h-4 w-4 flex-shrink-0 text-gray-700 dark:text-gray-300" />
+                  <span className="text-sm leading-7 text-gray-700 dark:text-gray-300">
+                    {achievement}
+                  </span>
                 </li>
               ))}
             </ul>
           </div>
         </TabsContent>
-        
-        <TabsContent value="education" className="space-y-4">
-          <div className="p-6 bg-blue-50/50 dark:bg-blue-900/10 rounded-lg border border-blue-100 dark:border-blue-900/30">
-            <h3 className="text-lg font-medium mb-4 text-blue-600 dark:text-blue-400">Education & Qualifications</h3>
-            <div className="space-y-4">
-              {mentor.education.map((edu, index) => (
-                <div key={index} className="flex items-start gap-3">
-                  <GraduationCap className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5" />
+
+        <TabsContent value="education" className="mt-4">
+          <div className="border border-gray-300 bg-white/70 p-5 dark:border-gray-800 dark:bg-[#171b1d]">
+            <ul className="space-y-3">
+              {mentor.education.map((item) => (
+                <li key={`${item.degree}-${item.institution}`} className="flex items-start gap-2.5">
+                  <GraduationCap className="mt-0.5 h-4 w-4 flex-shrink-0 text-gray-700 dark:text-gray-300" />
                   <div>
-                    <p className="font-medium">{edu.degree}</p>
-                    <p className="text-sm text-muted-foreground">{edu.institution}</p>
+                    <p className="text-sm font-medium uppercase tracking-[0.04em]">
+                      {item.degree}
+                    </p>
+                    <p className="text-sm leading-7 text-gray-700 dark:text-gray-300">
+                      {item.institution}
+                    </p>
                   </div>
-                </div>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
         </TabsContent>
       </Tabs>
-      
+
       <div className="flex justify-end">
-        <Button className="bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 text-white">
-          Request Mentorship
+        <Button className="h-10 rounded-none bg-gray-900 px-5 text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-gray-50 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200">
+          Request mentorship
         </Button>
       </div>
+    </div>
+  );
+}
+
+function Stat({
+  value,
+  label,
+  icon: Icon,
+}: {
+  value: string;
+  label: string;
+  icon: ElementType;
+}) {
+  return (
+    <div className="px-2 text-center">
+      <Icon className="mx-auto h-4 w-4 text-gray-300" />
+      <p className="mt-2 text-xl font-semibold">{value}</p>
+      <p className="text-[0.62rem] uppercase tracking-[0.12em] text-gray-400">{label}</p>
     </div>
   );
 }
