@@ -374,12 +374,12 @@ export function CareerMapGame() {
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
-            <div className="mt-2 text-sm text-muted-foreground flex items-center cursor-help">
-              <Info className="inline-block w-4 h-4 mr-1 text-brand-blue" />
+            <div className="mt-2 text-sm text-[#1A1B4B]/60 flex items-center cursor-help">
+              <Info className="inline-block w-4 h-4 mr-1 text-[#1A1B4B]" />
               <span>Help with this question</span>
             </div>
           </TooltipTrigger>
-          <TooltipContent className="max-w-sm p-4 bg-popover text-popover-foreground">
+          <TooltipContent className="max-w-sm p-4 bg-[#FFFFFF] text-[#1A1B4B]">
             <p>{question.helper}</p>
           </TooltipContent>
         </Tooltip>
@@ -397,11 +397,11 @@ export function CareerMapGame() {
     
     return (
       <div className="mt-2 text-sm flex items-center">
-        <span className={currentSelections === maxSelections ? "text-warning font-medium" : "text-muted-foreground"}>
+        <span className={currentSelections === maxSelections ? "text-[#26A649] font-medium" : "text-[#1A1B4B]/60"}>
           Selected: {currentSelections} / {maxSelections}
         </span>
         {currentSelections === maxSelections && (
-          <Badge variant="outline" className="ml-2 bg-warning/10 text-warning border-warning/20">
+          <Badge variant="outline" className="ml-2 bg-[#26A649]/10 text-[#26A649] border-[#26A649]/20">
             Max reached
           </Badge>
         )}
@@ -425,7 +425,7 @@ export function CareerMapGame() {
               {currentQ.options?.map((option) => (
                 <div
                   key={option}
-                  className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent/50 transition-colors"
+                  className="flex items-center space-x-3 p-3 rounded-lg hover:bg-[#1A1B4B]/5 transition-colors"
                 >
                   <RadioGroupItem value={option} id={option} />
                   <Label htmlFor={option} className="flex-1 cursor-pointer">
@@ -448,7 +448,7 @@ export function CareerMapGame() {
                   className={`flex items-center space-x-3 p-3 rounded-lg transition-colors ${
                     value.split(",").includes(option)
                       ? "bg-primary/10 border border-primary/20"
-                      : "hover:bg-accent/50"
+                      : "hover:bg-[#1A1B4B]/5"
                   }`}
                 >
                   <Checkbox
@@ -492,21 +492,17 @@ export function CareerMapGame() {
               value={value}
               onChange={(e) => handleInputChange(e.target.value, currentQ.id)}
               placeholder={currentQ.placeholder || "Type your answer here..."}
-              className={`min-h-[150px] ${error ? "border-destructive focus-visible:ring-destructive" : ""}`}
+              className={`min-h-[150px] ${error ? "border-[#1A1B4B]/20 focus-visible:ring-[#1A1B4B]/40" : ""}`}
             />
             {currentQ.validation?.minLength && (
-              <div className="text-sm text-muted-foreground flex items-center">
+              <div className="text-sm text-[#1A1B4B]/60 flex items-center">
                 <Clock className="w-4 h-4 mr-1" />
                 Minimum {currentQ.validation.minLength} characters
                 <div className="ml-2 flex items-center">
                   <Progress
                     value={Math.min((value.length / currentQ.validation.minLength) * 100, 100)}
                     className="h-2 w-24"
-                    style={{
-                      "--progress-fill": value.length >= currentQ.validation.minLength 
-                        ? "hsl(var(--success))" 
-                        : "hsl(var(--primary))"
-                    } as React.CSSProperties}
+                    style={{ "--progress-fill": value.length >= currentQ.validation.minLength ? "#26A649" : "#1A1B4B" } as React.CSSProperties}
                   />
                   <span className="ml-2 text-xs">
                     {value.length}/{currentQ.validation.minLength}
@@ -526,7 +522,7 @@ export function CareerMapGame() {
               value={value}
               onChange={(e) => handleInputChange(e.target.value, currentQ.id)}
               placeholder={currentQ.placeholder || "Type your answer here"}
-              className={error ? "border-destructive focus-visible:ring-destructive" : ""}
+              className={error ? "border-[#1A1B4B]/20 focus-visible:ring-[#1A1B4B]/40" : ""}
             />
             {renderQuestionHelper(currentQ)}
           </div>
@@ -555,11 +551,7 @@ export function CareerMapGame() {
               value={completionPercentage[section.id]} 
               className="h-2"
               style={{
-                "--progress-fill": completionPercentage[section.id] >= 100 
-                  ? "hsl(var(--success))" 
-                  : completionPercentage[section.id] > 50
-                  ? "hsl(var(--primary))"
-                  : "hsl(var(--muted-foreground))"
+                "--progress-fill": completionPercentage[section.id] >= 100 ? "#26A649" : completionPercentage[section.id] > 50 ? "#1A1B4B" : "#1A1B4B/30"
               } as React.CSSProperties}
             />
           </div>
@@ -588,7 +580,7 @@ export function CareerMapGame() {
               {index + 1}. {suggestion.title.split(" ")[0]}
               <Badge
                 variant="outline"
-                className="ml-2 bg-primary/10 border-primary/20 whitespace-nowrap"
+                className="ml-2 bg-[#1A1B4B]/10 border border-[#1A1B4B]/20 whitespace-nowrap"
               >
                 {Math.round(suggestion.confidence * 100)}%
               </Badge>
@@ -629,7 +621,7 @@ export function CareerMapGame() {
                   {Math.round(suggestion.confidence * 100)}% Match
                 </Badge>
               </div>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
+              <div className="flex items-center gap-2 text-sm text-[#1A1B4B]/60 mt-1">
                 <Briefcase className="w-4 h-4" />
                 {suggestion.sectors.join(" • ")}
               </div>
@@ -648,13 +640,13 @@ export function CareerMapGame() {
             </div>
           </div>
 
-          <p className="text-muted-foreground">{suggestion.description}</p>
+          <p className="text-[#1A1B4B]/60">{suggestion.description}</p>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card className="p-4 bg-accent/30 border-0">
+            <Card className="p-4 bg-[#1A1B4B]/10 border-0">
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
-                  <GraduationCap className="w-5 h-5 text-brand-blue" />
+                  <GraduationCap className="w-5 h-5 text-[#1A1B4B]" />
                   <h4 className="font-semibold">Education Path</h4>
                 </div>
                 <ul className="list-disc pl-5 space-y-2 text-sm">
@@ -665,15 +657,15 @@ export function CareerMapGame() {
               </div>
             </Card>
 
-            <Card className="p-4 bg-accent/30 border-0">
+            <Card className="p-4 bg-[#1A1B4B]/10 border-0">
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
-                  <Target className="w-5 h-5 text-success" />
+                  <Target className="w-5 h-5 text-[#26A649]" />
                   <h4 className="font-semibold">Key Skills</h4>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {suggestion.skills.slice(0, 8).map((skill) => (
-                    <Badge key={skill} variant="secondary" className="bg-success/10 text-success-foreground">
+                    <Badge key={skill} variant="secondary" className="bg-[#26A649]/10 text-[#26A649]">
                       {skill}
                     </Badge>
                   ))}
@@ -681,10 +673,10 @@ export function CareerMapGame() {
               </div>
             </Card>
 
-            <Card className="p-4 bg-accent/30 border-0">
+            <Card className="p-4 bg-[#1A1B4B]/10 border-0">
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
-                  <Heart className="w-5 h-5 text-destructive" />
+                  <Heart className="w-5 h-5 text-[#1A1B4B]/60" />
                   <h4 className="font-semibold">Why This Matches You</h4>
                 </div>
                 <ul className="list-disc pl-5 space-y-2 text-sm">
@@ -695,10 +687,10 @@ export function CareerMapGame() {
               </div>
             </Card>
 
-            <Card className="p-4 bg-accent/30 border-0">
+            <Card className="p-4 bg-[#1A1B4B]/10 border-0">
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
-                  <TrendingUp className="w-5 h-5 text-brand-purple" />
+                  <TrendingUp className="w-5 h-5 text-[#1A1B4B]" />
                   <h4 className="font-semibold">Career Outlook</h4>
                 </div>
                 <div className="space-y-3 text-sm">
@@ -708,10 +700,10 @@ export function CareerMapGame() {
                       variant="outline"
                       className={`${
                         suggestion.growthOutlook.includes("High")
-                          ? "bg-success/10 text-success border-success/20"
+                          ? "bg-[#26A649]/10 text-[#26A649] border-[#26A649]/20"
                           : suggestion.growthOutlook.includes("Moderate")
-                          ? "bg-warning/10 text-warning border-warning/20"
-                          : "bg-destructive/10 text-destructive border-destructive/20"
+                          ? "bg-[#26A649]/10 text-[#26A649] border-[#26A649]/30"
+                          : "bg-[#1A1B4B]/10 text-[#1A1B4B]/60 border-[#1A1B4B]/20"
                       }`}
                     >
                       {suggestion.growthOutlook}
@@ -724,11 +716,11 @@ export function CareerMapGame() {
                     </div>
                     <div className="grid grid-cols-3 gap-2 text-center">
                       <div className="p-2 bg-primary/5 rounded">
-                        <div className="text-xs text-muted-foreground">Entry</div>
+                        <div className="text-xs text-[#1A1B4B]/60">Entry</div>
                         <div className="font-medium">${suggestion.salary.entry.toLocaleString()}</div>
                       </div>
                       <div className="p-2 bg-primary/10 rounded">
-                        <div className="text-xs text-muted-foreground">Mid</div>
+                        <div className="text-xs text-[#1A1B4B]/60">Mid</div>
                         <div className="font-medium">
                           $
                           {Math.round(
@@ -737,7 +729,7 @@ export function CareerMapGame() {
                         </div>
                       </div>
                       <div className="p-2 bg-primary/15 rounded">
-                        <div className="text-xs text-muted-foreground">Senior</div>
+                        <div className="text-xs text-[#1A1B4B]/60">Senior</div>
                         <div className="font-medium">
                           ${suggestion.salary.senior.toLocaleString()}
                         </div>
@@ -749,7 +741,7 @@ export function CareerMapGame() {
             </Card>
           </div>
 
-          <Card className="p-4 bg-accent/30 border-0">
+          <Card className="p-4 bg-[#1A1B4B]/10 border-0">
             <div className="space-y-3">
               <div className="flex items-center gap-2">
                 <BarChart className="w-5 h-5 text-info" />
@@ -780,25 +772,19 @@ export function CareerMapGame() {
     </motion.div>
   );
 
-  // Utility function to get color based on index using themed colors
+  // Utility function to get color based on index
   const getCareerColor = (index: number) => {
-    const colors = [
-      "hsl(var(--brand-blue))",
-      "hsl(var(--success))",
-      "hsl(var(--brand-purple))",
-      "hsl(var(--warning))",
-      "hsl(var(--brand-teal))"
-    ];
+    const colors = ["#1A1B4B", "#26A649", "#1A1B4B", "#26A649", "#1A1B4B"];
     return colors[index % colors.length];
   };
 
-  // Utility function to get color based on score using themed colors
+  // Utility function to get color based on score
   const getScoreColor = (score: number) => {
-    if (score >= 0.8) return "hsl(var(--success))";
-    if (score >= 0.6) return "hsl(var(--brand-blue))";
-    if (score >= 0.4) return "hsl(var(--brand-purple))";
-    if (score >= 0.2) return "hsl(var(--warning))";
-    return "hsl(var(--destructive))";
+    if (score >= 0.8) return "#26A649";
+    if (score >= 0.6) return "#1A1B4B";
+    if (score >= 0.4) return "#1A1B4B";
+    if (score >= 0.2) return "#26A649";
+    return "#26A649";
   };
 
   // Render introduction screen
@@ -810,7 +796,7 @@ export function CareerMapGame() {
         transition={{ duration: 0.3 }}
         className="w-full max-w-2xl mx-auto"
       >
-        <Card className="glass-card">
+        <Card className="border border-[#1A1B4B]/20 bg-[#FFFFFF]">
           <CardHeader className="text-center">
             <CardTitle className="text-3xl font-bold text-gradient-primary">CareerMap Assessment</CardTitle>
             <CardDescription className="text-lg mt-2">
@@ -820,12 +806,12 @@ export function CareerMapGame() {
           <CardContent className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {sections.map((section) => (
-                <Card key={section.id} className="p-4 hover:bg-accent/50 transition-colors gradient-border">
+                <Card key={section.id} className="p-4 hover:bg-[#1A1B4B]/5 transition-colors gradient-border">
                 <div className="flex items-center mb-2">
                   <div className="p-2 rounded-full bg-primary/10 mr-3">{section.icon}</div>
                   <h3 className="font-semibold">{section.title}</h3>
                 </div>
-                <p className="text-sm text-muted-foreground">{section.description}</p>
+                <p className="text-sm text-[#1A1B4B]/60">{section.description}</p>
                 <p className="text-xs mt-2">
                   {section.questions.length} questions • ~{Math.round(section.questions.length / 2)}{" "}
                   min
@@ -834,10 +820,10 @@ export function CareerMapGame() {
             ))}
           </div>
 
-          <Card className="p-4 bg-accent/30 border-0">
+          <Card className="p-4 bg-[#1A1B4B]/10 border-0">
             <div className="flex items-start">
-              <div className="p-2 rounded-full bg-brand-blue/20 mr-3">
-                <Lightbulb className="h-5 w-5 text-brand-blue" />
+              <div className="p-2 rounded-full bg-[#1A1B4B]/10 mr-3">
+                <Lightbulb className="h-5 w-5 text-[#1A1B4B]" />
               </div>
               <div>
                 <h3 className="font-semibold flex items-center">
@@ -846,7 +832,7 @@ export function CareerMapGame() {
                     ~10 minutes
                   </Badge>
                 </h3>
-                <p className="text-sm text-muted-foreground mt-1">
+                <p className="text-sm text-[#1A1B4B]/60 mt-1">
                   This assessment uses advanced algorithms to match your unique profile with potential
                   career paths. Your answers will be analyzed across multiple dimensions including skills,
                   interests, work style, and values.
@@ -867,9 +853,9 @@ export function CareerMapGame() {
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger>
-                  <Info className="w-4 h-4 ml-2 text-muted-foreground" />
+                  <Info className="w-4 h-4 ml-2 text-[#1A1B4B]/60" />
                 </TooltipTrigger>
-                <TooltipContent className="bg-popover text-popover-foreground">
+                <TooltipContent className="bg-[#FFFFFF] text-[#1A1B4B]">
                   <p className="max-w-xs">
                     Your responses will be saved in your browser's local storage, allowing you to continue later.
                     No data is sent to our servers until you submit the assessment.
@@ -880,12 +866,12 @@ export function CareerMapGame() {
           </div>
 
           {status === "authenticated" ? (
-            <div className="flex items-center text-sm p-2 rounded-md bg-success/10 text-success border border-success/20">
+            <div className="flex items-center text-sm p-2 rounded-md bg-success/10 text-[#26A649] border border-[#26A649]/20">
               <Award className="h-4 w-4 mr-2" />
               Signed in as {session?.user?.email}. Your results will be saved to your account.
             </div>
           ) : (
-            <div className="flex items-center text-sm p-2 rounded-md bg-warning/10 text-warning border border-warning/20">
+            <div className="flex items-center text-sm p-2 rounded-md bg-[#26A649]/10 text-[#26A649] border border-[#26A649]/30">
               <Info className="h-4 w-4 mr-2" />
               Sign in to save your results and access them later.
             </div>
@@ -893,7 +879,7 @@ export function CareerMapGame() {
         </CardContent>
         <CardFooter className="flex justify-between">
           {(Object.keys(answers).length > 0 && !suggestions) && (
-            <Button variant="outline" onClick={() => setShowIntro(false)} className="gradient-border">
+            <Button variant="outline" onClick={() => setShowIntro(false)} className="border border-[#1A1B4B]/20 text-[#1A1B4B]">
               Continue Assessment
             </Button>
           )}
@@ -911,7 +897,7 @@ if (isSubmitting) {
   return (
     <Card className="w-full max-w-xl mx-auto glass-card">
       <CardContent className="flex flex-col items-center justify-center py-16">
-        <Loader2 className="h-16 w-16 animate-spin mb-6 text-primary" />
+        <Loader2 className="h-16 w-16 animate-spin mb-6 text-[#1A1B4B]" />
         <CardTitle className="mb-2">Analyzing your responses...</CardTitle>
         <CardDescription className="text-center max-w-sm">
           Our algorithm is processing your answers to find the best career matches based on your unique profile.
@@ -926,9 +912,9 @@ if (error) {
   return (
     <Card className="w-full max-w-xl mx-auto glass-card">
       <CardContent className="flex flex-col items-center justify-center py-16">
-        <div className="p-4 rounded-full bg-destructive/10 mb-6">
+        <div className="p-4 rounded-full bg-[#1A1B4B]/10 mb-6">
           <svg
-            xmlns="http://www.w3.org/2000/svg"
+            xmlns="http://www.w3.org/200/svg"
             width="24"
             height="24"
             viewBox="0 0 24 24"
@@ -937,12 +923,12 @@ if (error) {
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="h-10 w-10 text-destructive"
+            className="h-10 w-10 text-[#1A1B4B]/60"
           >
             <path d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
-        <CardTitle className="mb-2 text-destructive">Something went wrong</CardTitle>
+        <CardTitle className="mb-2 text-[#1A1B4B]/60">Something went wrong</CardTitle>
         <CardDescription className="text-center max-w-sm mb-6">{error}</CardDescription>
         <Button onClick={() => setError(null)} className="btn-gradient">Try Again</Button>
       </CardContent>
@@ -963,7 +949,7 @@ if (suggestions) {
         <CardHeader>
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-              <Badge variant="outline" className="mb-2 bg-primary/10 border-primary/20">
+              <Badge variant="outline" className="mb-2 bg-[#1A1B4B]/10 border border-[#1A1B4B]/20">
                 Assessment Complete
               </Badge>
               <CardTitle className="text-3xl gradient-text">Your Career Matches</CardTitle>
@@ -973,15 +959,15 @@ if (suggestions) {
               </CardDescription>
             </div>
             <div className="flex flex-wrap gap-2">
-              <Button variant="outline" size="sm" onClick={handleShare} className="gradient-border">
+              <Button variant="outline" size="sm" onClick={handleShare} className="border border-[#1A1B4B]/20 text-[#1A1B4B]">
                 <Share className="h-4 w-4 mr-2" />
                 Share
               </Button>
-              <Button variant="outline" size="sm" onClick={handleExport} className="gradient-border">
+              <Button variant="outline" size="sm" onClick={handleExport} className="border border-[#1A1B4B]/20 text-[#1A1B4B]">
                 <Save className="h-4 w-4 mr-2" />
                 Export
               </Button>
-              <Button variant="outline" size="sm" onClick={restartAssessment} className="gradient-border">
+              <Button variant="outline" size="sm" onClick={restartAssessment} className="border border-[#1A1B4B]/20 text-[#1A1B4B]">
                 <RotateCw className="h-4 w-4 mr-2" />
                 Restart
               </Button>
@@ -993,7 +979,7 @@ if (suggestions) {
         </CardContent>
       </Card>
 
-      <Card className="glass-card">
+      <Card className="border border-[#1A1B4B]/20 bg-[#FFFFFF]">
         <CardHeader>
           <CardTitle className="gradient-text">Next Steps</CardTitle>
         </CardHeader>
@@ -1004,11 +990,11 @@ if (suggestions) {
           </p>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card className="p-4 border-t-4 border-t-brand-blue">
+            <Card className="p-4 border-t-4 border-t-[#1A1B4B]">
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
-                  <div className="p-2 rounded-full bg-brand-blue/20">
-                    <BookOpen className="h-5 w-5 text-brand-blue" />
+                  <div className="p-2 rounded-full bg-[#1A1B4B]/10">
+                    <BookOpen className="h-5 w-5 text-[#1A1B4B]" />
                   </div>
                   <h4 className="font-semibold">Research</h4>
                 </div>
@@ -1021,11 +1007,11 @@ if (suggestions) {
               </div>
             </Card>
             
-            <Card className="p-4 border-t-4 border-t-success">
+            <Card className="p-4 border-t-4 border-t-[#26A649]">
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
-                  <div className="p-2 rounded-full bg-success/20">
-                    <GraduationCap className="h-5 w-5 text-success" />
+                  <div className="p-2 rounded-full bg-[#26A649]/10">
+                    <GraduationCap className="h-5 w-5 text-[#26A649]" />
                   </div>
                   <h4 className="font-semibold">Learn</h4>
                 </div>
@@ -1038,11 +1024,11 @@ if (suggestions) {
               </div>
             </Card>
             
-            <Card className="p-4 border-t-4 border-t-brand-purple">
+            <Card className="p-4 border-t-4 border-t-[#1A1B4B]">
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
                   <div className="p-2 rounded-full bg-brand-purple/20">
-                    <Briefcase className="h-5 w-5 text-brand-purple" />
+                    <Briefcase className="h-5 w-5 text-[#1A1B4B]" />
                   </div>
                   <h4 className="font-semibold">Connect</h4>
                 </div>
@@ -1058,7 +1044,7 @@ if (suggestions) {
           
           <div className="p-4 rounded-lg bg-primary/5 border border-primary/10">
             <div className="flex items-start">
-              <Lightbulb className="h-5 w-5 text-primary mr-3 mt-0.5" />
+              <Lightbulb className="h-5 w-5 text-[#1A1B4B] mr-3 mt-0.5" />
               <div>
                 <h4 className="font-medium">Career Development Resources</h4>
                 <p className="text-sm mt-1">
@@ -1070,7 +1056,7 @@ if (suggestions) {
           </div>
         </CardContent>
         <CardFooter className="flex justify-between">
-          <Button onClick={restartAssessment} variant="outline" className="gradient-border">
+          <Button onClick={restartAssessment} variant="outline" className="border border-[#1A1B4B]/20 text-[#1A1B4B]">
             <RefreshCw className="h-4 w-4 mr-2" />
             Start New Assessment
           </Button>
@@ -1102,7 +1088,7 @@ return (
               {currentSectionData.title}: {currentQuestion + 1} of {currentSectionData.questions.length}
             </CardTitle>
           </div>
-          <Badge variant="outline" className="bg-primary/10 border-primary/20">
+          <Badge variant="outline" className="bg-[#1A1B4B]/10 border border-[#1A1B4B]/20">
             {Math.round(currentOverallProgress)}% Complete
           </Badge>
         </div>
@@ -1110,7 +1096,7 @@ return (
         <div className="mt-6 flex flex-col sm:flex-row sm:items-center gap-2">
           <Badge
             variant="outline"
-            className={currentQ.required ? "bg-destructive/10 text-destructive border-destructive/20" : ""}
+            className={currentQ.required ? "bg-[#1A1B4B]/10 text-[#1A1B4B]/60 border-[#1A1B4B]/20" : ""}
           >
             {currentQ.required ? "Required" : "Optional"}
           </Badge>
@@ -1122,9 +1108,9 @@ return (
       <CardContent>
         {renderFormField()}
         {formErrors[currentQ.id] && (
-          <p className="text-destructive text-sm mt-3 flex items-center">
+          <p className="text-[#1A1B4B]/60 text-sm mt-3 flex items-center">
             <svg
-              xmlns="http://www.w3.org/2000/svg"
+              xmlns="http://www.w3.org/200/svg"
               width="16"
               height="16"
               viewBox="0 0 24 24"
@@ -1149,7 +1135,7 @@ return (
             onClick={handleBack}
             variant="outline"
             disabled={currentQuestion === 0 && currentSection === "initial"}
-            className="gradient-border"
+            className="border border-[#1A1B4B]/20 text-[#1A1B4B]"
           >
             <ChevronLeft className="h-4 w-4 mr-2" />
             Back
@@ -1175,7 +1161,7 @@ return (
                   <Info className="h-4 w-4" />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent className="bg-popover text-popover-foreground">Show assessment information</TooltipContent>
+              <TooltipContent className="bg-[#FFFFFF] text-[#1A1B4B]">Show assessment information</TooltipContent>
             </Tooltip>
           </TooltipProvider>
           <TooltipProvider>
@@ -1185,14 +1171,14 @@ return (
                   <RefreshCw className="h-4 w-4" />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent className="bg-popover text-popover-foreground">Restart assessment</TooltipContent>
+              <TooltipContent className="bg-[#FFFFFF] text-[#1A1B4B]">Restart assessment</TooltipContent>
             </Tooltip>
           </TooltipProvider>
         </div>
       </CardFooter>
     </Card>
 
-    <Card className="bg-accent/30 border-0 glass-card">
+    <Card className="border border-[#1A1B4B]/20 bg-[#FFFFFF]">
       <CardHeader className="pb-0">
         <CardTitle className="text-sm font-medium">Assessment Progress</CardTitle>
       </CardHeader>
