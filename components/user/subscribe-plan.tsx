@@ -294,7 +294,7 @@ export function SubscribePlan() {
           <div className="flex items-center space-x-2 p-1 border rounded-lg">
             <div 
               className={cn(
-                "absolute top-0 bottom-0 w-1/2 rounded-md bg-gradient-to-r from-blue-600/10 to-teal-500/10 dark:from-blue-600/20 dark:to-teal-500/20 transition-transform duration-300",
+                "absolute top-0 bottom-0 w-1/2 rounded-md bg-gradient-to-r from-[#1A1B4B]/20 to-[#26A649]/10   transition-transform duration-300",
                 selectedCycle === "yearly" && "translate-x-full"
               )}
             ></div>
@@ -318,7 +318,7 @@ export function SubscribePlan() {
                 selectedCycle === "yearly" && "text-primary font-medium"
               )}
             >
-              <Sparkles className="h-4 w-4 mr-2 text-amber-500" />
+              <Sparkles className="h-4 w-4 mr-2 text-[#26A649]" />
               Yearly (Save 15%)
             </Button>
           </div>
@@ -348,7 +348,7 @@ export function SubscribePlan() {
               className={cn(
                 "border-2 transition-all duration-300 h-full relative overflow-hidden",
                 subscriptionPlan?.id === plan.id 
-                  ? "border-primary shadow-lg shadow-primary/10 dark:shadow-primary/5" 
+                  ? "border-primary shadow-lg shadow-primary/10 " 
                   : isHoveredPlan === plan.id
                   ? "border-primary/50 shadow-md"
                   : "hover:border-primary/30 hover:shadow-sm"
@@ -357,7 +357,7 @@ export function SubscribePlan() {
               {/* Popular badge */}
               {plan.popular && (
                 <div className="absolute top-0 right-0">
-                  <div className="bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold py-1 px-3 transform rotate-45 translate-x-6 translate-y-1">
+                  <div className="bg-gradient-to-r from-[#1A1B4B]/20 to-[#1A1B4B] text-[#FFFFFF] text-xs font-bold py-1 px-3 transform rotate-45 translate-x-6 translate-y-1">
                     POPULAR
                   </div>
                 </div>
@@ -367,15 +367,15 @@ export function SubscribePlan() {
               <CardHeader className="pb-4">
                 <div className="flex justify-between items-start">
                   <div>
-                    <CardTitle className="text-xl bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-teal-500">
+                    <CardTitle className="text-xl bg-clip-text text-transparent bg-gradient-to-r from-[#1A1B4B]/20 to-[#26A649]">
                       {plan.name}
                     </CardTitle>
                     <CardDescription className="mt-1">
                       {plan.description}
                     </CardDescription>
                   </div>
-                  <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-full">
-                    <BadgeCheck className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                  <div className="p-2 bg-[#1A1B4B]/10  rounded-full">
+                    <BadgeCheck className="w-5 h-5 text-[#1A1B4B] " />
                   </div>
                 </div>
                 
@@ -391,7 +391,7 @@ export function SubscribePlan() {
                       /{selectedCycle === "yearly" ? "year" : "month"}
                     </span>
                     {selectedCycle === "yearly" && (
-                      <span className="text-xs text-green-600 dark:text-green-400 flex items-center">
+                      <span className="text-xs text-[#26A649]  flex items-center">
                         <ThumbsUp className="h-3 w-3 mr-1" />
                         Save 15%
                       </span>
@@ -405,7 +405,7 @@ export function SubscribePlan() {
                 <div className="space-y-3">
                   {plan.services.map((service, index) => (
                     <div key={index} className="flex items-start">
-                      <Check className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                      <Check className="h-5 w-5 text-[#26A649] mr-2 mt-0.5 flex-shrink-0" />
                       <span className="text-sm text-muted-foreground">
                         {service}
                       </span>
@@ -420,7 +420,7 @@ export function SubscribePlan() {
                   <DialogTrigger asChild>
                     <Button 
                       variant="outline" 
-                      className="w-full hover:bg-blue-50 dark:hover:bg-blue-900/20 border-blue-200 dark:border-blue-800/80"
+                      className="w-full hover:bg-[#1A1B4B]/10  border-[#1A1B4B]/20 "
                     >
                       View Details
                       <ArrowRight className="w-4 h-4 ml-2" />
@@ -439,7 +439,7 @@ export function SubscribePlan() {
                     
                     <div className="space-y-6 py-4">
                       {/* Price section */}
-                      <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                      <div className="p-4 bg-[#1A1B4B]/10  rounded-lg">
                         <div className="flex justify-between items-end">
                           <div>
                             <p className="text-sm text-muted-foreground">Price</p>
@@ -467,7 +467,7 @@ export function SubscribePlan() {
                         </div>
                         
                         {selectedCycle === "yearly" && (
-                          <div className="mt-2 text-sm flex items-center text-green-600 dark:text-green-400">
+                          <div className="mt-2 text-sm flex items-center text-[#26A649] ">
                             <Award className="h-4 w-4 mr-1" />
                             <span>You save ${(plan.price * 12 * 0.15).toFixed(2)} with yearly billing</span>
                           </div>
@@ -483,7 +483,7 @@ export function SubscribePlan() {
                         <ul className="space-y-2">
                           {plan.services.map((service, index) => (
                             <li key={index} className="flex items-start">
-                              <Check className="h-4 w-4 text-green-500 mr-2 mt-1 flex-shrink-0" />
+                              <Check className="h-4 w-4 text-[#26A649] mr-2 mt-1 flex-shrink-0" />
                               <span className="text-muted-foreground">{service}</span>
                             </li>
                           ))}
@@ -499,7 +499,7 @@ export function SubscribePlan() {
                         <ul className="space-y-2">
                           {plan.features.map((feature, index) => (
                             <li key={index} className="flex items-start">
-                              <Check className="h-4 w-4 text-green-500 mr-2 mt-1 flex-shrink-0" />
+                              <Check className="h-4 w-4 text-[#26A649] mr-2 mt-1 flex-shrink-0" />
                               <span className="text-muted-foreground">{feature}</span>
                             </li>
                           ))}
@@ -521,7 +521,7 @@ export function SubscribePlan() {
                   <Dialog open={open} onOpenChange={setOpen}>
                     <DialogTrigger asChild>
                       <Button
-                        className="w-full bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600"
+                        className="w-full bg-gradient-to-r from-[#1A1B4B]/20 to-[#26A649] hover:from-[#1A1B4B]/20 hover:to-[#26A649]/10"
                         onClick={() => {
                           setSubscriptionPlan(plan);
                           setOpen(true);
@@ -540,7 +540,7 @@ export function SubscribePlan() {
                       
                       <div className="space-y-6 py-4">
                         {/* Payment amount */}
-                        <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                        <div className="p-4 bg-[#1A1B4B]/10  rounded-lg">
                           <p className="text-sm font-medium text-muted-foreground mb-1">Payment Amount</p>
                           <p className="text-2xl font-bold">
                             ${selectedCycle === "yearly"
@@ -561,7 +561,7 @@ export function SubscribePlan() {
                           
                           <ol className="space-y-4">
                             <li className="flex items-start">
-                              <div className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-blue-600 dark:text-blue-400 mr-3 mt-0.5">
+                              <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#1A1B4B]/10  flex items-center justify-center text-[#1A1B4B]  mr-3 mt-0.5">
                                 1
                               </div>
                               <div>
@@ -580,7 +580,7 @@ export function SubscribePlan() {
                             </li>
                             
                             <li className="flex items-start">
-                              <div className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-blue-600 dark:text-blue-400 mr-3 mt-0.5">
+                              <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#1A1B4B]/10  flex items-center justify-center text-[#1A1B4B]  mr-3 mt-0.5">
                                 2
                               </div>
                               <div>
@@ -595,24 +595,24 @@ export function SubscribePlan() {
                                     className={cn(
                                       "flex flex-col items-center justify-center w-full h-24 border-2 border-dashed rounded-lg cursor-pointer",
                                       uploadSuccess 
-                                        ? "border-green-500 bg-green-50 dark:bg-green-900/20" 
-                                        : "border-gray-300 dark:border-gray-600 hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                                        ? "border-[#26A649]/30 bg-[#26A649]/10 " 
+                                        : "border-[#1A1B4B]/20  hover:border-[#1A1B4B]/20 hover:bg-[#1A1B4B]/10 "
                                     )}
                                   >
                                     {uploadSuccess ? (
                                       <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                                        <ThumbsUp className="h-8 w-8 text-green-500 mb-2" />
-                                        <p className="text-sm text-green-600 dark:text-green-400 font-medium">
+                                        <ThumbsUp className="h-8 w-8 text-[#26A649] mb-2" />
+                                        <p className="text-sm text-[#26A649]  font-medium">
                                           File uploaded successfully
                                         </p>
                                       </div>
                                     ) : (
                                       <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                                        <Upload className="h-8 w-8 text-gray-400 mb-2" />
-                                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                                        <Upload className="h-8 w-8 text-[#1A1B4B]/60 mb-2" />
+                                        <p className="text-sm text-[#1A1B4B]/70 ">
                                           Click to upload or drag and drop
                                         </p>
-                                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                                        <p className="text-xs text-[#1A1B4B]/70 ">
                                           PNG, JPG or PDF (max. 5MB)
                                         </p>
                                       </div>
@@ -643,7 +643,7 @@ export function SubscribePlan() {
                         <Button
                           disabled={isSubscribing || !subscriptionPaymentProof}
                           onClick={handleSubscribe}
-                          className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600"
+                          className="w-full sm:w-auto bg-gradient-to-r from-[#1A1B4B]/20 to-[#26A649] hover:from-[#1A1B4B]/20 hover:to-[#26A649]/10"
                         >
                           {isSubscribing
                             ? "Processing..."
@@ -654,7 +654,7 @@ export function SubscribePlan() {
                   </Dialog>
                 ) : (
                   <Link href="/login" className="w-full">
-                    <Button className="w-full bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600">
+                    <Button className="w-full bg-gradient-to-r from-[#1A1B4B]/20 to-[#26A649] hover:from-[#1A1B4B]/20 hover:to-[#26A649]/10">
                       Login to Subscribe
                       <UserPlus className="w-4 h-4 ml-2" />
                     </Button>
@@ -669,17 +669,17 @@ export function SubscribePlan() {
       {/* Help Section */}
       <motion.div 
         variants={itemVariants}
-        className="mt-12 rounded-xl overflow-hidden shadow-sm border border-blue-100 dark:border-blue-900/50"
+        className="mt-12 rounded-xl overflow-hidden shadow-sm border border-[#1A1B4B]/20 "
       >
-        <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 p-6">
+        <div className="bg-gradient-to-r from-[#1A1B4B]/20 to-[#1A1B4B]/10   p-6">
           <div className="flex flex-col md:flex-row md:items-center gap-6">
             <div className="flex-shrink-0">
-              <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-blue-600 dark:text-blue-400">
+              <div className="w-12 h-12 rounded-full bg-[#1A1B4B]/10  flex items-center justify-center text-[#1A1B4B] ">
                 <AlertCircle className="w-6 h-6" />
               </div>
             </div>
             <div className="flex-grow">
-              <h4 className="font-semibold text-lg text-gray-900 dark:text-gray-100 mb-2">
+              <h4 className="font-semibold text-lg text-[#1A1B4B]  mb-2">
                 Need help choosing?
               </h4>
               <p className="text-muted-foreground mb-4">
@@ -689,7 +689,7 @@ export function SubscribePlan() {
                 <Button 
                   asChild
                   variant="outline" 
-                  className="border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/30"
+                  className="border-[#1A1B4B]/20  text-[#1A1B4B]  hover:bg-[#1A1B4B]/10 "
                 >
                   <Link href="/contact">
                     Contact Support
@@ -699,7 +699,7 @@ export function SubscribePlan() {
                 <Button 
                   asChild
                   variant="outline" 
-                  className="border-purple-200 dark:border-purple-800 text-purple-700 dark:text-purple-300 hover:bg-purple-50 dark:hover:bg-purple-900/30"
+                  className="border-[#1A1B4B]/20  text-[#1A1B4B]  hover:bg-[#1A1B4B]/10 "
                 >
                   <Link href="/consultation">
                     Book a Consultation
