@@ -375,7 +375,7 @@ export function AcademicQuestionnaire() {
       field: "motivation",
       label: "Why do you want to pursue a graduate degree?",
       type: "textarea",
-      icon: <Sparkles className="h-5 w-5 text-indigo-500" />,
+      icon: <Sparkles className="h-5 w-5 text-[#1A1B4B]" />,
       helper:
         "Explain your academic and career motivations for pursuing higher education",
       section: "motivation",
@@ -385,7 +385,7 @@ export function AcademicQuestionnaire() {
       field: "timing",
       label: "Why is now the right time for graduate studies?",
       type: "textarea",
-      icon: <Clock className="h-5 w-5 text-indigo-500" />,
+      icon: <Clock className="h-5 w-5 text-[#1A1B4B]" />,
       helper:
         "Explain why this point in your career is ideal for further education",
       section: "motivation",
@@ -400,7 +400,7 @@ export function AcademicQuestionnaire() {
         { value: "phd", label: "PhD" },
         { value: "both", label: "Both (Master's followed by PhD)" },
       ],
-      icon: <Award className="h-5 w-5 text-indigo-500" />,
+      icon: <Award className="h-5 w-5 text-[#1A1B4B]" />,
       section: "motivation",
       animation: "fade-up",
     },
@@ -408,7 +408,7 @@ export function AcademicQuestionnaire() {
       field: "fieldOfStudy",
       label: "What field do you want to study?",
       type: "text",
-      icon: <BookOpen className="h-5 w-5 text-indigo-500" />,
+      icon: <BookOpen className="h-5 w-5 text-[#1A1B4B]" />,
       helper: "Specify your intended field/discipline of study",
       section: "motivation",
       animation: "fade-down",
@@ -419,7 +419,7 @@ export function AcademicQuestionnaire() {
       field: "undergradCGPA",
       label: "What was your undergraduate CGPA?",
       type: "text",
-      icon: <FileText className="h-5 w-5 text-blue-500" />,
+      icon: <FileText className="h-5 w-5 text-[#1A1B4B]" />,
       helper: "Enter your cumulative GPA from your undergraduate degree",
       section: "academic",
       animation: "fade-right",
@@ -433,7 +433,7 @@ export function AcademicQuestionnaire() {
         { value: "5", label: "5.0 Scale" },
         { value: "other", label: "Other Scale" },
       ],
-      icon: <FileText className="h-5 w-5 text-blue-500" />,
+      icon: <FileText className="h-5 w-5 text-[#1A1B4B]" />,
       section: "academic",
       animation: "fade-left",
     },
@@ -441,7 +441,7 @@ export function AcademicQuestionnaire() {
       field: "customGpaScale",
       label: "Please specify your GPA scale",
       type: "text",
-      icon: <FileText className="h-5 w-5 text-blue-500" />,
+      icon: <FileText className="h-5 w-5 text-[#1A1B4B]" />,
       helper: "Enter the maximum value of your GPA scale (e.g., 10)",
       condition: (values) => values.gpaScale === "other",
       section: "academic",
@@ -451,7 +451,7 @@ export function AcademicQuestionnaire() {
       field: "undergradCourses",
       label: "What courses did you take in your undergraduate program?",
       type: "textarea",
-      icon: <BookOpen className="h-5 w-5 text-blue-500" />,
+      icon: <BookOpen className="h-5 w-5 text-[#1A1B4B]" />,
       helper: "List major courses you completed in your undergraduate studies",
       section: "academic",
       animation: "fade-right",
@@ -460,7 +460,7 @@ export function AcademicQuestionnaire() {
       field: "relevantCourses",
       label: "Which courses are most relevant to your intended field of study?",
       type: "textarea",
-      icon: <BookOpen className="h-5 w-5 text-blue-500" />,
+      icon: <BookOpen className="h-5 w-5 text-[#1A1B4B]" />,
       helper:
         "Highlight courses that directly relate to your graduate study plans",
       section: "academic",
@@ -472,7 +472,7 @@ export function AcademicQuestionnaire() {
       field: "workExperience",
       label: "How many years of relevant work experience do you have?",
       type: "text",
-      icon: <Briefcase className="h-5 w-5 text-green-500" />,
+      icon: <Briefcase className="h-5 w-5 text-[#26A649]" />,
       helper:
         "Enter the number of years of professional experience related to your field",
       section: "experience",
@@ -482,7 +482,7 @@ export function AcademicQuestionnaire() {
       field: "workExperienceDetails",
       label: "Please describe your relevant work experience",
       type: "textarea",
-      icon: <Briefcase className="h-5 w-5 text-green-500" />,
+      icon: <Briefcase className="h-5 w-5 text-[#26A649]" />,
       helper: "Describe positions, responsibilities, and achievements",
       condition: (values) => parseFloat(values.workExperience) > 0,
       section: "experience",
@@ -496,7 +496,7 @@ export function AcademicQuestionnaire() {
         { value: "yes", label: "Yes" },
         { value: "no", label: "No" },
       ],
-      icon: <Users className="h-5 w-5 text-green-500" />,
+      icon: <Users className="h-5 w-5 text-[#26A649]" />,
       section: "experience",
       animation: "fade-right",
     },
@@ -504,7 +504,7 @@ export function AcademicQuestionnaire() {
       field: "leadershipDetails",
       label: "Please describe your leadership experiences and outcomes",
       type: "textarea",
-      icon: <Users className="h-5 w-5 text-green-500" />,
+      icon: <Users className="h-5 w-5 text-[#26A649]" />,
       helper: "Detail your responsibilities and accomplishments as a leader",
       condition: (values) => values.leadership === "yes",
       section: "experience",
@@ -518,7 +518,7 @@ export function AcademicQuestionnaire() {
         { value: "yes", label: "Yes" },
         { value: "no", label: "No" },
       ],
-      icon: <Users className="h-5 w-5 text-green-500" />,
+      icon: <Users className="h-5 w-5 text-[#26A649]" />,
       section: "experience",
       animation: "fade-up",
     },
@@ -526,7 +526,7 @@ export function AcademicQuestionnaire() {
       field: "communityServiceDetails",
       label: "Please describe your community service or volunteer work",
       type: "textarea",
-      icon: <Users className="h-5 w-5 text-green-500" />,
+      icon: <Users className="h-5 w-5 text-[#26A649]" />,
       helper: "Include organizations, roles, and impact of your service",
       condition: (values) => values.communityService === "yes",
       section: "experience",
@@ -540,7 +540,7 @@ export function AcademicQuestionnaire() {
         { value: "yes", label: "Yes" },
         { value: "no", label: "No" },
       ],
-      icon: <Award className="h-5 w-5 text-green-500" />,
+      icon: <Award className="h-5 w-5 text-[#26A649]" />,
       section: "experience",
       animation: "fade-right",
     },
@@ -548,7 +548,7 @@ export function AcademicQuestionnaire() {
       field: "awardDetails",
       label: "Please list your awards and honors",
       type: "textarea",
-      icon: <Award className="h-5 w-5 text-green-500" />,
+      icon: <Award className="h-5 w-5 text-[#26A649]" />,
       helper: "Include the name, date, and significance of each award",
       condition: (values) => values.awards === "yes",
       section: "experience",
@@ -562,7 +562,7 @@ export function AcademicQuestionnaire() {
         { value: "yes", label: "Yes" },
         { value: "no", label: "No" },
       ],
-      icon: <FileText className="h-5 w-5 text-green-500" />,
+      icon: <FileText className="h-5 w-5 text-[#26A649]" />,
       helper: "Include articles, papers, conference presentations, etc.",
       section: "experience",
       animation: "fade-up",
@@ -571,7 +571,7 @@ export function AcademicQuestionnaire() {
       field: "publicationDetails",
       label: "Please list your publications and presentations",
       type: "textarea",
-      icon: <FileText className="h-5 w-5 text-green-500" />,
+      icon: <FileText className="h-5 w-5 text-[#26A649]" />,
       helper: "Include title, publication venue, date, and your role",
       condition: (values) => values.publications === "yes",
       section: "experience",
@@ -583,7 +583,7 @@ export function AcademicQuestionnaire() {
       field: "languages",
       label: "Which languages do you speak?",
       type: "text",
-      icon: <Globe className="h-5 w-5 text-purple-500" />,
+      icon: <Globe className="h-5 w-5 text-[#1A1B4B]" />,
       helper: "List all languages you speak and your proficiency level in each",
       section: "language",
       animation: "fade-right",
@@ -599,7 +599,7 @@ export function AcademicQuestionnaire() {
         { value: "native", label: "Native Speaker" },
         { value: "certified", label: "Certified (IELTS/TOEFL/etc.)" },
       ],
-      icon: <Globe className="h-5 w-5 text-purple-500" />,
+      icon: <Globe className="h-5 w-5 text-[#1A1B4B]" />,
       section: "language",
       animation: "fade-left",
     },
@@ -607,7 +607,7 @@ export function AcademicQuestionnaire() {
       field: "certificationDetails",
       label: "Please provide details of your English certification",
       type: "text",
-      icon: <FileText className="h-5 w-5 text-purple-500" />,
+      icon: <FileText className="h-5 w-5 text-[#1A1B4B]" />,
       helper: "Include test name, score, and date (e.g., IELTS 7.5, June 2023)",
       condition: (values) => values.englishProficiency === "certified",
       section: "language",
@@ -621,7 +621,7 @@ export function AcademicQuestionnaire() {
         { value: "yes", label: "Yes" },
         { value: "no", label: "No" },
       ],
-      icon: <Briefcase className="h-5 w-5 text-purple-500" />,
+      icon: <Briefcase className="h-5 w-5 text-[#1A1B4B]" />,
       section: "language",
       animation: "fade-down",
     },
@@ -634,7 +634,7 @@ export function AcademicQuestionnaire() {
         { value: "no", label: "No" },
         { value: "unsure", label: "Not Sure" },
       ],
-      icon: <Briefcase className="h-5 w-5 text-purple-500" />,
+      icon: <Briefcase className="h-5 w-5 text-[#1A1B4B]" />,
       condition: (values) => values.linkedin === "yes",
       helper:
         "An optimized profile highlights academic achievements, research, and scholarly activities",
@@ -647,7 +647,7 @@ export function AcademicQuestionnaire() {
       field: "intendedCountries",
       label: "Which countries are you interested in studying in?",
       type: "text",
-      icon: <Globe className="h-5 w-5 text-amber-500" />,
+      icon: <Globe className="h-5 w-5 text-[#26A649]" />,
       helper:
         "List the countries where you'd like to pursue your graduate studies",
       section: "planning",
@@ -662,7 +662,7 @@ export function AcademicQuestionnaire() {
         { value: "partial", label: "Partial Funding (Tuition Only)" },
         { value: "flexible", label: "Flexible (Will Consider Any Funding)" },
       ],
-      icon: <Award className="h-5 w-5 text-amber-500" />,
+      icon: <Award className="h-5 w-5 text-[#26A649]" />,
       section: "planning",
       animation: "fade-up",
     },
@@ -676,7 +676,7 @@ export function AcademicQuestionnaire() {
         { value: "1to2years", label: "1-2 Years from Now" },
         { value: "2+years", label: "More than 2 Years from Now" },
       ],
-      icon: <Clock className="h-5 w-5 text-amber-500" />,
+      icon: <Clock className="h-5 w-5 text-[#26A649]" />,
       section: "planning",
       animation: "fade-down",
     },
@@ -916,14 +916,14 @@ export function AcademicQuestionnaire() {
           className="h-2"
           indicatorColor={
             section === "motivation"
-              ? "bg-indigo-500"
+              ? "bg-[#1A1B4B]"
               : section === "academic"
-              ? "bg-blue-500"
+              ? "bg-[#1A1B4B]"
               : section === "experience"
-              ? "bg-green-500"
+              ? "bg-[#26A649]"
               : section === "language"
-              ? "bg-purple-500"
-              : "bg-amber-500"
+              ? "bg-[#1A1B4B]"
+              : "bg-[#26A649]"
           }
         />
       </div>
@@ -953,7 +953,7 @@ export function AcademicQuestionnaire() {
                 completionPercentage[s.id] === 100
                   ? "bg-success/20 text-success"
                   : completionPercentage[s.id] > 0
-                  ? "bg-blue-500/20 text-blue-600 dark:bg-blue-400/30 dark:text-blue-300"
+                  ? "bg-[#1A1B4B]/20 text-[#1A1B4B]  "
                   : "bg-muted-foreground/20 text-muted-foreground"
               }`}
             >
@@ -1122,52 +1122,52 @@ export function AcademicQuestionnaire() {
     return (
       <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/40 dark:to-indigo-950/40 border-0 shadow">
+          <Card className="bg-gradient-to-br from-[#1A1B4B]/20 to-[#1A1B4B]/10   border-0 shadow">
             <CardContent className="pt-6">
               <div className="text-center">
-                <h3 className="text-xl font-bold text-blue-700 dark:text-blue-400">
+                <h3 className="text-xl font-bold text-[#1A1B4B] ">
                   Profile Completion
                 </h3>
-                <div className="mt-2 inline-flex items-center justify-center w-24 h-24 rounded-full bg-white dark:bg-gray-900 shadow-inner">
-                  <span className="text-3xl font-bold text-blue-600 dark:text-blue-400">
+                <div className="mt-2 inline-flex items-center justify-center w-24 h-24 rounded-full bg-[#FFFFFF]  shadow-inner">
+                  <span className="text-3xl font-bold text-[#1A1B4B] ">
                     {overallPercentage}%
                   </span>
                 </div>
-                <p className="mt-2 text-sm text-blue-700 dark:text-blue-400">
+                <p className="mt-2 text-sm text-[#1A1B4B] ">
                   {completionLevel} Completion
                 </p>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/40 dark:to-pink-950/40 border-0 shadow">
+          <Card className="bg-gradient-to-br from-[#1A1B4B]/20 to-[#1A1B4B]/10   border-0 shadow">
             <CardContent className="pt-6">
               <div className="text-center">
-                <h3 className="text-xl font-bold text-purple-700 dark:text-purple-400">
+                <h3 className="text-xl font-bold text-[#1A1B4B] ">
                   Scholarship Readiness
                 </h3>
-                <div className="mt-2 inline-flex items-center justify-center w-24 h-24 rounded-full bg-white dark:bg-gray-900 shadow-inner">
-                  <span className="text-3xl font-bold text-purple-600 dark:text-purple-400">
+                <div className="mt-2 inline-flex items-center justify-center w-24 h-24 rounded-full bg-[#FFFFFF]  shadow-inner">
+                  <span className="text-3xl font-bold text-[#1A1B4B] ">
                     {readinessScore}/100
                   </span>
                 </div>
-                <p className="mt-2 text-sm text-purple-700 dark:text-purple-400">
+                <p className="mt-2 text-sm text-[#1A1B4B] ">
                   {profileStrength} Profile
                 </p>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-green-50 to-teal-50 dark:from-green-950/40 dark:to-teal-950/40 border-0 shadow">
+          <Card className="bg-gradient-to-br from-[#26A649]/20 to-[#26A649]/10   border-0 shadow">
             <CardContent className="pt-6">
               <div className="text-center">
-                <h3 className="text-xl font-bold text-green-700 dark:text-green-400">
+                <h3 className="text-xl font-bold text-[#26A649] ">
                   Next Steps
                 </h3>
-                <div className="mt-2 inline-flex items-center justify-center w-24 h-24 rounded-full bg-white dark:bg-gray-900 shadow-inner">
-                  <Sparkles className="w-12 h-12 text-green-500 dark:text-green-400" />
+                <div className="mt-2 inline-flex items-center justify-center w-24 h-24 rounded-full bg-[#FFFFFF]  shadow-inner">
+                  <Sparkles className="w-12 h-12 text-[#26A649] " />
                 </div>
-                <p className="mt-2 text-sm text-green-700 dark:text-green-400">
+                <p className="mt-2 text-sm text-[#26A649] ">
                   Personalized Guidance
                 </p>
               </div>
@@ -1191,7 +1191,7 @@ export function AcademicQuestionnaire() {
                     <Badge
                       key={index}
                       variant="outline"
-                      className="bg-blue-500/10 text-blue-600 dark:bg-blue-400/10 dark:text-blue-400 border-blue-500/20 dark:border-blue-400/20 px-3 py-1"
+                      className="bg-[#1A1B4B]/10 text-[#1A1B4B]   border-[#1A1B4B]/20  px-3 py-1"
                     >
                       {type}
                     </Badge>
@@ -1210,37 +1210,37 @@ export function AcademicQuestionnaire() {
                 <ul className="space-y-2">
                   {values.leadership === "yes" && (
                     <li className="flex items-center gap-2 text-sm">
-                      <div className="w-1.5 h-1.5 rounded-full bg-green-500"></div>
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#26A649]"></div>
                       <span>Leadership experience</span>
                     </li>
                   )}
                   {values.publications === "yes" && (
                     <li className="flex items-center gap-2 text-sm">
-                      <div className="w-1.5 h-1.5 rounded-full bg-green-500"></div>
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#26A649]"></div>
                       <span>Publications or presentations</span>
                     </li>
                   )}
                   {values.awards === "yes" && (
                     <li className="flex items-center gap-2 text-sm">
-                      <div className="w-1.5 h-1.5 rounded-full bg-green-500"></div>
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#26A649]"></div>
                       <span>Academic awards or honors</span>
                     </li>
                   )}
                   {parseFloat(values.workExperience) >= 2 && (
                     <li className="flex items-center gap-2 text-sm">
-                      <div className="w-1.5 h-1.5 rounded-full bg-green-500"></div>
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#26A649]"></div>
                       <span>Relevant work experience</span>
                     </li>
                   )}
                   {values.englishProficiency === "certified" && (
                     <li className="flex items-center gap-2 text-sm">
-                      <div className="w-1.5 h-1.5 rounded-full bg-green-500"></div>
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#26A649]"></div>
                       <span>Certified English proficiency</span>
                     </li>
                   )}
                   {values.communityService === "yes" && (
                     <li className="flex items-center gap-2 text-sm">
-                      <div className="w-1.5 h-1.5 rounded-full bg-green-500"></div>
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#26A649]"></div>
                       <span>Community service/volunteer work</span>
                     </li>
                   )}
@@ -1249,7 +1249,7 @@ export function AcademicQuestionnaire() {
                     (values.gpaScale === "5" &&
                       parseFloat(values.undergradCGPA) >= 4.5 && (
                         <li className="flex items-center gap-2 text-sm">
-                          <div className="w-1.5 h-1.5 rounded-full bg-green-500"></div>
+                          <div className="w-1.5 h-1.5 rounded-full bg-[#26A649]"></div>
                           <span>Strong academic performance</span>
                         </li>
                       ))}
@@ -1263,32 +1263,32 @@ export function AcademicQuestionnaire() {
                 <ul className="space-y-2">
                   {!values.leadership || values.leadership === "no" ? (
                     <li className="flex items-center gap-2 text-sm">
-                      <div className="w-1.5 h-1.5 rounded-full bg-amber-500"></div>
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#26A649]"></div>
                       <span>Gain leadership experience</span>
                     </li>
                   ) : null}
                   {!values.publications || values.publications === "no" ? (
                     <li className="flex items-center gap-2 text-sm">
-                      <div className="w-1.5 h-1.5 rounded-full bg-amber-500"></div>
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#26A649]"></div>
                       <span>Pursue publication opportunities</span>
                     </li>
                   ) : null}
                   {parseFloat(values.workExperience || "0") < 1 && (
                     <li className="flex items-center gap-2 text-sm">
-                      <div className="w-1.5 h-1.5 rounded-full bg-amber-500"></div>
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#26A649]"></div>
                       <span>Gain relevant work or research experience</span>
                     </li>
                   )}
                   {!values.awards || values.awards === "no" ? (
                     <li className="flex items-center gap-2 text-sm">
-                      <div className="w-1.5 h-1.5 rounded-full bg-amber-500"></div>
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#26A649]"></div>
                       <span>Seek academic recognition opportunities</span>
                     </li>
                   ) : null}
                   {values.englishProficiency !== "certified" &&
                     values.englishProficiency !== "native" && (
                       <li className="flex items-center gap-2 text-sm">
-                        <div className="w-1.5 h-1.5 rounded-full bg-amber-500"></div>
+                        <div className="w-1.5 h-1.5 rounded-full bg-[#26A649]"></div>
                         <span>Obtain English proficiency certification</span>
                       </li>
                     )}
@@ -1307,7 +1307,7 @@ export function AcademicQuestionnaire() {
                   onClick={() =>
                     (window.location.href = "/scholarship-quest/opportunities")
                   }
-                  className="bg-gradient-to-r from-blue-600 to-indigo-600"
+                  className="bg-gradient-to-r from-[#1A1B4B]/20 to-[#1A1B4B]/10"
                 >
                   <Award className="mr-2 h-4 w-4" />
                   Find Scholarships
@@ -1338,13 +1338,13 @@ export function AcademicQuestionnaire() {
 
   return (
     <div className="w-full">
-      <Card className="w-full shadow-md card-3d overflow-hidden border border-blue-100/50 dark:border-blue-900/20">
-        <CardHeader className="bg-gradient-to-br from-blue-50/80 to-indigo-50/80 dark:from-blue-950/40 dark:to-indigo-950/40 border-b border-blue-100/50 dark:border-blue-900/20">
+      <Card className="w-full shadow-md card-3d overflow-hidden border border-[#1A1B4B]/20 ">
+        <CardHeader className="bg-gradient-to-br from-[#1A1B4B]/20 to-[#1A1B4B]/10   border-b border-[#1A1B4B]/20 ">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <Badge
                 variant="outline"
-                className="mb-2 bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-500/20"
+                className="mb-2 bg-[#1A1B4B]/10 text-[#1A1B4B]  border-[#1A1B4B]/20"
               >
                 Academic Assessment
               </Badge>
@@ -1385,12 +1385,12 @@ export function AcademicQuestionnaire() {
                     transition={{ duration: 0.3 }}
                     className="space-y-6"
                   >
-                    <div className="flex items-center gap-3 mb-6 p-4 bg-blue-50/50 dark:bg-blue-950/20 rounded-lg border border-blue-100 dark:border-blue-900/30">
-                      <div className="p-2.5 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-400">
+                    <div className="flex items-center gap-3 mb-6 p-4 bg-[#1A1B4B]/10  rounded-lg border border-[#1A1B4B]/20 ">
+                      <div className="p-2.5 rounded-full bg-[#1A1B4B]/10  text-[#1A1B4B] ">
                         {currentQuestion.icon}
                       </div>
                       <div>
-                        <h3 className="text-lg font-semibold text-blue-800 dark:text-blue-300">
+                        <h3 className="text-lg font-semibold text-[#1A1B4B] ">
                           {currentQuestion.label}
                         </h3>
                       </div>
@@ -1416,7 +1416,7 @@ export function AcademicQuestionnaire() {
                     className="py-6"
                   >
                     <div className="text-center mb-8">
-                      <div className="inline-block p-6 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full mb-6 text-white">
+                      <div className="inline-block p-6 bg-gradient-to-br from-[#1A1B4B]/20 to-[#1A1B4B]/10 rounded-full mb-6 text-[#FFFFFF]">
                         <Trophy className="w-14 h-14" />
                       </div>
                       <h2 className="text-3xl font-bold mb-4 text-gradient-primary">
@@ -1434,7 +1434,7 @@ export function AcademicQuestionnaire() {
             </CardContent>
 
             {!isComplete && (
-              <CardFooter className="flex justify-between p-6 bg-gradient-to-br from-blue-50/80 to-indigo-50/80 dark:from-blue-950/40 dark:to-indigo-950/40 border-t border-blue-100/50 dark:border-blue-900/20">
+              <CardFooter className="flex justify-between p-6 bg-gradient-to-br from-[#1A1B4B]/20 to-[#1A1B4B]/10   border-t border-[#1A1B4B]/20 ">
                 <Button
                   type="button"
                   variant="outline"
@@ -1467,13 +1467,13 @@ export function AcademicQuestionnaire() {
                     type="button"
                     onClick={handleNext}
                     disabled={isSubmitting}
-                    className="gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
+                    className="gap-2 bg-gradient-to-r from-[#1A1B4B]/20 to-[#1A1B4B]/10 hover:from-[#1A1B4B]/20 hover:to-[#1A1B4B]/10"
                   >
                     {isSubmitting ? (
                       <>
                         <svg
-                          className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                          xmlns="http://www.w3.org/2000/svg"
+                          className="animate-spin -ml-1 mr-2 h-4 w-4 text-[#FFFFFF]"
+                          xmlns="http://www.w3.org/200/svg"
                           fill="none"
                           viewBox="0 0 24 24"
                         >
