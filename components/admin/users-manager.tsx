@@ -195,7 +195,7 @@ function MarketingEmailDialog({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-blue-600 hover:bg-blue-700">
+        <Button className="bg-[#1A1B4B]/10 hover:bg-[#1A1B4B]/10">
           <Mail className="mr-2 h-4 w-4" />
           Send Marketing Email
         </Button>
@@ -318,7 +318,7 @@ function MarketingEmailDialog({
           <Button
             onClick={handleSend}
             disabled={sendEmailMutation.isPending}
-            className="bg-blue-600 hover:bg-blue-700"
+            className="bg-[#1A1B4B]/10 hover:bg-[#1A1B4B]/10"
           >
             {sendEmailMutation.isPending ? (
               <>
@@ -628,12 +628,12 @@ export function UsersManager() {
         cell: ({ row }) => {
           const role = row.getValue("role") as Role;
           const roleColors: { [key: string]: string } = {
-            ADMIN: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200",
+            ADMIN: "bg-[#1A1B4B]/10 text-[#1A1B4B]  ",
             MODERATOR:
-              "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
-            USER: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
+              "bg-[#1A1B4B]/10 text-[#1A1B4B]  ",
+            USER: "bg-[#26A649]/10 text-[#26A649]  ",
             MENTOR:
-              "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200",
+              "bg-[#1A1B4B]/10 text-[#1A1B4B]  ",
           };
           return <Badge className={roleColors[role]}>{role}</Badge>;
         },
@@ -670,7 +670,7 @@ export function UsersManager() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   onClick={() => handleDeleteUser(user.id)}
-                  className="text-red-600 focus:text-red-600"
+                  className="text-[#1A1B4B] focus:text-[#1A1B4B]"
                 >
                   <Trash2 className="mr-2 h-4 w-4" />
                   Delete User
@@ -714,8 +714,8 @@ export function UsersManager() {
 
   if (error) {
     return (
-      <div className="rounded-md bg-red-50 p-4">
-        <div className="text-sm text-red-700">
+      <div className="rounded-md bg-[#1A1B4B]/10 p-4">
+        <div className="text-sm text-[#1A1B4B]">
           {error instanceof Error ? error.message : "Failed to load users"}
         </div>
       </div>
@@ -842,16 +842,16 @@ export function UsersManager() {
 
       {/* Selected Users Info */}
       {selectedUsers.length > 0 && (
-        <div className="rounded-md bg-blue-50 dark:bg-blue-900/20 p-3">
+        <div className="rounded-md bg-[#1A1B4B]/10  p-3">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-blue-800 dark:text-blue-200">
+            <span className="text-sm text-[#1A1B4B] ">
               {selectedUsers.length} user(s) selected
             </span>
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setRowSelection({})}
-              className="text-blue-800 dark:text-blue-200"
+              className="text-[#1A1B4B] "
             >
               Clear Selection
             </Button>
@@ -960,7 +960,7 @@ export function UsersManager() {
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleConfirmDelete}
-              className="bg-red-600 hover:bg-red-700"
+              className="bg-[#1A1B4B]/10 hover:bg-[#1A1B4B]/10"
               disabled={deleteMutation.isPending}
             >
               {deleteMutation.isPending ? "Deleting..." : "Delete"}
