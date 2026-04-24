@@ -79,13 +79,13 @@ export function LessonContent({
       </CardHeader>
       <CardContent>
         <div
-          className="prose dark:prose-invert max-w-none"
+          className="prose  max-w-none"
           dangerouslySetInnerHTML={{ __html: lesson.content }}
         />
       </CardContent>
       <CardFooter>
         {isCompleted ? (
-          <div className="flex items-center text-green-500">
+          <div className="flex items-center text-[#26A649]">
             <CheckCircle className="mr-2" />
             Lesson Completed
             {isPending && <Loader2 className="ml-2 h-4 w-4 animate-spin" />}
