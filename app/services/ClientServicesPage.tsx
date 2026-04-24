@@ -1,10 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   BookOpen,
   Users,
@@ -13,15 +10,15 @@ import {
   Search,
   MessageSquare,
   ArrowRight,
-  ArrowDown,
+  ArrowUpRight,
   Briefcase,
   Award,
   ChevronRight,
-  ScrollText,
-  Zap,
   Mail,
   Phone,
+  Zap,
   Calendar,
+  Check,
 } from "lucide-react";
 import Link from "next/link";
 import { SubscribePlan } from "@/components/user/subscribe-plan";
@@ -29,8 +26,8 @@ import { motion } from "framer-motion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Image from "next/image";
 import ServiceCard from "@/components/services/ServiceCard";
+import { cn } from "@/lib/utils";
 
-// Service categories with associated services
 const serviceCategories = [
   {
     id: "career",
@@ -46,10 +43,10 @@ const serviceCategories = [
           "Comprehensive career assessment and profiling",
           "Personalized career roadmap development",
           "Industry-specific guidance and insights",
-          "Long-term career progression planning"
+          "Long-term career progression planning",
         ],
         color: "blue",
-        image: "/services/career-planning.jpg"
+        image: "/services/career-planning.jpg",
       },
       {
         icon: Users,
@@ -59,10 +56,10 @@ const serviceCategories = [
           "Leadership and management skills training",
           "Change management and adaptability development",
           "Professional excellence and workplace competencies",
-          "Team building and collaborative skills enhancement"
+          "Team building and collaborative skills enhancement",
         ],
         color: "purple",
-        image: "/services/leadership.jpg"
+        image: "/services/leadership.jpg",
       },
       {
         icon: MessageSquare,
@@ -72,12 +69,12 @@ const serviceCategories = [
           "Personalized mock interview sessions with feedback",
           "Industry-specific question preparation",
           "Body language and presentation coaching",
-          "Salary negotiation techniques"
+          "Salary negotiation techniques",
         ],
         color: "green",
-        image: "/services/interview.jpg"
-      }
-    ]
+        image: "/services/interview.jpg",
+      },
+    ],
   },
   {
     id: "scholarship",
@@ -94,7 +91,7 @@ const serviceCategories = [
           "Scholarship matching and opportunity identification",
           "Application strategy and timeline planning",
           "Personal statement and essay development",
-          "Interview preparation and mock sessions"
+          "Interview preparation and mock sessions",
         ],
         color: "amber",
         image: "/services/scholarship.jpg",
@@ -107,8 +104,8 @@ const serviceCategories = [
               "Unlimited essay reviews",
               "Custom application strategy",
               "Interview preparation",
-              "Weekly progress tracking"
-            ]
+              "Weekly progress tracking",
+            ],
           },
           {
             name: "Silver Package",
@@ -118,10 +115,10 @@ const serviceCategories = [
               "3 essay reviews",
               "General application guidance",
               "Basic interview tips",
-              "Monthly progress check-ins"
-            ]
-          }
-        ]
+              "Monthly progress check-ins",
+            ],
+          },
+        ],
       },
       {
         icon: BookOpen,
@@ -131,18 +128,18 @@ const serviceCategories = [
           "Research methodology and design training",
           "Academic writing and publishing guidance",
           "Literature review and analysis techniques",
-          "Thesis and dissertation development support"
+          "Thesis and dissertation development support",
         ],
         color: "indigo",
-        image: "/services/academic.jpg"
-      }
-    ]
+        image: "/services/academic.jpg",
+      },
+    ],
   },
   {
     id: "documents",
     name: "Professional Documentation",
     description: "Expert assistance creating compelling professional documents",
-    icon: ScrollText,
+    icon: FileText,
     services: [
       {
         icon: FileText,
@@ -152,391 +149,300 @@ const serviceCategories = [
           "Strategic CV/resume development and optimization",
           "Compelling personal statement creation",
           "Tailored cover letter development",
-          "Professional portfolio organization"
+          "Professional portfolio organization",
         ],
         color: "cyan",
-        image: "/services/documents.jpg"
-      }
-    ]
-  }
+        image: "/services/documents.jpg",
+      },
+    ],
+  },
 ];
 
-// Testimonials data
-const testimonials = [
-  {
-    quote: "The scholarship coaching program was transformative. I successfully secured funding for my master's degree at a prestigious university.",
-    name: "David O.",
-    role: "Software Engineer",
-    image: "/mentors/thumb.png"
-  },
-  {
-    quote: "ACCM's CV alignment service completely transformed my job search. I started getting interviews immediately after the makeover.",
-    name: "Sarah M.",
-    role: "Marketing Professional",
-    image: "/mentors/thumb.png"
-  },
-  {
-    quote: "The mentorship program provided clear direction and actionable steps that helped me advance in my career within months.",
-    name: "John D.",
-    role: "Project Manager",
-    image: "/mentors/thumb.png"
-  }
+const stats = [
+  { value: "10,000+", label: "Professionals mentored" },
+  { value: "98%", label: "Success rate" },
+  { value: "500+", label: "Scholarships secured" },
+  { value: "75+", label: "Partner organizations" },
 ];
+
+function FeatureCard({
+  feature,
+  index,
+}: {
+  feature: (typeof serviceCategories)[0]["services"][0];
+  index: number;
+}) {
+  return (
+    <motion.article
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.4, delay: index * 0.06 }}
+      className={cn(
+        "border border-gray-300 bg-white/70 p-5 dark:border-gray-800 dark:bg-[#171b1d]",
+        index === 1 ? "md:translate-y-8" : "",
+        index === 2 ? "md:-translate-y-4" : ""
+      )}
+    >
+      <div className="flex h-10 w-10 items-center justify-center border border-gray-300 bg-[#ece8df] dark:border-gray-700 dark:bg-[#121518]">
+        <feature.icon className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+      </div>
+      <h3 className="mt-4 text-base font-semibold uppercase tracking-[0.03em]">
+        {feature.title}
+      </h3>
+      <p className="mt-2 text-sm leading-7 text-gray-700 dark:text-gray-300">
+        {feature.description}
+      </p>
+      <ul className="mt-4 space-y-2.5">
+        {feature.features.slice(0, 3).map((f) => (
+          <li key={f} className="flex items-start gap-2.5">
+            <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-gray-700 dark:text-gray-300" />
+            <span className="text-sm leading-7 text-gray-700 dark:text-gray-300">
+              {f}
+            </span>
+          </li>
+        ))}
+      </ul>
+      <Link
+        href="#"
+        className="mt-5 inline-flex items-center text-xs font-semibold uppercase tracking-[0.14em] text-gray-700 underline decoration-gray-400 underline-offset-4 dark:text-gray-200 dark:decoration-gray-600"
+      >
+        Learn more
+        <ChevronRight className="ml-1 h-4 w-4" />
+      </Link>
+    </motion.article>
+  );
+}
 
 export default function ClientServicesPage({ session }) {
-  // Animation variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
-  };
-  
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6 }
-    }
-  };
-
   return (
-    <div className="container mx-auto max-w-7xl px-4 py-10">
-      {/* Hero Section */}
-      <section className="relative py-16 md:py-24 overflow-hidden rounded-2xl mb-16">
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-r from-gray-900/80 to-gray-800/80 z-10"></div>
-          <Image 
-            src="/accm/IMG_4681.JPG"
-            alt="Career mentorship services"
-            fill
-            className="object-cover"
-            priority
-          />
-        </div>
-        
-        <div className="relative z-30 px-6">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-            className="max-w-3xl mx-auto text-center text-white"
-          >
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">Transform Your Career Journey</h1>
-            <p className="text-xl mb-8">
-              Discover our comprehensive range of professional development services designed to help you build skills, gain confidence, and achieve your career goals.
-            </p>
-            <div className="flex flex-wrap gap-4 justify-center">
-              <Button 
-                size="lg" 
-                className="bg-white text-blue-600 hover:bg-blue-50"
-                asChild
-              >
-                <a href="#services">
-                  Explore Services
-                  <ArrowDown className="ml-2 h-4 w-4" />
-                </a>
-              </Button>
-              {!session && (
-                <Button 
-                  size="lg" 
-                  variant="outline" 
-                  className="border-white text-white hover:bg-white/10"
-                  asChild
-                >
-                  <Link href="/register">
-                    Start Your Journey
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-              )}
+    <div className="bg-[#f7f5f1] text-gray-900 dark:bg-[#111416] dark:text-gray-100">
+      <main className="mx-auto w-full max-w-[88rem] px-5 py-10 sm:px-7 lg:px-10">
+        <section className="border border-gray-300 dark:border-gray-800">
+          <div className="grid gap-0 lg:grid-cols-[1.1fr_0.9fr]">
+            <div className="relative min-h-[22rem]">
+              <Image
+                src="/accm/IMG_4681.JPG"
+                alt="Career mentorship services"
+                fill
+                className="object-cover"
+                priority
+              />
+              <div className="absolute inset-0 bg-black/35" />
             </div>
-          </motion.div>
-        </div>
-      </section>
-      
-      {/* Stats Section */}
-      <section className="py-12 bg-gray-50 dark:bg-gray-900/50 rounded-2xl mb-16">
-        <div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-            {[
-              { icon: Users, value: "10,000+", label: "Professionals Mentored" },
-              { icon: Award, value: "98%", label: "Success Rate" },
-              { icon: GraduationCap, value: "500+", label: "Scholarships Secured" },
-              { icon: Briefcase, value: "75+", label: "Partner Organizations" }
-            ].map((stat, index) => (
+            <div className="bg-[#ece8df] p-7 dark:bg-[#171b1d] sm:p-10">
+              <motion.p
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.35 }}
+                className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-gray-500 dark:text-gray-400"
+              >
+                Our services
+              </motion.p>
+              <motion.h1
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.05 }}
+                className="mt-4 text-balance text-[clamp(1.9rem,4.1vw,3.7rem)] font-semibold uppercase leading-[0.98]"
+              >
+                Transform your career trajectory.
+              </motion.h1>
+              <motion.p
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.1 }}
+                className="mt-5 text-sm leading-8 text-gray-700 dark:text-gray-300"
+              >
+                Comprehensive programs designed to build skills, clarity,
+                and confidence for your professional journey.
+              </motion.p>
               <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="p-6 rounded-lg"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.15 }}
+                className="mt-7 flex flex-wrap gap-3"
               >
-                <div className="flex justify-center mb-3">
-                  <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center text-blue-600 dark:text-blue-400">
-                    <stat.icon className="h-6 w-6" />
-                  </div>
-                </div>
-                <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">{stat.value}</div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">{stat.label}</div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-      
-      {/* Main Services Section */}
-      <section id="services" className="py-16 md:py-24">
-        <div>
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="max-w-3xl mx-auto text-center mb-16"
-          >
-            <span className="inline-block px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-sm font-medium mb-4">
-              Our Services
-            </span>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Comprehensive Development Programs
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              Each program is carefully designed to provide you with the knowledge, skills, and confidence needed to excel in your professional life.
-            </p>
-          </motion.div>
-          
-          <Tabs defaultValue="career" className="w-full">
-            <div className="flex justify-center mb-10">
-              <TabsList className="grid grid-cols-3 w-full max-w-2xl bg-blue-50 dark:bg-gray-800/50">
-                {serviceCategories.map(category => (
-                  <TabsTrigger 
-                    key={category.id}
-                    value={category.id}
-                    className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-800 data-[state=active]:text-blue-600 dark:data-[state=active]:text-blue-400"
+                {!session && (
+                  <Link href="/register">
+                    <Button className="h-11 rounded-none bg-gray-900 px-6 text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-gray-50 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200">
+                      Get started
+                      <ArrowUpRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </Link>
+                )}
+                <Link href="#services">
+                  <Button
+                    variant="ghost"
+                    className="h-11 rounded-none border border-gray-300 px-6 text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-gray-700 hover:bg-gray-200 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800"
                   >
-                    <div className="flex items-center gap-2">
-                      <category.icon className="h-4 w-4" />
-                      <span>{category.name}</span>
-                    </div>
-                  </TabsTrigger>
-                ))}
-              </TabsList>
+                    Browse services
+                  </Button>
+                </Link>
+              </motion.div>
             </div>
-            
-            {serviceCategories.map(category => (
-              <TabsContent key={category.id} value={category.id} className="space-y-8">
-                <motion.p 
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.5 }}
-                  className="text-center text-muted-foreground max-w-2xl mx-auto mb-10"
+          </div>
+        </section>
+
+        <section className="border-x border-b border-gray-300 py-14 dark:border-gray-800 md:py-20">
+          <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr]">
+            <div className="space-y-4">
+              <p className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-gray-500 dark:text-gray-400">
+                Impact by numbers
+              </p>
+              <h2 className="text-balance text-[clamp(1.55rem,3vw,2.7rem)] font-semibold uppercase leading-tight">
+                Proven results across Africa.
+              </h2>
+              <p className="text-sm leading-7 text-gray-700 dark:text-gray-300">
+                Thousands of professionals have transformed their careers
+                through our structured mentorship programs.
+              </p>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {stats.map((stat, index) => (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, y: 12 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.35, delay: index * 0.08 }}
+                  className={cn(
+                    "border border-gray-300 bg-white/70 p-5 dark:border-gray-800 dark:bg-[#171b1d]",
+                    index === 1 ? "sm:translate-y-6" : "",
+                    index === 3 ? "sm:-translate-y-3" : ""
+                  )}
                 >
-                  {category.description}
-                </motion.p>
-                
-                <motion.div 
-                  variants={containerVariants}
-                  initial="hidden"
-                  animate="visible"
-                  className="grid gap-8 md:grid-cols-2 lg:grid-cols-3"
-                >
-                  {category.services.map((service, index) => (
-                    <motion.div key={index} variants={itemVariants}>
-                      <ServiceCard 
-                        service={service} 
-                        color={service.color} 
-                      />
-                    </motion.div>
-                  ))}
+                  <p className="text-3xl font-semibold">{stat.value}</p>
+                  <p className="mt-1 text-xs uppercase tracking-[0.14em] text-gray-500 dark:text-gray-400">
+                    {stat.label}
+                  </p>
                 </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="services"
+          className="border-x border-b border-gray-300 py-14 dark:border-gray-800 md:py-20"
+        >
+          <div className="mb-12">
+            <p className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-gray-500 dark:text-gray-400">
+              What we offer
+            </p>
+            <h2 className="mt-2 text-balance text-[clamp(1.5rem,2.8vw,2.4rem)] font-semibold uppercase leading-tight">
+              Programs built for your growth.
+            </h2>
+          </div>
+
+          <Tabs defaultValue="career" className="w-full">
+            <TabsList className="mb-10 h-auto flex-wrap justify-start gap-2 bg-transparent p-0 dark:bg-transparent">
+              {serviceCategories.map((category) => (
+                <TabsTrigger
+                  key={category.id}
+                  value={category.id}
+                  className="data-[state=active]:bg-gray-900 data-[state=active]:text-gray-50 dark:data-[state=active]:bg-gray-100 dark:data-[state=active]:text-gray-900 rounded-none border border-gray-300 px-5 py-2.5 text-[0.68rem] font-semibold uppercase tracking-[0.16em] data-[state=active]:border-gray-900 dark:data-[state=active]:border-gray-100 dark:data-[state=active]:border-gray-100"
+                >
+                  {category.name}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+
+            {serviceCategories.map((category) => (
+              <TabsContent key={category.id} value={category.id} className="space-y-8">
+                <p className="max-w-[42ch] text-sm leading-7 text-gray-700 dark:text-gray-300">
+                  {category.description}
+                </p>
+                <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+                  {category.services.map((service, index) => (
+                    <ServiceCard
+                      key={service.title}
+                      service={service}
+                      color={service.color}
+                    />
+                  ))}
+                </div>
               </TabsContent>
             ))}
           </Tabs>
-        </div>
-      </section>
-      
-      {/* Testimonials */}
-      <section className="py-16 bg-gray-50 dark:bg-gray-900/50 relative overflow-hidden rounded-2xl mb-16">        
-        <div className="relative">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="max-w-3xl mx-auto text-center mb-12"
-          >
-            <span className="inline-block px-3 py-1 rounded-full bg-teal-100 dark:bg-teal-900/40 text-teal-700 dark:text-teal-300 text-sm font-medium mb-4">
-              Success Stories
-            </span>
-            <h2 className="text-3xl font-bold mb-4">
-              What Our Clients Say
-            </h2>
-            <p className="text-muted-foreground">
-              Hear from professionals who have transformed their careers through our programs.
+        </section>
+
+        <section className="border-x border-b border-gray-300 py-14 dark:border-gray-800 md:py-20">
+          <div className="mb-12">
+            <p className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-gray-500 dark:text-gray-400">
+              Membership
             </p>
-          </motion.div>
-          
-          <div className="grid md:grid-cols-3 gap-6">
-            {testimonials.map((testimonial, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-              >
-                <Card className="h-full border-blue-100 dark:border-blue-900/50 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm">
-                  <CardContent className="pt-6 pb-6 flex flex-col h-full">
-                    <div className="mb-4 text-4xl text-blue-200 dark:text-blue-800">"</div>
-                    <p className="italic text-gray-700 dark:text-gray-300 flex-grow">
-                      {testimonial.quote}
-                    </p>
-                    <div className="mt-6 flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full overflow-hidden">
-                        <Image
-                          src={testimonial.image}
-                          alt={testimonial.name}
-                          width={40}
-                          height={40}
-                          className="object-cover"
-                        />
-                      </div>
-                      <div>
-                        <p className="font-medium">{testimonial.name}</p>
-                        <p className="text-sm text-muted-foreground">{testimonial.role}</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
+            <h2 className="mt-2 text-balance text-[clamp(1.5rem,2.8vw,2.4rem)] font-semibold uppercase leading-tight">
+              Choose your access level.
+            </h2>
           </div>
-        </div>
-      </section>
-      
-      {/* Subscription Plans */}
-      <section className="py-16 md:py-24">
-        <div>
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="max-w-3xl mx-auto text-center mb-16"
-          >
-            <span className="inline-block px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 text-sm font-medium mb-4">
-              Subscription Plans
-            </span>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Choose Your Learning Journey
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              Select a subscription plan that suits your needs and get access to our comprehensive learning programs.
-            </p>
-          </motion.div>
-          
+
           <SubscribePlan />
-          
+
           {!session && (
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="text-center mt-12"
-            >
+            <div className="mt-10 text-center">
               <Link href="/login">
-                <Button size="lg" className="gap-2 bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 text-white">
-                  Start Learning Today
-                  <ArrowRight className="h-4 w-4" />
+                <Button className="h-11 rounded-none bg-gray-900 px-6 text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-gray-50 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200">
+                  Sign in to continue
+                  <ArrowUpRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
-            </motion.div>
+            </div>
           )}
-        </div>
-      </section>
-      
-      {/* FAQ & Contact Section */}
-      <section className="py-16 bg-gray-50 dark:bg-gray-900/50 rounded-2xl">
-        <div>
-          <div className="max-w-4xl mx-auto bg-white dark:bg-gray-900 rounded-xl shadow-lg overflow-hidden">
-            <div className="flex flex-col md:flex-row">
-              <div className="md:w-1/2 p-8 md:p-10">
-                <h3 className="text-2xl font-bold mb-4">Need Personal Assistance?</h3>
-                <p className="text-muted-foreground mb-6">
-                  Our team can help you find the perfect service or plan for your specific career needs.
-                </p>
-                <div className="space-y-4">
-                  {[
-                    { 
-                      icon: Mail, 
-                      title: "Email Us", 
-                      detail: "admin@africanccm.com",
-                      action: "Send Email",
-                      link: "mailto:admin@africanccm.com"
-                    },
-                    { 
-                      icon: Phone, 
-                      title: "Call Us", 
-                      detail: "+447 570 224 173",
-                      action: "Call Now",
-                      link: "tel:+447570224173"
-                    }
-                  ].map((item, index) => (
-                    <div key={index} className="flex items-start gap-4">
-                      <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center text-blue-600 dark:text-blue-400 flex-shrink-0">
-                        <item.icon className="h-5 w-5" />
-                      </div>
-                      <div className="flex-grow">
-                        <h4 className="font-medium">{item.title}</h4>
-                        <p className="text-sm text-muted-foreground mb-2">{item.detail}</p>
-                        <a 
-                          href={item.link}
-                          className="text-sm text-blue-600 dark:text-blue-400 hover:underline inline-flex items-center"
-                        >
-                          {item.action}
-                          <ChevronRight className="h-3 w-3 ml-1" />
-                        </a>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-8">
-                  <Link href="/contact">
-                    <Button variant="outline" className="w-full">Visit Contact Page</Button>
-                  </Link>
-                </div>
-              </div>
-              <div className="md:w-1/2 bg-gradient-to-br from-blue-600 to-teal-500 p-8 md:p-10 text-white flex items-center">
-                <div>
-                <div className="flex items-center gap-2 mb-4">
-                    <Zap className="h-5 w-5" />
-                    <h3 className="text-2xl font-bold">Fast Track Your Career</h3>
-                  </div>
-                  <p className="mb-6">
-                    Schedule a free 15-minute consultation with our expert career advisors to discuss your career goals and how we can help you achieve them.
-                  </p>
-                  <Button 
-                    className="bg-white text-blue-600 hover:bg-blue-50 w-full"
-                    asChild
-                  >
-                    <Link href="/consultation">
-                      Schedule Consultation
-                      <Calendar className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
-                </div>
+        </section>
+
+        <section className="border border-gray-300 dark:border-gray-800">
+          <div className="grid lg:grid-cols-[1.15fr_0.85fr]">
+            <div className="bg-[#171b1d] px-6 py-10 text-gray-100 sm:px-10">
+              <p className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-gray-400">
+                Need guidance
+              </p>
+              <h2 className="mt-3 text-balance text-[clamp(1.6rem,3vw,2.7rem)] font-semibold uppercase leading-tight">
+                Not sure where to start?
+              </h2>
+              <p className="mt-4 max-w-[48ch] text-sm leading-8 text-gray-300">
+                Our team can help you identify the right program for your
+                specific career goals.
+              </p>
+              <div className="mt-8 grid gap-3 sm:grid-cols-2">
+                <a
+                  href="mailto:admin@africanccm.com"
+                  className="border border-gray-700 bg-white/5 px-4 py-3 text-sm leading-6 text-gray-300 transition-colors hover:bg-white/10"
+                >
+                  <span className="block text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-gray-500">
+                    Email
+                  </span>
+                  admin@africanccm.com
+                </a>
+                <a
+                  href="tel:+447570224173"
+                  className="border border-gray-700 bg-white/5 px-4 py-3 text-sm leading-6 text-gray-300 transition-colors hover:bg-white/10"
+                >
+                  <span className="block text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-gray-500">
+                    Phone
+                  </span>
+                  +447 570 224 173
+                </a>
               </div>
             </div>
+            <div className="flex flex-col justify-center gap-3 bg-[#ece8df] px-6 py-10 dark:bg-[#0f1315] sm:px-10">
+              <Link href="/contact">
+                <Button className="h-11 w-full rounded-none bg-gray-900 text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-gray-50 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200">
+                  Talk to our team
+                  <ArrowUpRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+              <Link href="/about">
+                <Button
+                  variant="ghost"
+                  className="h-11 w-full rounded-none border border-gray-300 text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-gray-700 hover:bg-gray-200 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800"
+                >
+                  Learn about us
+                </Button>
+              </Link>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </main>
     </div>
   );
 }
