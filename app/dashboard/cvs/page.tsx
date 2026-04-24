@@ -15,11 +15,11 @@ import {
 } from "@/components/ui/card";
 import { 
   FileText, 
-  PlusCircle, 
   Award, 
   TrendingUp, 
   BarChart,
-  Bookmark
+  Bookmark,
+  Sparkles
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { formatDistanceToNow } from "date-fns";
@@ -76,12 +76,12 @@ export default async function UserCVsPage() {
   // Determine next suggested action based on user's progress
   const getNextAction = () => {
     if (stats.totalCVs === 0) {
-      return {
+        return {
         title: "Upload Your First CV",
         description: "Start by uploading your CV for professional analysis",
         actionText: "Upload CV",
         actionLink: "/cv-alignment",
-        icon: <FileText className="h-5 w-5 text-blue-500" />,
+         icon: <FileText className="h-5 w-5 text-[#1A1B4B]" />,
       };
     }
 
@@ -91,7 +91,7 @@ export default async function UserCVsPage() {
         description: "You have CVs that haven't been fully analyzed yet",
         actionText: "Continue Analysis",
         actionLink: "/cv-alignment",
-        icon: <BarChart className="h-5 w-5 text-orange-500" />,
+         icon: <BarChart className="h-5 w-5 text-[#1A1B4B]" />,
       };
     }
 
@@ -100,44 +100,40 @@ export default async function UserCVsPage() {
       description: "Continue improving your CV based on our recommendations",
       actionText: "View Analysis",
       actionLink: "#cv-list",
-      icon: <TrendingUp className="h-5 w-5 text-purple-500" />,
+       icon: <TrendingUp className="h-5 w-5 text-[#1A1B4B]" />,
     };
   };
 
   const nextAction = getNextAction();
 
-  return (
-    <div className="container py-10 space-y-8">
-      {/* Page header with actions */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight mb-1">My CVs & Analyses</h1>
-          <p className="text-muted-foreground max-w-2xl">
-            Manage your CVs, view analysis results, and track your improvement over time
-          </p>
-        </div>
-        <Button asChild>
-          <Link href="/cv-alignment">
-            <PlusCircle className="mr-2 h-4 w-4" />
-            Upload New CV
-          </Link>
-        </Button>
+return (
+    <div className="space-y-8">
+      <div className="space-y-2">
+        <p className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-[#26A649]">
+          <Sparkles className="mr-2 h-3.5 w-3.5 inline" />
+          Career Tools
+        </p>
+        <h1 className="text-2xl font-semibold uppercase tracking-tight text-[#1A1B4B] sm:text-3xl">
+          My CVs
+        </h1>
+        <p className="text-sm text-[#1A1B4B]/60">
+          Manage your CVs and track improvement
+        </p>
       </div>
 
-      {/* Statistic cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card>
+        <Card className="border-[#1A1B4B]/20 bg-[#FFFFFF]">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-muted-foreground">Total CVs</CardTitle>
+            <CardTitle className="text-sm text-[#1A1B4B]/60">Total CVs</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex justify-between items-center">
               <div className="text-3xl font-bold">{stats.totalCVs}</div>
-              <div className="h-12 w-12 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
-                <FileText className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#1A1B4B]/10">
+                <FileText className="h-6 w-6 text-[#1A1B4B]" />
               </div>
             </div>
-            <p className="text-xs text-muted-foreground mt-2">
+            <p className="text-xs text-[#1A1B4B]/60 mt-2">
               {stats.lastUpdated 
                 ? `Last updated ${formatDistanceToNow(stats.lastUpdated, { addSuffix: true })}` 
                 : "No CVs uploaded yet"}
@@ -145,20 +141,20 @@ export default async function UserCVsPage() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-[#1A1B4B]/20 bg-[#FFFFFF]">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-muted-foreground">Best Score</CardTitle>
+            <CardTitle className="text-sm text-[#1A1B4B]/60">Best Score</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex justify-between items-center">
               <div className="text-3xl font-bold">
                 {stats.bestScore > 0 ? stats.bestScore : "N/A"}
               </div>
-              <div className="h-12 w-12 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
-                <Award className="h-6 w-6 text-green-600 dark:text-green-400" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#26A649]/10">
+                <Award className="h-6 w-6 text-[#26A649]" />
               </div>
             </div>
-            <p className="text-xs text-muted-foreground mt-2">
+            <p className="text-xs text-[#1A1B4B]/60 mt-2">
               {stats.bestScore >= 90 
                 ? "Outstanding CV - excellent work!" 
                 : stats.bestScore >= 80 
@@ -172,9 +168,9 @@ export default async function UserCVsPage() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-[#1A1B4B]/20 bg-[#FFFFFF]">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-muted-foreground">Progress Status</CardTitle>
+            <CardTitle className="text-sm text-[#1A1B4B]/60">Progress Status</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex justify-between items-center">
@@ -185,11 +181,11 @@ export default async function UserCVsPage() {
                 {user?.progressStatus === "SCHOLARSHIP_MATRIX_PENDING" && "Scholarship Matrix"}
                 {!user?.progressStatus && "Getting Started"}
               </div>
-              <div className="h-12 w-12 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center">
-                <TrendingUp className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#1A1B4B]/10">
+                <TrendingUp className="h-6 w-6 text-[#1A1B4B]" />
               </div>
             </div>
-            <p className="text-xs text-muted-foreground mt-2">
+            <p className="text-xs text-[#1A1B4B]/60 mt-2">
               {user?.progressStatus === "PAYMENT_PENDING" && "Complete payment to unlock all features"}
               {user?.progressStatus === "PERSONAL_DISCOVERY_PENDING" && "Complete your personal discovery questionnaire"}
               {user?.progressStatus === "CV_ALIGNMENT_PENDING" && "Upload and analyze your CV"}
@@ -201,19 +197,19 @@ export default async function UserCVsPage() {
       </div>
 
       {/* Next action card */}
-      <Card className="bg-gradient-to-r from-blue-50/50 to-purple-50/50 dark:from-blue-950/50 dark:to-purple-950/50 border-blue-100 dark:border-blue-800">
+      <Card className="border-[#1A1B4B]/20 bg-[#FFFFFF]">
         <CardContent className="p-6">
           <div className="flex flex-col md:flex-row md:items-center gap-4">
-            <div className="h-12 w-12 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm">
+            <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-[#1A1B4B]/10">
               {nextAction.icon}
             </div>
             <div className="flex-1">
-              <h3 className="text-lg font-medium mb-1">{nextAction.title}</h3>
-              <p className="text-sm text-muted-foreground">
+              <h3 className="mb-1 text-lg font-medium text-[#1A1B4B]">{nextAction.title}</h3>
+              <p className="text-sm text-[#1A1B4B]/60">
                 {nextAction.description}
               </p>
             </div>
-            <Button asChild className="md:self-end">
+            <Button asChild className="bg-[#1A1B4B] text-[#FFFFFF] hover:bg-[#1A1B4B]/90 md:self-end">
               <Link href={nextAction.actionLink}>
                 {nextAction.actionText}
               </Link>
@@ -224,10 +220,10 @@ export default async function UserCVsPage() {
 
       {/* Tips box (if user has CVs) */}
       {stats.totalCVs > 0 && (
-        <Card className="bg-muted/40">
+        <Card className="border-[#1A1B4B]/20 bg-[#FFFFFF]">
           <CardHeader className="pb-3">
             <CardTitle className="text-base flex items-center">
-              <Bookmark className="mr-2 h-4 w-4 text-blue-500" />
+              <Bookmark className="mr-2 h-4 w-4 text-[#26A649]" />
               CV Improvement Tips
             </CardTitle>
             <CardDescription>Quick tips to enhance your CV quality</CardDescription>
@@ -236,41 +232,43 @@ export default async function UserCVsPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-3">
                 <div className="flex items-start gap-2">
-                  <div className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 rounded-full h-5 w-5 flex items-center justify-center text-xs mt-0.5">
+                  <div className="mt-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-[#1A1B4B]/10 text-xs text-[#1A1B4B]">
                     1
                   </div>
                   <div>
                     <h4 className="text-sm font-medium">Use action verbs</h4>
-                    <p className="text-xs text-muted-foreground">Start bullet points with powerful action verbs like "achieved," "implemented," or "led"</p>
+                    <p className="text-xs text-[#1A1B4B]/60">
+                      Start bullet points with powerful action verbs like &quot;achieved,&quot; &quot;implemented,&quot; or &quot;led&quot;
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-2">
-                  <div className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 rounded-full h-5 w-5 flex items-center justify-center text-xs mt-0.5">
+                  <div className="mt-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-[#1A1B4B]/10 text-xs text-[#1A1B4B]">
                     2
                   </div>
                   <div>
                     <h4 className="text-sm font-medium">Quantify achievements</h4>
-                    <p className="text-xs text-muted-foreground">Include specific metrics and percentages to demonstrate your impact</p>
+                    <p className="text-xs text-[#1A1B4B]/60">Include specific metrics and percentages to demonstrate your impact</p>
                   </div>
                 </div>
               </div>
               <div className="space-y-3">
                 <div className="flex items-start gap-2">
-                  <div className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 rounded-full h-5 w-5 flex items-center justify-center text-xs mt-0.5">
+                  <div className="mt-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-[#1A1B4B]/10 text-xs text-[#1A1B4B]">
                     3
                   </div>
                   <div>
                     <h4 className="text-sm font-medium">Tailor to job descriptions</h4>
-                    <p className="text-xs text-muted-foreground">Customize your CV for each application by matching keywords</p>
+                    <p className="text-xs text-[#1A1B4B]/60">Customize your CV for each application by matching keywords</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-2">
-                  <div className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 rounded-full h-5 w-5 flex items-center justify-center text-xs mt-0.5">
+                  <div className="mt-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-[#1A1B4B]/10 text-xs text-[#1A1B4B]">
                     4
                   </div>
                   <div>
                     <h4 className="text-sm font-medium">Keep it concise</h4>
-                    <p className="text-xs text-muted-foreground">Aim for 1-2 pages with focused, relevant content for your target role</p>
+                    <p className="text-xs text-[#1A1B4B]/60">Aim for 1-2 pages with focused, relevant content for your target role</p>
                   </div>
                 </div>
               </div>
