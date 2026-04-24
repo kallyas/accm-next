@@ -4,6 +4,12 @@ import { getToken } from "next-auth/jwt";
 
 // Cache control constants
 const CACHE_CONTROL_PRIVATE = "private, no-cache, no-store, must-revalidate";
+const AUTH_PAGES = new Set([
+  "/login",
+  "/register",
+  "/forgot-password",
+  "/reset-password",
+]);
 
 // Define route access patterns
 const ROUTE_ACCESS = {
@@ -116,7 +122,8 @@ const isPathAllowedForRole = (
 
 export async function middleware(request: NextRequest) {
   try {
-    const currentPath = request.nextUrl.pathname;
+    const currentPath = request.nextUrl.pathname.replace(/\/$/, "") || "/";
+    const isAuthPage = AUTH_PAGES.has(currentPath);
 
     // Authentication check
     const token = await getToken({
@@ -125,6 +132,14 @@ export async function middleware(request: NextRequest) {
     });
 
     if (!token) {
+      if (isAuthPage) {
+        return NextResponse.next({
+          headers: {
+            "Cache-Control": CACHE_CONTROL_PRIVATE,
+          },
+        });
+      }
+
       const loginUrl = createRedirectURL(
         "/login",
         "Please log in to access this page",
@@ -139,6 +154,14 @@ export async function middleware(request: NextRequest) {
     }
 
     const userRole = token.role as "ADMIN" | "USER";
+
+    if (isAuthPage) {
+      return NextResponse.redirect(new URL(ROUTE_ACCESS[userRole].redirectPath, request.url), {
+        headers: {
+          "Cache-Control": CACHE_CONTROL_PRIVATE,
+        },
+      });
+    }
 
     // Role-based access control
     if (!isPathAllowedForRole(currentPath, userRole)) {
@@ -214,6 +237,10 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
+    "/login",
+    "/register",
+    "/forgot-password",
+    "/reset-password",
     "/dashboard/:path*",
     "/admin/:path*",
     "/scholarship-quest",
