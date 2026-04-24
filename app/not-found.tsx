@@ -4,16 +4,15 @@
 import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { useTheme } from "next-themes";
-import { 
-  AlertTriangle, 
-  Home, 
-  ArrowLeft, 
-  Search, 
+import {
+  AlertTriangle,
+  Home,
+  ArrowLeft,
+  Search,
   Compass,
   BookOpen,
   GraduationCap,
-  Briefcase
+  Briefcase,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,12 +20,10 @@ import { useRouter } from "next/navigation";
 
 export default function Custom404Page() {
   const router = useRouter();
-  const { theme } = useTheme();
   const [searchQuery, setSearchQuery] = React.useState("");
   const [randomMessage, setRandomMessage] = React.useState("");
-  
+
   React.useEffect(() => {
-    // Set a random 404 message
     const messages = [
       "Oops! This page seems to have gone on a career break.",
       "Looks like this page is still exploring its career options.",
@@ -35,7 +32,7 @@ export default function Custom404Page() {
       "This knowledge resource has moved on to better opportunities.",
       "This page is taking a gap year. Try another destination.",
     ];
-    
+
     setRandomMessage(messages[Math.floor(Math.random() * messages.length)]);
   }, []);
 
@@ -47,157 +44,101 @@ export default function Custom404Page() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12">
-      {/* Decorative background elements */}
-      <div className="absolute inset-0 -z-10">
-        {/* Grid pattern overlay */}
-        <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] bg-repeat opacity-5 dark:opacity-3" />
-        
-        {/* Decorative shapes */}
-        <div className="absolute -top-40 -left-40 w-80 h-80 bg-blue-300/20 dark:bg-blue-700/10 rounded-full blur-3xl" />
-        <div className="absolute top-1/4 -right-20 w-60 h-60 bg-purple-300/20 dark:bg-purple-700/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-1/3 w-60 h-60 bg-teal-300/20 dark:bg-teal-700/10 rounded-full blur-3xl" />
-        
-        {/* Animated 404 text */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-5 dark:opacity-[0.03] pointer-events-none">
-          <div className="text-[40rem] font-black text-gray-900 dark:text-gray-100">
+    <div className="relative min-h-screen overflow-hidden bg-[#FFFFFF] px-4 py-10 sm:px-8 lg:px-12">
+      <div className="pointer-events-none absolute -left-24 top-[-4rem] h-72 w-72 rounded-full bg-[#1A1B4B]/10 blur-3xl" />
+      <div className="pointer-events-none absolute -right-20 bottom-[-4rem] h-80 w-80 rounded-full bg-[#26A649]/15 blur-3xl" />
+
+      <div className="mx-auto grid w-full max-w-6xl gap-6 lg:grid-cols-12 lg:gap-10">
+        <motion.aside
+          initial={{ opacity: 0, x: -16 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.4 }}
+          className="border border-[#1A1B4B]/20 bg-[#1A1B4B] p-6 text-[#FFFFFF] lg:col-span-4 lg:mb-10"
+        >
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#26A649]">
+            Navigation
+          </p>
+          <div className="mt-5 text-[clamp(2.8rem,8vw,5.4rem)] font-semibold leading-none">
             404
           </div>
-        </div>
-      </div>
+          <p className="mt-4 max-w-xs text-sm text-[#FFFFFF]/85">
+            The page you requested does not exist or has moved.
+          </p>
+          <div className="mt-8 inline-flex items-center gap-2 border border-[#FFFFFF]/30 px-3 py-2 text-xs uppercase tracking-[0.16em]">
+            <Compass className="h-4 w-4 text-[#26A649]" />
+            Find Route
+          </div>
+        </motion.aside>
 
-      <div className="relative z-10 max-w-3xl w-full mx-auto bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm rounded-2xl overflow-hidden shadow-xl border border-gray-200 dark:border-gray-800">
-        <div className="p-1">
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 h-2 w-full rounded-t-xl"></div>
-        </div>
-        
-        <div className="p-6 md:p-12 text-center">
-          <motion.div 
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            className="flex justify-center mb-8"
-          >
-            <div className="relative">
-              <div className="w-24 h-24 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center">
-                <AlertTriangle className="h-12 w-12 text-red-500" />
-              </div>
-              
-              <motion.div 
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5, duration: 0.5 }}
-                className="absolute -right-2 -bottom-2 bg-white dark:bg-gray-800 rounded-full p-2 shadow-lg border border-gray-200 dark:border-gray-700"
-              >
-                <Compass className="h-6 w-6 text-blue-500" />
-              </motion.div>
-            </div>
-          </motion.div>
-          
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Page Not Found
-            </h1>
-            
-            <p className="text-xl text-gray-600 dark:text-gray-300 mb-8">
-              {randomMessage}
-            </p>
-          </motion.div>
-          
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="mb-8"
-          >
-            <form onSubmit={handleSearch} className="flex gap-2 max-w-md mx-auto">
-              <Input
-                type="text"
-                placeholder="Search for resources..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="flex-1"
-              />
-              <Button type="submit">
-                <Search className="h-4 w-4 mr-2" />
-                Search
-              </Button>
-            </form>
-          </motion.div>
-
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-            className="mb-12"
-          >
-            <h2 className="text-lg font-medium mb-4 text-gray-800 dark:text-gray-200">
-              Find your way to these popular destinations
-            </h2>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-              <Link href="/">
-                <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg transition-colors hover:bg-blue-100 dark:hover:bg-blue-800/30 flex flex-col items-center text-center">
-                  <Home className="h-6 w-6 text-blue-600 dark:text-blue-400 mb-2" />
-                  <span className="text-sm font-medium text-gray-800 dark:text-gray-200">Home</span>
-                </div>
-              </Link>
-              
-              <Link href="/career-map">
-                <div className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg transition-colors hover:bg-purple-100 dark:hover:bg-purple-800/30 flex flex-col items-center text-center">
-                  <Briefcase className="h-6 w-6 text-purple-600 dark:text-purple-400 mb-2" />
-                  <span className="text-sm font-medium text-gray-800 dark:text-gray-200">Career Map</span>
-                </div>
-              </Link>
-              
-              <Link href="/scholarship-quest">
-                <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg transition-colors hover:bg-green-100 dark:hover:bg-green-800/30 flex flex-col items-center text-center">
-                  <GraduationCap className="h-6 w-6 text-green-600 dark:text-green-400 mb-2" />
-                  <span className="text-sm font-medium text-gray-800 dark:text-gray-200">Scholarships</span>
-                </div>
-              </Link>
-              
-              <Link href="/resources">
-                <div className="p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg transition-colors hover:bg-amber-100 dark:hover:bg-amber-800/30 flex flex-col items-center text-center">
-                  <BookOpen className="h-6 w-6 text-amber-600 dark:text-amber-400 mb-2" />
-                  <span className="text-sm font-medium text-gray-800 dark:text-gray-200">Resources</span>
-                </div>
-              </Link>
-            </div>
-          </motion.div>
-          
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.8 }}
-          >
-            <Button variant="outline" onClick={() => router.back()} className="group">
-              <ArrowLeft className="h-4 w-4 mr-2 transition-transform group-hover:-translate-x-1" />
-              Go Back
-            </Button>
-          </motion.div>
-        </div>
-      </div>
-      
-      {/* Animated elements */}
-      <div className="hidden md:block absolute bottom-12 right-12 opacity-70">
-        <motion.div
-          animate={{
-            y: [0, -10, 0],
-            rotate: [0, 5, 0]
-          }}
-          transition={{
-            duration: 5,
-            repeat: Infinity,
-            repeatType: "loop"
-          }}
+        <motion.section
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+          className="border border-[#1A1B4B]/20 bg-[#FFFFFF] p-6 sm:p-8 lg:col-span-8"
         >
-          <Compass className="h-12 w-12 text-blue-500 dark:text-blue-400" />
-        </motion.div>
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <h1 className="text-[clamp(1.8rem,5vw,3.2rem)] font-semibold uppercase leading-tight text-[#1A1B4B]">
+                Page Not Found
+              </h1>
+              <p className="mt-2 text-sm text-[#1A1B4B]/70">{randomMessage}</p>
+            </div>
+            <div className="flex h-12 w-12 items-center justify-center border border-[#1A1B4B]/20 bg-[#1A1B4B]/5">
+              <AlertTriangle className="h-6 w-6 text-[#1A1B4B]" />
+            </div>
+          </div>
+
+          <form onSubmit={handleSearch} className="mt-8 grid gap-3 sm:grid-cols-[1fr_auto]">
+            <Input
+              type="text"
+              placeholder="Search for pages or resources"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="h-11 border-[#1A1B4B]/20 bg-[#FFFFFF] text-[#1A1B4B] placeholder:text-[#1A1B4B]/45"
+            />
+            <Button type="submit" className="h-11 bg-[#1A1B4B] text-[#FFFFFF] hover:bg-[#1A1B4B]/90">
+              <Search className="mr-2 h-4 w-4" />
+              Search
+            </Button>
+          </form>
+
+          <div className="mt-8 grid gap-3 sm:grid-cols-2">
+            <Link href="/" className="border border-[#1A1B4B]/20 bg-[#1A1B4B]/5 p-4 transition-colors hover:bg-[#1A1B4B]/10">
+              <Home className="h-5 w-5 text-[#1A1B4B]" />
+              <p className="mt-2 text-sm font-medium uppercase tracking-[0.12em] text-[#1A1B4B]">Home</p>
+              <p className="mt-1 text-xs text-[#1A1B4B]/65">Return to the main page.</p>
+            </Link>
+
+            <Link href="/career-map" className="border border-[#1A1B4B]/20 bg-[#26A649]/10 p-4 transition-colors hover:bg-[#26A649]/15">
+              <Briefcase className="h-5 w-5 text-[#26A649]" />
+              <p className="mt-2 text-sm font-medium uppercase tracking-[0.12em] text-[#1A1B4B]">Career Map</p>
+              <p className="mt-1 text-xs text-[#1A1B4B]/65">Continue your assessment flow.</p>
+            </Link>
+
+            <Link href="/scholarship-quest" className="border border-[#1A1B4B]/20 bg-[#1A1B4B]/5 p-4 transition-colors hover:bg-[#1A1B4B]/10">
+              <GraduationCap className="h-5 w-5 text-[#1A1B4B]" />
+              <p className="mt-2 text-sm font-medium uppercase tracking-[0.12em] text-[#1A1B4B]">Scholarships</p>
+              <p className="mt-1 text-xs text-[#1A1B4B]/65">Explore available opportunities.</p>
+            </Link>
+
+            <Link href="/resources" className="border border-[#1A1B4B]/20 bg-[#26A649]/10 p-4 transition-colors hover:bg-[#26A649]/15">
+              <BookOpen className="h-5 w-5 text-[#26A649]" />
+              <p className="mt-2 text-sm font-medium uppercase tracking-[0.12em] text-[#1A1B4B]">Resources</p>
+              <p className="mt-1 text-xs text-[#1A1B4B]/65">Read guides and learning materials.</p>
+            </Link>
+          </div>
+
+          <div className="mt-8">
+            <Button
+              variant="outline"
+              onClick={() => router.back()}
+              className="h-11 border-[#1A1B4B]/20 text-[#1A1B4B] hover:bg-[#1A1B4B]/10"
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Go back
+            </Button>
+          </div>
+        </motion.section>
       </div>
     </div>
   );
