@@ -11,15 +11,11 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-  CardFooter,
 } from "@/components/ui/card";
 import {
   BookOpen,
   Sparkles,
   ChevronRight,
-  Share2,
-  Download,
-  BarChart2,
   Lightbulb,
 } from "lucide-react";
 import { format } from "date-fns";
@@ -123,14 +119,14 @@ export default async function PersonalDiscoveryPage() {
     : null;
 
   return (
-    <div className="container py-10 space-y-8">
+    <div className="space-y-8">
       {/* Header with action button */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight mb-1">Personal Discovery</h1>
-          <p className="text-muted-foreground max-w-2xl">
-            Your personalized 4W Framework self-assessment for career alignment and growth
-          </p>
+           <h1 className="text-2xl font-semibold uppercase tracking-tight text-[#1A1B4B] sm:text-3xl">Personal Discovery</h1>
+           <p className="max-w-2xl text-sm text-[#1A1B4B]/60">
+             Your personalized 4W Framework self-assessment for career alignment and growth
+           </p>
         </div>
         {user.personalDiscovery && (
           <Button asChild>
@@ -143,13 +139,13 @@ export default async function PersonalDiscoveryPage() {
       
       {/* Progress and stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="col-span-1 md:col-span-2">
+        <Card className="col-span-1 border-[#1A1B4B]/20 bg-[#FFFFFF] md:col-span-2">
           <CardHeader className="pb-2">
             <CardTitle className="text-base flex items-center">
-              <BookOpen className="mr-2 h-4 w-4 text-blue-500" />
+              <BookOpen className="mr-2 h-4 w-4 text-[#26A649]" />
               Discovery Progress
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-[#1A1B4B]/60">
               {!user.personalDiscovery 
                 ? "Begin your personal discovery journey"
                 : completionPercentage < 100
@@ -163,20 +159,20 @@ export default async function PersonalDiscoveryPage() {
               <div className="flex justify-between mb-1">
                 <span className="text-sm font-medium">{completionPercentage}% Complete</span>
                 {lastUpdated && (
-                  <span className="text-xs text-muted-foreground">Last updated: {lastUpdated}</span>
+                  <span className="text-xs text-[#1A1B4B]/55">Last updated: {lastUpdated}</span>
                 )}
               </div>
               <Progress value={completionPercentage} className="h-2" />
               
               {!user.personalDiscovery && (
-                <Card className="bg-muted mt-4">
+                 <Card className="mt-4 border-[#1A1B4B]/15 bg-[#1A1B4B]/5">
                   <CardContent className="p-4 flex flex-col items-center text-center">
-                    <Sparkles className="h-12 w-12 text-blue-500 mb-3 mt-2" />
-                    <h3 className="text-lg font-medium mb-1">Discover Your Career Path</h3>
-                    <p className="text-sm text-muted-foreground mb-4">
+                    <Sparkles className="mb-3 mt-2 h-12 w-12 text-[#26A649]" />
+                    <h3 className="mb-1 text-lg font-medium text-[#1A1B4B]">Discover Your Career Path</h3>
+                    <p className="mb-4 text-sm text-[#1A1B4B]/60">
                       The personal discovery process helps align your strengths, aspirations, and goals with career opportunities
                     </p>
-                    <Button asChild>
+                    <Button asChild className="bg-[#1A1B4B] text-[#FFFFFF] hover:bg-[#1A1B4B]/90">
                       <Link href="/dashboard/personal-discovery/start">
                         Start Questionnaire
                       </Link>
@@ -189,10 +185,10 @@ export default async function PersonalDiscoveryPage() {
         </Card>
         
         {/* Quick stats */}
-        <Card>
+        <Card className="border-[#1A1B4B]/20 bg-[#FFFFFF]">
           <CardHeader className="pb-2">
             <CardTitle className="text-base flex items-center">
-              <Sparkles className="mr-2 h-4 w-4 text-purple-500" />
+              <Sparkles className="mr-2 h-4 w-4 text-[#26A649]" />
               Quick Insights
             </CardTitle>
           </CardHeader>
@@ -215,15 +211,15 @@ export default async function PersonalDiscoveryPage() {
                     </div>
                   </div>
                   {completionPercentage === 100 && user.cvs && user.cvs.length > 0 && (
-                    <div className="text-xs text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 p-2 rounded">
-                      CV and personal discovery alignment ready for review
-                    </div>
+                     <div className="rounded bg-[#26A649]/10 p-2 text-xs text-[#26A649]">
+                       CV and personal discovery alignment ready for review
+                     </div>
                   )}
                 </>
               ) : (
-                <div className="text-sm text-muted-foreground">
-                  Complete your personal discovery to view insights
-                </div>
+                 <div className="text-sm text-[#1A1B4B]/60">
+                   Complete your personal discovery to view insights
+                 </div>
               )}
             </div>
           </CardContent>
@@ -231,19 +227,19 @@ export default async function PersonalDiscoveryPage() {
       </div>
       
       {/* Next action card */}
-      <Card className="bg-gradient-to-r from-blue-50/50 to-purple-50/50 dark:from-blue-950/50 dark:to-purple-950/50 border-blue-100 dark:border-blue-800">
+      <Card className="border-[#1A1B4B]/20 bg-[#FFFFFF]">
         <CardContent className="p-6">
           <div className="flex flex-col md:flex-row md:items-center gap-4">
-            <div className="h-12 w-12 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm">
-              <Lightbulb className="h-5 w-5 text-amber-500" />
+            <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-[#1A1B4B]/10">
+              <Lightbulb className="h-5 w-5 text-[#26A649]" />
             </div>
             <div className="flex-1">
-              <h3 className="text-lg font-medium mb-1">{nextAction.title}</h3>
-              <p className="text-sm text-muted-foreground">
+              <h3 className="mb-1 text-lg font-medium text-[#1A1B4B]">{nextAction.title}</h3>
+              <p className="text-sm text-[#1A1B4B]/60">
                 {nextAction.description}
               </p>
             </div>
-            <Button asChild className="md:self-end">
+            <Button asChild className="bg-[#1A1B4B] text-[#FFFFFF] hover:bg-[#1A1B4B]/90 md:self-end">
               <Link href={nextAction.href}>
                 {nextAction.cta}
                 <ChevronRight className="ml-1 h-4 w-4" />
@@ -261,4 +257,3 @@ export default async function PersonalDiscoveryPage() {
     </div>
   );
 }
-
