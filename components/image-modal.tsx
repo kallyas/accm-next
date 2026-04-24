@@ -75,7 +75,7 @@ export function ImageModal({
       
       // Create a simple SVG with a gradient as placeholder
       const svg = `
-        <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+        <svg width="100" height="100" xmlns="http://www.w3.org/200/svg">
           <defs>
             <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop stop-color="rgb(${r},${g},${b})" offset="0%" />
@@ -189,8 +189,8 @@ export function ImageModal({
               size="icon"
               onClick={() => setShowInfo(!showInfo)}
               className={cn(
-                "text-white hover:bg-white/20 rounded-full",
-                showInfo && "bg-white/20"
+                "text-[#FFFFFF] hover:bg-[#FFFFFF]/20 rounded-full",
+                showInfo && "bg-[#FFFFFF]/20"
               )}
             >
               <Info size={18} />
@@ -199,7 +199,7 @@ export function ImageModal({
               variant="ghost"
               size="icon"
               onClick={() => setSelectedImage(null)}
-              className="text-white hover:bg-white/20 rounded-full"
+              className="text-[#FFFFFF] hover:bg-[#FFFFFF]/20 rounded-full"
             >
               <X size={18} />
             </Button>
@@ -213,7 +213,7 @@ export function ImageModal({
               size="icon"
               onClick={() => handleNavigate(-1)}
               disabled={isNavigating}
-              className="absolute left-4 z-30 rounded-full bg-black/30 text-white hover:bg-black/50 backdrop-blur-sm h-10 w-10"
+              className="absolute left-4 z-30 rounded-full bg-[#1A1B4B]/30 text-[#FFFFFF] hover:bg-[#1A1B4B]/50 backdrop-blur-sm h-10 w-10"
             >
               <ChevronLeft size={22} className={cn(
                 "transition-opacity duration-200",
@@ -279,7 +279,7 @@ export function ImageModal({
               size="icon"
               onClick={() => handleNavigate(1)}
               disabled={isNavigating}
-              className="absolute right-4 z-30 rounded-full bg-black/30 text-white hover:bg-black/50 backdrop-blur-sm h-10 w-10"
+              className="absolute right-4 z-30 rounded-full bg-[#1A1B4B]/30 text-[#FFFFFF] hover:bg-[#1A1B4B]/50 backdrop-blur-sm h-10 w-10"
             >
               <ChevronRight size={22} className={cn(
                 "transition-opacity duration-200",
@@ -288,7 +288,7 @@ export function ImageModal({
             </Button>
 
             {/* Pagination indicator */}
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-2 py-1 rounded-full bg-black/50 backdrop-blur-sm text-xs text-white">
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-2 py-1 rounded-full bg-[#1A1B4B]/50 backdrop-blur-sm text-xs text-[#FFFFFF]">
               {currentIndex + 1} / {images.length}
             </div>
           </div>
@@ -346,8 +346,8 @@ export function ImageModal({
                   </div>
 
                   {selectedImage.featured && (
-                    <div className="text-yellow-500 flex items-center gap-1.5">
-                      <span className="flex h-2 w-2 rounded-full bg-yellow-500"></span>
+                    <div className="text-[#26A649] flex items-center gap-1.5">
+                      <span className="flex h-2 w-2 rounded-full bg-[#26A649]"></span>
                       <span>Featured</span>
                     </div>
                   )}
