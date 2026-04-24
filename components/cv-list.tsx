@@ -146,18 +146,18 @@ function getSectionTitle(sectionKey: string): string {
 
 function getScoreColor(score: number): string {
   if (score >= 80)
-    return "text-green-600 bg-green-100 dark:bg-green-900/30 dark:text-green-400";
+    return "text-[#26A649] bg-[#26A649]/10  ";
   if (score >= 60)
-    return "text-yellow-600 bg-yellow-100 dark:bg-yellow-900/30 dark:text-yellow-400";
-  return "text-red-600 bg-red-100 dark:bg-red-900/30 dark:text-red-400";
+    return "text-[#26A649] bg-[#26A649]/10  ";
+  return "text-[#1A1B4B] bg-[#1A1B4B]/10  ";
 }
 
 function getScoreCircleClass(score: number): string {
   if (score >= 80)
-    return "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 border-green-200 dark:border-green-800";
+    return "bg-[#26A649]/10 text-[#26A649]   border-[#26A649]/30 ";
   if (score >= 60)
-    return "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400 border-yellow-200 dark:border-yellow-800";
-  return "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 border-red-200 dark:border-red-800";
+    return "bg-[#26A649]/10 text-[#26A649]   border-[#1A1B4B]/20 ";
+  return "bg-[#1A1B4B]/10 text-[#1A1B4B]   border-[#1A1B4B]/20 ";
 }
 
 // if there are "," in the text, keep them, replace _ with " "
@@ -328,10 +328,10 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
       coverage: Math.round(value * 100),
       class:
         value >= 0.7
-          ? "bg-green-500"
+          ? "bg-[#26A649]"
           : value >= 0.4
-          ? "bg-yellow-500"
-          : "bg-red-500",
+          ? "bg-[#26A649]"
+          : "bg-[#1A1B4B]",
     }));
   };
 
@@ -539,7 +539,7 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
                                   variant="ghost"
                                   size="icon"
                                   onClick={() => handleDelete(cv.id)}
-                                  className="text-red-500 hover:text-red-700 hover:bg-red-100/50 dark:hover:bg-red-900/20"
+                                  className="text-[#1A1B4B] hover:text-[#1A1B4B] hover:bg-[#1A1B4B]/10 "
                                 >
                                   <Trash2 className="h-4 w-4" />
                                 </Button>
@@ -604,8 +604,8 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
                           </div>
                         ) : (
                           <div className="flex-1 flex flex-col items-center justify-center py-4 px-3 text-center space-y-2">
-                            <div className="h-10 w-10 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center">
-                              <AlertCircle className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+                            <div className="h-10 w-10 bg-[#26A649]/10  rounded-full flex items-center justify-center">
+                              <AlertCircle className="h-5 w-5 text-[#26A649] " />
                             </div>
                             <p className="text-sm font-medium">
                               Not Yet Analyzed
@@ -684,8 +684,8 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
                           {/* File info */}
                           <div className="p-4 flex-grow flex justify-between">
                             <div className="flex items-center gap-3">
-                              <div className="h-10 w-10 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center flex-shrink-0">
-                                <FileText className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                              <div className="h-10 w-10 bg-[#1A1B4B]/10  rounded-full flex items-center justify-center flex-shrink-0">
+                                <FileText className="h-5 w-5 text-[#1A1B4B] " />
                               </div>
                               <div>
                                 <h3 className="font-medium" title={cv.fileName}>
@@ -746,7 +746,7 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
                                   <Button
                                     variant="ghost"
                                     size="sm"
-                                    className="rounded-none h-12 px-4 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:bg-blue-50/50 dark:hover:bg-blue-900/20"
+                                    className="rounded-none h-12 px-4 text-[#1A1B4B]  hover:text-[#1A1B4B]  hover:bg-[#1A1B4B]/10 "
                                     onClick={() => {
                                       setSelectedCV(cv);
                                       setActiveTab("overview");
@@ -763,7 +763,7 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                className="rounded-none h-12 px-4 text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 hover:bg-amber-50/50 dark:hover:bg-amber-900/20"
+                                className="rounded-none h-12 px-4 text-[#26A649]  hover:text-[#26A649]  hover:bg-[#26A649]/10 "
                                 asChild
                               >
                                 <Link href="/cv-alignment">
@@ -778,7 +778,7 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
                             <Button
                               variant="ghost"
                               size="sm"
-                              className="rounded-none h-12 px-4 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50/50 dark:hover:bg-red-900/20"
+                              className="rounded-none h-12 px-4 text-[#1A1B4B]  hover:text-[#1A1B4B]  hover:bg-[#1A1B4B]/10 "
                               onClick={() => handleDelete(cv.id)}
                             >
                               <Trash2 className="h-4 w-4 sm:mr-2" />
@@ -805,7 +805,7 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
           <DialogContent className="max-w-5xl max-h-[90vh] flex flex-col">
             <DialogHeader>
               <DialogTitle className="flex items-center">
-                <FileText className="h-5 w-5 mr-2 text-blue-500" />
+                <FileText className="h-5 w-5 mr-2 text-[#1A1B4B]" />
                 CV Analysis Report
               </DialogTitle>
               <DialogDescription>
@@ -999,7 +999,7 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
                           <CardHeader className="pb-2">
                             <CardTitle className="text-base font-medium flex items-center">
                               <AlertCircle
-                                className="mr-2 text-red-500"
+                                className="mr-2 text-[#1A1B4B]"
                                 size={16}
                               />
                               Top Issues ({analysisResult.issues.length})
@@ -1014,7 +1014,7 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
                                     .map((issue: string, index: number) => (
                                       <li
                                         key={index}
-                                        className="flex items-start text-red-600 dark:text-red-400 mb-2"
+                                        className="flex items-start text-[#1A1B4B]  mb-2"
                                       >
                                         <X className="mr-2 mt-0.5 h-4 w-4 flex-shrink-0" />
                                         <span className="text-sm">{issue}</span>
@@ -1035,7 +1035,7 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
                                   )}
                                 </ul>
                               ) : (
-                                <p className="text-sm text-green-600 dark:text-green-400 flex items-center">
+                                <p className="text-sm text-[#26A649]  flex items-center">
                                   <CheckCircle2 className="mr-2 h-4 w-4" />
                                   No major issues found!
                                 </p>
@@ -1049,7 +1049,7 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
                           <CardHeader className="pb-2">
                             <CardTitle className="text-base font-medium flex items-center">
                               <Lightbulb
-                                className="mr-2 text-yellow-500"
+                                className="mr-2 text-[#26A649]"
                                 size={16}
                               />
                               Improvement Suggestions (
@@ -1069,7 +1069,7 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
                                       ) => (
                                         <li
                                           key={index}
-                                          className="flex items-start text-blue-600 dark:text-blue-400 mb-2"
+                                          className="flex items-start text-[#1A1B4B]  mb-2"
                                         >
                                           <CheckCircle2 className="mr-2 mt-0.5 h-4 w-4 flex-shrink-0" />
                                           <span className="text-sm">
@@ -1097,7 +1097,7 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
                                   )}
                                 </ul>
                               ) : (
-                                <p className="text-sm text-green-600 dark:text-green-400 flex items-center">
+                                <p className="text-sm text-[#26A649]  flex items-center">
                                   <Award className="mr-2 h-4 w-4" />
                                   Your CV looks excellent!
                                 </p>
@@ -1111,7 +1111,7 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
                       <Card>
                         <CardHeader className="pb-2">
                           <CardTitle className="text-base font-medium flex items-center">
-                            <Tag className="mr-2 text-blue-500" size={16} />
+                            <Tag className="mr-2 text-[#1A1B4B]" size={16} />
                             Industry Keyword Coverage
                           </CardTitle>
                         </CardHeader>
@@ -1129,7 +1129,7 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
                                     {category.coverage}%
                                   </span>
                                 </div>
-                                <div className="h-2 w-full bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                <div className="h-2 w-full bg-[#1A1B4B]/10  rounded-full overflow-hidden">
                                   <div
                                     className={`h-full ${category.class}`}
                                     style={{ width: `${category.coverage}%` }}
@@ -1191,14 +1191,14 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
                                 {section.issues.length > 0 && (
                                   <div className="mb-4">
                                     <h4 className="text-sm font-medium mb-2 flex items-center">
-                                      <X className="mr-2 h-4 w-4 text-red-500" />
+                                      <X className="mr-2 h-4 w-4 text-[#1A1B4B]" />
                                       Issues
                                     </h4>
                                     <ul className="pl-6 space-y-1">
                                       {section.issues.map((issue, idx) => (
                                         <li
                                           key={idx}
-                                          className="text-sm text-red-600 dark:text-red-400 list-disc"
+                                          className="text-sm text-[#1A1B4B]  list-disc"
                                         >
                                           {issue}
                                         </li>
@@ -1210,7 +1210,7 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
                                 {section.recommendations.length > 0 && (
                                   <div>
                                     <h4 className="text-sm font-medium mb-2 flex items-center">
-                                      <Lightbulb className="mr-2 h-4 w-4 text-yellow-500" />
+                                      <Lightbulb className="mr-2 h-4 w-4 text-[#26A649]" />
                                       Recommendations
                                     </h4>
                                     <ul className="pl-6 space-y-1">
@@ -1218,7 +1218,7 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
                                         (recommendation, idx) => (
                                           <li
                                             key={idx}
-                                            className="text-sm text-blue-600 dark:text-blue-400 list-disc"
+                                            className="text-sm text-[#1A1B4B]  list-disc"
                                           >
                                             {recommendation}
                                           </li>
@@ -1230,7 +1230,7 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
 
                                 {section.issues.length === 0 &&
                                   section.recommendations.length === 0 && (
-                                    <p className="text-sm text-green-600 dark:text-green-400 flex items-center">
+                                    <p className="text-sm text-[#26A649]  flex items-center">
                                       <CheckCircle2 className="mr-2 h-4 w-4" />
                                       This section looks good!
                                     </p>
@@ -1243,11 +1243,11 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
 
                       {/* Missing Sections */}
                       {analysisResult.sections.length < 6 && (
-                        <Card className="border-dashed border-orange-300 dark:border-orange-700">
+                        <Card className="border-dashed border-[#1A1B4B]/20 ">
                           <CardHeader className="pb-2">
                             <CardTitle className="text-base font-medium flex items-center">
                               <AlertCircle
-                                className="mr-2 text-orange-500"
+                                className="mr-2 text-[#1A1B4B]"
                                 size={16}
                               />
                               Consider Adding These Sections
@@ -1272,7 +1272,7 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
                                     key={index}
                                     className="flex items-center"
                                   >
-                                    <div className="w-3 h-3 bg-orange-200 dark:bg-orange-900 rounded-full mr-2"></div>
+                                    <div className="w-3 h-3 bg-[#1A1B4B]/10  rounded-full mr-2"></div>
                                     <span className="text-sm">
                                       {getSectionTitle(section)}
                                     </span>
@@ -1297,7 +1297,7 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
                         <CardHeader className="pb-2">
                           <CardTitle className="text-base font-medium flex items-center">
                             <BarChart2
-                              className="mr-2 text-blue-500"
+                              className="mr-2 text-[#1A1B4B]"
                               size={16}
                             />
                             Industry Category Coverage
@@ -1321,7 +1321,7 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
                                     {category.coverage}%
                                   </span>
                                 </div>
-                                <div className="h-3 w-full bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                <div className="h-3 w-full bg-[#1A1B4B]/10  rounded-full overflow-hidden">
                                   <div
                                     className={`h-full ${category.class}`}
                                     style={{ width: `${category.coverage}%` }}
@@ -1345,7 +1345,7 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
                         <CardHeader className="pb-2">
                           <CardTitle className="text-base font-medium flex items-center">
                             <CheckCircle2
-                              className="mr-2 text-green-500"
+                              className="mr-2 text-[#26A649]"
                               size={16}
                             />
                             Keywords Found in Your CV
@@ -1362,13 +1362,13 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
                                 (keyword, index) => (
                                   <div
                                     key={index}
-                                    className="bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 px-3 py-1 rounded-full text-sm flex items-center"
+                                    className="bg-[#26A649]/10  text-[#26A649]  px-3 py-1 rounded-full text-sm flex items-center"
                                   >
                                     <span className="font-medium capitalize">
                                       {keyword.term}
                                     </span>
                                     {keyword.count > 1 && (
-                                      <span className="ml-1 text-xs bg-green-200 dark:bg-green-800 rounded-full px-1.5">
+                                      <span className="ml-1 text-xs bg-[#26A649]/10  rounded-full px-1.5">
                                         {keyword.count}×
                                       </span>
                                     )}
@@ -1391,7 +1391,7 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
                         <Card>
                           <CardHeader className="pb-2">
                             <CardTitle className="text-base font-medium flex items-center">
-                              <X className="mr-2 text-red-500" size={16} />
+                              <X className="mr-2 text-[#1A1B4B]" size={16} />
                               Recommended Keywords
                             </CardTitle>
                             <CardDescription>
@@ -1404,7 +1404,7 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
                                 (keyword, index) => (
                                   <div
                                     key={index}
-                                    className="bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 px-3 py-1 rounded-full text-sm flex items-center"
+                                    className="bg-[#1A1B4B]/10  text-[#1A1B4B]  px-3 py-1 rounded-full text-sm flex items-center"
                                   >
                                     <span className="font-medium capitalize">
                                       {keyword.term}
@@ -1412,7 +1412,7 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
                                     <TooltipProvider>
                                       <Tooltip>
                                         <TooltipTrigger asChild>
-                                          <span className="ml-1 text-xs bg-white dark:bg-red-800 rounded-full p-0.5">
+                                          <span className="ml-1 text-xs bg-[#FFFFFF]  rounded-full p-0.5">
                                             <Info className="h-3 w-3" />
                                           </span>
                                         </TooltipTrigger>
@@ -1435,7 +1435,7 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
                       <Card>
                         <CardHeader className="pb-2">
                           <CardTitle className="text-base font-medium flex items-center">
-                            <Layers className="mr-2 text-blue-500" size={16} />
+                            <Layers className="mr-2 text-[#1A1B4B]" size={16} />
                             Action Verbs
                           </CardTitle>
                           <CardDescription>
@@ -1449,11 +1449,11 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
                                 w-16 h-16 rounded-full flex items-center justify-center
                                 ${
                                   analysisResult.details.actionVerbCount >= 10
-                                    ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300"
+                                    ? "bg-[#26A649]/10  text-[#26A649] "
                                     : analysisResult.details.actionVerbCount >=
                                       5
-                                    ? "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300"
-                                    : "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300"
+                                    ? "bg-[#26A649]/10  text-[#26A649] "
+                                    : "bg-[#1A1B4B]/10  text-[#1A1B4B] "
                                 }
                               `}
                             >
@@ -1525,7 +1525,7 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
                         <CardHeader className="pb-2">
                           <CardTitle className="text-base font-medium flex items-center">
                             <AlertCircle
-                              className="mr-2 text-red-500"
+                              className="mr-2 text-[#1A1B4B]"
                               size={16}
                             />
                             Identified Issues
@@ -1540,7 +1540,7 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
                               {analysisResult.issues.map((issue, index) => (
                                 <li
                                   key={index}
-                                  className="flex items-start text-red-600 dark:text-red-400"
+                                  className="flex items-start text-[#1A1B4B] "
                                 >
                                   <X className="mr-2 mt-0.5 h-4 w-4 flex-shrink-0" />
                                   <span className="text-sm">{issue}</span>
@@ -1548,7 +1548,7 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
                               ))}
                             </ul>
                           ) : (
-                            <p className="text-sm text-green-600 dark:text-green-400 flex items-center">
+                            <p className="text-sm text-[#26A649]  flex items-center">
                               <CheckCircle2 className="mr-2 h-4 w-4" />
                               No major issues found!
                             </p>
@@ -1561,7 +1561,7 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
                         <CardHeader className="pb-2">
                           <CardTitle className="text-base font-medium flex items-center">
                             <Lightbulb
-                              className="mr-2 text-yellow-500"
+                              className="mr-2 text-[#26A649]"
                               size={16}
                             />
                             Improvement Recommendations
@@ -1577,7 +1577,7 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
                                 (recommendation, index) => (
                                   <li
                                     key={index}
-                                    className="flex items-start text-blue-600 dark:text-blue-400"
+                                    className="flex items-start text-[#1A1B4B] "
                                   >
                                     <CheckCircle2 className="mr-2 mt-0.5 h-4 w-4 flex-shrink-0" />
                                     <span className="text-sm">
@@ -1590,7 +1590,7 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
                               )}
                             </ul>
                           ) : (
-                            <p className="text-sm text-green-600 dark:text-green-400 flex items-center">
+                            <p className="text-sm text-[#26A649]  flex items-center">
                               <Award className="mr-2 h-4 w-4" />
                               Your CV looks excellent!
                             </p>
@@ -1599,11 +1599,11 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
                       </Card>
 
                       {/* Next Steps */}
-                      <Card className="bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
+                      <Card className="bg-[#1A1B4B]/10  border-[#1A1B4B]/20 ">
                         <CardHeader className="pb-2">
-                          <CardTitle className="text-base font-medium flex items-center text-blue-700 dark:text-blue-300">
+                          <CardTitle className="text-base font-medium flex items-center text-[#1A1B4B] ">
                             <ListChecks
-                              className="mr-2 text-blue-600 dark:text-blue-400"
+                              className="mr-2 text-[#1A1B4B] "
                               size={16}
                             />
                             Next Steps
@@ -1612,54 +1612,54 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
                         <CardContent className="pt-4">
                           <ol className="space-y-3">
                             <li className="flex items-start">
-                              <div className="flex-shrink-0 h-5 w-5 rounded-full bg-blue-200 dark:bg-blue-800 text-blue-700 dark:text-blue-300 flex items-center justify-center mr-3 text-xs font-medium">
+                              <div className="flex-shrink-0 h-5 w-5 rounded-full bg-[#1A1B4B]/10  text-[#1A1B4B]  flex items-center justify-center mr-3 text-xs font-medium">
                                 1
                               </div>
                               <div>
-                                <p className="text-sm text-blue-700 dark:text-blue-300">
+                                <p className="text-sm text-[#1A1B4B] ">
                                   Review all recommendations
                                 </p>
-                                <p className="text-xs text-blue-600/70 dark:text-blue-400/70 mt-0.5">
+                                <p className="text-xs text-[#1A1B4B]  mt-0.5">
                                   Understand what needs to be improved
                                 </p>
                               </div>
                             </li>
                             <li className="flex items-start">
-                              <div className="flex-shrink-0 h-5 w-5 rounded-full bg-blue-200 dark:bg-blue-800 text-blue-700 dark:text-blue-300 flex items-center justify-center mr-3 text-xs font-medium">
+                              <div className="flex-shrink-0 h-5 w-5 rounded-full bg-[#1A1B4B]/10  text-[#1A1B4B]  flex items-center justify-center mr-3 text-xs font-medium">
                                 2
                               </div>
                               <div>
-                                <p className="text-sm text-blue-700 dark:text-blue-300">
+                                <p className="text-sm text-[#1A1B4B] ">
                                   Download your CV and make the suggested
                                   improvements
                                 </p>
-                                <p className="text-xs text-blue-600/70 dark:text-blue-400/70 mt-0.5">
+                                <p className="text-xs text-[#1A1B4B]  mt-0.5">
                                   Update your CV based on the analysis
                                 </p>
                               </div>
                             </li>
                             <li className="flex items-start">
-                              <div className="flex-shrink-0 h-5 w-5 rounded-full bg-blue-200 dark:bg-blue-800 text-blue-700 dark:text-blue-300 flex items-center justify-center mr-3 text-xs font-medium">
+                              <div className="flex-shrink-0 h-5 w-5 rounded-full bg-[#1A1B4B]/10  text-[#1A1B4B]  flex items-center justify-center mr-3 text-xs font-medium">
                                 3
                               </div>
                               <div>
-                                <p className="text-sm text-blue-700 dark:text-blue-300">
+                                <p className="text-sm text-[#1A1B4B] ">
                                   Upload the revised CV for another analysis
                                 </p>
-                                <p className="text-xs text-blue-600/70 dark:text-blue-400/70 mt-0.5">
+                                <p className="text-xs text-[#1A1B4B]  mt-0.5">
                                   Track your improvement over time
                                 </p>
                               </div>
                             </li>
                             <li className="flex items-start">
-                              <div className="flex-shrink-0 h-5 w-5 rounded-full bg-blue-200 dark:bg-blue-800 text-blue-700 dark:text-blue-300 flex items-center justify-center mr-3 text-xs font-medium">
+                              <div className="flex-shrink-0 h-5 w-5 rounded-full bg-[#1A1B4B]/10  text-[#1A1B4B]  flex items-center justify-center mr-3 text-xs font-medium">
                                 4
                               </div>
                               <div>
-                                <p className="text-sm text-blue-700 dark:text-blue-300">
+                                <p className="text-sm text-[#1A1B4B] ">
                                   Book a session with one of our mentors
                                 </p>
-                                <p className="text-xs text-blue-600/70 dark:text-blue-400/70 mt-0.5">
+                                <p className="text-xs text-[#1A1B4B]  mt-0.5">
                                   Get personalized guidance on your career path
                                 </p>
                               </div>
@@ -1683,7 +1683,7 @@ export function CVList({ initialCvs }: { initialCvs: CV[] }) {
               </div>
             ) : (
               <div className="text-center py-12">
-                <AlertCircle className="h-12 w-12 text-yellow-500 mx-auto mb-4" />
+                <AlertCircle className="h-12 w-12 text-[#26A649] mx-auto mb-4" />
                 <h3 className="text-lg font-medium mb-2">
                   Analysis Not Available
                 </h3>
