@@ -75,11 +75,11 @@ export function ImageCarousel({
             priority={currentIndex === 0}
           />
           
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#1A1B4B]/70 via-transparent to-transparent" />
           
-          <div className="absolute bottom-0 left-0 p-4 md:p-6 text-white">
+          <div className="absolute bottom-0 left-0 p-4 md:p-6 text-[#FFFFFF]">
             <h3 className="text-lg md:text-xl font-bold">{images[currentIndex].alt}</h3>
-            <p className="text-sm mt-1 text-white/80 max-w-md">
+            <p className="text-sm mt-1 text-[#FFFFFF]/80 max-w-md">
               {images[currentIndex].description}
             </p>
           </div>
@@ -91,7 +91,7 @@ export function ImageCarousel({
         variant="ghost"
         size="icon"
         onClick={() => navigate(-1)}
-        className="absolute left-2 top-1/2 -translate-y-1/2 z-10 rounded-full bg-black/30 text-white hover:bg-black/50"
+        className="absolute left-2 top-1/2 -translate-y-1/2 z-10 rounded-full bg-[#1A1B4B]/30 text-[#FFFFFF] hover:bg-[#1A1B4B]/50"
       >
         <ChevronLeft size={20} />
       </Button>
@@ -100,7 +100,7 @@ export function ImageCarousel({
         variant="ghost"
         size="icon"
         onClick={() => navigate(1)}
-        className="absolute right-2 top-1/2 -translate-y-1/2 z-10 rounded-full bg-black/30 text-white hover:bg-black/50"
+        className="absolute right-2 top-1/2 -translate-y-1/2 z-10 rounded-full bg-[#1A1B4B]/30 text-[#FFFFFF] hover:bg-[#1A1B4B]/50"
       >
         <ChevronRight size={20} />
       </Button>
@@ -111,7 +111,7 @@ export function ImageCarousel({
           <button
             key={index}
             className={`h-1.5 rounded-full transition-all ${
-              index === currentIndex ? 'w-6 bg-white' : 'w-1.5 bg-white/50'
+              index === currentIndex ? 'w-6 bg-[#FFFFFF]' : 'w-1.5 bg-[#FFFFFF]/50'
             }`}
             onClick={() => {
               setCurrentIndex(index);
