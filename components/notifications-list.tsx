@@ -133,12 +133,12 @@ export function NotificationsList({ userId }: { userId: string }) {
   if (isLoading)
     return (
       <div className="space-y-4">
-        <Card className="p-8 text-center">
+        <Card className="border-[#1A1B4B]/20 bg-[#FFFFFF] p-8 text-center">
           <div className="flex flex-col items-center gap-4">
-            <Bell className="h-12 w-12 text-muted-foreground/50" />
+            <Bell className="h-12 w-12 text-[#1A1B4B]/35" />
             <div className="space-y-2">
-              <h3 className="text-lg font-semibold">Loading notifications</h3>
-              <p className="text-sm text-muted-foreground">
+              <h3 className="text-lg font-semibold text-[#1A1B4B]">Loading notifications</h3>
+              <p className="text-sm text-[#1A1B4B]/60">
                 Please wait while we fetch your notifications
               </p>
             </div>
@@ -148,14 +148,14 @@ export function NotificationsList({ userId }: { userId: string }) {
     );
   if (isError)
     return (
-      <Card className="p-8 text-center">
+      <Card className="border-[#1A1B4B]/20 bg-[#FFFFFF] p-8 text-center">
         <div className="flex flex-col items-center gap-4">
-          <Bell className="h-12 w-12 text-muted-foreground/50" />
+          <Bell className="h-12 w-12 text-[#1A1B4B]/35" />
           <div className="space-y-2">
-            <h3 className="text-lg font-semibold">
+            <h3 className="text-lg font-semibold text-[#1A1B4B]">
               Failed to load notifications
             </h3>
-            <p className="text-sm text-muted-foreground">{error.message}</p>
+            <p className="text-sm text-[#1A1B4B]/60">{error.message}</p>
           </div>
         </div>
       </Card>
@@ -164,12 +164,12 @@ export function NotificationsList({ userId }: { userId: string }) {
   return (
     <div className="space-y-6">
       {data?.notifications.length === 0 ? (
-        <Card className="p-8 text-center">
+        <Card className="border-[#1A1B4B]/20 bg-[#FFFFFF] p-8 text-center">
           <div className="flex flex-col items-center gap-4">
-            <Bell className="h-12 w-12 text-muted-foreground/50" />
+            <Bell className="h-12 w-12 text-[#1A1B4B]/35" />
             <div className="space-y-2">
-              <h3 className="text-lg font-semibold">No notifications yet</h3>
-              <p className="text-sm text-muted-foreground">
+              <h3 className="text-lg font-semibold text-[#1A1B4B]">No notifications yet</h3>
+              <p className="text-sm text-[#1A1B4B]/60">
                 When you receive notifications, they will appear here
               </p>
             </div>
@@ -182,32 +182,32 @@ export function NotificationsList({ userId }: { userId: string }) {
               key={notification.id}
               className={cn(
                 "transition-colors duration-200",
-                !notification.read && "border-primary/20 bg-primary/5"
+                !notification.read && "border-[#26A649]/35 bg-[#26A649]/8"
               )}
             >
               <CardHeader className="flex flex-row items-start gap-4 space-y-0 pb-2">
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
-                    <CardTitle className="text-base">
-                      {notification.title}
-                    </CardTitle>
-                    {!notification.read && (
-                      <Dot className="h-6 w-6 fill-primary text-primary animate-pulse" />
-                    )}
-                  </div>
-                  <CardDescription className="mt-1">
-                    {formatDistanceToNow(new Date(notification.createdAt), {
-                      addSuffix: true,
-                    })}
+                      <CardTitle className="text-base text-[#1A1B4B]">
+                        {notification.title}
+                      </CardTitle>
+                      {!notification.read && (
+                        <Dot className="h-6 w-6 fill-[#26A649] text-[#26A649] animate-pulse" />
+                      )}
+                    </div>
+                    <CardDescription className="mt-1 text-[#1A1B4B]/60">
+                      {formatDistanceToNow(new Date(notification.createdAt), {
+                        addSuffix: true,
+                      })}
                   </CardDescription>
                 </div>
                 {!notification.read && (
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    className="h-8 hover:bg-primary/10"
-                    onClick={() => markAsReadMutation.mutate(notification.id)}
-                    disabled={markAsReadMutation.isPending}
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="h-8 text-[#1A1B4B] hover:bg-[#1A1B4B]/10"
+                      onClick={() => markAsReadMutation.mutate(notification.id)}
+                      disabled={markAsReadMutation.isPending}
                   >
                     {markAsReadMutation.isPending ? (
                       <span className="flex items-center gap-2">
@@ -224,7 +224,7 @@ export function NotificationsList({ userId }: { userId: string }) {
                 )}
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-muted-foreground leading-relaxed">
+                <p className="text-sm leading-relaxed text-[#1A1B4B]/75">
                   {notification.description} 
                 </p>
               </CardContent>
@@ -233,19 +233,35 @@ export function NotificationsList({ userId }: { userId: string }) {
         </div>
       )}
 
-      {data?.total! > pageSize && (
+      {(data?.total ?? 0) > pageSize && (
         <Pagination className="mt-8">
           <PaginationContent>
             <PaginationItem>
-              {page > 1 && <PaginationPrevious href="#" />}
+              {page > 1 && (
+                <PaginationPrevious
+                  href="#"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    setPage((prev) => Math.max(1, prev - 1));
+                  }}
+                />
+              )}
             </PaginationItem>
             {/* Add page numbers based on your total pages */}
             <PaginationItem>
               <span>{page}</span>
             </PaginationItem>
             <PaginationItem>
-              {page < Math.ceil(data!.total / pageSize) && (
-                <PaginationNext href="#" />
+              {page < Math.ceil((data?.total ?? 0) / pageSize) && (
+                <PaginationNext
+                  href="#"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    setPage((prev) =>
+                      Math.min(Math.ceil((data?.total ?? 0) / pageSize), prev + 1)
+                    );
+                  }}
+                />
               )}
             </PaginationItem>
           </PaginationContent>
