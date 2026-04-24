@@ -17,7 +17,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -98,31 +97,33 @@ const api = {
 
 // Components
 const EmptyState = ({ onAddClick }: { onAddClick: () => void }) => (
-  <Card className="text-center p-8">
+  <Card className="border-[#1A1B4B]/20 bg-[#FFFFFF] p-8 text-center">
     <CardContent className="pt-6 px-8">
       <div className="flex justify-center mb-4">
-        <MessageSquarePlus className="h-12 w-12 text-muted-foreground" />
+        <MessageSquarePlus className="h-12 w-12 text-[#1A1B4B]/35" />
       </div>
-      <h3 className="text-lg font-semibold mb-2">No testimonials yet</h3>
-      <p className="text-muted-foreground mb-6">
+      <h3 className="mb-2 text-lg font-semibold text-[#1A1B4B]">No testimonials yet</h3>
+      <p className="mb-6 text-[#1A1B4B]/60">
         Share your experience with us by adding your first testimonial.
       </p>
-      <Button onClick={onAddClick}>Add Your First Testimonial</Button>
+      <Button onClick={onAddClick} className="bg-[#1A1B4B] text-[#FFFFFF] hover:bg-[#1A1B4B]/90">
+        Add Your First Testimonial
+      </Button>
     </CardContent>
   </Card>
 );
 
 const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => (
-  <Card className="hover:shadow-md transition-shadow">
+  <Card className="border-[#1A1B4B]/20 bg-[#FFFFFF] transition-shadow hover:shadow-md">
     <CardHeader>
       <CardTitle className="flex justify-between items-center">
-        <span>Testimonial</span>
-        <div className="flex items-center text-yellow-500">
+        <span className="text-[#1A1B4B]">Testimonial</span>
+        <div className="flex items-center text-[#26A649]">
           <Star className="h-4 w-4 fill-current" />
           <span className="ml-1 text-sm">{testimonial.rating}/5</span>
         </div>
       </CardTitle>
-      <CardDescription>
+      <CardDescription className="text-[#1A1B4B]/60">
         {new Date(testimonial.createdAt).toLocaleDateString(undefined, {
           year: "numeric",
           month: "long",
@@ -131,7 +132,7 @@ const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => (
       </CardDescription>
     </CardHeader>
     <CardContent>
-      <p className="whitespace-pre-wrap text-sm">{testimonial.content}</p>
+      <p className="whitespace-pre-wrap text-sm text-[#1A1B4B]/80">{testimonial.content}</p>
     </CardContent>
   </Card>
 );
@@ -251,7 +252,7 @@ export default function UserTestimonialsPage() {
 
   if (error) {
     return (
-      <div className="container py-10">
+      <div className="py-2">
         <Alert variant="destructive">
           <AlertTitle>Error</AlertTitle>
           <AlertDescription>{(error as Error).message}</AlertDescription>
@@ -264,16 +265,21 @@ export default function UserTestimonialsPage() {
   const showPagination = (data?.data.pagination.totalPages ?? 0) > 1;
 
   return (
-    <div className="container max-w-7xl py-10">
+    <div className="max-w-7xl space-y-8">
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-3xl font-bold">My Testimonials</h1>
-          <p className="text-muted-foreground mt-1">
+          <p className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-[#26A649]">
+            Community Voice
+          </p>
+          <h1 className="text-2xl font-semibold uppercase tracking-tight text-[#1A1B4B] sm:text-3xl">
+            My Testimonials
+          </h1>
+          <p className="mt-1 text-[#1A1B4B]/60">
             Share and manage your feedback
           </p>
         </div>
         {!showEmptyState && (
-          <Button asChild onClick={() => setIsDialogOpen(true)}>
+          <Button asChild onClick={() => setIsDialogOpen(true)} className="bg-[#1A1B4B] text-[#FFFFFF] hover:bg-[#1A1B4B]/90">
             Add New Testimonial
           </Button>
         )}
@@ -282,16 +288,16 @@ export default function UserTestimonialsPage() {
       {isLoading ? (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {[...Array(6)].map((_, i) => (
-            <Card key={i} className="animate-pulse">
+            <Card key={i} className="animate-pulse border-[#1A1B4B]/20 bg-[#FFFFFF]">
               <CardHeader>
-                <div className="h-6 bg-muted rounded w-2/3" />
-                <div className="h-4 bg-muted rounded w-1/3 mt-2" />
+                <div className="h-6 w-2/3 rounded bg-[#1A1B4B]/10" />
+                <div className="mt-2 h-4 w-1/3 rounded bg-[#1A1B4B]/10" />
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
-                  <div className="h-4 bg-muted rounded" />
-                  <div className="h-4 bg-muted rounded w-5/6" />
-                  <div className="h-4 bg-muted rounded w-4/6" />
+                  <div className="h-4 rounded bg-[#1A1B4B]/10" />
+                  <div className="h-4 w-5/6 rounded bg-[#1A1B4B]/10" />
+                  <div className="h-4 w-4/6 rounded bg-[#1A1B4B]/10" />
                 </div>
               </CardContent>
             </Card>
@@ -318,7 +324,7 @@ export default function UserTestimonialsPage() {
                 <ChevronLeft className="h-4 w-4 mr-1" />
                 Previous
               </Button>
-              <span className="text-sm text-muted-foreground">
+              <span className="text-sm text-[#1A1B4B]/60">
                 Page {page} of {data?.data.pagination.totalPages}
               </span>
               <Button
