@@ -139,7 +139,7 @@ export function YouTubePlayer({ videoUrl, onComplete }: YouTubePlayerProps) {
 
   return (
     <div className="space-y-4">
-      <div className="relative pb-[56.25%] h-0 bg-gray-900 rounded-lg overflow-hidden">
+      <div className="relative pb-[56.25%] h-0 bg-[#1A1B4B]/10 rounded-lg overflow-hidden">
         <div
           id="youtube-player"
           className="absolute top-0 left-0 w-full h-full"
@@ -147,9 +147,9 @@ export function YouTubePlayer({ videoUrl, onComplete }: YouTubePlayerProps) {
       </div>
 
       {isWatched ? (
-        <div className="flex items-center justify-center gap-2 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
-          <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400" />
-          <span className="text-sm font-medium text-green-800 dark:text-green-200">
+        <div className="flex items-center justify-center gap-2 p-4 bg-[#26A649]/10  rounded-lg border border-[#26A649]/30 ">
+          <CheckCircle className="h-5 w-5 text-[#26A649] " />
+          <span className="text-sm font-medium text-[#26A649] ">
             Video completed! You can now proceed to the questionnaire.
           </span>
         </div>
