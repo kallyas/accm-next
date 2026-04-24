@@ -41,18 +41,30 @@ export default function UserEventsPage() {
   const { userEvents } = useEvents();
 
   return (
-    <div className="container py-10">
-      <h1 className="text-3xl font-bold mb-6">My Registered Events</h1>
-      <Card>
+    <div className="space-y-6">
+      <div className="space-y-2">
+        <p className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-[#26A649]">
+          Community
+        </p>
+        <h1 className="text-2xl font-semibold uppercase tracking-tight text-[#1A1B4B] sm:text-3xl">
+          My Registered Events
+        </h1>
+        <p className="text-sm text-[#1A1B4B]/60">
+          View and manage your upcoming event registrations.
+        </p>
+      </div>
+      <Card className="border-[#1A1B4B]/20 bg-[#FFFFFF]">
         <CardHeader>
-          <CardTitle>Upcoming Events</CardTitle>
-          <CardDescription>Events you have registered for</CardDescription>
+          <CardTitle className="text-[#1A1B4B]">Upcoming Events</CardTitle>
+          <CardDescription className="text-[#1A1B4B]/60">
+            Events you have registered for
+          </CardDescription>
         </CardHeader>
         <CardContent>
           {userEvents.isLoading ? (
             <LoadingState />
           ) : userEvents.isError ? (
-            <div className="text-red-500">
+            <div className="text-[#1A1B4B]">
               Error loading events: {userEvents.error.message}
             </div>
           ) : (
