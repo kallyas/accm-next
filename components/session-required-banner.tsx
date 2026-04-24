@@ -21,14 +21,14 @@ export function SessionRequiredBanner() {
         transition={{ duration: 0.3 }}
         className="container py-3"
       >
-        <Alert className="bg-blue-50 text-blue-800 border-blue-200 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-800 flex flex-col sm:flex-row sm:items-center sm:justify-between">
+        <Alert className="bg-[#1A1B4B]/10 text-[#1A1B4B] border-[#1A1B4B]/20    flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-start">
             <AlertCircle className="h-5 w-5 mt-0.5 mr-2" />
             <div>
-              <AlertTitle className="text-blue-800 dark:text-blue-300">
+              <AlertTitle className="text-[#1A1B4B] ">
                 Sign in for full access
               </AlertTitle>
-              <AlertDescription className="text-blue-700 dark:text-blue-400 text-sm">
+              <AlertDescription className="text-[#1A1B4B]  text-sm">
                 Create an account or sign in to save your preferences and
                 booking history.
               </AlertDescription>
@@ -38,7 +38,7 @@ export function SessionRequiredBanner() {
             <Button
               variant="outline"
               size="sm"
-              className="border-blue-300 hover:bg-blue-100 dark:border-blue-700 dark:hover:bg-blue-800/50"
+              className="border-[#1A1B4B]/20 hover:bg-[#1A1B4B]/10  "
               onClick={() => setDismissed(true)}
             >
               Continue as guest
@@ -46,7 +46,7 @@ export function SessionRequiredBanner() {
             <Link href="/login?callbackUrl=/book-session">
               <Button
                 size="sm"
-                className="bg-blue-600 hover:bg-blue-700 text-white dark:bg-blue-700 dark:hover:bg-blue-600"
+                className="bg-[#1A1B4B]/10 hover:bg-[#1A1B4B]/10 text-[#FFFFFF]  "
               >
                 Sign In
               </Button>
