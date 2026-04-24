@@ -2,23 +2,21 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { 
-  Card, 
-  CardContent, 
-  CardFooter, 
-  CardHeader, 
-  CardTitle, 
-  CardDescription 
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, ArrowRight, Check, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
-// Helper Components
-export const ChevronDown = ({ className }) => (
+const ChevronDown = ({ className }: { className?: string }) => (
   <svg
-    xmlns="http://www.w3.org/2000/svg"
+    xmlns="http://www.w3.org/200/svg"
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
@@ -31,132 +29,130 @@ export const ChevronDown = ({ className }) => (
   </svg>
 );
 
-const ServiceCard = ({ service, color = "blue" }) => {
-  const colorStyles = {
-    blue: "bg-blue-50 border-blue-100 dark:bg-blue-900/20 dark:border-blue-900/30",
-    green: "bg-green-50 border-green-100 dark:bg-green-900/20 dark:border-green-900/30",
-    amber: "bg-amber-50 border-amber-100 dark:bg-amber-900/20 dark:border-amber-900/30",
-    purple: "bg-purple-50 border-purple-100 dark:bg-purple-900/20 dark:border-purple-900/30",
-    indigo: "bg-indigo-50 border-indigo-100 dark:bg-indigo-900/20 dark:border-indigo-900/30",
-    cyan: "bg-cyan-50 border-cyan-100 dark:bg-cyan-900/20 dark:border-cyan-900/30",
+const ServiceCard = ({
+  service,
+  color = "blue",
+}: {
+  service: {
+    icon?: React.ElementType;
+    title: string;
+    description: string;
+    features: string[];
+    image?: string;
+    badge?: string;
+    packages?: {
+      name: string;
+      duration: string;
+      features: string[];
+    }[];
   };
-  
-  const iconColorStyles = {
-    blue: "text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-blue-900/40",
-    green: "text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/40",
-    amber: "text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-900/40",
-    purple: "text-purple-600 dark:text-purple-400 bg-purple-100 dark:bg-purple-900/40",
-    indigo: "text-indigo-600 dark:text-indigo-400 bg-indigo-100 dark:bg-indigo-900/40",
-    cyan: "text-cyan-600 dark:text-cyan-400 bg-cyan-100 dark:bg-cyan-900/40",
-  };
-  
-  const checkColorStyles = {
-    blue: "text-blue-500 dark:text-blue-400",
-    green: "text-green-500 dark:text-green-400",
-    amber: "text-amber-500 dark:text-amber-400",
-    purple: "text-purple-500 dark:text-purple-400",
-    indigo: "text-indigo-500 dark:text-indigo-400",
-    cyan: "text-cyan-500 dark:text-cyan-400",
-  };
-  
+  color?: string;
+}) => {
   const [showPackages, setShowPackages] = useState(false);
-  
+
   return (
-    <Card className={cn(
-      "h-full border-2 hover:shadow-lg transition-all duration-300 relative overflow-hidden",
-      colorStyles[color]
-    )}>
+    <Card
+      className={cn(
+        "h-full border border-[#1A1B4B]/20 bg-[#FFFFFF] transition-colors hover:bg-[#1A1B4B]/10   "
+      )}
+    >
       {service.badge && (
-        <Badge 
-          variant="default" 
-          className="absolute top-3 right-3 z-10 bg-amber-600 hover:bg-amber-600"
-        >
+        <Badge className="absolute top-3 right-3 z-10 bg-[#26A649]/10 px-2 py-0.5 text-[0.6rem] font-semibold uppercase tracking-wider hover:bg-[#26A649]/10">
           {service.badge}
         </Badge>
       )}
 
-      {/* Service Image */}
-      <div className="w-full h-48 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/60 z-10" />
-        {service.image && (
+      <div className="relative aspect-[16/10] overflow-hidden">
+        {service.image ? (
           <Image
             src={service.image}
             alt={service.title}
             fill
             className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
-        )}
-        <div className="absolute bottom-4 left-4 z-20">
-          <div className={cn(
-            "p-2 rounded-full w-10 h-10 flex items-center justify-center",
-            iconColorStyles[color]
-          )}>
-            <service.icon className="h-5 w-5" />
-          </div>
-        </div>
-      </div>
-      
-      <CardHeader className="pb-2">
-        <CardTitle className="text-xl">{service.title}</CardTitle>
-        <CardDescription>{service.description}</CardDescription>
-      </CardHeader>
-      
-      <CardContent className="pb-0">
-        <div className="space-y-3">
-          {service.features.map((feature, idx) => (
-            <div key={idx} className="flex gap-2">
-              <CheckCircle className={cn(
-                "h-5 w-5 flex-shrink-0 mt-0.5",
-                checkColorStyles[color]
-              )} />
-              <span className="text-sm text-muted-foreground">{feature}</span>
-            </div>
-          ))}
-        </div>
-        
-        {/* Packages Section (if available) */}
-        {service.packages && (
-          <div className="mt-4">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowPackages(!showPackages)}
-              className={cn(
-                "w-full border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300",
-                showPackages && "bg-blue-50 dark:bg-blue-900/30"
+        ) : (
+          <div className="absolute inset-0 bg-[#1A1B4B]/5 ">
+            <div className="flex h-full items-center justify-center">
+              {service.icon && (
+                <service.icon className="h-12 w-12 text-[#1A1B4B]/60 " />
               )}
+            </div>
+          </div>
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#1A1B4B]/50 via-[#1A1B4B]/10 to-transparent" />
+        {service.icon && !service.image && (
+          <div className="absolute bottom-4 left-4">
+            <div className="flex h-10 w-10 items-center justify-center border border-[#1A1B4B]/20 bg-[#FFFFFF]  ">
+              <service.icon className="h-5 w-5 text-[#1A1B4B] " />
+            </div>
+          </div>
+        )}
+      </div>
+
+      <CardHeader className="p-5 pb-3">
+        <h3 className="text-base font-semibold uppercase tracking-[0.03em]">
+          {service.title}
+        </h3>
+        <p className="mt-2 text-sm leading-6 text-[#1A1B4B] ">
+          {service.description}
+        </p>
+      </CardHeader>
+
+      <CardContent className="p-5 pt-0">
+        <ul className="space-y-2.5">
+          {service.features.slice(0, 4).map((feature, idx) => (
+            <li key={idx} className="flex items-start gap-2.5">
+              <CheckCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#1A1B4B] " />
+              <span className="text-sm leading-6 text-[#1A1B4B] ">
+                {feature}
+              </span>
+            </li>
+          ))}
+        </ul>
+
+        {service.packages && (
+          <div className="mt-5">
+            <Button
+              variant="ghost"
+              onClick={() => setShowPackages(!showPackages)}
+              className="h-9 w-full rounded-none border border-[#1A1B4B]/20 px-4 text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-[#1A1B4B] hover:bg-[#1A1B4B]/10   "
             >
-              {showPackages ? "Hide Packages" : "View Available Packages"}
+              {showPackages ? "Hide packages" : "View packages"}
               {showPackages ? (
                 <ChevronDown className="ml-2 h-4 w-4" />
               ) : (
                 <ChevronRight className="ml-2 h-4 w-4" />
               )}
             </Button>
-            
+
             {showPackages && (
-              <div className="mt-4 space-y-4">
+              <div className="mt-4 space-y-3">
                 {service.packages.map((pkg, idx) => (
-                  <div 
-                    key={idx} 
-                    className="border border-blue-100 dark:border-blue-900/30 rounded-lg p-4 bg-white/80 dark:bg-gray-900/80"
+                  <div
+                    key={idx}
+                    className="border border-[#1A1B4B]/20 bg-[#FFFFFF] p-4  "
                   >
-                    <div className="flex justify-between items-center mb-2">
-                      <h4 className="font-medium text-blue-700 dark:text-blue-300">
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-sm font-semibold uppercase tracking-[0.03em] text-[#1A1B4B] ">
                         {pkg.name}
                       </h4>
-                      <Badge variant="outline" className="text-xs">
+                      <Badge
+                        variant="outline"
+                        className="border-[#1A1B4B]/20 text-[0.6rem] uppercase tracking-wider "
+                      >
                         {pkg.duration}
                       </Badge>
                     </div>
-                    <div className="space-y-1.5">
+                    <ul className="mt-3 space-y-2">
                       {pkg.features.map((feature, fidx) => (
-                        <div key={fidx} className="flex gap-2 items-start">
-                          <Check className="h-3.5 w-3.5 text-green-500 mt-0.5" />
-                          <span className="text-xs text-muted-foreground">{feature}</span>
-                        </div>
+                        <li key={fidx} className="flex items-start gap-2">
+                          <Check className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-[#1A1B4B] " />
+                          <span className="text-xs leading-5 text-[#1A1B4B] ">
+                            {feature}
+                          </span>
+                        </li>
                       ))}
-                    </div>
+                    </ul>
                   </div>
                 ))}
               </div>
@@ -164,23 +160,15 @@ const ServiceCard = ({ service, color = "blue" }) => {
           </div>
         )}
       </CardContent>
-      
-      <CardFooter className="pt-4 pb-4">
-        <Button
-          variant="outline"
-          className={cn(
-            "w-full border-2",
-            color === "blue" && "border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/30",
-            color === "green" && "border-green-200 dark:border-green-800 text-green-700 dark:text-green-300 hover:bg-green-50 dark:hover:bg-green-900/30",
-            color === "amber" && "border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-amber-900/30",
-            color === "purple" && "border-purple-200 dark:border-purple-800 text-purple-700 dark:text-purple-300 hover:bg-purple-50 dark:hover:bg-purple-900/30",
-            color === "indigo" && "border-indigo-200 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/30",
-            color === "cyan" && "border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-300 hover:bg-cyan-50 dark:hover:bg-cyan-900/30",
-          )}
+
+      <CardFooter className="p-5 pt-4">
+        <Link
+          href="#"
+          className="flex h-10 w-full items-center justify-center border border-[#1A1B4B]/20 bg-[#FFFFFF] px-4 text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-[#1A1B4B] transition-colors hover:bg-[#1A1B4B]/10    "
         >
-          Learn More
+          Learn more
           <ArrowRight className="ml-2 h-4 w-4" />
-        </Button>
+        </Link>
       </CardFooter>
     </Card>
   );
