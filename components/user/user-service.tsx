@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Sparkles } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -16,7 +17,7 @@ type Service = {
 };
 
 export function UserServices() {
-  const [services, setServices] = useState<Service[]>([
+  const [services] = useState<Service[]>([
     {
       id: "1",
       name: "1-on-1 Mentorship",
@@ -37,12 +38,17 @@ export function UserServices() {
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {services.map((service) => (
-        <Card key={service.id}>
+        <Card key={service.id} className="border-[#1A1B4B]/20 bg-[#FFFFFF]">
           <CardHeader>
-            <CardTitle>{service.name}</CardTitle>
+            <CardTitle className="flex items-center gap-2 text-[#1A1B4B]">
+              <Sparkles className="h-4 w-4 text-[#26A649]" />
+              {service.name}
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <CardDescription>{service.description}</CardDescription>
+            <CardDescription className="text-[#1A1B4B]/60">
+              {service.description}
+            </CardDescription>
           </CardContent>
         </Card>
       ))}
