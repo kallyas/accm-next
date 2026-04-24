@@ -82,25 +82,23 @@ import {
 
 // Enhanced theme-aware colors
 const getThemeColors = (theme: "dark" | "light") => ({
-  primary: theme === "dark" ? "#94A3B8" : "#475569",
-  secondary: theme === "dark" ? "#1E293B" : "#F1F5F9",
-  accent: theme === "dark" ? "#3B82F6" : "#2563EB",
-  text: theme === "dark" ? "#F1F5F9" : "#1E293B",
-  muted: theme === "dark" ? "#64748B" : "#94A3B8",
-  success: theme === "dark" ? "#10B981" : "#059669",
-  warning: theme === "dark" ? "#F59E0B" : "#D97706",
-  danger: theme === "dark" ? "#EF4444" : "#DC2626",
+  primary: "#1A1B4B",
+  secondary: "#FFFFFF",
+  accent: "#26A649",
+  text: "#1A1B4B",
+  muted: "#1A1B4B",
+  success: "#26A649",
+  warning: "#1A1B4B",
+  danger: "#1A1B4B",
   chartColors: {
-    primary: theme === "dark"
-      ? ["#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#A855F7", "#EC4899", "#14B8A6"]
-      : ["#2563EB", "#059669", "#D97706", "#DC2626", "#7C3AED", "#DB2777", "#0D9488"],
+    primary: ["#1A1B4B", "#26A649", "#1A1B4B", "#26A649", "#1A1B4B", "#26A649", "#1A1B4B"],
     progressStates: {
-      PAYMENT_PENDING: theme === "dark" ? "#F59E0B" : "#D97706",
-      PERSONAL_DISCOVERY_PENDING: theme === "dark" ? "#10B981" : "#059669",
-      CV_ALIGNMENT_PENDING: theme === "dark" ? "#3B82F6" : "#2563EB",
-      SCHOLARSHIP_MATRIX_PENDING: theme === "dark" ? "#8B5CF6" : "#7C3AED",
-      ESSAYS_PENDING: theme === "dark" ? "#EC4899" : "#DB2777",
-      COMPLETED: theme === "dark" ? "#059669" : "#047857",
+      PAYMENT_PENDING: "#1A1B4B",
+      PERSONAL_DISCOVERY_PENDING: "#26A649",
+      CV_ALIGNMENT_PENDING: "#1A1B4B",
+      SCHOLARSHIP_MATRIX_PENDING: "#1A1B4B",
+      ESSAYS_PENDING: "#1A1B4B",
+      COMPLETED: "#26A649",
     },
   },
 });
@@ -146,14 +144,14 @@ function MetricCard({
   // Color variants for the trend badge
   const variantClasses = {
     default: "",
-    success: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
-    warning: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
-    danger: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
+    success: "bg-[#26A649]/10 text-[#26A649]  ",
+    warning: "bg-[#26A649]/10 text-[#26A649]  ",
+    danger: "bg-[#1A1B4B]/10 text-[#1A1B4B]  ",
   };
 
   // Trend icon based on value
   const TrendIcon = trend && trend.value >= 0 ? TrendingUp : TrendingDown;
-  const trendColorClass = trend && trend.value >= 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400";
+  const trendColorClass = trend && trend.value >= 0 ? "text-[#26A649] " : "text-[#1A1B4B] ";
 
   return (
     <Card className="overflow-hidden">
@@ -663,7 +661,7 @@ export function AnalyticsDashboard({
                       <div className="relative pt-1">
                         <div className="flex items-center justify-between mb-1">
                           <div>
-                            <span className="text-xs font-medium text-blue-600 dark:text-blue-400">
+                            <span className="text-xs font-medium text-[#1A1B4B] ">
                               {course.averageProgress}% completed
                             </span>
                           </div>
@@ -673,13 +671,13 @@ export function AnalyticsDashboard({
                             </span>
                           </div>
                         </div>
-                        <div className="relative h-2 w-full bg-blue-100 dark:bg-blue-900 rounded-full overflow-hidden">
+                        <div className="relative h-2 w-full bg-[#1A1B4B]/10  rounded-full overflow-hidden">
                           <div 
-                            className="bg-blue-600 dark:bg-blue-400 h-full rounded-full" 
+                            className="bg-[#1A1B4B]/10  h-full rounded-full" 
                             style={{ width: `${course.averageProgress}%` }}
                           />
                           <div 
-                            className="absolute top-0 h-full rounded-full border-l-2 border-red-400 dark:border-red-500" 
+                            className="absolute top-0 h-full rounded-full border-l-2 border-[#1A1B4B]/20 " 
                             style={{ left: '80%' }}
                           />
                         </div>
@@ -741,8 +739,8 @@ export function AnalyticsDashboard({
                 </h3>
                 <p className="text-sm text-muted-foreground">Retention Rate</p>
                 <div className="flex justify-center items-center gap-2 mt-4">
-                  <TrendingUp className="h-4 w-4 text-green-500" />
-                  <span className="text-xs text-green-500">+2.4% from last period</span>
+                  <TrendingUp className="h-4 w-4 text-[#26A649]" />
+                  <span className="text-xs text-[#26A649]">+2.4% from last period</span>
                 </div>
               </div>
             </Card>
