@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, AlertCircle } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import {
   Card,
   CardHeader,
@@ -8,20 +8,20 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { SubscribePlan } from "../user/subscribe-plan";
 
 export function UpgradeOptions() {
   return (
-    <Card className="shadow-lg">
-      <CardHeader className="border-b dark:border-gray-800">
+    <Card className="border border-[#1A1B4B]/20 bg-[#FFFFFF]">
+      <CardHeader className="border-b border-[#1A1B4B]/10">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <ArrowRight className="w-5 h-5 text-gray-500" />
+            <ArrowRight className="h-5 w-5 text-[#26A649]" />
             <div>
-              <CardTitle>Upgrade Your Plan</CardTitle>
-              <CardDescription>Get more from your subscription</CardDescription>
+              <CardTitle className="text-[#1A1B4B]">Upgrade Your Plan</CardTitle>
+              <CardDescription className="text-[#1A1B4B]/60">
+                Get more from your subscription
+              </CardDescription>
             </div>
           </div>
         </div>
