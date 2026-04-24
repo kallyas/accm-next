@@ -118,7 +118,7 @@ export function UserFeedback() {
 
   if (error) {
     return (
-      <div className="rounded-lg border border-red-200 p-4 text-red-800">
+      <div className="rounded-lg border border-[#1A1B4B]/20 bg-[#FFFFFF] p-4 text-[#1A1B4B]">
         Error loading feedback: {(error as Error).message}
       </div>
     );
@@ -133,11 +133,12 @@ export function UserFeedback() {
           onChange={(e) => setFeedback(e.target.value)}
           rows={5}
           disabled={submitMutation.isPending}
-          className="resize-none"
+          className="resize-none border-[#1A1B4B]/20 bg-[#FFFFFF] text-[#1A1B4B] placeholder:text-[#1A1B4B]/40"
         />
         <Button
           type="submit"
           disabled={submitMutation.isPending || !feedback.trim()}
+          className="bg-[#1A1B4B] text-[#FFFFFF] hover:bg-[#1A1B4B]/90"
         >
           {submitMutation.isPending ? (
             <>
@@ -151,49 +152,49 @@ export function UserFeedback() {
       </form>
 
       <div className="space-y-4">
-        <h2 className="text-xl font-semibold">Your Previous Feedback</h2>
+        <h2 className="text-xl font-semibold text-[#1A1B4B]">Your Previous Feedback</h2>
 
         {isLoading ? (
           <div className="space-y-4">
             {[1, 2, 3].map((i) => (
-              <Card key={i} className="animate-pulse">
+              <Card key={i} className="animate-pulse border-[#1A1B4B]/20 bg-[#FFFFFF]">
                 <CardHeader>
-                  <div className="h-4 bg-muted rounded w-1/4" />
+                  <div className="h-4 w-1/4 rounded bg-[#1A1B4B]/10" />
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
-                    <div className="h-4 bg-muted rounded" />
-                    <div className="h-4 bg-muted rounded w-5/6" />
+                    <div className="h-4 rounded bg-[#1A1B4B]/10" />
+                    <div className="h-4 w-5/6 rounded bg-[#1A1B4B]/10" />
                   </div>
                 </CardContent>
               </Card>
             ))}
           </div>
         ) : data?.data.feedback.length === 0 ? (
-          <Card>
-            <CardContent className="py-8 text-center">
-              <MessageSquare className="mx-auto h-12 w-12 text-muted-foreground opacity-50" />
-              <p className="mt-4 text-lg font-medium">No feedback yet</p>
-              <p className="text-sm text-muted-foreground">
-                Your submitted feedback will appear here
-              </p>
-            </CardContent>
-          </Card>
-        ) : (
-          <div className="space-y-4">
-            {data?.data.feedback.map((item) => (
-              <Card key={item.id}>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    {new Date(item.createdAt).toLocaleDateString(undefined, {
+            <Card className="border-[#1A1B4B]/20 bg-[#FFFFFF]">
+              <CardContent className="py-8 text-center">
+                <MessageSquare className="mx-auto h-12 w-12 text-[#1A1B4B]/35" />
+                <p className="mt-4 text-lg font-medium text-[#1A1B4B]">No feedback yet</p>
+                <p className="text-sm text-[#1A1B4B]/60">
+                  Your submitted feedback will appear here
+                </p>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="space-y-4">
+              {data?.data.feedback.map((item) => (
+                <Card key={item.id} className="border-[#1A1B4B]/20 bg-[#FFFFFF]">
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium text-[#1A1B4B]">
+                      {new Date(item.createdAt).toLocaleDateString(undefined, {
                       year: "numeric",
                       month: "long",
                       day: "numeric",
                     })}
                   </CardTitle>
-                  <Button
-                    variant="destructive"
-                    size="sm"
+                    <Button
+                      variant="destructive"
+                      size="sm"
                     onClick={() => setFeedbackToDelete(item.id)}
                     disabled={deleteMutation.isPending}
                   >
@@ -213,6 +214,7 @@ export function UserFeedback() {
                   size="sm"
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
                   disabled={page === 1}
+                  className="border-[#1A1B4B]/30 text-[#1A1B4B] hover:bg-[#1A1B4B]/10"
                 >
                   Previous
                 </Button>
@@ -225,6 +227,7 @@ export function UserFeedback() {
                     )
                   }
                   disabled={page >= (data?.data.pagination.totalPages ?? 1)}
+                  className="border-[#1A1B4B]/30 text-[#1A1B4B] hover:bg-[#1A1B4B]/10"
                 >
                   Next
                 </Button>
@@ -250,7 +253,7 @@ export function UserFeedback() {
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => feedbackToDelete && handleDelete(feedbackToDelete)}
-              className="bg-red-600 hover:bg-red-700"
+              className="bg-[#1A1B4B] text-[#FFFFFF] hover:bg-[#1A1B4B]/90"
             >
               Delete
             </AlertDialogAction>
