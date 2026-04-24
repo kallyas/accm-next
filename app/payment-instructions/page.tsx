@@ -1,499 +1,338 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  SmartphoneIcon,
-  LandmarkIcon,
-  GlobeIcon,
-  DollarSignIcon,
-  CopyIcon,
-  CheckIcon,
-  InfoIcon,
-  CalendarIcon,
-  ChevronRightIcon,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import {
+  CalendarIcon,
+  CheckIcon,
+  ChevronRightIcon,
+  CopyIcon,
+  DollarSignIcon,
+  InfoIcon,
+  LandmarkIcon,
+  SmartphoneIcon,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 export default function PaymentInstructionsPage() {
-  const [activeCopyStates, setActiveCopyStates] = useState<Record<string, boolean>>({});
+  const [activeCopyStates, setActiveCopyStates] = useState<Record<string, boolean>>(
+    {}
+  );
 
-  // Function to handle copying to clipboard
   const handleCopy = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
-    setActiveCopyStates({ ...activeCopyStates, [id]: true });
+    setActiveCopyStates((prev) => ({ ...prev, [id]: true }));
     setTimeout(() => {
-      setActiveCopyStates({ ...activeCopyStates, [id]: false });
+      setActiveCopyStates((prev) => ({ ...prev, [id]: false }));
     }, 2000);
   };
 
-  // Animation variants for staggered entry
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5 },
-    },
-  };
-
   return (
-    <div className="container mx-auto max-w-7xl px-4 py-10">
-      {/* Hero Section */}
-      <section className="relative mb-16 rounded-2xl overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-gray-900/80 to-gray-800/80 z-10" />
-        <div className="relative px-6 z-20 py-16 text-white text-center">
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-          >
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">Payment Instructions</h1>
-            <p className="text-xl max-w-2xl mx-auto">
-              Choose your preferred payment method to complete your transaction securely.
-            </p>
-          </motion.div>
-        </div>
-      </section>
+    <div className="bg-[#f7f5f1] text-gray-900 dark:bg-[#111416] dark:text-gray-100">
+      <main className="mx-auto w-full max-w-[88rem] px-5 py-10 sm:px-7 lg:px-10">
+        <section className="border border-gray-300 dark:border-gray-800">
+          <div className="grid gap-0 lg:grid-cols-[1.05fr_0.95fr]">
+            <div className="bg-[#ece8df] p-7 dark:bg-[#171b1d] sm:p-10">
+              <motion.p
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.35 }}
+                className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-gray-500 dark:text-gray-400"
+              >
+                Payments
+              </motion.p>
+              <motion.h1
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.05 }}
+                className="mt-4 text-balance text-[clamp(1.9rem,4.2vw,3.8rem)] font-semibold uppercase leading-[0.98]"
+              >
+                Complete your subscription securely.
+              </motion.h1>
+              <motion.p
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.1 }}
+                className="mt-5 max-w-[58ch] text-sm leading-8 text-gray-700 dark:text-gray-300"
+              >
+                Choose the payment channel that fits you. Copy details directly,
+                make payment, then upload confirmation on your billing page.
+              </motion.p>
+            </div>
+            <div className="flex flex-col justify-between border-t border-gray-300 bg-[#171b1d] p-7 text-gray-100 dark:border-gray-800 sm:p-10 lg:border-l lg:border-t-0">
+              <div>
+                <p className="text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-gray-400">
+                  Important
+                </p>
+                <p className="mt-3 text-sm leading-8 text-gray-300">
+                  After payment, upload your transaction proof under your active
+                  subscription for verification.
+                </p>
+              </div>
+              <Button
+                asChild
+                className="mt-8 h-10 rounded-none bg-gray-100 text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-gray-900 hover:bg-gray-200"
+              >
+                <Link href="/dashboard/billing">
+                  Go to billing
+                  <ChevronRightIcon className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </section>
 
-      <div>
-        {/* Payment Methods Tabs */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="max-w-5xl mx-auto"
-        >
+        <section className="border-x border-b border-gray-300 py-14 dark:border-gray-800 md:py-16">
           <Tabs defaultValue="mobile" className="w-full">
-            <TabsList className="grid w-full grid-cols-3 mb-10 bg-gray-100 dark:bg-gray-800 rounded-2xl p-2">
-              <TabsTrigger 
-                value="mobile" 
-                className="group data-[state=active]:bg-white dark:data-[state=active]:bg-gray-900 data-[state=active]:shadow-sm rounded-xl py-3"
+            <TabsList className="grid h-auto w-full grid-cols-3 rounded-none border border-gray-300 bg-white/60 p-1 dark:border-gray-800 dark:bg-[#171b1d]">
+              <TabsTrigger
+                value="mobile"
+                className="rounded-none border border-transparent py-3 data-[state=active]:border-gray-300 data-[state=active]:bg-[#ece8df] dark:data-[state=active]:border-gray-700 dark:data-[state=active]:bg-[#111416]"
               >
-                <div className="flex items-center gap-2 py-2">
-                  <SmartphoneIcon className="h-5 w-5 text-green-600 dark:text-green-400" />
-                  <span>Mobile Money</span>
-                </div>
+                <SmartphoneIcon className="mr-2 h-4 w-4" />
+                Mobile Money
               </TabsTrigger>
-              <TabsTrigger 
-                value="bank" 
-                className="group data-[state=active]:bg-white dark:data-[state=active]:bg-gray-900 data-[state=active]:shadow-sm rounded-xl py-3"
+              <TabsTrigger
+                value="bank"
+                className="rounded-none border border-transparent py-3 data-[state=active]:border-gray-300 data-[state=active]:bg-[#ece8df] dark:data-[state=active]:border-gray-700 dark:data-[state=active]:bg-[#111416]"
               >
-                <div className="flex items-center gap-2 py-2">
-                  <LandmarkIcon className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                  <span>Bank Transfer</span>
-                </div>
+                <LandmarkIcon className="mr-2 h-4 w-4" />
+                Bank Transfer
               </TabsTrigger>
-              <TabsTrigger 
-                value="international" 
-                className="group data-[state=active]:bg-white dark:data-[state=active]:bg-gray-900 data-[state=active]:shadow-sm rounded-xl py-3"
+              <TabsTrigger
+                value="international"
+                className="rounded-none border border-transparent py-3 data-[state=active]:border-gray-300 data-[state=active]:bg-[#ece8df] dark:data-[state=active]:border-gray-700 dark:data-[state=active]:bg-[#111416]"
               >
-                <div className="flex items-center gap-2 py-2">
-                  <DollarSignIcon className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-                  <span>International</span>
-                </div>
+                <DollarSignIcon className="mr-2 h-4 w-4" />
+                International
               </TabsTrigger>
             </TabsList>
-            
-            {/* Mobile Money Content */}
-            <TabsContent value="mobile">
-              <motion.div variants={itemVariants}>
-                <Card className="border-green-100 dark:border-green-900/50 overflow-hidden shadow-lg rounded-2xl">
-                  <div className="h-2 bg-gradient-to-r from-green-500 to-green-600 w-full"></div>
-                  <CardHeader>
-                    <div className="flex items-center gap-4">
-                      <div className="p-3 rounded-full bg-green-100 dark:bg-green-900/30">
-                        <SmartphoneIcon className="h-8 w-8 text-green-600 dark:text-green-400" />
-                      </div>
-                      <div>
-                        <CardTitle className="text-2xl">Mobile Money</CardTitle>
-                        <CardDescription>Most Preferred Method in Uganda</CardDescription>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    <div className="bg-gradient-to-r from-green-50 to-green-100/50 dark:from-green-900/20 dark:to-green-800/20 p-6 rounded-lg border border-green-200 dark:border-green-800/30">
-                      <p className="text-green-700 dark:text-green-300 font-medium mb-2 text-sm uppercase tracking-wide">Send Payment To:</p>
-                      
-                      <div className="space-y-4">
-                        <PaymentDetail 
-                          label="Phone Number" 
-                          value="+256752206865" 
-                          color="green"
-                          isCopied={activeCopyStates['mobile-phone']}
-                          onCopy={() => handleCopy('+256752206865', 'mobile-phone')}
-                        />
-                        
-                        <PaymentDetail 
-                          label="Account Name" 
-                          value="Abel Wilson Walekhwa" 
-                          color="green"
-                          isCopied={activeCopyStates['mobile-name']}
-                          onCopy={() => handleCopy('Abel Wilson Walekhwa', 'mobile-name')}
-                        />
-                      </div>
-                    </div>
-                    
-                    <div className="p-4 rounded-lg bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-800/30">
-                      <div className="flex gap-3">
-                        <InfoIcon className="h-5 w-5 text-amber-500 dark:text-amber-400 flex-shrink-0 mt-0.5" />
-                        <div>
-                          <p className="text-amber-800 dark:text-amber-300 text-sm">
-                            After sending money, please save the transaction reference number. You'll need it to confirm your payment.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                  <CardFooter className="flex justify-between border-t border-green-100 dark:border-green-900/30 px-6 py-4 bg-green-50/50 dark:bg-green-900/10">
-                    <div className="text-sm text-green-700 dark:text-green-300 flex items-center">
-                      <CalendarIcon className="h-4 w-4 mr-2" />
-                      <span>Instant confirmation</span>
-                    </div>
-                    <Button variant="outline" className="border-green-200 hover:bg-green-100 text-green-700 dark:border-green-800 dark:hover:bg-green-900/30 dark:text-green-300" asChild>
-                      <Link href="/dashboard/billing">
-                        <span>Confirm Payment</span>
-                        <ChevronRightIcon className="h-4 w-4 ml-2" />
-                      </Link>
-                    </Button>
-                  </CardFooter>
-                </Card>
-              </motion.div>
+
+            <TabsContent value="mobile" className="mt-5">
+              <PaymentPanel
+                title="Mobile Money"
+                subtitle="Most preferred method in Uganda"
+                accent="green"
+                eta="Instant confirmation"
+                note="After sending money, save the transaction reference number for payment confirmation."
+                rows={[
+                  {
+                    id: "mobile-phone",
+                    label: "Phone Number",
+                    value: "+256752206865",
+                  },
+                  {
+                    id: "mobile-name",
+                    label: "Account Name",
+                    value: "Abel Wilson Walekhwa",
+                  },
+                ]}
+                activeCopyStates={activeCopyStates}
+                onCopy={handleCopy}
+              />
             </TabsContent>
-            
-            {/* Bank Transfer Content */}
-            <TabsContent value="bank">
-              <motion.div variants={itemVariants}>
-                <Card className="border-blue-100 dark:border-blue-900/50 overflow-hidden shadow-lg rounded-2xl">
-                  <div className="h-2 bg-gradient-to-r from-blue-500 to-blue-600 w-full"></div>
-                  <CardHeader>
-                    <div className="flex items-center gap-4">
-                      <div className="p-3 rounded-full bg-blue-100 dark:bg-blue-900/30">
-                        <LandmarkIcon className="h-8 w-8 text-blue-600 dark:text-blue-400" />
-                      </div>
-                      <div>
-                        <CardTitle className="text-2xl">Bank Transfer</CardTitle>
-                        <CardDescription>Local Bank Transfer in Uganda</CardDescription>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    <div className="bg-gradient-to-r from-blue-50 to-blue-100/50 dark:from-blue-900/20 dark:to-blue-800/20 p-6 rounded-lg border border-blue-200 dark:border-blue-800/30">
-                      <p className="text-blue-700 dark:text-blue-300 font-medium mb-4 text-sm uppercase tracking-wide">Bank Account Details:</p>
-                      
-                      <div className="space-y-4">
-                        <PaymentDetail 
-                          label="Bank Name" 
-                          value="Centenary Rural Development Bank" 
-                          color="blue"
-                          isCopied={activeCopyStates['bank-name']}
-                          onCopy={() => handleCopy('Centenary Rural Development Bank', 'bank-name')}
-                        />
-                        
-                        <PaymentDetail 
-                          label="Account Name" 
-                          value="AFRICAN CENTER FOR CAREER MENTORSHIP" 
-                          color="blue"
-                          isCopied={activeCopyStates['bank-account-name']}
-                          onCopy={() => handleCopy('AFRICAN CENTER FOR CAREER MENTORSHIP', 'bank-account-name')}
-                        />
-                        
-                        <PaymentDetail 
-                          label="Account Number" 
-                          value="3203652885" 
-                          color="blue"
-                          isCopied={activeCopyStates['bank-account-number']}
-                          onCopy={() => handleCopy('3203652885', 'bank-account-number')}
-                        />
-                        
-                        <PaymentDetail 
-                          label="Branch" 
-                          value="Mbale" 
-                          color="blue"
-                          isCopied={activeCopyStates['bank-branch']}
-                          onCopy={() => handleCopy('Mbale', 'bank-branch')}
-                        />
-                      </div>
-                    </div>
-                    
-                    <div className="p-4 rounded-lg bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-800/30">
-                      <div className="flex gap-3">
-                        <InfoIcon className="h-5 w-5 text-amber-500 dark:text-amber-400 flex-shrink-0 mt-0.5" />
-                        <div>
-                          <p className="text-amber-800 dark:text-amber-300 text-sm">
-                            Please note that bank transfers may take 1-2 business days to be processed. Include your name as reference.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                  <CardFooter className="flex justify-between border-t border-blue-100 dark:border-blue-900/30 px-6 py-4 bg-blue-50/50 dark:bg-blue-900/10">
-                    <div className="text-sm text-blue-700 dark:text-blue-300 flex items-center">
-                      <CalendarIcon className="h-4 w-4 mr-2" />
-                      <span>1-2 business days</span>
-                    </div>
-                    <Button variant="outline" className="border-blue-200 hover:bg-blue-100 text-blue-700 dark:border-blue-800 dark:hover:bg-blue-900/30 dark:text-blue-300" asChild>
-                      <Link href="/dashboard/billing">
-                        <span>Upload Receipt</span>
-                        <ChevronRightIcon className="h-4 w-4 ml-2" />
-                      </Link>
-                    </Button>
-                  </CardFooter>
-                </Card>
-              </motion.div>
+
+            <TabsContent value="bank" className="mt-5">
+              <PaymentPanel
+                title="Bank Transfer"
+                subtitle="Local bank transfer in Uganda"
+                accent="blue"
+                eta="1-2 business days"
+                note="Bank transfers may take 1-2 business days to process. Include your name as reference."
+                rows={[
+                  {
+                    id: "bank-name",
+                    label: "Bank Name",
+                    value: "Centenary Rural Development Bank",
+                  },
+                  {
+                    id: "bank-account-name",
+                    label: "Account Name",
+                    value: "AFRICAN CENTER FOR CAREER MENTORSHIP",
+                  },
+                  {
+                    id: "bank-account-number",
+                    label: "Account Number",
+                    value: "3203652885",
+                  },
+                  {
+                    id: "bank-branch",
+                    label: "Branch",
+                    value: "Mbale",
+                  },
+                ]}
+                activeCopyStates={activeCopyStates}
+                onCopy={handleCopy}
+              />
             </TabsContent>
-            
-            {/* International Transfer Content */}
-            <TabsContent value="international">
-              <motion.div variants={itemVariants}>
-                <Card className="border-purple-100 dark:border-purple-900/50 overflow-hidden shadow-lg rounded-2xl">
-                  <div className="h-2 bg-gradient-to-r from-purple-500 to-purple-600 w-full"></div>
-                  <CardHeader>
-                    <div className="flex items-center gap-4">
-                      <div className="p-3 rounded-full bg-purple-100 dark:bg-purple-900/30">
-                        <DollarSignIcon className="h-8 w-8 text-purple-600 dark:text-purple-400" />
-                      </div>
-                      <div>
-                        <CardTitle className="text-2xl">International Transfer</CardTitle>
-                        <CardDescription>US Dollar Account for International Payments</CardDescription>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    <div className="bg-gradient-to-r from-purple-50 to-purple-100/50 dark:from-purple-900/20 dark:to-purple-800/20 p-6 rounded-lg border border-purple-200 dark:border-purple-800/30">
-                      <p className="text-purple-700 dark:text-purple-300 font-medium mb-4 text-sm uppercase tracking-wide">Account Information:</p>
-                      
-                      <div className="space-y-4">
-                        <PaymentDetail 
-                          label="Currency" 
-                          value="US Dollar" 
-                          color="purple"
-                          isCopied={activeCopyStates['intl-currency']}
-                          onCopy={() => handleCopy('US Dollar', 'intl-currency')}
-                        />
-                        
-                        <PaymentDetail 
-                          label="Beneficiary" 
-                          value="ABEL WALEKHWA" 
-                          color="purple"
-                          isCopied={activeCopyStates['intl-beneficiary']}
-                          onCopy={() => handleCopy('ABEL WALEKHWA', 'intl-beneficiary')}
-                        />
-                        
-                        <PaymentDetail 
-                          label="Account Number" 
-                          value="217535467566" 
-                          color="purple"
-                          isCopied={activeCopyStates['intl-account-number']}
-                          onCopy={() => handleCopy('217535467566', 'intl-account-number')}
-                        />
-                        
-                        <PaymentDetail 
-                          label="ACH Routing Number" 
-                          value="101019644" 
-                          color="purple"
-                          isCopied={activeCopyStates['intl-ach']}
-                          onCopy={() => handleCopy('101019644', 'intl-ach')}
-                        />
-                        
-                        <PaymentDetail 
-                          label="Wire Routing Number" 
-                          value="101019644" 
-                          color="purple"
-                          isCopied={activeCopyStates['intl-wire']}
-                          onCopy={() => handleCopy('101019644', 'intl-wire')}
-                        />
-                      </div>
-                      
-                      <div className="mt-6 pt-4 border-t border-purple-200 dark:border-purple-800/30">
-                        <p className="text-purple-700 dark:text-purple-300 font-medium mb-4 text-sm uppercase tracking-wide">Bank Information:</p>
-                        
-                        <div className="space-y-4">
-                          <PaymentDetail 
-                            label="Bank Name" 
-                            value="Lead Bank" 
-                            color="purple"
-                            isCopied={activeCopyStates['intl-bank-name']}
-                            onCopy={() => handleCopy('Lead Bank', 'intl-bank-name')}
-                          />
-                          
-                          <div className="relative">
-                            <div className="flex justify-between">
-                              <p className="text-purple-700 dark:text-purple-300 text-sm font-medium">Bank Address:</p>
-                              <TooltipProvider>
-                                <Tooltip>
-                                  <TooltipTrigger asChild>
-                                    <Button 
-                                      variant="ghost" 
-                                      size="sm" 
-                                      className="h-6 px-2 text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300"
-                                      onClick={() => handleCopy('1801 Main Street\nKansas City, MO, 64108\nUnited States', 'intl-bank-address')}
-                                    >
-                                      {activeCopyStates['intl-bank-address'] ? (
-                                        <CheckIcon className="h-3 w-3" />
-                                      ) : (
-                                        <CopyIcon className="h-3 w-3" />
-                                      )}
-                                    </Button>
-                                  </TooltipTrigger>
-                                  <TooltipContent>
-                                    <p className="text-xs">
-                                      {activeCopyStates['intl-bank-address'] ? 'Copied!' : 'Copy address'}
-                                    </p>
-                                  </TooltipContent>
-                                </Tooltip>
-                              </TooltipProvider>
-                            </div>
-                            <div className="text-purple-700 dark:text-purple-300 pl-3 border-l-2 border-purple-200 dark:border-purple-700 mt-2">
-                              <p>1801 Main Street</p>
-                              <p>Kansas City, MO, 64108</p>
-                              <p>United States</p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="p-4 rounded-lg bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-800/30">
-                      <div className="flex gap-3">
-                        <InfoIcon className="h-5 w-5 text-amber-500 dark:text-amber-400 flex-shrink-0 mt-0.5" />
-                        <div>
-                          <p className="text-amber-800 dark:text-amber-300 text-sm">
-                            International transfers may take 3-5 business days to process. Please include all required information to avoid delays.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                  <CardFooter className="flex justify-between border-t border-purple-100 dark:border-purple-900/30 px-6 py-4 bg-purple-50/50 dark:bg-purple-900/10">
-                    <div className="text-sm text-purple-700 dark:text-purple-300 flex items-center">
-                      <CalendarIcon className="h-4 w-4 mr-2" />
-                      <span>3-5 business days</span>
-                    </div>
-                    <Button variant="outline" className="border-purple-200 hover:bg-purple-100 text-purple-700 dark:border-purple-800 dark:hover:bg-purple-900/30 dark:text-purple-300" asChild>
-                      <Link href="/dashboard/billing">
-                        <span>Upload Receipt</span>
-                        <ChevronRightIcon className="h-4 w-4 ml-2" />
-                      </Link>
-                    </Button>
-                  </CardFooter>
-                </Card>
-              </motion.div>
+
+            <TabsContent value="international" className="mt-5">
+              <PaymentPanel
+                title="International Transfer"
+                subtitle="US Dollar account details"
+                accent="purple"
+                eta="3-5 business days"
+                note="International transfers may take 3-5 business days. Include complete beneficiary details to avoid delays."
+                rows={[
+                  { id: "intl-currency", label: "Currency", value: "US Dollar" },
+                  { id: "intl-beneficiary", label: "Beneficiary", value: "ABEL WALEKHWA" },
+                  {
+                    id: "intl-account-number",
+                    label: "Account Number",
+                    value: "217535467566",
+                  },
+                  {
+                    id: "intl-ach",
+                    label: "ACH Routing Number",
+                    value: "101019644",
+                  },
+                  {
+                    id: "intl-wire",
+                    label: "Wire Routing Number",
+                    value: "101019644",
+                  },
+                  { id: "intl-bank-name", label: "Bank Name", value: "Lead Bank" },
+                  {
+                    id: "intl-bank-address",
+                    label: "Bank Address",
+                    value: "1801 Main Street, Kansas City, MO, 64108, United States",
+                  },
+                ]}
+                activeCopyStates={activeCopyStates}
+                onCopy={handleCopy}
+              />
             </TabsContent>
           </Tabs>
+        </section>
 
-          {/* Additional Information */}
-          <motion.div 
-            variants={itemVariants}
-            className="mt-10 shadow-md rounded-lg overflow-hidden border border-blue-100 dark:border-blue-900/30"
-          >
-            <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/10 dark:to-purple-900/10 p-6 relative">
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-purple-500"></div>
-              <div className="flex items-start gap-4">
-                <div className="p-2 rounded-full bg-blue-100 dark:bg-blue-900/30 mt-1">
-                  <InfoIcon className="h-5 w-5 text-blue-700 dark:text-blue-300" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-medium mb-2 text-blue-700 dark:text-blue-300">Payment Confirmation</h3>
-                  <p className="text-muted-foreground">
-                    After making the payment, please upload the payment receipt against the Subscription you are paying for. You can do this on the{" "}
-                    <Link
-                      href="/dashboard/billing"
-                      className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium"
-                    >
-                      Subscriptions Page
-                    </Link>.
-                  </p>
-                </div>
-              </div>
+        <section className="border border-t-0 border-gray-300 dark:border-gray-800">
+          <div className="grid md:grid-cols-[1.1fr_0.9fr]">
+            <div className="bg-[#171b1d] px-6 py-10 text-gray-100 sm:px-10">
+              <p className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-gray-400">
+                Confirmation
+              </p>
+              <h2 className="mt-3 text-balance text-[clamp(1.6rem,3vw,2.7rem)] font-semibold uppercase leading-tight">
+                Upload your receipt to complete verification.
+              </h2>
+              <p className="mt-4 max-w-[48ch] text-sm leading-8 text-gray-300">
+                Once payment is made, upload your transaction proof against the
+                subscription you are paying for.
+              </p>
             </div>
-          </motion.div>
-        </motion.div>
-      </div>
+            <div className="flex items-center justify-center bg-[#ece8df] p-6 dark:bg-[#0f1315] sm:p-10">
+              <Button
+                asChild
+                className="h-10 w-full max-w-sm rounded-none bg-gray-900 text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-gray-50 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200"
+              >
+                <Link href="/dashboard/billing">
+                  Upload receipt
+                  <ChevronRightIcon className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </section>
+      </main>
     </div>
   );
 }
 
-// Helper component for payment details with copy functionality
-function PaymentDetail({ 
-  label, 
-  value, 
-  color = "blue",
-  isCopied = false,
-  onCopy
+function PaymentPanel({
+  title,
+  subtitle,
+  rows,
+  note,
+  eta,
+  accent,
+  activeCopyStates,
+  onCopy,
+}: {
+  title: string;
+  subtitle: string;
+  rows: { id: string; label: string; value: string }[];
+  note: string;
+  eta: string;
+  accent: "green" | "blue" | "purple";
+  activeCopyStates: Record<string, boolean>;
+  onCopy: (text: string, id: string) => void;
+}) {
+  return (
+    <article className="border border-gray-300 bg-white/70 p-6 dark:border-gray-800 dark:bg-[#171b1d]">
+      <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-start">
+        <div>
+          <p className="text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-gray-500 dark:text-gray-400">
+            {subtitle}
+          </p>
+          <h2 className="mt-1 text-xl font-semibold uppercase tracking-[0.03em]">
+            {title}
+          </h2>
+        </div>
+        <div className="inline-flex items-center border border-gray-300 px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-gray-600 dark:border-gray-700 dark:text-gray-300">
+          <CalendarIcon className="mr-1.5 h-3.5 w-3.5" />
+          {eta}
+        </div>
+      </div>
+
+      <div className="mt-5 grid gap-3 md:grid-cols-2">
+        {rows.map((row) => (
+          <PaymentDetail
+            key={row.id}
+            label={row.label}
+            value={row.value}
+            accent={accent}
+            isCopied={!!activeCopyStates[row.id]}
+            onCopy={() => onCopy(row.value, row.id)}
+          />
+        ))}
+      </div>
+
+      <div className="mt-5 border border-amber-200 bg-amber-50/80 p-4 dark:border-amber-800/30 dark:bg-amber-900/10">
+        <p className="flex gap-2 text-sm leading-7 text-amber-800 dark:text-amber-300">
+          <InfoIcon className="mt-0.5 h-4 w-4 flex-shrink-0" />
+          {note}
+        </p>
+      </div>
+    </article>
+  );
+}
+
+function PaymentDetail({
+  label,
+  value,
+  accent,
+  isCopied,
+  onCopy,
 }: {
   label: string;
   value: string;
-  color?: "green" | "blue" | "purple";
-  isCopied?: boolean;
+  accent: "green" | "blue" | "purple";
+  isCopied: boolean;
   onCopy: () => void;
 }) {
   return (
-    <div className="relative">
-      <div className="flex justify-between">
-        <p className={cn(
-          "text-sm font-medium",
-          color === "green" && "text-green-700 dark:text-green-300",
-          color === "blue" && "text-blue-700 dark:text-blue-300",
-          color === "purple" && "text-purple-700 dark:text-purple-300"
-        )}>
-          {label}:
+    <div className="border border-gray-300 bg-white p-4 dark:border-gray-700 dark:bg-[#111416]">
+      <div className="flex items-center justify-between gap-2">
+        <p className="text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-gray-500 dark:text-gray-400">
+          {label}
         </p>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                className={cn(
-                  "h-6 px-2 hover:bg-transparent",
-                  color === "green" && "text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300",
-                  color === "blue" && "text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300", 
-                  color === "purple" && "text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300"
-                )}
-                onClick={onCopy}
-              >
-                {isCopied ? (
-                  <CheckIcon className="h-3 w-3" />
-                ) : (
-                  <CopyIcon className="h-3 w-3" />
-                )}
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p className="text-xs">{isCopied ? 'Copied!' : 'Copy to clipboard'}</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <Button
+          variant="ghost"
+          size="sm"
+          className={cn(
+            "h-7 rounded-none border border-transparent px-2 text-xs",
+            accent === "green" && "text-green-700 dark:text-green-300",
+            accent === "blue" && "text-blue-700 dark:text-blue-300",
+            accent === "purple" && "text-purple-700 dark:text-purple-300"
+          )}
+          onClick={onCopy}
+        >
+          {isCopied ? <CheckIcon className="h-3.5 w-3.5" /> : <CopyIcon className="h-3.5 w-3.5" />}
+        </Button>
       </div>
-      <p className={cn(
-        "text-base font-medium mt-1",
-        color === "green" && "text-green-900 dark:text-green-50",
-        color === "blue" && "text-blue-900 dark:text-blue-50",
-        color === "purple" && "text-purple-900 dark:text-purple-50"
-      )}>
+      <p className="mt-2 break-all text-sm font-medium leading-7 text-gray-800 dark:text-gray-100">
         {value}
       </p>
     </div>
