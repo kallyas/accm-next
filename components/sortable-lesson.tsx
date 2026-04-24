@@ -41,7 +41,7 @@ export const SortableLesson = ({ lesson, index, removeLesson, form }) => {
             <Trash2 className="h-4 w-4" />
           </Button>
           <div {...attributes} {...listeners}>
-            <GripVertical className="h-5 w-5 text-gray-500" />
+            <GripVertical className="h-5 w-5 text-[#1A1B4B]/70" />
           </div>
         </div>
       </div>
