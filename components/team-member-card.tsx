@@ -117,4 +117,3 @@ export function TeamMemberCardComponent({
   return <TeamMemberCard member={member} index={index} />;
 }
 
-export { TeamMemberCard };
