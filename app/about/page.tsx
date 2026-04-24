@@ -1,403 +1,465 @@
 "use client";
 
 import Image from "next/image";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  CheckCircle,
-  Users,
-  Target,
-  Lightbulb,
-  Award,
-  Star,
-  Handshake,
-  Clock,
-  BookOpen,
-  Building,
-  HeartHandshake,
-  Book,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import {
+  Award,
+  Book,
+  BookOpen,
+  Building,
+  CheckCircle,
+  Handshake,
+  HeartHandshake,
+  Lightbulb,
+  Star,
+  Target,
+  Users,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+
+const coreValues = [
+  {
+    icon: Award,
+    title: "Professionalism",
+    description:
+      "We maintain the highest standards of professional conduct in all interactions.",
+  },
+  {
+    icon: Book,
+    title: "Research",
+    description:
+      "We ground our guidance in evidence-based practices and continuous learning.",
+  },
+  {
+    icon: Star,
+    title: "Excellence",
+    description:
+      "We pursue quality in every mentoring pathway, programme, and learner touchpoint.",
+  },
+  {
+    icon: Handshake,
+    title: "Collaboration",
+    description:
+      "We co-create outcomes with institutions, mentors, and professionals across Africa.",
+  },
+];
+
+const objectives = [
+  {
+    icon: Building,
+    title: "Build a Sustainable and Self-Financing Organisation",
+    description:
+      "Grow to 500 full-time staff and achieve 80% funding from earned revenue.",
+  },
+  {
+    icon: BookOpen,
+    title: "Develop Comprehensive Career Mentorship Curricula",
+    description: "Create 50+ curricula across all disciplines and levels.",
+  },
+  {
+    icon: Building,
+    title: "Establish a Continental Mentorship Network",
+    description:
+      "Build 5 primary hubs and 15 secondary hubs with presence in all 54 African countries.",
+  },
+  {
+    icon: Target,
+    title: "Expand Access to Career Guidance Services",
+    description:
+      "Reach 100 million active users annually through digital and physical platforms.",
+  },
+  {
+    icon: Users,
+    title: "Institutionalise Career Guidance Systems",
+    description:
+      "Integrate structured career guidance into universities and schools across Africa.",
+  },
+  {
+    icon: Users,
+    title: "Deliver Human Capital Development Programmes",
+    description:
+      "Train 100,000 professionals annually through applied programmes and mentorship.",
+  },
+  {
+    icon: Lightbulb,
+    title: "Deploy Advanced Technology",
+    description:
+      "Deploy AI Mentor and Quantum Career Simulator for personalised guidance.",
+  },
+  {
+    icon: Award,
+    title: "Implement High School Research Programme",
+    description:
+      "Support 25,000 students annually and 500,000 cumulative scholarships.",
+  },
+  {
+    icon: Book,
+    title: "Build a Pan-African Content Ecosystem",
+    description:
+      "Scale apps, books, podcasts, and certification systems for mass access.",
+  },
+];
+
+const theoryOfChange = [
+  {
+    title: "Problem",
+    points: [
+      "Limited access to structured career guidance in Africa",
+      "Mismatch between education and labor market needs",
+      "High youth unemployment and underemployment",
+    ],
+  },
+  {
+    title: "Inputs",
+    points: [
+      "Digital platforms, apps, AI tools, and online communities",
+      "Skilled mentors and partnerships with universities, employers, and governments",
+      "Funding, institutional support, research, and curriculum development",
+    ],
+  },
+  {
+    title: "Activities",
+    points: [
+      "Deliver virtual and physical mentorship",
+      "Develop and distribute career curricula",
+      "Deploy AI and quantum-based tools",
+      "Run the High School Research Programme",
+      "Establish regional hubs and provide training sessions",
+    ],
+  },
+  {
+    title: "Outputs",
+    points: [
+      "Millions of users accessing mentorship platforms",
+      "Career curricula and digital tools developed",
+      "Students matched with mentors and researchers",
+      "Career certifications issued and regional hubs operational",
+    ],
+  },
+  {
+    title: "Outcomes",
+    points: [
+      "Increased employability and career readiness",
+      "More scholarship placements and career transitions",
+      "Stronger institutional career guidance systems",
+      "Increased professional skills across the workforce",
+    ],
+  },
+  {
+    title: "Impact",
+    points: [
+      "Reduced youth unemployment",
+      "Improved human capital development",
+      "Increased socioeconomic mobility",
+      "A transformed African workforce aligned with global opportunities",
+    ],
+  },
+];
+
+const previousWork = [
+  "Conducted a Leadership and Change Management training at Give Directly, Uganda, December 2023",
+  "Excellence at work, Career Visualization and Conflicts resolution at African Youth Action Network, July, 2023 and January 2024",
+  "International Coaching for professionals with success rate of 98.1% admission stage and scholarship at 82.7% for 2023-24",
+  "Youth empowered leadership and entrepreneurship inaugural project, July-September 2023",
+];
+
+const communityService = [
+  "Contributed to education services access through Nalusaga Young Persons Savings and Cooperative Society LTD, Himutu Subcounty, Butaleja District (REG NO P9392/RCS) (USD 4,174)",
+  "Supported girl child school retention project at Butaleja Technical Institute, 2023 (USD 55.5)",
+];
 
 export default function AboutPage() {
-  // Animation variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5 },
-    },
-  };
-
   return (
-    <div className="container mx-auto max-w-7xl px-4 py-10">
-      {/* Hero Section */}
-      <section className="relative mb-16 rounded-2xl overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-gray-900/80 to-gray-800/80 z-10" />
-        <Image
-          src="/accm/IMG_4727.JPG"
-          alt="African Centre For Career Mentorship Team"
-          width={1200}
-          height={500}
-          className="object-cover w-full h-[300px] md:h-[400px]"
-        />
-        <div className="absolute inset-0 z-20 flex flex-col justify-center items-center text-white text-center p-6">
-          <motion.h1 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-            className="text-4xl md:text-5xl font-bold mb-4"
-          >
-            About African Centre For Career Mentorship
-          </motion.h1>
-          <motion.p 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.7, delay: 0.3 }}
-            className="text-lg md:text-xl max-w-2xl"
-          >
-            A sustainable center of excellence for career mentorship and human capital development in Africa
-          </motion.p>
-        </div>
-      </section>
+    <div className="bg-[#f7f5f1] text-gray-900 dark:bg-[#111416] dark:text-gray-100">
+      <main className="mx-auto w-full max-w-[88rem] px-5 py-10 sm:px-7 lg:px-10">
+        <section className="border border-gray-300 dark:border-gray-800">
+          <div className="grid gap-0 lg:grid-cols-[1.1fr_0.9fr]">
+            <div className="relative min-h-[22rem]">
+              <Image
+                src="/accm/IMG_4727.JPG"
+                alt="African Centre For Career Mentorship Team"
+                fill
+                className="object-cover"
+                priority
+              />
+              <div className="absolute inset-0 bg-black/35" />
+            </div>
+            <div className="bg-[#ece8df] p-7 dark:bg-[#171b1d] sm:p-10">
+              <motion.p
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.35 }}
+                className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-gray-500 dark:text-gray-400"
+              >
+                About ACCM
+              </motion.p>
+              <motion.h1
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.05 }}
+                className="mt-4 text-balance text-[clamp(1.9rem,4.1vw,3.7rem)] font-semibold uppercase leading-[0.98]"
+              >
+                Career mentorship as infrastructure for Africa.
+              </motion.h1>
+              <motion.p
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.1 }}
+                className="mt-5 text-sm leading-8 text-gray-700 dark:text-gray-300"
+              >
+                We are building a sustainable centre of excellence for career
+                mentorship and human capital development at scale.
+              </motion.p>
+            </div>
+          </div>
+        </section>
 
-      {/* Main Content */}
-      <div>
-        {/* Our Story Section */}
-        <motion.section 
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="mb-16"
-        >
-          <div className="grid gap-10 md:grid-cols-2 items-center">
-            <motion.div variants={itemVariants} className="order-2 md:order-1">
-              <div className="relative">
-                <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-teal-500 rounded-xl blur opacity-20"></div>
-                <Image
-                  src="/accm/IMG_4727.JPG"
-                  alt="Team at African Centre For Career Mentorship"
-                  width={600}
-                  height={400}
-                  className="rounded-lg relative shadow-xl"
-                />
-              </div>
-            </motion.div>
-            <motion.div variants={itemVariants} className="order-1 md:order-2">
-              <h2 className="text-3xl font-bold mb-6 text-gradient-primary">Our Story</h2>
-              <div className="space-y-4 text-muted-foreground">
-                <p className="text-lg">
-                  African Centre For Career Mentorship is a sustainable center of excellence dedicated to empowering professionals across Africa through expert guidance and innovative career development programs.
-                </p>
-                <p className="text-lg">
-                  Founded by Abel Wilson Walekhwa, our mission is to bridge the gap between education and industry needs, fostering a new generation of skilled and confident professionals ready to take on the challenges of the modern workplace.
-                </p>
-                <p className="text-lg">
-                  Through our unique 4WFramework and personalized mentorship approach, we've helped thousands of individuals unlock their potential and achieve their career goals.
-                </p>
-              </div>
-              <div className="mt-8">
-                <Button asChild className="bg-gradient-primary hover:from-blue-700 hover:to-teal-600 text-white">
-                  <Link href="/contact">Connect With Us</Link>
+        <section className="border-x border-b border-gray-300 py-14 dark:border-gray-800 md:py-16">
+          <div className="grid gap-10 lg:grid-cols-[0.92fr_1.08fr]">
+            <div className="space-y-4">
+              <p className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-gray-500 dark:text-gray-400">
+                Our story
+              </p>
+              <h2 className="text-balance text-[clamp(1.55rem,3vw,2.7rem)] font-semibold uppercase leading-tight">
+                We equip youth and professionals with market-relevant direction.
+              </h2>
+            </div>
+            <div className="space-y-5 text-sm leading-8 text-gray-700 dark:text-gray-300">
+              <p>
+                African Centre For Career Mentorship is building a scalable,
+                technology-driven ecosystem that transforms career guidance
+                access across Africa.
+              </p>
+              <p>
+                We support professionals to discover and activate their full
+                potential through mentorship, structured learning, and practical
+                labour-market alignment.
+              </p>
+              <p>
+                By 2050, our ambition is to drive socioeconomic transformation by
+                reaching millions through strategic partnerships and advanced
+                career technologies.
+              </p>
+              <div className="pt-2">
+                <Button
+                  asChild
+                  className="h-10 rounded-none bg-gray-900 px-5 text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-gray-50 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200"
+                >
+                  <Link href="/contact">Connect with us</Link>
                 </Button>
               </div>
-            </motion.div>
+            </div>
           </div>
-        </motion.section>
+        </section>
 
-        {/* Vision, Mission, Goal Section */}
-        <motion.section 
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          className="mb-16"
-        >
-          <div className="grid gap-6 md:grid-cols-3">
-            <motion.div variants={itemVariants}>
-              <Card className="h-full hover:shadow-lg transition-shadow duration-300 border-blue-100 dark:border-blue-900/50">
-                <CardHeader className="pb-2">
-                  <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center mb-4">
-                    <Lightbulb className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-                  </div>
-                  <CardTitle className="text-2xl text-gradient-primary">Our Vision</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-lg text-muted-foreground">
-                    A sustainable centre of excellence for Career Mentorship and Human Capital Development in Africa.
-                  </p>
-                </CardContent>
-              </Card>
-            </motion.div>
-            
-            <motion.div variants={itemVariants}>
-              <Card className="h-full hover:shadow-lg transition-shadow duration-300 border-teal-100 dark:border-teal-900/50">
-                <CardHeader className="pb-2">
-                  <div className="w-12 h-12 rounded-full bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center mb-4">
-                    <Target className="h-6 w-6 text-teal-600 dark:text-teal-400" />
-                  </div>
-                  <CardTitle className="text-2xl text-gradient-primary">Our Mission</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-lg text-muted-foreground">
-                    To set up a functional and Sustainable Centre of Excellence for Career Mentorship and Human Capital Development in Uganda by December 2025.
-                  </p>
-                </CardContent>
-              </Card>
-            </motion.div>
-            
-            <motion.div variants={itemVariants}>
-              <Card className="h-full hover:shadow-lg transition-shadow duration-300 border-purple-100 dark:border-purple-900/50">
-                <CardHeader className="pb-2">
-                  <div className="w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center mb-4">
-                    <Target className="h-6 w-6 text-purple-600 dark:text-purple-400" />
-                  </div>
-                  <CardTitle className="text-2xl text-gradient-primary">Our Goal</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-lg text-muted-foreground">
-                    To equip youths and professionals with growing and changing job market skills and support them their full potentials for socio-economic transformation of Africa.
-                  </p>
-                </CardContent>
-              </Card>
-            </motion.div>
-          </div>
-        </motion.section>
-
-        {/* Values Section */}
-        <motion.section
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          className="mb-16"
-        >
-          <div className="text-center mb-10">
-            <h2 className="text-3xl font-bold mb-4 text-gradient-primary">Our Core Values</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              These principles guide our approach to empowering professionals and transforming careers across Africa.
-            </p>
-          </div>
-          
-          <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-4">
+        <section className="border-x border-b border-gray-300 py-14 dark:border-gray-800 md:py-16">
+          <div className="grid gap-5 md:grid-cols-3">
             {[
-              { icon: Award, title: "Professionalism", description: "We maintain the highest standards of professional conduct in all our interactions." },
-              { icon: Book, title: "Research", description: "We base our approaches on thorough research and evidence-based practices." },
-              { icon: Star, title: "Excellence", description: "We strive for excellence in all our programs and services." },
-              { icon: Handshake, title: "Collaboration", description: "We believe in the power of working together to achieve greater impact." },
-            ].map((value, index) => (
-              <motion.div key={index} variants={itemVariants}>
-                <Card className="h-full hover:shadow-lg transition-all duration-300 group border-blue-100/50 dark:border-blue-900/30 hover:border-blue-300 dark:hover:border-blue-700">
-                  <CardHeader className="pb-2">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-100 to-teal-100 dark:from-blue-900/30 dark:to-teal-900/30 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                      <value.icon className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-                    </div>
-                    <CardTitle className="text-xl">{value.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <CardDescription className="text-base">
-                      {value.description}
-                    </CardDescription>
-                  </CardContent>
-                </Card>
-              </motion.div>
+              {
+                title: "Vision",
+                body: "A sustainable centre of excellence for Career Mentorship and Human Capital Development in Africa.",
+              },
+              {
+                title: "Mission",
+                body: "Equip youths and professionals with growing and changing job market skills while supporting socioeconomic transformation.",
+              },
+              {
+                title: "Goal",
+                body: "Build a scalable, technology-driven mentorship ecosystem reaching millions by 2050.",
+              },
+            ].map((item) => (
+              <article
+                key={item.title}
+                className="border border-gray-300 bg-white/70 p-5 dark:border-gray-800 dark:bg-[#171b1d]"
+              >
+                <p className="text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">
+                  {item.title}
+                </p>
+                <p className="mt-3 text-sm leading-8 text-gray-700 dark:text-gray-300">
+                  {item.body}
+                </p>
+              </article>
             ))}
           </div>
-        </motion.section>
+        </section>
 
-        {/* Objectives Section */}
-        <motion.section
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.1 }}
-          className="mb-16"
-        >
-          <div className="text-center mb-10">
-            <h2 className="text-3xl font-bold mb-4 text-gradient-primary">Specific Objectives</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Our strategic roadmap to create lasting impact in career development across Africa.
+        <section className="border-x border-b border-gray-300 py-14 dark:border-gray-800 md:py-16">
+          <div className="mb-8">
+            <p className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-gray-500 dark:text-gray-400">
+              Core values
             </p>
+            <h2 className="mt-2 text-balance text-[clamp(1.5rem,2.8vw,2.4rem)] font-semibold uppercase leading-tight">
+              Principles that shape how we mentor and build.
+            </h2>
           </div>
-          
-          <div className="bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm rounded-xl p-8 border border-blue-100 dark:border-blue-900/30 shadow-sm">
-            <div className="grid gap-6 md:grid-cols-2">
-              {[
-                {
-                  icon: Building,
-                  title: "Sustainable Organization",
-                  description: "To grow a sustainable and accountable organization by December 2025.",
-                  deadline: "December 2025"
-                },
-                {
-                  icon: Users,
-                  title: "Human Capital Development",
-                  description: "To design and implement professional Human Capital Development program for over 300 staff from 10 different organizations by December 2024.",
-                  deadline: "December 2024"
-                },
-                {
-                  icon: BookOpen,
-                  title: "Career Mentorship Curriculum",
-                  description: "To develop a two-career mentorship curricular for Science, Technology, Engineering and Mathematics and Humanities students leaving universities and colleges in Uganda by June 2024.",
-                  deadline: "June 2024"
-                },
-                {
-                  icon: Building,
-                  title: "Mentorship Centre",
-                  description: "To set up one carrier mentorship Centre For both STEM and Humanities students leaving universities and colleges in Uganda by December 2023.",
-                  deadline: "December 2023"
-                },
-                {
-                  icon: Users,
-                  title: "Career Services Initiation",
-                  description: "To initiate a career mentorship services for both STEM and Humanities students from Kampala metropolitan area from 0 to 2M by December 2024.",
-                  deadline: "December 2024"
-                },
-                {
-                  icon: Users,
-                  title: "Career Services Advancement",
-                  description: "To advance Career services for 1M students in 10 academic institutions and universities in Kampala metropolitan area by December 2025.",
-                  deadline: "December 2025"
-                },
-              ].map((objective, index) => (
-                <motion.div key={index} variants={itemVariants}>
-                  <div className="flex gap-4">
-                    <div className="mt-1">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-100 to-teal-100 dark:from-blue-900/30 dark:to-teal-900/30 flex items-center justify-center">
-                        <objective.icon className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                      </div>
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold mb-1">{objective.title}</h3>
-                      <p className="text-muted-foreground mb-2">{objective.description}</p>
-                      <div className="flex items-center text-sm text-muted-foreground">
-                        <Clock className="h-4 w-4 mr-1" />
-                        <span>Target: {objective.deadline}</span>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {coreValues.map((value, index) => (
+              <article
+                key={value.title}
+                className={`border border-gray-300 bg-white/70 p-5 dark:border-gray-800 dark:bg-[#171b1d] ${
+                  index === 1 ? "lg:translate-y-6" : ""
+                }`}
+              >
+                <value.icon className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+                <h3 className="mt-4 text-base font-semibold uppercase tracking-[0.03em]">
+                  {value.title}
+                </h3>
+                <p className="mt-2 text-sm leading-7 text-gray-700 dark:text-gray-300">
+                  {value.description}
+                </p>
+              </article>
+            ))}
           </div>
-        </motion.section>
+        </section>
 
-        {/* Impact Section */}
-        <motion.section
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.1 }}
-          className="mb-16"
-        >
-          <div className="text-center mb-10">
-            <h2 className="text-3xl font-bold mb-4 text-gradient-primary">Our Impact</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Real results through dedication to transformative leadership and career development.
+        <section className="border-x border-b border-gray-300 py-14 dark:border-gray-800 md:py-16">
+          <div className="mb-8">
+            <p className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-gray-500 dark:text-gray-400">
+              Strategic objectives by 2050
             </p>
+            <h2 className="mt-2 text-balance text-[clamp(1.5rem,2.8vw,2.4rem)] font-semibold uppercase leading-tight">
+              The roadmap for long-term continental impact.
+            </h2>
           </div>
-          
-          <div className="grid gap-8 md:grid-cols-2">
-            <motion.div variants={itemVariants}>
-              <Card className="h-full hover:shadow-lg transition-shadow duration-300 border-blue-100 dark:border-blue-900/50 overflow-hidden">
-                <div className="h-2 bg-gradient-to-r from-blue-600 to-blue-400 w-full"></div>
-                <CardHeader>
-                  <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center mb-4">
-                    <Award className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-                  </div>
-                  <CardTitle className="text-2xl">Previous Work</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-4">
-                    {[
-                      "Conducted a Leadership and Change Management training at Give Directly, Uganda, December 2023",
-                      "Excellence at work, Career Visualization and Conflicts resolution at African Youth Action Network, July, 2023 and January 2024",
-                      "International Coaching for professionals with success rate of 98.1% admission stage and scholarship at 82.7% for 2023-24",
-                      "Youth empowered leadership and entrepreneurship inaugural project, July-September 2023",
-                    ].map((impact, index) => (
-                      <div key={index} className="flex items-start gap-3">
-                        <CheckCircle className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-1 flex-shrink-0" />
-                        <p className="text-muted-foreground">{impact}</p>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-            
-            <motion.div variants={itemVariants}>
-              <Card className="h-full hover:shadow-lg transition-shadow duration-300 border-teal-100 dark:border-teal-900/50 overflow-hidden">
-                <div className="h-2 bg-gradient-to-r from-teal-600 to-teal-400 w-full"></div>
-                <CardHeader>
-                  <div className="w-12 h-12 rounded-full bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center mb-4">
-                    <HeartHandshake className="h-6 w-6 text-teal-600 dark:text-teal-400" />
-                  </div>
-                  <CardTitle className="text-2xl">Community Service</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-4">
-                    {[
-                      "Contributed to education services access through Nalusaga Young Persons Savings and Cooperative Society LTD, Himutu Subcounty, Butaleja District (REG NO P9392/RCS) (USD 4,174)",
-                      "Supported girl child school retention project at Butaleja Technical Institute, 2023 (USD 55.5)",
-                    ].map((service, index) => (
-                      <div key={index} className="flex items-start gap-3">
-                        <CheckCircle className="h-5 w-5 text-teal-600 dark:text-teal-400 mt-1 flex-shrink-0" />
-                        <p className="text-muted-foreground">{service}</p>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {objectives.map((objective) => (
+              <article
+                key={objective.title}
+                className="border border-gray-300 bg-white/70 p-5 dark:border-gray-800 dark:bg-[#171b1d]"
+              >
+                <objective.icon className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+                <h3 className="mt-4 text-sm font-semibold uppercase tracking-[0.06em]">
+                  {objective.title}
+                </h3>
+                <p className="mt-2 text-sm leading-7 text-gray-700 dark:text-gray-300">
+                  {objective.description}
+                </p>
+              </article>
+            ))}
           </div>
-        </motion.section>
-        
-        {/* CTA Section */}
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-        >
-          <div className="relative rounded-2xl overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-600/90 to-teal-500/90 z-10" />
-            <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] bg-repeat opacity-10 mix-blend-overlay"></div>
-            <div className="relative z-20 py-16 px-6 text-center text-white">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Transform Your Career?</h2>
-              <p className="text-lg md:text-xl max-w-2xl mx-auto mb-8">
-                Join thousands of professionals who have accelerated their careers through our mentorship programs.
+        </section>
+
+        <section className="border-x border-b border-gray-300 py-14 dark:border-gray-800 md:py-16">
+          <div className="mb-8">
+            <p className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-gray-500 dark:text-gray-400">
+              Theory of change
+            </p>
+            <h2 className="mt-2 text-balance text-[clamp(1.5rem,2.8vw,2.4rem)] font-semibold uppercase leading-tight">
+              How our actions translate into measurable outcomes.
+            </h2>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {theoryOfChange.map((block, index) => (
+              <article
+                key={block.title}
+                className="border border-gray-300 bg-white/70 p-5 dark:border-gray-800 dark:bg-[#171b1d]"
+              >
+                <p className="text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-gray-500 dark:text-gray-400">
+                  Step {index + 1}
+                </p>
+                <h3 className="mt-2 text-base font-semibold uppercase tracking-[0.03em]">
+                  {block.title}
+                </h3>
+                <ul className="mt-3 space-y-2.5">
+                  {block.points.map((point) => (
+                    <li key={point} className="flex items-start gap-2.5">
+                      <CheckCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-gray-700 dark:text-gray-300" />
+                      <span className="text-sm leading-7 text-gray-700 dark:text-gray-300">
+                        {point}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="border-x border-b border-gray-300 py-14 dark:border-gray-800 md:py-16">
+          <div className="mb-8">
+            <p className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-gray-500 dark:text-gray-400">
+              Impact
+            </p>
+            <h2 className="mt-2 text-balance text-[clamp(1.5rem,2.8vw,2.4rem)] font-semibold uppercase leading-tight">
+              Evidence of delivery across programmes and communities.
+            </h2>
+          </div>
+          <div className="grid gap-5 md:grid-cols-2">
+            <article className="border border-gray-300 bg-white/70 p-5 dark:border-gray-800 dark:bg-[#171b1d]">
+              <div className="flex items-center gap-2">
+                <Award className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+                <h3 className="text-base font-semibold uppercase tracking-[0.03em]">
+                  Previous work
+                </h3>
+              </div>
+              <ul className="mt-4 space-y-2.5">
+                {previousWork.map((item) => (
+                  <li key={item} className="flex items-start gap-2.5">
+                    <CheckCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-gray-700 dark:text-gray-300" />
+                    <span className="text-sm leading-7 text-gray-700 dark:text-gray-300">
+                      {item}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </article>
+
+            <article className="border border-gray-300 bg-white/70 p-5 dark:border-gray-800 dark:bg-[#171b1d]">
+              <div className="flex items-center gap-2">
+                <HeartHandshake className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+                <h3 className="text-base font-semibold uppercase tracking-[0.03em]">
+                  Community service
+                </h3>
+              </div>
+              <ul className="mt-4 space-y-2.5">
+                {communityService.map((item) => (
+                  <li key={item} className="flex items-start gap-2.5">
+                    <CheckCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-gray-700 dark:text-gray-300" />
+                    <span className="text-sm leading-7 text-gray-700 dark:text-gray-300">
+                      {item}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </article>
+          </div>
+        </section>
+
+        <section className="border border-t-0 border-gray-300 dark:border-gray-800">
+          <div className="grid md:grid-cols-[1.15fr_0.85fr]">
+            <div className="bg-[#171b1d] px-6 py-10 text-gray-100 sm:px-10">
+              <p className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-gray-400">
+                Next step
               </p>
-              <div className="flex flex-wrap gap-4 justify-center">
-                <Button asChild size="lg" className="bg-white text-blue-600 hover:bg-blue-50">
-                  <Link href="/contact">Contact Us</Link>
+              <h2 className="mt-3 text-balance text-[clamp(1.6rem,3vw,2.7rem)] font-semibold uppercase leading-tight">
+                Build your growth plan with our team.
+              </h2>
+              <p className="mt-4 max-w-[48ch] text-sm leading-8 text-gray-300">
+                Whether you are beginning, pivoting, or scaling your career, we
+                can help you map a clear path and execute with confidence.
+              </p>
+            </div>
+            <div className="flex items-center justify-center bg-[#ece8df] p-6 dark:bg-[#0f1315] sm:p-10">
+              <div className="w-full max-w-sm space-y-3">
+                <Button
+                  asChild
+                  className="h-10 w-full rounded-none bg-gray-900 text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-gray-50 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200"
+                >
+                  <Link href="/contact">Contact us</Link>
                 </Button>
-                <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
-                  <Link href="/services">Explore Our Services</Link>
+                <Button
+                  asChild
+                  variant="ghost"
+                  className="h-10 w-full rounded-none border border-gray-300 text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-gray-700 hover:bg-gray-200 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800"
+                >
+                  <Link href="/services">Explore services</Link>
                 </Button>
               </div>
             </div>
           </div>
-        </motion.section>
-      </div>
+        </section>
+      </main>
     </div>
   );
 }
