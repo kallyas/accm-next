@@ -33,7 +33,7 @@ async function fetchUserProgress(): Promise<CourseProgress[]> {
 // Loading skeleton component
 function ProgressSkeleton() {
   return (
-    <Card className="animate-pulse">
+    <Card className="animate-pulse border-[#1A1B4B]/20 bg-[#FFFFFF]">
       <CardHeader>
         <Skeleton className="h-6 w-3/4" />
         <Skeleton className="h-4 w-1/2 mt-2" />
@@ -60,13 +60,13 @@ function ErrorState({ message }: { message: string }) {
 // Empty state component
 function EmptyState() {
   return (
-    <Card className="col-span-full p-6">
+    <Card className="col-span-full border-[#1A1B4B]/20 bg-[#FFFFFF] p-6">
       <div className="flex flex-col items-center text-center space-y-4">
-        <BookOpen className="h-12 w-12 text-muted-foreground" />
+        <BookOpen className="h-12 w-12 text-[#1A1B4B]/40" />
         <div className="space-y-2">
-          <h3 className="text-lg font-semibold">No Courses Found</h3>
-          <p className="text-sm text-muted-foreground">
-            You haven't enrolled in any courses yet. Start your learning journey
+          <h3 className="text-lg font-semibold text-[#1A1B4B]">No Courses Found</h3>
+          <p className="text-sm text-[#1A1B4B]/60">
+            You have not enrolled in any courses yet. Start your learning journey
             today!
           </p>
         </div>
@@ -78,16 +78,16 @@ function EmptyState() {
 // Course progress card component
 function CourseProgressCard({ course }: { course: CourseProgress }) {
   return (
-    <Card>
+    <Card className="border-[#1A1B4B]/20 bg-[#FFFFFF]">
       <CardHeader>
-        <CardTitle className="line-clamp-1">{course.courseTitle}</CardTitle>
-        <CardDescription>
+        <CardTitle className="line-clamp-1 text-[#1A1B4B]">{course.courseTitle}</CardTitle>
+        <CardDescription className="text-[#1A1B4B]/60">
           {course.completedLessons} of {course.totalLessons} lessons completed
         </CardDescription>
       </CardHeader>
       <CardContent>
         <Progress value={course.progress} className="w-full" />
-        <p className="mt-2 text-sm text-muted-foreground">
+        <p className="mt-2 text-sm text-[#1A1B4B]/60">
           {course.progress}% Complete
         </p>
       </CardContent>
@@ -109,8 +109,15 @@ export default function UserProgressPage() {
   // Loading state
   if (isLoading) {
     return (
-      <div className="container py-10">
-        <h1 className="text-3xl font-bold mb-6">My Progress</h1>
+      <div className="space-y-6">
+        <div className="space-y-2">
+          <p className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-[#26A649]">
+            Learning
+          </p>
+          <h1 className="text-2xl font-semibold uppercase tracking-tight text-[#1A1B4B] sm:text-3xl">
+            My Progress
+          </h1>
+        </div>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {[...Array(6)].map((_, i) => (
             <ProgressSkeleton key={i} />
@@ -123,8 +130,10 @@ export default function UserProgressPage() {
   // Error state
   if (error) {
     return (
-      <div className="container py-10">
-        <h1 className="text-3xl font-bold mb-6">My Progress</h1>
+      <div className="space-y-6">
+        <h1 className="text-2xl font-semibold uppercase tracking-tight text-[#1A1B4B] sm:text-3xl">
+          My Progress
+        </h1>
         <ErrorState message={(error as Error).message} />
       </div>
     );
@@ -133,8 +142,10 @@ export default function UserProgressPage() {
   // Empty state
   if (!courseProgress?.length) {
     return (
-      <div className="container py-10">
-        <h1 className="text-3xl font-bold mb-6">My Progress</h1>
+      <div className="space-y-6">
+        <h1 className="text-2xl font-semibold uppercase tracking-tight text-[#1A1B4B] sm:text-3xl">
+          My Progress
+        </h1>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           <EmptyState />
         </div>
@@ -144,8 +155,10 @@ export default function UserProgressPage() {
 
   // Success state
   return (
-    <div className="container py-10">
-      <h1 className="text-3xl font-bold mb-6">My Progress</h1>
+    <div className="space-y-6">
+      <h1 className="text-2xl font-semibold uppercase tracking-tight text-[#1A1B4B] sm:text-3xl">
+        My Progress
+      </h1>
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {courseProgress.map((course) => (
           <CourseProgressCard key={course.courseId} course={course} />
