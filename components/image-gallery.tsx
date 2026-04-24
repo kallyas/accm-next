@@ -296,7 +296,7 @@ const generateBlurDataUrl = (id: number): string => {
   const b = (colorHash + 140) % 200;
 
   const svg = `
-    <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+    <svg width="100" height="100" xmlns="http://www.w3.org/200/svg">
       <defs>
         <linearGradient id="g${id}" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop stop-color="rgb(${r},${g},${b})" offset="0%" />
@@ -362,7 +362,7 @@ const GalleryImage = memo(function GalleryImage({
     >
       {/* Glassmorphism hover effect */}
       <motion.div 
-        className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-10 opacity-0 group-hover:opacity-100 transition-opacity"
+        className="absolute inset-0 bg-gradient-to-t from-[#1A1B4B]/80 via-[#1A1B4B]/40 to-transparent z-10 opacity-0 group-hover:opacity-100 transition-opacity"
         whileHover={{ opacity: 1 }}
       />
       
@@ -372,8 +372,8 @@ const GalleryImage = memo(function GalleryImage({
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <div className="bg-yellow-500/80 backdrop-blur-sm p-1 rounded-full">
-                  <Heart size={14} className="text-white" fill="white" />
+                <div className="bg-[#26A649]/80 backdrop-blur-sm p-1 rounded-full">
+                  <Heart size={14} className="text-[#FFFFFF]" fill="white" />
                 </div>
               </TooltipTrigger>
               <TooltipContent>
@@ -386,14 +386,14 @@ const GalleryImage = memo(function GalleryImage({
       
       {/* Image info overlay */}
       <motion.div 
-        className="absolute bottom-0 left-0 right-0 p-3 z-20 text-white opacity-0 group-hover:opacity-100 transition-opacity"
+        className="absolute bottom-0 left-0 right-0 p-3 z-20 text-[#FFFFFF] opacity-0 group-hover:opacity-100 transition-opacity"
         initial={{ y: 10, opacity: 0 }}
         whileHover={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.2 }}
       >
         <p className="font-medium truncate text-sm">{image.alt}</p>
         
-        <div className="flex items-center gap-1 mt-1 text-xs text-white/80">
+        <div className="flex items-center gap-1 mt-1 text-xs text-[#FFFFFF]/80">
           <Calendar size={12} />
           <span>{new Date(image.date).toLocaleDateString()}</span>
         </div>
@@ -401,12 +401,12 @@ const GalleryImage = memo(function GalleryImage({
         {image.tags && image.tags.length > 0 && (
           <div className="flex flex-wrap gap-1 mt-2">
             {image.tags.slice(0, 2).map(tag => (
-              <span key={tag} className="text-[10px] px-1.5 py-0.5 bg-white/20 rounded-full capitalize">
+              <span key={tag} className="text-[10px] px-1.5 py-0.5 bg-[#FFFFFF]/20 rounded-full capitalize">
                 {tag}
               </span>
             ))}
             {image.tags.length > 2 && (
-              <span className="text-[10px] px-1.5 py-0.5 bg-white/20 rounded-full">
+              <span className="text-[10px] px-1.5 py-0.5 bg-[#FFFFFF]/20 rounded-full">
                 +{image.tags.length - 2}
               </span>
             )}
