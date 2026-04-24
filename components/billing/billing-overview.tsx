@@ -27,21 +27,19 @@ function StatusBadge({ status }: { status: string }) {
   const getStatusStyles = (status: string) => {
     switch (status.toLowerCase()) {
       case "paid":
-        return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
+        return "bg-[#26A649]/10 text-[#26A649]";
       case "pending":
-        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200";
+        return "bg-[#26A649]/10 text-[#26A649]";
       case "failed":
-        return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
+        return "bg-[#1A1B4B]/10 text-[#1A1B4B]";
       default:
-        return "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200";
+        return "bg-[#1A1B4B]/10 text-[#1A1B4B]";
     }
   };
 
   return (
     <span
-      className={`px-2.5 py-0.5 rounded-full text-sm font-medium ${getStatusStyles(
-        status
-      )}`}
+      className={`px-2 py-0.5 rounded text-xs font-medium ${getStatusStyles(status)}`}
     >
       {status}
     </span>
@@ -50,13 +48,17 @@ function StatusBadge({ status }: { status: string }) {
 
 export function BillingOverview({ bills }: { bills: Bill[] }) {
   return (
-    <Card className="shadow-lg">
-      <CardHeader className="border-b dark:border-gray-800">
-        <div className="flex items-center space-x-2">
-          <Receipt className="w-5 h-5 text-gray-500" />
+    <Card className="border border-[#1A1B4B]/20 bg-[#FFFFFF]">
+      <CardHeader className="border-b border-[#1A1B4B]/10 pb-3">
+        <div className="flex items-center gap-2">
+          <Receipt className="h-4 w-4 text-[#1A1B4B]/50" />
           <div>
-            <CardTitle>Billing Overview</CardTitle>
-            <CardDescription>Track your payment history</CardDescription>
+            <CardTitle className="text-sm uppercase tracking-wider text-[#1A1B4B]">
+              Billing History
+            </CardTitle>
+            <CardDescription className="text-xs text-[#1A1B4B]/60">
+              Payment records
+            </CardDescription>
           </div>
         </div>
       </CardHeader>
@@ -66,32 +68,31 @@ export function BillingOverview({ bills }: { bills: Bill[] }) {
             <Table>
               <TableHeader>
                 <TableRow className="hover:bg-transparent">
-                  <TableHead className="w-[150px]">Date</TableHead>
-                  <TableHead>Amount</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead className="text-xs uppercase tracking-wider text-[#1A1B4B]/60 w-[120px]">Date</TableHead>
+                  <TableHead className="text-xs uppercase tracking-wider text-[#1A1B4B]/60">Amount</TableHead>
+                  <TableHead className="text-xs uppercase tracking-wider text-[#1A1B4B]/60">Status</TableHead>
+                  <TableHead className="text-right text-xs uppercase tracking-wider text-[#1A1B4B]/60">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {bills.map((bill) => (
-                  <TableRow
-                    key={bill.id}
-                    className="hover:bg-gray-50 dark:hover:bg-gray-800/50"
-                  >
-                    <TableCell className="font-medium">
+                  <TableRow key={bill.id} className="hover:bg-[#1A1B4B]/10">
+                    <TableCell className="text-xs text-[#1A1B4B]">
                       {bill.date.toLocaleDateString("en-US", {
                         year: "numeric",
                         month: "short",
                         day: "numeric",
                       })}
                     </TableCell>
-                    <TableCell>${bill.amount.toFixed(2)}</TableCell>
+                    <TableCell className="text-xs font-medium text-[#1A1B4B]">
+                      ${bill.amount.toFixed(2)}
+                    </TableCell>
                     <TableCell>
                       <StatusBadge status={bill.status} />
                     </TableCell>
                     <TableCell className="text-right">
-                      <Button variant="ghost" size="sm">
-                        View Receipt
+                      <Button variant="ghost" size="sm" className="text-xs uppercase tracking-wider">
+                        View
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -100,9 +101,9 @@ export function BillingOverview({ bills }: { bills: Bill[] }) {
             </Table>
           </div>
         ) : (
-          <div className="p-6 text-center text-gray-500">
-            <Receipt className="w-12 h-12 mx-auto mb-4 opacity-50" />
-            <p className="text-sm">No billing history available</p>
+          <div className="p-6 text-center">
+            <Receipt className="h-10 w-10 mx-auto mb-3 text-[#1A1B4B]/30" />
+            <p className="text-xs text-[#1A1B4B]/60">No billing history</p>
           </div>
         )}
       </CardContent>
