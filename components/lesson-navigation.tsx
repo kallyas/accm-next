@@ -63,7 +63,7 @@ export function LessonNavigation({
                 >
                   <div className="flex items-center w-full">
                     {isCompleted && (
-                      <CheckCircle className="mr-2 h-4 w-4 text-green-500 flex-shrink-0" />
+                      <CheckCircle className="mr-2 h-4 w-4 text-[#26A649] flex-shrink-0" />
                     )}
                     {isLocked && (
                       <Lock className="mr-2 h-4 w-4 flex-shrink-0" />
