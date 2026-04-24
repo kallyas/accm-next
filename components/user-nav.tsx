@@ -71,7 +71,7 @@ export function UserNav() {
           <Button variant="ghost" className="relative h-8 w-8 rounded-full">
             <BellIcon className="h-5 w-5" />
             {data?.notifications.some((notification) => !notification.read) && (
-              <span className="absolute top-0 right-0 inline-block h-2 w-2 rounded-full bg-red-500" />
+              <span className="absolute top-0 right-0 inline-block h-2 w-2 rounded-full bg-[#1A1B4B]" />
             )}
           </Button>
         </DropdownMenuTrigger>
