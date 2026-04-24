@@ -90,7 +90,7 @@ export function PersonalDiscovery({
       <Card className="border-dashed">
         <CardHeader>
           <CardTitle className="flex items-center">
-            <BookOpen className="mr-2 h-5 w-5 text-blue-500" />
+            <BookOpen className="mr-2 h-5 w-5 text-[#1A1B4B]" />
             Personal Discovery
           </CardTitle>
           <CardDescription>
@@ -98,8 +98,8 @@ export function PersonalDiscovery({
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col items-center text-center py-12">
-          <div className="bg-blue-100 dark:bg-blue-900/30 rounded-full p-4 mb-4">
-            <FileText className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+          <div className="bg-[#1A1B4B]/10  rounded-full p-4 mb-4">
+            <FileText className="h-8 w-8 text-[#1A1B4B] " />
           </div>
           <h3 className="text-lg font-medium mb-2">
             Begin Your Self-Discovery Journey
@@ -124,96 +124,96 @@ export function PersonalDiscovery({
   const categories: Record<string, CategoryInfo> = {
     strengths: {
       title: "Strengths",
-      icon: <Star className="h-4 w-4 text-amber-500" />,
+      icon: <Star className="h-4 w-4 text-[#26A649]" />,
       description: "Your core capabilities and assets",
       color:
-        "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300",
+        "bg-[#26A649]/10 text-[#26A649]  ",
     },
     weaknesses: {
       title: "Weaknesses",
-      icon: <AlertTriangle className="h-4 w-4 text-red-500" />,
+      icon: <AlertTriangle className="h-4 w-4 text-[#1A1B4B]" />,
       description: "Areas that need improvement",
-      color: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300",
+      color: "bg-[#1A1B4B]/10 text-[#1A1B4B]  ",
     },
     opportunities: {
       title: "Opportunities",
-      icon: <Lightbulb className="h-4 w-4 text-blue-500" />,
+      icon: <Lightbulb className="h-4 w-4 text-[#1A1B4B]" />,
       description: "Potential paths for growth",
-      color: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300",
+      color: "bg-[#1A1B4B]/10 text-[#1A1B4B]  ",
     },
     threats: {
       title: "Threats",
-      icon: <AlertTriangle className="h-4 w-4 text-orange-500" />,
+      icon: <AlertTriangle className="h-4 w-4 text-[#1A1B4B]" />,
       description: "Challenges to be aware of",
       color:
-        "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300",
+        "bg-[#1A1B4B]/10 text-[#1A1B4B]  ",
     },
     achievements: {
       title: "Achievements",
-      icon: <Award className="h-4 w-4 text-purple-500" />,
+      icon: <Award className="h-4 w-4 text-[#1A1B4B]" />,
       description: "Your accomplishments",
       color:
-        "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300",
+        "bg-[#1A1B4B]/10 text-[#1A1B4B]  ",
     },
     familyAspirations: {
       title: "Family Aspirations",
-      icon: <Home className="h-4 w-4 text-green-500" />,
+      icon: <Home className="h-4 w-4 text-[#26A649]" />,
       description: "Your family goals",
       color:
-        "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300",
+        "bg-[#26A649]/10 text-[#26A649]  ",
     },
     careerAspirations: {
       title: "Career Aspirations",
-      icon: <Briefcase className="h-4 w-4 text-blue-500" />,
+      icon: <Briefcase className="h-4 w-4 text-[#1A1B4B]" />,
       description: "Your professional goals",
-      color: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300",
+      color: "bg-[#1A1B4B]/10 text-[#1A1B4B]  ",
     },
     financialBusinessAspirations: {
       title: "Financial/Business Aspirations",
-      icon: <DollarSign className="h-4 w-4 text-emerald-500" />,
+      icon: <DollarSign className="h-4 w-4 text-[#26A649]" />,
       description: "Your financial goals",
       color:
-        "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300",
+        "bg-[#26A649]/10 text-[#26A649]  ",
     },
     socialAspirations: {
       title: "Social Aspirations",
-      icon: <Users className="h-4 w-4 text-indigo-500" />,
+      icon: <Users className="h-4 w-4 text-[#1A1B4B]" />,
       description: "Your community goals",
       color:
-        "bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-300",
+        "bg-[#1A1B4B]/10 text-[#1A1B4B]  ",
     },
     desiredPosition: {
       title: "Desired Position",
-      icon: <Target className="h-4 w-4 text-rose-500" />,
+      icon: <Target className="h-4 w-4 text-[#1A1B4B]" />,
       description: "Roles you aspire to",
-      color: "bg-rose-100 text-rose-800 dark:bg-rose-900/30 dark:text-rose-300",
+      color: "bg-[#1A1B4B]/10 text-[#1A1B4B]  ",
     },
     requiredSkills: {
       title: "Required Skills",
-      icon: <GraduationCap className="h-4 w-4 text-cyan-500" />,
+      icon: <GraduationCap className="h-4 w-4 text-[#1A1B4B]" />,
       description: "Skills for your goals",
-      color: "bg-cyan-100 text-cyan-800 dark:bg-cyan-900/30 dark:text-cyan-300",
+      color: "bg-[#1A1B4B]/10 text-[#1A1B4B]  ",
     },
     coursesAndTrainings: {
       title: "Courses and Trainings",
-      icon: <BookOpen className="h-4 w-4 text-violet-500" />,
+      icon: <BookOpen className="h-4 w-4 text-[#1A1B4B]" />,
       description: "Learning opportunities",
       color:
-        "bg-violet-100 text-violet-800 dark:bg-violet-900/30 dark:text-violet-300",
+        "bg-[#1A1B4B]/10 text-[#1A1B4B]  ",
     },
     strategies: {
       title: "Strategies",
-      icon: <Lightbulb className="h-4 w-4 text-yellow-500" />,
+      icon: <Lightbulb className="h-4 w-4 text-[#26A649]" />,
       description: "Your action plans",
       color:
-        "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300",
+        "bg-[#26A649]/10 text-[#26A649]  ",
     },
     shortTermGoals: {
       title: "Short-term Goals",
-      icon: <Target className="h-4 w-4 text-green-500" />,
+      icon: <Target className="h-4 w-4 text-[#26A649]" />,
       description: "Immediate objectives",
       color:
-        "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300",
+        "bg-[#26A649]/10 text-[#26A649]  ",
     },
   };
 
@@ -280,7 +280,7 @@ export function PersonalDiscovery({
         <div className="flex justify-between items-start">
           <div>
             <CardTitle className="flex items-center">
-              <BookOpen className="mr-2 h-5 w-5 text-blue-500" />
+              <BookOpen className="mr-2 h-5 w-5 text-[#1A1B4B]" />
               Personal Discovery
             </CardTitle>
             <CardDescription>
@@ -399,7 +399,7 @@ export function PersonalDiscovery({
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-base flex items-center">
-                  <Target className="mr-2 h-4 w-4 text-blue-500" />
+                  <Target className="mr-2 h-4 w-4 text-[#1A1B4B]" />
                   Key Aspirations
                 </CardTitle>
               </CardHeader>
@@ -408,10 +408,10 @@ export function PersonalDiscovery({
                   {/* Career Aspirations Summary */}
                   <div className="space-y-2">
                     <h3 className="text-sm font-medium flex items-center">
-                      <Briefcase className="h-4 w-4 mr-2 text-blue-600" />
+                      <Briefcase className="h-4 w-4 mr-2 text-[#1A1B4B]" />
                       Career Aspirations
                     </h3>
-                    <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded text-sm">
+                    <div className="bg-[#1A1B4B]/10  p-3 rounded text-sm">
                       {personalDiscovery.careerAspirations &&
                       Array.isArray(personalDiscovery.careerAspirations) &&
                       personalDiscovery.careerAspirations.length > 0 ? (
@@ -456,10 +456,10 @@ export function PersonalDiscovery({
                   {/* Financial/Business Aspirations */}
                   <div className="space-y-2">
                     <h3 className="text-sm font-medium flex items-center">
-                      <DollarSign className="h-4 w-4 mr-2 text-emerald-600" />
+                      <DollarSign className="h-4 w-4 mr-2 text-[#26A649]" />
                       Financial/Business Goals
                     </h3>
-                    <div className="bg-emerald-50 dark:bg-emerald-900/20 p-3 rounded text-sm">
+                    <div className="bg-[#26A649]/10  p-3 rounded text-sm">
                       {personalDiscovery.financialBusinessAspirations &&
                       Array.isArray(
                         personalDiscovery.financialBusinessAspirations
@@ -527,7 +527,7 @@ export function PersonalDiscovery({
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-base flex items-center">
-                  <Lightbulb className="mr-2 h-4 w-4 text-amber-500" />
+                  <Lightbulb className="mr-2 h-4 w-4 text-[#26A649]" />
                   Strategic Development
                 </CardTitle>
               </CardHeader>
@@ -536,7 +536,7 @@ export function PersonalDiscovery({
                   {/* Required Skills */}
                   <div className="space-y-2">
                     <h3 className="text-sm font-medium flex items-center">
-                      <GraduationCap className="h-4 w-4 mr-2 text-blue-600" />
+                      <GraduationCap className="h-4 w-4 mr-2 text-[#1A1B4B]" />
                       Required Skills
                     </h3>
                     <div className="flex flex-wrap gap-2">
@@ -558,7 +558,7 @@ export function PersonalDiscovery({
                   {/* Strategies */}
                   <div className="space-y-2">
                     <h3 className="text-sm font-medium flex items-center">
-                      <Target className="h-4 w-4 mr-2 text-indigo-600" />
+                      <Target className="h-4 w-4 mr-2 text-[#1A1B4B]" />
                       Key Strategies
                     </h3>
                     <ul className="space-y-1">
@@ -568,7 +568,7 @@ export function PersonalDiscovery({
                           .slice(0, 3)
                           .map((strategy, idx) => (
                             <li key={idx} className="text-sm flex items-start">
-                              <span className="inline-block h-1.5 w-1.5 rounded-full bg-indigo-500 mt-1.5 mr-2 flex-shrink-0"></span>
+                              <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#1A1B4B] mt-1.5 mr-2 flex-shrink-0"></span>
                               {strategy}
                             </li>
                           ))
@@ -604,7 +604,7 @@ export function PersonalDiscovery({
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg flex items-center">
-                  <Target className="mr-2 h-5 w-5 text-blue-500" />
+                  <Target className="mr-2 h-5 w-5 text-[#1A1B4B]" />
                   SWOT Analysis
                 </CardTitle>
                 <CardDescription>
@@ -615,13 +615,13 @@ export function PersonalDiscovery({
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Strengths */}
-                  <Card className="border-green-200 dark:border-green-800">
-                    <CardHeader className="bg-green-50 dark:bg-green-900/20 pb-3">
-                      <CardTitle className="text-base text-green-700 dark:text-green-300 flex items-center">
+                  <Card className="border-[#26A649]/30 ">
+                    <CardHeader className="bg-[#26A649]/10  pb-3">
+                      <CardTitle className="text-base text-[#26A649]  flex items-center">
                         <Star className="mr-2 h-4 w-4" />
                         Strengths
                       </CardTitle>
-                      <CardDescription className="text-green-600/80 dark:text-green-400/80">
+                      <CardDescription className="text-[#26A649] ">
                         Your core capabilities and assets
                       </CardDescription>
                     </CardHeader>
@@ -631,7 +631,7 @@ export function PersonalDiscovery({
                         <ul className="space-y-2">
                           {personalDiscovery.strengths.map((strength, idx) => (
                             <li key={idx} className="flex items-start">
-                              <span className="inline-block h-1.5 w-1.5 rounded-full bg-green-500 mt-1.5 mr-2"></span>
+                              <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#26A649] mt-1.5 mr-2"></span>
                               <span>{strength}</span>
                             </li>
                           ))}
@@ -645,13 +645,13 @@ export function PersonalDiscovery({
                   </Card>
 
                   {/* Weaknesses */}
-                  <Card className="border-red-200 dark:border-red-800">
-                    <CardHeader className="bg-red-50 dark:bg-red-900/20 pb-3">
-                      <CardTitle className="text-base text-red-700 dark:text-red-300 flex items-center">
+                  <Card className="border-[#1A1B4B]/20 ">
+                    <CardHeader className="bg-[#1A1B4B]/10  pb-3">
+                      <CardTitle className="text-base text-[#1A1B4B]  flex items-center">
                         <AlertTriangle className="mr-2 h-4 w-4" />
                         Weaknesses
                       </CardTitle>
-                      <CardDescription className="text-red-600/80 dark:text-red-400/80">
+                      <CardDescription className="text-[#1A1B4B] ">
                         Areas for improvement
                       </CardDescription>
                     </CardHeader>
@@ -661,7 +661,7 @@ export function PersonalDiscovery({
                         <ul className="space-y-2">
                           {personalDiscovery.weaknesses.map((weakness, idx) => (
                             <li key={idx} className="flex items-start">
-                              <span className="inline-block h-1.5 w-1.5 rounded-full bg-red-500 mt-1.5 mr-2"></span>
+                              <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#1A1B4B] mt-1.5 mr-2"></span>
                               <span>{weakness}</span>
                             </li>
                           ))}
@@ -675,13 +675,13 @@ export function PersonalDiscovery({
                   </Card>
 
                   {/* Opportunities */}
-                  <Card className="border-blue-200 dark:border-blue-800">
-                    <CardHeader className="bg-blue-50 dark:bg-blue-900/20 pb-3">
-                      <CardTitle className="text-base text-blue-700 dark:text-blue-300 flex items-center">
+                  <Card className="border-[#1A1B4B]/20 ">
+                    <CardHeader className="bg-[#1A1B4B]/10  pb-3">
+                      <CardTitle className="text-base text-[#1A1B4B]  flex items-center">
                         <Lightbulb className="mr-2 h-4 w-4" />
                         Opportunities
                       </CardTitle>
-                      <CardDescription className="text-blue-600/80 dark:text-blue-400/80">
+                      <CardDescription className="text-[#1A1B4B] ">
                         External factors you can leverage
                       </CardDescription>
                     </CardHeader>
@@ -692,7 +692,7 @@ export function PersonalDiscovery({
                           {personalDiscovery.opportunities.map(
                             (opportunity, idx) => (
                               <li key={idx} className="flex items-start">
-                                <span className="inline-block h-1.5 w-1.5 rounded-full bg-blue-500 mt-1.5 mr-2"></span>
+                                <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#1A1B4B] mt-1.5 mr-2"></span>
                                 <span>{opportunity}</span>
                               </li>
                             )
@@ -707,13 +707,13 @@ export function PersonalDiscovery({
                   </Card>
 
                   {/* Threats */}
-                  <Card className="border-orange-200 dark:border-orange-800">
-                    <CardHeader className="bg-orange-50 dark:bg-orange-900/20 pb-3">
-                      <CardTitle className="text-base text-orange-700 dark:text-orange-300 flex items-center">
+                  <Card className="border-[#1A1B4B]/20 ">
+                    <CardHeader className="bg-[#1A1B4B]/10  pb-3">
+                      <CardTitle className="text-base text-[#1A1B4B]  flex items-center">
                         <AlertTriangle className="mr-2 h-4 w-4" />
                         Threats
                       </CardTitle>
-                      <CardDescription className="text-orange-600/80 dark:text-orange-400/80">
+                      <CardDescription className="text-[#1A1B4B] ">
                         External challenges to be aware of
                       </CardDescription>
                     </CardHeader>
@@ -723,7 +723,7 @@ export function PersonalDiscovery({
                         <ul className="space-y-2">
                           {personalDiscovery.threats.map((threat, idx) => (
                             <li key={idx} className="flex items-start">
-                              <span className="inline-block h-1.5 w-1.5 rounded-full bg-orange-500 mt-1.5 mr-2"></span>
+                              <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#1A1B4B] mt-1.5 mr-2"></span>
                               <span>{threat}</span>
                             </li>
                           ))}
@@ -738,13 +738,13 @@ export function PersonalDiscovery({
                 </div>
 
                 {/* Achievements */}
-                <Card className="mt-6 border-purple-200 dark:border-purple-800">
-                  <CardHeader className="bg-purple-50 dark:bg-purple-900/20 pb-3">
-                    <CardTitle className="text-base text-purple-700 dark:text-purple-300 flex items-center">
+                <Card className="mt-6 border-[#1A1B4B]/20 ">
+                  <CardHeader className="bg-[#1A1B4B]/10  pb-3">
+                    <CardTitle className="text-base text-[#1A1B4B]  flex items-center">
                       <Award className="mr-2 h-4 w-4" />
                       Achievements
                     </CardTitle>
-                    <CardDescription className="text-purple-600/80 dark:text-purple-400/80">
+                    <CardDescription className="text-[#1A1B4B] ">
                       Your accomplishments and successes
                     </CardDescription>
                   </CardHeader>
@@ -756,7 +756,7 @@ export function PersonalDiscovery({
                           (achievement, idx) => (
                             <div
                               key={idx}
-                              className="bg-purple-50/50 dark:bg-purple-900/10 p-3 rounded-md"
+                              className="bg-[#1A1B4B]/10  p-3 rounded-md"
                             >
                               <p className="text-sm">{achievement}</p>
                             </div>
@@ -779,7 +779,7 @@ export function PersonalDiscovery({
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg flex items-center">
-                  <Target className="mr-2 h-5 w-5 text-blue-500" />
+                  <Target className="mr-2 h-5 w-5 text-[#1A1B4B]" />
                   Life Aspirations
                 </CardTitle>
                 <CardDescription>
@@ -790,13 +790,13 @@ export function PersonalDiscovery({
                 {/* Family Aspirations */}
                 <div>
                   <h3 className="text-base font-medium mb-2 flex items-center">
-                    <Home className="mr-2 h-4 w-4 text-green-600" />
+                    <Home className="mr-2 h-4 w-4 text-[#26A649]" />
                     Family Aspirations
                   </h3>
                   <Card>
                     <CardContent className="py-4">
                       {personalDiscovery.familyAspirations ? (
-                        <div className="prose dark:prose-invert max-w-none">
+                        <div className="prose  max-w-none">
                           {Array.isArray(
                             personalDiscovery.familyAspirations
                           ) ? (
@@ -823,13 +823,13 @@ export function PersonalDiscovery({
                 {/* Career Aspirations */}
                 <div>
                   <h3 className="text-base font-medium mb-2 flex items-center">
-                    <Briefcase className="mr-2 h-4 w-4 text-blue-600" />
+                    <Briefcase className="mr-2 h-4 w-4 text-[#1A1B4B]" />
                     Career Aspirations
                   </h3>
                   <Card>
                     <CardContent className="py-4">
                       {personalDiscovery.careerAspirations ? (
-                        <div className="prose dark:prose-invert max-w-none">
+                        <div className="prose  max-w-none">
                           {Array.isArray(
                             personalDiscovery.careerAspirations
                           ) ? (
@@ -856,13 +856,13 @@ export function PersonalDiscovery({
                 {/* Financial/Business Aspirations */}
                 <div>
                   <h3 className="text-base font-medium mb-2 flex items-center">
-                    <DollarSign className="mr-2 h-4 w-4 text-emerald-600" />
+                    <DollarSign className="mr-2 h-4 w-4 text-[#26A649]" />
                     Financial/Business Aspirations
                   </h3>
                   <Card>
                     <CardContent className="py-4">
                       {personalDiscovery.financialBusinessAspirations ? (
-                        <div className="prose dark:prose-invert max-w-none">
+                        <div className="prose  max-w-none">
                           {Array.isArray(
                             personalDiscovery.financialBusinessAspirations
                           ) ? (
@@ -891,13 +891,13 @@ export function PersonalDiscovery({
                 {/* Social Aspirations */}
                 <div>
                   <h3 className="text-base font-medium mb-2 flex items-center">
-                    <Users className="mr-2 h-4 w-4 text-indigo-600" />
+                    <Users className="mr-2 h-4 w-4 text-[#1A1B4B]" />
                     Social Aspirations
                   </h3>
                   <Card>
                     <CardContent className="py-4">
                       {personalDiscovery.socialAspirations ? (
-                        <div className="prose dark:prose-invert max-w-none">
+                        <div className="prose  max-w-none">
                           {Array.isArray(
                             personalDiscovery.socialAspirations
                           ) ? (
@@ -929,7 +929,7 @@ export function PersonalDiscovery({
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg flex items-center">
-                  <Briefcase className="mr-2 h-5 w-5 text-blue-500" />
+                  <Briefcase className="mr-2 h-5 w-5 text-[#1A1B4B]" />
                   Career Planning
                 </CardTitle>
                 <CardDescription>
@@ -940,7 +940,7 @@ export function PersonalDiscovery({
                 {/* Desired Positions */}
                 <div>
                   <h3 className="text-base font-medium mb-2 flex items-center">
-                    <Target className="mr-2 h-4 w-4 text-blue-600" />
+                    <Target className="mr-2 h-4 w-4 text-[#1A1B4B]" />
                     Desired Positions
                   </h3>
                   <Card>
@@ -952,7 +952,7 @@ export function PersonalDiscovery({
                             (position, idx) => (
                               <div
                                 key={idx}
-                                className="bg-blue-50/50 dark:bg-blue-900/10 p-3 rounded-md"
+                                className="bg-[#1A1B4B]/10  p-3 rounded-md"
                               >
                                 <p className="text-sm font-medium">
                                   {position}
@@ -973,7 +973,7 @@ export function PersonalDiscovery({
                 {/* Required Skills */}
                 <div>
                   <h3 className="text-base font-medium mb-2 flex items-center">
-                    <GraduationCap className="mr-2 h-4 w-4 text-green-600" />
+                    <GraduationCap className="mr-2 h-4 w-4 text-[#26A649]" />
                     Required Skills
                   </h3>
                   <Card>
@@ -985,7 +985,7 @@ export function PersonalDiscovery({
                             (skill, idx) => (
                               <Badge
                                 key={idx}
-                                className="bg-green-100 text-green-800 hover:bg-green-200 dark:bg-green-900/30 dark:text-green-300 dark:hover:bg-green-900/40"
+                                className="bg-[#26A649]/10 text-[#26A649] hover:bg-[#26A649]/10   "
                               >
                                 {skill}
                               </Badge>
@@ -1004,7 +1004,7 @@ export function PersonalDiscovery({
                 {/* Courses and Trainings */}
                 <div>
                   <h3 className="text-base font-medium mb-2 flex items-center">
-                    <BookOpen className="mr-2 h-4 w-4 text-purple-600" />
+                    <BookOpen className="mr-2 h-4 w-4 text-[#1A1B4B]" />
                     Courses and Trainings
                   </h3>
                   <Card>
@@ -1015,7 +1015,7 @@ export function PersonalDiscovery({
                           {personalDiscovery.coursesAndTrainings.map(
                             (course, idx) => (
                               <li key={idx} className="flex items-start">
-                                <span className="inline-block h-1.5 w-1.5 rounded-full bg-purple-500 mt-1.5 mr-2"></span>
+                                <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#1A1B4B] mt-1.5 mr-2"></span>
                                 <span>{course}</span>
                               </li>
                             )
@@ -1035,7 +1035,7 @@ export function PersonalDiscovery({
                   {/* Strategies */}
                   <div>
                     <h3 className="text-base font-medium mb-2 flex items-center">
-                      <Lightbulb className="mr-2 h-4 w-4 text-amber-600" />
+                      <Lightbulb className="mr-2 h-4 w-4 text-[#26A649]" />
                       Strategies
                     </h3>
                     <Card>
@@ -1046,7 +1046,7 @@ export function PersonalDiscovery({
                             {personalDiscovery.strategies.map(
                               (strategy, idx) => (
                                 <li key={idx} className="flex items-start">
-                                  <span className="inline-block h-1.5 w-1.5 rounded-full bg-amber-500 mt-1.5 mr-2"></span>
+                                  <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#26A649] mt-1.5 mr-2"></span>
                                   <span>{strategy}</span>
                                 </li>
                               )
@@ -1064,7 +1064,7 @@ export function PersonalDiscovery({
                   {/* Short-term Goals */}
                   <div>
                     <h3 className="text-base font-medium mb-2 flex items-center">
-                      <Target className="mr-2 h-4 w-4 text-blue-600" />
+                      <Target className="mr-2 h-4 w-4 text-[#1A1B4B]" />
                       Short-term Goals
                     </h3>
                     <Card>
@@ -1075,7 +1075,7 @@ export function PersonalDiscovery({
                             {personalDiscovery.shortTermGoals.map(
                               (goal, idx) => (
                                 <li key={idx} className="flex items-start">
-                                  <span className="inline-block h-1.5 w-1.5 rounded-full bg-blue-500 mt-1.5 mr-2"></span>
+                                  <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#1A1B4B] mt-1.5 mr-2"></span>
                                   <span>{goal}</span>
                                 </li>
                               )
