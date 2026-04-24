@@ -18,50 +18,48 @@ type Plan = {
 
 export function CurrentPlan({ plan }: { plan: Plan | null }) {
   return (
-    <Card className="shadow-lg">
-      <CardHeader className="border-b dark:border-gray-800">
-        <div className="flex items-center space-x-2">
-          <CreditCard className="w-5 h-5 text-gray-500" />
+    <Card className="border border-[#1A1B4B]/20 bg-[#FFFFFF]">
+      <CardHeader className="border-b border-[#1A1B4B]/10 pb-3">
+        <div className="flex items-center gap-2">
+          <CreditCard className="h-4 w-4 text-[#1A1B4B]/50" />
           <div>
-            <CardTitle>Current Plan</CardTitle>
-            <CardDescription>Manage your subscription</CardDescription>
+            <CardTitle className="text-sm uppercase tracking-wider text-[#1A1B4B]">
+              Current Plan
+            </CardTitle>
+            <CardDescription className="text-xs text-[#1A1B4B]/60">
+              Your subscription
+            </CardDescription>
           </div>
         </div>
       </CardHeader>
-      <CardContent className="p-6">
+      <CardContent className="p-5">
         {plan ? (
-          <div className="space-y-6">
-            <div className="flex justify-between items-start">
-              <div>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-                  {plan.name}
-                </h3>
-                <p className="text-3xl font-bold mt-2">
-                  ${plan.price.toFixed(2)}
-                  <span className="text-base font-normal text-gray-500">
-                    /{plan.billingCycle === "Monthly" ? "mo" : "yr"}
-                  </span>
-                </p>
-              </div>
-              <Badge variant="outline" className="border-2">
-                {plan.billingCycle}
-              </Badge>
+          <div className="space-y-4">
+            <div>
+              <h3 className="text-lg font-semibold text-[#1A1B4B]">
+                {plan.name}
+              </h3>
+              <p className="text-2xl font-bold text-[#1A1B4B] mt-1">
+                ${plan.price.toFixed(2)}
+                <span className="text-xs font-normal text-[#1A1B4B]/60">
+                  /{plan.billingCycle}
+                </span>
+              </p>
             </div>
-            <div className="pt-4 border-t dark:border-gray-800">
-              <div className="flex items-center text-sm text-gray-500">
-                <Clock className="w-4 h-4 mr-2" />
-                Next billing date: {new Date().toLocaleDateString()}
-              </div>
-              <Button variant="outline" className="mt-4 w-full">
-                Manage Subscription
-              </Button>
-            </div>
+            <Button className="w-full bg-[#1A1B4B] text-[#FFFFFF] text-xs uppercase tracking-wider">
+              Manage Plan
+            </Button>
           </div>
         ) : (
-          <div className="text-center py-6">
-            <CreditCard className="w-12 h-12 mx-auto mb-4 text-gray-400" />
-            <p className="text-gray-500">No active subscription</p>
-            <Button className="mt-4">Choose a Plan</Button>
+          <div className="space-y-4">
+            <div className="text-center py-4">
+              <p className="text-sm text-[#1A1B4B]/60">
+                No active subscription
+              </p>
+            </div>
+            <Button asChild className="w-full bg-[#1A1B4B] text-[#FFFFFF] text-xs uppercase tracking-wider">
+              <a href="/dashboard/billing">Subscribe Now</a>
+            </Button>
           </div>
         )}
       </CardContent>
