@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -11,104 +11,117 @@ import { Button } from "@/components/ui/button";
 import { ModeSwitcher } from "@/components/mode-switcher";
 import { UserPlus, LogIn } from "lucide-react";
 import { ThemeTransitionEffect } from "./ThemeTransitionEffect";
+import { cn } from "@/lib/utils";
 
 export function Header() {
   const { data: session } = useSession();
   const [scrolled, setScrolled] = useState(false);
-  const [lastScrollY, setLastScrollY] = useState(0);
   const [hidden, setHidden] = useState(false);
+  const lastScrollY = useRef(0);
 
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
 
-      // Determine if scrolled (for shadow/background effect)
-      if (currentScrollY > 10) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
+      setScrolled(currentScrollY > 12);
 
-      // Auto-hide header when scrolling down, show when scrolling up
-      if (currentScrollY > lastScrollY && currentScrollY > 80) {
+      if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
         setHidden(true);
       } else {
         setHidden(false);
       }
 
-      setLastScrollY(currentScrollY);
+      lastScrollY.current = currentScrollY;
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
+  }, []);
 
   return (
     <>
       <ThemeTransitionEffect />
       <motion.header
-        className={`sticky top-0 z-50 w-full transition-all duration-300 ${
+        className={cn(
+          "sticky top-0 z-50 w-full border-b transition-all duration-300",
           scrolled
-            ? "bg-white/98 dark:bg-gray-900/98 backdrop-blur-md shadow-sm border-b border-gray-100 dark:border-gray-800"
-            : "bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm"
-        }`}
+            ? "border-[#1A1B4B]/20 bg-[#f7f5f1]/95 shadow-[0_10px_30px_-22px_rgba(15,23,42,0.45)] backdrop-blur-md  "
+            : "border-[#1A1B4B]/20 bg-[#f7f5f1]/88 backdrop-blur-sm  "
+        )}
         initial={{ y: 0 }}
-        animate={{ y: hidden ? -100 : 0 }}
-        transition={{ duration: 0.3 }}
+        animate={{ y: hidden ? -96 : 0 }}
+        transition={{ duration: 0.28, ease: "easeOut" }}
       >
-        <div className="container mx-auto flex h-16 items-center px-4 sm:px-6 lg:px-8">
-          <MainNav />
-          <MobileNav />
-          <div className="flex flex-1 items-center justify-end space-x-4">
-            <nav className="flex items-center space-x-2">
-              <AnimatePresence mode="wait">
-                {session ? (
-                  <motion.div
-                    key="user-nav"
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 20 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <UserNav />
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="auth-buttons"
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 20 }}
-                    transition={{ duration: 0.2 }}
-                    className="flex items-center space-x-3"
-                  >
-                    <Link href="/login">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="relative group hover:bg-gray-50 dark:hover:bg-gray-800/50 rounded-full px-4 py-2 transition-all duration-300"
-                      >
-                        <span className="flex items-center font-medium text-gray-700 dark:text-gray-300">
-                          <LogIn className="mr-2 h-4 w-4" />
-                          Login
-                        </span>
-                      </Button>
-                    </Link>
-                    <Link href="/register">
-                      <Button 
-                        size="sm" 
-                        className="relative group bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-200 rounded-full px-6 py-2 shadow-sm hover:shadow-md transition-all duration-300"
-                      >
-                        <span className="flex items-center font-medium">
-                          <UserPlus className="mr-2 h-4 w-4" />
-                          Start Learning
-                        </span>
-                      </Button>
-                    </Link>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-              <ModeSwitcher />
-            </nav>
+        <div className="mx-auto grid h-[4.7rem] w-full max-w-[88rem] grid-cols-[1fr_auto] items-stretch px-3 sm:px-6 lg:grid-cols-[minmax(15rem,20rem)_1fr_auto] lg:px-8">
+          <Link
+            href="/"
+            className="hidden border-r border-[#1A1B4B]/20 pr-6 lg:flex lg:items-center "
+          >
+            <div className="space-y-1">
+              <p className="text-[0.57rem] font-semibold uppercase tracking-[0.28em] text-[#1A1B4B]/70 ">
+                East Africa
+              </p>
+              <p className="text-[0.82rem] font-semibold uppercase tracking-[0.15em] text-[#1A1B4B] ">
+                African Centre for Career Mentorship
+              </p>
+            </div>
+          </Link>
+
+          <div className="flex items-center justify-start gap-3 pl-0 lg:justify-center lg:pl-5">
+            <MobileNav />
+            <Link
+              href="/"
+              className="hidden border-r border-[#1A1B4B]/20 pr-4 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-[#1A1B4B] md:inline-flex lg:hidden  "
+            >
+              ACCM
+            </Link>
+            <MainNav />
+          </div>
+
+          <div className="flex items-center justify-end gap-2 border-l border-[#1A1B4B]/20 pl-3 sm:pl-4 ">
+            <AnimatePresence mode="wait">
+              {session ? (
+                <motion.div
+                  key="user-nav"
+                  initial={{ opacity: 0, x: 16 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 16 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <UserNav />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="auth-buttons"
+                  initial={{ opacity: 0, x: 16 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 16 }}
+                  transition={{ duration: 0.2 }}
+                  className="hidden items-center gap-2 sm:flex"
+                >
+                  <Link href="/login">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-9 rounded-none border border-[#1A1B4B]/20 px-4 text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-[#1A1B4B] hover:bg-[#1A1B4B]/10   "
+                    >
+                      <LogIn className="mr-1.5 h-3.5 w-3.5" />
+                      Login
+                    </Button>
+                  </Link>
+                  <Link href="/register">
+                    <Button
+                      size="sm"
+                      className="h-9 rounded-none bg-[#1A1B4B]/10 px-4 text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-[#FFFFFF] hover:bg-[#1A1B4B]/10   "
+                    >
+                      <UserPlus className="mr-1.5 h-3.5 w-3.5" />
+                      Start
+                    </Button>
+                  </Link>
+                </motion.div>
+              )}
+            </AnimatePresence>
+            <ModeSwitcher />
           </div>
         </div>
       </motion.header>
