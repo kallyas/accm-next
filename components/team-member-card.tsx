@@ -1,137 +1,120 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { motion } from "framer-motion";
+import {
+  Linkedin,
+  Twitter,
+  Mail,
+  ExternalLink,
+  ArrowRight,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { Linkedin, Twitter, Mail } from "lucide-react";
 import { TeamMember } from "@/types/general";
+import { cn } from "@/lib/utils";
 
-export function TeamMemberCard({ member }: { member: TeamMember }) {
-  const [isOpen, setIsOpen] = useState(false);
-
+export function TeamMemberCard({
+  member,
+  index = 0,
+}: {
+  member: TeamMember;
+  index?: number;
+}) {
   return (
-    <Card className="flex flex-col h-full group relative overflow-hidden transition-all duration-300 hover:shadow-lg">
-      <CardHeader className="relative p-0 mb-4">
-        <div className="relative w-full pt-[100%] overflow-hidden">
+    <motion.article
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay: index * 0.08 }}
+      className={cn(
+        "group",
+        index % 3 === 1 ? "md:translate-y-8" : "",
+        index % 3 === 2 ? "md:-translate-y-4" : ""
+      )}
+    >
+      <div className="border border-[#1A1B4B]/20 bg-[#FFFFFF]  ">
+        <div className="relative aspect-[4/3] overflow-hidden">
           <Image
             src={member.imageUrl}
             alt={member.name}
-            layout="fill"
-            objectFit="cover"
-            className="transition-transform duration-300 group-hover:scale-105"
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#1A1B4B]/60 via-transparent to-transparent" />
         </div>
-      </CardHeader>
-      <CardContent className="flex-grow">
-        <CardTitle className="mb-2">{member.name}</CardTitle>
-        <p className="text-sm font-medium text-primary mb-2">
-          {member.position}
-        </p>
-        <p className="text-sm text-muted-foreground mb-4 line-clamp-3">
-          {member.about}
-        </p>
-        <div className="flex flex-wrap gap-2">
-          {member.expertise.map((skill) => (
-            <Badge key={skill} variant="secondary" className="text-xs">
-              {skill}
-            </Badge>
-          ))}
-        </div>
-      </CardContent>
-      <CardFooter className="flex justify-between items-center pt-4 border-t">
-        <div className="flex gap-2">
-          {member.socialLinks?.linkedin && (
-            <Button variant="ghost" size="icon" asChild>
-              <a
-                href={member.socialLinks.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
+        <div className="p-5">
+          <p className="text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-[#1A1B4B]/70 ">
+            {member.department}
+          </p>
+          <h3 className="mt-2 text-base font-semibold uppercase leading-tight">
+            {member.name}
+          </h3>
+          <p className="mt-1 text-sm leading-6 text-[#1A1B4B] ">
+            {member.position}
+          </p>
+          <p className="mt-3 text-sm leading-6 text-[#1A1B4B]  line-clamp-3">
+            {member.about}
+          </p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {member.expertise.slice(0, 3).map((skill) => (
+              <Badge
+                key={skill}
+                className="border border-[#1A1B4B]/20 bg-[#FFFFFF] px-2 py-0.5 text-[0.6rem] font-medium uppercase tracking-wider  "
               >
-                <Linkedin className="h-4 w-4" />
-              </a>
-            </Button>
-          )}
-          {member.socialLinks?.twitter && (
-            <Button variant="ghost" size="icon" asChild>
-              <a
-                href={member.socialLinks.twitter}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Twitter className="h-4 w-4" />
-              </a>
-            </Button>
-          )}
-          {member.socialLinks?.email && (
-            <Button variant="ghost" size="icon" asChild>
-              <a href={`mailto:${member.socialLinks.email}`}>
-                <Mail className="h-4 w-4" />
-              </a>
-            </Button>
-          )}
-        </div>
-        <Dialog open={isOpen} onOpenChange={setIsOpen}>
-          <DialogTrigger asChild>
-            <Button>View Profile</Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-2xl">
-            <DialogHeader>
-              <div className="flex items-start gap-6">
-                <div className="relative w-32 h-32 rounded-lg overflow-hidden">
-                  <Image
-                    src={member.imageUrl}
-                    alt={member.name}
-                    layout="fill"
-                    objectFit="cover"
-                  />
-                </div>
-                <div>
-                  <DialogTitle className="text-2xl mb-2">
-                    {member.name}
-                  </DialogTitle>
-                  <DialogDescription>
-                    <p className="text-primary font-medium">
-                      {member.position}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {member.department}
-                    </p>
-                  </DialogDescription>
-                </div>
-              </div>
-            </DialogHeader>
-            <div className="mt-6 space-y-4">
-              <h4 className="font-medium">About</h4>
-              <p className="text-muted-foreground">{member.about}</p>
-              <h4 className="font-medium">Expertise</h4>
-              <div className="flex flex-wrap gap-2">
-                {member.expertise.map((skill) => (
-                  <Badge key={skill} variant="secondary">
-                    {skill}
-                  </Badge>
-                ))}
-              </div>
+                {skill}
+              </Badge>
+            ))}
+          </div>
+          <div className="mt-5 flex items-center justify-between gap-3">
+            <div className="flex gap-1">
+              {member.socialLinks?.linkedin && (
+                <a
+                  href={member.socialLinks.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-8 w-8 items-center justify-center border border-[#1A1B4B]/20 text-[#1A1B4B] transition-colors hover:bg-[#1A1B4B]/10   "
+                >
+                  <Linkedin className="h-3.5 w-3.5" />
+                </a>
+              )}
+              {member.socialLinks?.twitter && (
+                <a
+                  href={member.socialLinks.twitter}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-8 w-8 items-center justify-center border border-[#1A1B4B]/20 text-[#1A1B4B] transition-colors hover:bg-[#1A1B4B]/10   "
+                >
+                  <Twitter className="h-3.5 w-3.5" />
+                </a>
+              )}
+              {member.socialLinks?.email && (
+                <a
+                  href={`mailto:${member.socialLinks.email}`}
+                  className="flex h-8 w-8 items-center justify-center border border-[#1A1B4B]/20 text-[#1A1B4B] transition-colors hover:bg-[#1A1B4B]/10   "
+                >
+                  <Mail className="h-3.5 w-3.5" />
+                </a>
+              )}
             </div>
-          </DialogContent>
-        </Dialog>
-      </CardFooter>
-    </Card>
+            <Button className="h-9 rounded-none bg-[#1A1B4B]/10 px-4 text-[0.66rem] font-semibold uppercase tracking-[0.14em] text-[#FFFFFF] hover:bg-[#1A1B4B]/10   ">
+              View profile
+              <ExternalLink className="ml-2 h-3.5 w-3.5" />
+            </Button>
+          </div>
+        </div>
+      </div>
+    </motion.article>
   );
 }
+
+export function TeamMemberCardComponent({
+  member,
+  index = 0,
+}: {
+  member: TeamMember;
+  index?: number;
+}) {
+  return <TeamMemberCard member={member} index={index} />;
+}
+
+export { TeamMemberCard };
